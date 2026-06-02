@@ -1,0 +1,5 @@
+update helper_list_items
+set name = {{ inpPLRenameName.text.trim() }}
+where id = {{ tblPicklistItems.selectedRow.id }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and is_system = false;

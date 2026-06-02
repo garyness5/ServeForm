@@ -1,0 +1,4 @@
+-- Delete Ingredient
+delete from ing_items
+where id = {{ Number(tblIngredientsList.selectedRow.id) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;

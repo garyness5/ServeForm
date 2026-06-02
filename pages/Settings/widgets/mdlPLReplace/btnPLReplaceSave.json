@@ -1,0 +1,62 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 58,
+  "boxShadow": "none",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonStyle": "PRIMARY_BUTTON",
+  "buttonVariant": "PRIMARY",
+  "disabledWhenInvalid": false,
+  "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "isDisabled"
+    },
+    {
+      "key": "onClick"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "isDefaultClickDisabled": true,
+  "isDisabled": "{{\n  radPLReplaceDeleteAction.selectedOptionValue === \"replace\" &&\n  !selPLReplaceWith.selectedOptionValue\n}}",
+  "isLoading": false,
+  "isVisible": true,
+  "key": "oy0hw5tj7l",
+  "leftColumn": 26,
+  "minWidth": 120,
+  "mobileBottomRow": 22,
+  "mobileLeftColumn": 47,
+  "mobileRightColumn": 63,
+  "mobileTopRow": 18,
+  "needsErrorInfo": false,
+  "onClick": "{{\n(() => {\n  const isDietTag =\n    (\n      getHelperLists.data.find(\n        x => String(x.id) === String(selPicklistType.selectedOptionValue)\n      )?.list_code || \"\"\n    ) === \"diet_tag\";\n\n  const action = isDietTag ? \"delete\" : radPLReplaceDeleteAction.selectedOptionValue;\n  const replaceToId = isDietTag ? null : selPLReplaceWith.selectedOptionValue;\n\n  if (action === \"replace\" && !replaceToId) {\n    showAlert(\"Select a replacement item first.\", \"warning\");\n    return;\n  }\n\n  storeValue(\"plReplaceAction\", action === \"replace\" ? \"Replace\" : \"Delete\");\n  storeValue(\"plReplaceToId\", replaceToId || null);\n\n  getHelperIngredientImpactCount.run(() => {\n    showModal(\"mdPLReplaceConfirm\");\n  });\n})()\n}}",
+  "originalBottomRow": 58,
+  "originalTopRow": 54,
+  "parentId": "7hgaofawbt",
+  "placement": "CENTER",
+  "recaptchaType": "V3",
+  "renderMode": "CANVAS",
+  "resetFormOnClick": false,
+  "responsiveBehavior": "hug",
+  "rightColumn": 42,
+  "text": "Yes",
+  "topRow": 54,
+  "type": "BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "h778b6rh2s",
+  "widgetName": "btnPLReplaceSave"
+}

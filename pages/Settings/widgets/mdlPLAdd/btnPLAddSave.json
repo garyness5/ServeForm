@@ -1,0 +1,60 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 22,
+  "boxShadow": "none",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonStyle": "PRIMARY_BUTTON",
+  "buttonVariant": "PRIMARY",
+  "disabledWhenInvalid": false,
+  "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "isDisabled"
+    },
+    {
+      "key": "onClick"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "isDefaultClickDisabled": true,
+  "isDisabled": "{{ !inpPLAddName.text || !inpPLAddName.text.trim() }}",
+  "isLoading": false,
+  "isVisible": true,
+  "key": "sz3v9lmedt",
+  "leftColumn": 47,
+  "minWidth": 120,
+  "mobileBottomRow": 22,
+  "mobileLeftColumn": 47,
+  "mobileRightColumn": 63,
+  "mobileTopRow": 18,
+  "needsErrorInfo": false,
+  "onClick": "{{\n  (() => {\n\n    const norm = s =>\n      (s || \"\")\n        .trim()\n        .normalize(\"NFD\")\n        .replace(/[\\u0300-\\u036f]/g, \"\")\n        .toLowerCase();\n\n    const newName = inpPLAddName.text;\n\n    const exists = getPicklistItems.data.some(\n      item =>\n        item.name &&\n        norm(item.name) === norm(newName)\n    );\n\n    if (exists) {\n\n      showAlert('Name already exists in this list', 'warning');\n\n    } else {\n\n      addPicklistItems.run()\n        .then(() => getPicklistItems.run())\n        .then(() => resetWidget('inpPLAddName'))\n        .then(() => closeModal('mdlPLAdd'));\n\n    }\n\n  })()\n}}",
+  "parentId": "cezvj11cz7",
+  "placement": "CENTER",
+  "recaptchaType": "V3",
+  "renderMode": "CANVAS",
+  "resetFormOnClick": false,
+  "responsiveBehavior": "hug",
+  "rightColumn": 63,
+  "text": "Save",
+  "topRow": 18,
+  "type": "BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "nvztvzelur",
+  "widgetName": "btnPLAddSave"
+}

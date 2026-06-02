@@ -1,0 +1,6 @@
+update helper_list_items
+set
+  active = false,
+  updated_at = now()
+where id = {{ tblPicklistItems.selectedRow.id }};
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;

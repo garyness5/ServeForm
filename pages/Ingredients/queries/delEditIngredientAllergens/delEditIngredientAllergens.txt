@@ -1,0 +1,2 @@
+delete from ing_allergens
+where ingredient_id = {{ Number(getIngredientById.data[0].id) }};

@@ -1,0 +1,62 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 23,
+  "boxShadow": "none",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonStyle": "PRIMARY_BUTTON",
+  "buttonVariant": "PRIMARY",
+  "disabledWhenInvalid": false,
+  "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "isDisabled"
+    },
+    {
+      "key": "onClick"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "isDefaultClickDisabled": true,
+  "isDisabled": "{{\n  !inpPLRenameName.text ||\n  !inpPLRenameName.text.trim()\n}}",
+  "isLoading": false,
+  "isVisible": true,
+  "key": "oy0hw5tj7l",
+  "leftColumn": 47,
+  "minWidth": 120,
+  "mobileBottomRow": 22,
+  "mobileLeftColumn": 47,
+  "mobileRightColumn": 63,
+  "mobileTopRow": 18,
+  "needsErrorInfo": false,
+  "onClick": "{{\n  (() => {\n\n    const norm = s =>\n      (s || \"\")\n        .trim()\n        .normalize(\"NFD\")\n        .replace(/[\\u0300-\\u036f]/g, \"\")\n        .toLowerCase();\n\n    const newName = inpPLRenameName.text;\n    const oldId = tblPicklistItems.selectedRow.id;\n\n    const exists = getPicklistItems.data.some(\n      item =>\n        item.id !== oldId &&\n        item.name &&\n        norm(item.name) === norm(newName)\n    );\n\n    if (exists) {\n      showAlert('Name already exists in this list', 'warning');\n    } else {\n      renamePicklistItem.run()\n        .then(() => getPicklistItems.run())\n        .then(() => closeModal('mdlPLRename'))\n        .then(() => showAlert('Item renamed', 'success'));\n    }\n\n  })()\n}}",
+  "originalBottomRow": 25,
+  "originalTopRow": 21,
+  "parentId": "cl0dp922vr",
+  "placement": "CENTER",
+  "recaptchaType": "V3",
+  "renderMode": "CANVAS",
+  "resetFormOnClick": false,
+  "responsiveBehavior": "hug",
+  "rightColumn": 63,
+  "text": "Save",
+  "topRow": 19,
+  "type": "BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "8sy2vsrm4r",
+  "widgetName": "btnPLRenameSave"
+}

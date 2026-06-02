@@ -1,0 +1,55 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 81,
+  "dynamicBindingPathList": [
+    {
+      "key": "truncateButtonColor"
+    },
+    {
+      "key": "fontFamily"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "text"
+    }
+  ],
+  "dynamicHeight": "AUTO_HEIGHT",
+  "dynamicTriggerPathList": [],
+  "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
+  "fontSize": "1rem",
+  "fontStyle": "BOLD",
+  "isLoading": false,
+  "isVisible": true,
+  "key": "h29kmo3jn9",
+  "leftColumn": 42,
+  "maxDynamicHeight": 9000,
+  "minDynamicHeight": 4,
+  "minWidth": 450,
+  "mobileBottomRow": 72,
+  "mobileLeftColumn": 42,
+  "mobileRightColumn": 58,
+  "mobileTopRow": 68,
+  "needsErrorInfo": false,
+  "originalBottomRow": 81,
+  "originalTopRow": 68,
+  "overflow": "NONE",
+  "parentColumnSpace": 19.5,
+  "parentId": "neis18dl1f",
+  "parentRowSpace": 10,
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 58,
+  "shouldTruncate": false,
+  "text": "{{\n{\n  list_code: getHelperLists.data.find(\n    x => String(x.id) === String(selPicklistType.selectedOptionValue)\n  )?.list_code,\n  is_system_raw: tblPicklistItems.selectedRow?.is_system,\n  is_system_string: String(tblPicklistItems.selectedRow?.is_system),\n  disabled_result:\n    getHelperLists.data.find(\n      x => String(x.id) === String(selPicklistType.selectedOptionValue)\n    )?.list_code === \"diet_tag\"\n    &&\n    String(tblPicklistItems.selectedRow?.is_system) === \"true\"\n}\n}}",
+  "textAlign": "LEFT",
+  "textColor": "#231F20",
+  "topRow": 68,
+  "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "type": "TEXT_WIDGET",
+  "version": 1,
+  "widgetId": "39goyfy44c",
+  "widgetName": "Text1"
+}

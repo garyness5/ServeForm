@@ -1,0 +1,16 @@
+update ing_items
+set
+  name = NULLIF('{{ inpIngEditIngredient.text.trim().replaceAll("'", "''") }}', ''),
+  item_code = NULLIF('{{ (inpIngEditSupplierCode.text || "").replaceAll("'", "''") }}', ''),
+  category_id = NULLIF('{{ selIngEditCategory.selectedOptionValue }}', '')::bigint,
+  supplier_id = NULLIF('{{ selIngEditSupplier.selectedOptionValue }}', '')::bigint,
+  packaging_id = NULLIF('{{ selIngEditPackaging.selectedOptionValue }}', '')::bigint,
+  purchase_qty = {{ inpIngEditQuantity.text ? Number(inpIngEditQuantity.text) : null }},
+  purchase_unit_id = NULLIF('{{ selIngEditPurchaseUnit.selectedOptionValue }}', '')::bigint,
+  total_cost = {{ inpIngEditPurchaseCost.text ? Number(inpIngEditPurchaseCost.text) : null }},
+  wastage_percent = {{ inpIngEditWastage.text ? Number(inpIngEditWastage.text) : null }},
+	active = {{ chkIngEditActive.isChecked }},
+  notes = NULLIF('{{ (rteIngEditNotes.text || "").replaceAll("'", "''") }}', ''),
+  updated_at = now()
+where id = {{ Number(getIngredientById.data[0].id) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;

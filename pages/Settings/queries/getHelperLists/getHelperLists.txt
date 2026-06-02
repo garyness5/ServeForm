@@ -1,0 +1,15 @@
+select
+  id,
+  list_name,
+  list_code,
+  domain,
+  behavior
+from helper_lists
+where active = true
+  and list_code in (
+    'ingredient_category',
+    'supplier',
+    'packaging',
+    'diet_tag'
+  )
+order by lower(list_name);

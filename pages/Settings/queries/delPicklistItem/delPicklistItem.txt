@@ -1,0 +1,68 @@
+UPDATE ing_items i
+SET supplier_id = NULL,
+    updated_at = now()
+WHERE i.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  AND i.supplier_id = {{ Number(tblPicklistItems.selectedRow.id) }}
+  AND EXISTS (
+    SELECT 1
+    FROM helper_list_items hli
+    JOIN helper_lists hl
+      ON hl.id = hli.list_id
+    WHERE hli.id = {{ Number(tblPicklistItems.selectedRow.id) }}
+      AND hl.list_code = 'supplier'
+      AND hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+      AND hli.is_system = false
+  );
+
+UPDATE ing_items i
+SET packaging_id = NULL,
+    updated_at = now()
+WHERE i.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  AND i.packaging_id = {{ Number(tblPicklistItems.selectedRow.id) }}
+  AND EXISTS (
+    SELECT 1
+    FROM helper_list_items hli
+    JOIN helper_lists hl
+      ON hl.id = hli.list_id
+    WHERE hli.id = {{ Number(tblPicklistItems.selectedRow.id) }}
+      AND hl.list_code = 'packaging'
+      AND hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+      AND hli.is_system = false
+  );
+
+UPDATE ing_items i
+SET category_id = NULL,
+    updated_at = now()
+WHERE i.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  AND i.category_id = {{ Number(tblPicklistItems.selectedRow.id) }}
+  AND EXISTS (
+    SELECT 1
+    FROM helper_list_items hli
+    JOIN helper_lists hl
+      ON hl.id = hli.list_id
+    WHERE hli.id = {{ Number(tblPicklistItems.selectedRow.id) }}
+      AND hl.list_code = 'ingredient_category'
+      AND hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+      AND hli.is_system = false
+  );
+
+DELETE FROM ing_diet_tags idt
+USING ing_items i
+WHERE idt.ingredient_id = i.id
+  AND i.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  AND idt.helper_list_item_id = {{ Number(tblPicklistItems.selectedRow.id) }}
+  AND EXISTS (
+    SELECT 1
+    FROM helper_list_items hli
+    JOIN helper_lists hl
+      ON hl.id = hli.list_id
+    WHERE hli.id = {{ Number(tblPicklistItems.selectedRow.id) }}
+      AND hl.list_code = 'diet_tag'
+      AND hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+      AND hli.is_system = false
+  );
+
+DELETE FROM helper_list_items hli
+WHERE hli.id = {{ Number(tblPicklistItems.selectedRow.id) }}
+  AND hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  AND hli.is_system = false;

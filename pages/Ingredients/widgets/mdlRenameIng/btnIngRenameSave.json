@@ -1,0 +1,62 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 23,
+  "boxShadow": "none",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonStyle": "PRIMARY_BUTTON",
+  "buttonVariant": "PRIMARY",
+  "disabledWhenInvalid": false,
+  "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "isDisabled"
+    },
+    {
+      "key": "onClick"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "isDefaultClickDisabled": true,
+  "isDisabled": "{{\n  !inpIngRenameTo.text?.trim()\n}}",
+  "isLoading": false,
+  "isVisible": true,
+  "key": "oy0hw5tj7l",
+  "leftColumn": 47,
+  "minWidth": 120,
+  "mobileBottomRow": 22,
+  "mobileLeftColumn": 47,
+  "mobileRightColumn": 63,
+  "mobileTopRow": 18,
+  "needsErrorInfo": false,
+  "onClick": "{{\n  !inpIngRenameTo.text?.trim()\n\n    ? showAlert(\"Ingredient name is required.\", \"warning\")\n\n    : checkIngRenameToExists.run(() => {\n\n        if (checkIngRenameToExists.data?.[0]?.match_count > 0) {\n\n          showAlert(\"Ingredient name already exists. Choose another name.\", \"warning\");\n\n        } else {\n\n          renameIngredient.run(() => {\n            getIngredients.run();\n            closeModal(\"mdlRenameIng\");\n            showAlert(\"Ingredient renamed\", \"success\");\n          });\n\n        }\n\n      })\n}}",
+  "originalBottomRow": 25,
+  "originalTopRow": 21,
+  "parentId": "0vgb38fbeh",
+  "placement": "CENTER",
+  "recaptchaType": "V3",
+  "renderMode": "CANVAS",
+  "resetFormOnClick": false,
+  "responsiveBehavior": "hug",
+  "rightColumn": 63,
+  "text": "Save",
+  "topRow": 19,
+  "type": "BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "u72kdmabw1",
+  "widgetName": "btnIngRenameSave"
+}

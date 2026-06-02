@@ -1,0 +1,3 @@
+-- Delete Diet Tags
+delete from ing_diet_tags
+where ingredient_id = {{ Number(tblIngredientsList.selectedRow.id) }};

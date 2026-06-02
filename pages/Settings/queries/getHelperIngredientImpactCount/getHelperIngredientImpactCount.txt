@@ -1,0 +1,54 @@
+select
+  case
+    when (
+      select list_code
+      from helper_lists
+      where id = {{ Number(selPicklistType.selectedOptionValue) }}
+    ) = 'supplier'
+      then (
+        select count(*)
+        from ing_items
+        where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+          and supplier_id = {{ Number(tblPicklistItems.selectedRow.id) }}
+      )
+
+    when (
+      select list_code
+      from helper_lists
+      where id = {{ Number(selPicklistType.selectedOptionValue) }}
+    ) = 'packaging'
+      then (
+        select count(*)
+        from ing_items
+        where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+          and packaging_id = {{ Number(tblPicklistItems.selectedRow.id) }}
+      )
+
+    when (
+      select list_code
+      from helper_lists
+      where id = {{ Number(selPicklistType.selectedOptionValue) }}
+    ) = 'ingredient_category'
+      then (
+        select count(*)
+        from ing_items
+        where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+          and category_id = {{ Number(tblPicklistItems.selectedRow.id) }}
+      )
+
+    when (
+      select list_code
+      from helper_lists
+      where id = {{ Number(selPicklistType.selectedOptionValue) }}
+    ) = 'diet_tag'
+      then (
+        select count(distinct idt.ingredient_id)
+        from ing_diet_tags idt
+        join ing_items i
+          on i.id = idt.ingredient_id
+        where i.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+          and idt.helper_list_item_id = {{ Number(tblPicklistItems.selectedRow.id) }}
+      )
+
+    else 0
+  end as ingredient_count;

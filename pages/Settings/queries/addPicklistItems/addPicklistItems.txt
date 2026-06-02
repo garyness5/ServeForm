@@ -1,0 +1,24 @@
+insert into helper_list_items
+(
+  client_id,
+  list_id,
+  name,
+  active,
+  is_system
+)
+select
+  '{{ appsmith.store.current_client_id }}'::uuid,
+  {{ selPicklistType.selectedOptionValue }},
+  {{ inpPLAddName.text.trim() }},
+  true,
+  false
+where not exists (
+  select 1
+  from helper_list_items hli
+  where hli.list_id = {{ selPicklistType.selectedOptionValue }}
+    and (
+      hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+      or hli.is_system = true
+    )
+    and public.norm_name(hli.name) = public.norm_name({{ inpPLAddName.text.trim() }})
+);

@@ -1,0 +1,3 @@
+-- Delete Allergens
+delete from ing_allergens
+where ingredient_id = {{ Number(tblIngredientsList.selectedRow.id) }};
