@@ -1,0 +1,41 @@
+v0.1.10 - Recipe Structure Started
+
+Created Recipe Supabase foundation and Appsmith Recipe workspace shell.
+
+Supabase
+- rec_items
+- rec_components
+- rec_diet_tags
+- vw_rec_items
+
+Settings
+- Added Recipe Categories helper list
+- Seeded default Recipe Categories
+- Recipe Categories now managed through Settings
+
+Appsmith
+- Created RecipesList page
+- Created Recipe workspace page
+- Created Recipe page layout:
+  - Header
+  - Actions
+  - Components
+  - Notes
+- Added Recipe header widgets
+- Wired Category selector
+- Wired Diet Tag selector
+- Wired Yield Unit selector
+
+Architecture Decisions
+- Recipes use workspace pages, not modals
+- Recipes open in new browser tabs
+- No duplicate components allowed
+- Recipe Categories managed through helper system
+- Allergens are calculated, not manually assigned
+- Diet Tags are manually assigned
+
+Next Steps
+- Save header-only recipe
+- Display recipes in RecipesList
+- Open recipe from RecipesList
+- Build component table
