@@ -1,0 +1,151 @@
+v0.1.11_Recipe_Header_Foundation
+
+Objective
+
+Begin implementation of Recipe Header workflow and establish Recipe workspace architecture.
+
+Completed
+
+Supabase
+
+* Verified rec_items structure
+* Verified rec_components structure
+* Verified rec_diet_tags structure
+* Verified vw_rec_items
+
+Settings
+
+* Recipe Categories available through helper architecture
+* Recipe Categories visible in Settings
+* Recipe Categories available in Recipe page
+
+Appsmith
+
+Pages
+
+* RecipesList page configured
+* Recipe workspace page configured
+
+Layout
+
+* Recipe header layout completed
+* Costing section layout completed
+* Information section layout completed
+* Components section placeholder created
+* Notes section created
+
+Widgets
+
+Created
+
+* Recipe Name
+* Category
+* Diet Tags
+* Status
+* Yield Qty
+* Yield Unit
+* Extra %
+* Subtotal
+* Total Cost
+* Cost Per Unit
+* Allergen Summary
+* Warnings
+* Notes
+
+Connected
+
+* Recipe Categories
+* Diet Tags
+* Units
+
+Workflow
+
+Implemented
+
+* Add Recipe navigation
+* current_recipe_id storage
+* Recipe page opening from RecipesList
+* Header-only Recipe Save
+* Duplicate name prevention
+* Recipe insertion into rec_items
+* Recipe visibility in RecipesList
+
+Architecture Decisions Confirmed
+
+Recipes use dedicated pages.
+
+Recipes do not use Add/Edit modals.
+
+RecipesList is navigation.
+
+Recipe is workspace.
+
+Multiple Recipes may be opened through browser tabs.
+
+Recipe Categories use helper architecture.
+
+Diet Tags behave identically to Ingredients.
+
+Recipe component rows will support:
+
+apply_wastage
+
+Values:
+
+* true
+* false
+
+Default:
+
+* true
+
+Filtering Direction Confirmed
+
+Diet Tags
+
+* Filter for items containing selected tags
+
+Allergens
+
+* Filter out items containing selected allergens
+
+Known Issues
+
+Header save succeeds using:
+
+* Name
+* Category
+
+Save workflow requires review when Yield Qty and Yield Unit are introduced.
+
+Add/Edit workflow requires fresh-eye review.
+
+Recipe loading workflow requires fresh-eye review.
+
+Current Status
+
+Recipe architecture established.
+
+Recipe workspace established.
+
+Recipe header partially operational.
+
+Recipe component implementation not yet started.
+
+Next Target
+
+Complete Recipe Header:
+
+* Open Recipe
+* Load Recipe
+* Edit Recipe
+* Update Recipe
+* Save & New
+* Close
+
+After Header Completion:
+
+* Recipe Components
+* Cost Rollups
+* Allergen Rollups
+* Diet Tag Rollups
