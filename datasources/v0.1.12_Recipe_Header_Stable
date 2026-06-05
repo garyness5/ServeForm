@@ -1,0 +1,190 @@
+# v0.1.12_Recipe_Header_Operational
+
+## Summary
+
+This release establishes a stable operational Recipe Header workflow and resolves the save/load issues that appeared when Yield Qty and Yield Unit were introduced.
+
+Recipe Components have not yet started. This milestone focuses solely on Recipe Header functionality and Recipe workspace stability.
+
+---
+
+## Completed
+
+### Recipe Header
+
+Confirmed working:
+
+* Create Recipe
+* Save Recipe
+* Open Recipe
+* Load Recipe
+* Edit Recipe
+* Update Recipe
+
+Header fields operational:
+
+* Recipe Name
+* Category
+* Status
+* Yield Qty
+* Yield Unit
+* Extra %
+
+---
+
+### Save Workflow
+
+Resolved Recipe Save issues.
+
+Verified:
+
+* addRecItem inserts correctly
+* updRecItem updates correctly
+* Yield Qty saves correctly
+* Yield Unit saves correctly
+* Existing Recipes update correctly
+* current_recipe_id workflow functioning
+
+Confirmed issue source was Appsmith query/value handling rather than Supabase schema.
+
+---
+
+### Recipe Loading
+
+Verified loading of:
+
+* Name
+* Category
+* Status
+* Yield Qty
+* Yield Unit
+* Extra %
+
+Yield Unit loading corrected through proper value-type matching.
+
+---
+
+### Duplicate Name Rules
+
+Confirmed duplicate protection is enforced by Supabase.
+
+Constraint remains authoritative.
+
+Duplicate prevention now behaves correctly for Create vs Update workflows.
+
+Global rule confirmed:
+
+Allowed:
+
+* Tokay → tokay
+* Tokay → Tókay
+* Tokay → toKày
+
+Blocked:
+
+* Tokey → Tokay
+* Tokey → tokay
+* Tokey → Tókay
+
+Rule applies across all name-bearing domains.
+
+Duplicate checks must exclude the current record during updates.
+
+---
+
+### RecipeList Cleanup
+
+RecipeList table rebuilt and cleaned.
+
+Resolved:
+
+* duplicate/conflicting display columns
+* incorrect custom column bindings
+* column confusion from previous iterations
+
+Current visible columns:
+
+* Recipe
+* Category
+* Yield
+* Unit
+* Extra %
+* Status
+
+Table behavior verified.
+
+---
+
+## Architecture Confirmed
+
+Recipes continue to use:
+
+* Dedicated workspace page
+* Not modal based
+
+RecipesList purpose:
+
+* Navigation
+* Search
+* Open
+
+Recipe page purpose:
+
+* Create
+* Edit
+* Header management
+
+Multiple browser tabs remain supported.
+
+---
+
+## Propagation Rule Confirmed
+
+Nothing propagates downstream until Save.
+
+After Save:
+
+* Saved recipe state becomes authoritative
+* Saved recipe cost automatically updates downstream usages
+* Unsaved edits remain local to the open workspace
+
+Sub-recipes follow the same rule.
+
+Saved state propagates.
+Unsaved state does not.
+
+---
+
+## Deferred
+
+Not yet implemented:
+
+* Save & New
+* Close with dirty-check prompt
+* Recipe Diet Tags
+* Notes workflow review
+* Cost calculations
+* Subtotal
+* Total Cost
+* Cost Per Unit
+* Allergen Summary
+* Warnings
+
+---
+
+## Next Development Target
+
+Recipe Components
+
+Planned focus:
+
+* tblRecComponents
+* Ingredient selection
+* Sub-recipe selection
+* Parent/Child rules
+* Component save/load
+* Cost rollups
+* Allergen rollups
+* Diet Tag rollups
+
+Recipe Header foundation considered operational and suitable as the baseline for Component implementation.
