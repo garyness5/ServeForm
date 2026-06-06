@@ -1,0 +1,9 @@
+- Added rec_components active field
+- Created/updated vw_rec_components
+- Added wastage_percent to component view
+- Connected tblRecComponents to vw_rec_components
+- Confirmed real component row display
+- Set Use Wastage checkbox from apply_wastage
+- Set Status checkbox from active
+- Added read-only Wastage % display
+- Confirmed item_type stored as lowercase ingredient/recipe
