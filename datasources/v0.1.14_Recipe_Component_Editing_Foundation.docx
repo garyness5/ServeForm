@@ -1,0 +1,25 @@
+Recipe Components moved from display foundation to editing foundation.
+v0.1.14_Recipe_Component_Editing_Foundation.docx
+Implemented:
+- Item Type selection
+- Category filtering
+- Item filtering
+- Duplicate prevention
+- Category autofill
+- Unit autofill
+- Wastage autofill
+- Allergen autofill
+- Diet Tag autofill
+- Remove row
+- Local row state engine
+- Minimum blank row generation
+
+Ingredient costing contract finalized:
+- Yield Qty
+- Yield Unit
+- Price Per Unit
+- Cost Per Base Unit
+
+Known blocker:
+- Appsmith table event instability
+- Component persistence not yet implemented
