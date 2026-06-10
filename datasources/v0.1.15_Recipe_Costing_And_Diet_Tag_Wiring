@@ -1,0 +1,37 @@
+v0.1.15_Recipe_Costing_And_Diet_Tag_Wiring
+Completed
+•	Recipe component persistence
+•	Component save workflow
+•	Component reload workflow
+•	Recipe switching stabilization
+•	Local draft state architecture
+•	Automatic component loading
+•	Live line cost calculations
+•	Live subtotal calculations
+•	Live total cost calculations
+•	Live cost per yield unit calculations
+•	Component allergen summary
+•	Component diet tag summary
+•	Recipe diet tag save/load
+•	rec_diet_tags persistence
+•	vw_rec_items diet tag publication
+•	vw_rec_components allergen publication
+•	vw_rec_components diet tag publication improvements
+Confirmed Architecture
+Draft State
+→ Appsmith
+Save
+→ Publish
+Published State
+→ Supabase
+Upstream Saved Changes
+→ Propagate Automatically
+Current Blockers
+•	Recipe save with blank Yield Qty and Yield Unit
+•	Final verification of recipe diet tag downstream display
+Next Target
+•	Fix Name + Category only recipe save
+•	Warning engine
+•	Save & New
+•	Close dirty-check
+
