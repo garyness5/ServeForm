@@ -1,0 +1,27 @@
+v0.1.16_Recipe_Save_Warnings_And_Recipe_Cost_Publication
+Completed
+• Recipe save with Name + Category only
+• Blank Yield Qty support
+• Blank Yield Unit support
+• Recipe diet tag downstream publication verified
+• Sub-recipe cost publication verified
+• Warning Engine v1
+• Recipe inactive warning
+• Missing item warning
+• No-cost warning
+• Cost-per-unit warning
+• Warning display panel
+• Recipe cost publication investigation
+• Draft warning architecture
+Confirmed
+• Draft → Save → Publish architecture
+• Upstream saved changes propagate automatically
+• Recipe component costing operational
+• Recipe diet tags operational
+Current Blocker
+• Component duplicate-prevention picklists
+Next Target
+• Restore picklist exclusion rules
+• Save & New
+• Close dirty-check
+
