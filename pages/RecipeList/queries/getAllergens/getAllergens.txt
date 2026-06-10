@@ -1,0 +1,10 @@
+SELECT
+  hli.id,
+  hli.name
+FROM helper_list_items hli
+JOIN helper_lists hl
+  ON hl.id = hli.list_id
+WHERE hl.list_code = 'allergen'
+  AND hli.is_system = true
+  AND hli.active = true
+ORDER BY hli.sort_order NULLS LAST, hli.name;

@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT *\nFROM vw_ing_items\nWHERE client_id = '{{ appsmith.store.current_client_id }}'::uuid\nORDER BY name ASC;",
+      "body": "select\n  *\nfrom public.vw_ing_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\norder by name;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

@@ -8,6 +8,7 @@ from helper_lists
 where active = true
   and list_code in (
     'ingredient_category',
+    'recipe_category',
     'supplier',
     'packaging',
     'diet_tag'

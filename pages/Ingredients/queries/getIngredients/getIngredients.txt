@@ -1,4 +1,5 @@
-SELECT *
-FROM vw_ing_items
-WHERE client_id = '{{ appsmith.store.current_client_id }}'::uuid
-ORDER BY name ASC;
+select
+  *
+from public.vw_ing_items
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+order by name;

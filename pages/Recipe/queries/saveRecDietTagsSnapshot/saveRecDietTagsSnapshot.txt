@@ -1,0 +1,5 @@
+select *
+from public.save_rec_diet_tags_snapshot(
+  {{ Number(appsmith.store.current_recipe_id || 0) }},
+  '{{ JSON.stringify((msRecDietTags.selectedOptionValues || []).map(id => ({ tag_id: Number(id) }))).replaceAll("'", "''") }}'::jsonb
+);

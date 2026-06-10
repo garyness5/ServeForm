@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "6a0a1bde3214f344228346e7_11df737b-84d8-4af9-9773-2e1432a40a6d",
+  "id": "Recipe_recRecipePage",
+  "unpublishedCollection": {
+    "name": "recRecipePage",
+    "pageId": "Recipe",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}

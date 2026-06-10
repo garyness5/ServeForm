@@ -1,0 +1,5 @@
+select
+  helper_list_item_id::text as value
+from public.rec_diet_tags
+where recipe_id = {{ Number(appsmith.store.current_recipe_id || 0) }}
+order by helper_list_item_id;

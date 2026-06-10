@@ -1,0 +1,6 @@
+SELECT
+  *
+FROM
+  public.units
+WHERE
+  "abbreviation" ilike '%{{selRecYieldUnit.filterText}}%'

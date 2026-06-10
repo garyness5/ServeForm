@@ -1,0 +1,23 @@
+insert into rec_items
+(
+  client_id,
+  name,
+  category_id,
+  yield_qty,
+  yield_unit_id,
+  extra_percent,
+  notes,
+  active
+)
+values
+(
+  '{{ appsmith.store.current_client_id }}'::uuid,
+  NULLIF('{{ inpRecName.text.trim().replaceAll("'", "''") }}', ''),
+  {{ selRecCategory.selectedOptionValue ? Number(selRecCategory.selectedOptionValue) : null }},
+  {{ inpRecYieldQty.text ? Number(inpRecYieldQty.text) : null }},
+  {{ selRecYieldUnit.selectedOptionValue ? Number(selRecYieldUnit.selectedOptionValue) : null }},
+  {{ inpRecExtraPercent.text ? Number(inpRecExtraPercent.text) : 0 }},
+  NULLIF('{{ (rteRecNotes.text || "").replaceAll("'", "''") }}', ''),
+  {{ chkRecActive.isChecked ? true : false }}
+)
+returning id;

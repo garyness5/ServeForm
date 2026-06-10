@@ -1,0 +1,13 @@
+update rec_items
+set
+  name = NULLIF('{{ inpRecName.text.trim().replaceAll("'", "''") }}', ''),
+  category_id = {{ selRecCategory.selectedOptionValue && selRecCategory.selectedOptionValue !== "" ? Number(selRecCategory.selectedOptionValue) : null }},
+  yield_qty = {{ inpRecYieldQty.text && inpRecYieldQty.text !== "" ? Number(inpRecYieldQty.text) : null }},
+  yield_unit_id = {{ selRecYieldUnit.selectedOptionValue && selRecYieldUnit.selectedOptionValue !== "" ? Number(selRecYieldUnit.selectedOptionValue) : null }},
+  extra_percent = {{ inpRecExtraPercent.text && inpRecExtraPercent.text !== "" ? Number(inpRecExtraPercent.text) : 0 }},
+  notes = NULLIF('{{ (rteRecNotes.text || "").replaceAll("'", "''") }}', ''),
+  active = {{ chkRecActive.isChecked ? true : false }},
+  updated_at = now()
+where id = {{ Number(appsmith.store.current_recipe_id) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+returning id;

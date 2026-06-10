@@ -1,0 +1,56 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 31,
+  "boxShadow": "none",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonStyle": "PRIMARY_BUTTON",
+  "buttonVariant": "PRIMARY",
+  "disabledWhenInvalid": false,
+  "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
+    {
+      "key": "borderRadius"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "isDefaultClickDisabled": true,
+  "isDisabled": false,
+  "isLoading": false,
+  "isVisible": true,
+  "key": "db5p08m351",
+  "leftColumn": 27,
+  "minWidth": 120,
+  "mobileBottomRow": 22,
+  "mobileLeftColumn": 47,
+  "mobileRightColumn": 63,
+  "mobileTopRow": 18,
+  "needsErrorInfo": false,
+  "onClick": "{{\n  delIngAllergens.run(() => {\n    delIngDietTags.run(() => {\n      delIng.run(() => {\n      resetWidget(\"tblIngredientsList\");\n        getRecipes.run();\n        closeModal(\"mdlDelConfirmIng\");\n        closeModal(\"mdlDeleteIng\");\n        showAlert(\"Ingredient deleted\", \"success\");\n      });\n    });\n  })\n}}",
+  "originalBottomRow": 31,
+  "originalTopRow": 27,
+  "parentId": "6pp4tm9qzz",
+  "placement": "CENTER",
+  "recaptchaType": "V3",
+  "renderMode": "CANVAS",
+  "resetFormOnClick": false,
+  "responsiveBehavior": "hug",
+  "rightColumn": 43,
+  "text": "Yes",
+  "topRow": 27,
+  "type": "BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "p461ulpl2d",
+  "widgetName": "btnRecDelConfirmYes"
+}

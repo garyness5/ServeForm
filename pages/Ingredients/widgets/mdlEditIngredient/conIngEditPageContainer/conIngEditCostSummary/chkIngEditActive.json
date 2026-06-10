@@ -22,7 +22,7 @@
   "key": "m7uw01hcow",
   "label": "Active",
   "labelPosition": "Left",
-  "labelStyle": "",
+  "labelStyle": "BOLD",
   "labelTextSize": "1rem",
   "leftColumn": 2,
   "maxDynamicHeight": 9000,

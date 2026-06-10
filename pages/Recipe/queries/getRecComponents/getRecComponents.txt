@@ -1,0 +1,4 @@
+select *
+from public.vw_rec_components
+where recipe_id = {{ Number(appsmith.store.current_recipe_id || 0) }}
+order by line_no;
