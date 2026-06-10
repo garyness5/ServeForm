@@ -1,6 +1,6 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_e7dc2ab8-d76d-4230-9e0d-c92440d016de",
-  "id": "Recipe_recRecipeSave.closeRecipe",
+  "gitSyncId": "6a0a1bde3214f344228346e7_afef4953-576b-4913-9eb2-90c51954f499",
+  "id": "Recipe_recRecipeSave.validateBeforeSave",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
@@ -22,8 +22,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "recRecipeSave.closeRecipe",
-    "name": "closeRecipe",
+    "fullyQualifiedName": "recRecipeSave.validateBeforeSave",
+    "name": "validateBeforeSave",
     "pageId": "Recipe",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

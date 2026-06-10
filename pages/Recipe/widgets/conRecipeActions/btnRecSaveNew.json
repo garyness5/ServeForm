@@ -12,11 +12,17 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -25,7 +31,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": true,
+  "isDisabled": "{{ !recRecipeSave.isDirty() }}",
   "isLoading": false,
   "isVisible": true,
   "key": "bv6gv3416k",

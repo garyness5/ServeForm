@@ -58,7 +58,7 @@
     "created_at",
     "updated_at"
   ],
-  "columnUpdatedAt": 1781113232157,
+  "columnUpdatedAt": 1781124477602,
   "columnWidthMap": {
     "active": 103,
     "allergen_names": 124,
@@ -907,7 +907,7 @@
       "label": "Unit",
       "notation": "standard",
       "originalId": "unit_abbreviation",
-      "selectOptions": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  getRecComponentUnits.data.map(u => ({\n    label: u.abbreviation,\n    value: u.abbreviation\n  }))\n)) : \n  getRecComponentUnits.data.map(u => ({\n    label: u.abbreviation,\n    value: u.abbreviation\n  }))\n })()}}",
+      "selectOptions": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( recCompTable.unitOptions(currentRow) )) :  recCompTable.unitOptions(currentRow)  })()}}",
       "sticky": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,

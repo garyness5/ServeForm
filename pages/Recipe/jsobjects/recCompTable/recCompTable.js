@@ -349,6 +349,19 @@ export default {
 			};
 		});
 	},
+	
+	unitOptions(row) {
+		const unitType = row?.unit_type;
+
+		if (!unitType) return [];
+
+		return (getRecComponentUnits.data || [])
+			.filter(u => u.unit_type === unitType)
+			.map(u => ({
+				label: u.abbreviation,
+				value: u.abbreviation
+			}));
+	},
 
 	lineCost(row) {
 		if (!row || !row.qty || !row.unit_abbreviation || !row.item_type || !row.component_name) return null;

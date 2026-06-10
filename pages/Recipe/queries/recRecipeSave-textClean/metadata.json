@@ -1,12 +1,16 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_cbe1f282-335f-4af4-936f-e5f03f9ea5ae",
-  "id": "Recipe_recRecipeSave.currentComponentSnapshot",
+  "gitSyncId": "6a0a1bde3214f344228346e7_7175768e-4c07-4d77-8942-d1c65446a935",
+  "id": "Recipe_recRecipeSave.textClean",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
     "actionConfiguration": {
       "encodeParamsToggle": true,
-      "jsArguments": [],
+      "jsArguments": [
+        {
+          "name": "value"
+        }
+      ],
       "paginationType": "NONE",
       "timeoutInMillisecond": 10000
     },
@@ -22,8 +26,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "recRecipeSave.currentComponentSnapshot",
-    "name": "currentComponentSnapshot",
+    "fullyQualifiedName": "recRecipeSave.textClean",
+    "name": "textClean",
     "pageId": "Recipe",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

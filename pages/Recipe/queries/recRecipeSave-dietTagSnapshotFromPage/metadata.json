@@ -1,16 +1,12 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_b6de4fdb-bcd5-4954-9c4a-7b59285e315a",
-  "id": "Recipe_recRecipeSave.componentSnapshot",
+  "gitSyncId": "6a0a1bde3214f344228346e7_96dd1cc0-0c84-41f6-b273-0d6e1fbace11",
+  "id": "Recipe_recRecipeSave.dietTagSnapshotFromPage",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
     "actionConfiguration": {
       "encodeParamsToggle": true,
-      "jsArguments": [
-        {
-          "name": "rows"
-        }
-      ],
+      "jsArguments": [],
       "paginationType": "NONE",
       "timeoutInMillisecond": 10000
     },
@@ -26,8 +22,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "recRecipeSave.componentSnapshot",
-    "name": "componentSnapshot",
+    "fullyQualifiedName": "recRecipeSave.dietTagSnapshotFromPage",
+    "name": "dietTagSnapshotFromPage",
     "pageId": "Recipe",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false
