@@ -1,0 +1,15 @@
+v0.1.17_Recipe_Core_Complete
+Component duplicate-prevention picklists restored
+Active-only component picklists
+Current-row item retention
+Cyclic recipe prevention verified
+Component save snapshot repaired
+Save & New implemented
+Close dirty-check implemented
+Recipe save validation (Name + Category required)
+Recipe notes dirty-check
+Recipe diet tag dirty-check
+Component dirty-check
+Save button enable/disable by dirty state
+Save & New button enable/disable by dirty state
+Component UnitType filtering
