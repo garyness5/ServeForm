@@ -1,0 +1,157 @@
+v0.1.19_Ingredient_Delete_Foundation
+Date
+2026-06-10
+Summary
+Aligned Ingredient deletion architecture with Recipe deletion architecture by introducing soft delete support and deleted-state tracking.
+This commit establishes the foundation for future inactive vs deleted behavior across all composition domains.
+________________________________________
+Completed
+Ingredient Soft Delete Foundation
+Added:
+deleted boolean not null default false
+to:
+public.ing_items
+Result:
+Ingredients now support:
+active = true,  deleted = false
+    Available
+
+active = false, deleted = false
+    Inactive / Temporarily unavailable
+
+deleted = true
+    Deleted / Permanently unavailable
+________________________________________
+Ingredient View Update
+Updated:
+public.vw_ing_items
+Added:
+deleted
+to the published view output.
+Column added as final column to preserve existing view compatibility.
+________________________________________
+Ingredient List Filtering
+Updated:
+getIngredients
+Deleted ingredients are now excluded from Ingredient List.
+Pattern:
+coalesce(deleted, false) = false
+________________________________________
+Ingredient Delete Behavior
+Replaced hard delete behavior.
+Previous:
+delete from ing_items
+New:
+update ing_items
+set
+  active = false,
+  deleted = true
+Ingredient records are now retained for future recovery.
+________________________________________
+Recipe Component Ingredient Picklists
+Updated:
+getRecComponentItems
+Ingredient selection now excludes:
+deleted = true
+while continuing to require:
+active = true
+Deleted ingredients can no longer be added to new Recipes.
+________________________________________
+Ingredient Delete Data Preservation
+Removed destructive delete chain from Ingredient delete workflow.
+No longer deletes:
+ing_allergens
+ing_diet_tags
+during Ingredient delete.
+Reason:
+Deleted Ingredient records remain recoverable and retain complete metadata.
+________________________________________
+Ingredient Impact Count
+Added Recipe usage counting framework.
+Current:
+Recipes
+Future placeholders retained:
+Dishes
+Menus
+Events
+for downstream expansion.
+________________________________________
+Database Changes
+Table
+Updated:
+public.ing_items
+Added:
+deleted boolean not null default false
+________________________________________
+View
+Updated:
+public.vw_ing_items
+Added:
+deleted
+________________________________________
+Consistency Improvements
+Recipes and Ingredients now share the same deletion architecture.
+Current pattern:
+Ingredients
+  active
+  deleted
+
+Recipes
+  active
+  deleted
+Planned future pattern:
+Ingredients
+Recipes
+Dishes
+Menus
+all using:
+active + deleted
+status model.
+________________________________________
+Outstanding Testing
+Ingredient Delete
+Verify:
+•	Deleted ingredient disappears from Ingredient List
+•	Deleted ingredient disappears from Recipe component picklists
+•	Deleted ingredient remains visible where already used
+•	Deleted ingredient cost contribution removed
+•	Deleted ingredient warning styling applied
+Inactive vs Deleted
+Verify separate downstream behavior:
+Inactive:
+•	Temporary
+•	Row remains
+•	Qty/Unit retained
+•	Line Cost blank
+•	Italic warning
+Deleted:
+•	Permanent
+•	Row remains
+•	Name red
+•	Cost contribution removed
+•	Not available in picklists
+________________________________________
+Deferred
+Admin Restore Page
+Future capability enabled by soft delete architecture.
+Potential sections:
+Deleted Ingredients
+Deleted Recipes
+Deleted Dishes
+Deleted Menus
+Actions:
+Restore
+Permanent Delete
+Not implemented.
+________________________________________
+Next Session Priority
+1.	Test Ingredient delete downstream behavior in Recipes
+2.	Verify inactive vs deleted behavior
+3.	Review Settings Category Replace/Delete rules
+4.	Verify Ingredient and Recipe propagation
+5.	Commit propagation/category changes
+________________________________________
+Notes
+This commit intentionally focuses on data preservation and architectural alignment.
+Behavioral polishing for deleted/inactive downstream display remains a separate follow-up task.
+
