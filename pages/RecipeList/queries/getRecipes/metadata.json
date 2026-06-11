@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT *\nFROM vw_rec_items\nWHERE client_id = '{{ appsmith.store.current_client_id }}'::uuid\nORDER BY name ASC;",
+      "body": "SELECT *\nFROM vw_rec_items\nWHERE client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  AND coalesce(deleted, false) = false\nORDER BY name ASC;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

@@ -17,9 +17,6 @@
   ],
   "dynamicPropertyPathList": [
     {
-      "key": "isDisabled"
-    },
-    {
       "key": "onClick"
     }
   ],
@@ -29,7 +26,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "",
+  "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -40,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ recRecipeSave.closeWithoutSaving() }}",
+  "onClick": "{{\n  appsmith.store.pendingRecipeAction === \"duplicate\"\n    ? recRecipeSave.duplicateWithoutSaving()\n    : appsmith.store.pendingRecipeAction === \"delete\"\n      ? recRecipeSave.deleteWithoutSaving()\n      : recRecipeSave.closeWithoutSaving()\n}}",
   "originalBottomRow": 24,
   "originalTopRow": 20,
   "parentId": "qtesy6qkrq",
@@ -51,7 +48,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 49,
   "text": "No",
-  "tooltip": "Closse without saving",
+  "tooltip": "Close without saving",
   "topRow": 20,
   "type": "BUTTON_WIDGET",
   "version": 1,

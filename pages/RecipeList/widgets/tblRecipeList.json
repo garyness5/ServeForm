@@ -47,9 +47,10 @@
     "notes",
     "created_at",
     "updated_at",
-    "diet_tag_names"
+    "diet_tag_names",
+    "deleted"
   ],
-  "columnUpdatedAt": 1781024908140,
+  "columnUpdatedAt": 1781134980197,
   "columnWidthMap": {
     "category_id": 118,
     "category_name": 154,
@@ -131,6 +132,9 @@
     },
     {
       "key": "primaryColumns.diet_tag_names.computedValue"
+    },
+    {
+      "key": "primaryColumns.deleted.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -313,6 +317,40 @@
       "notation": "standard",
       "originalId": "created_at",
       "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "deleted": {
+      "alias": "deleted",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "checkbox",
+      "computedValue": "{{(() => { const tableData = tblRecipeList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"deleted\"])) : deleted })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "deleted",
+      "index": 16,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "deleted",
+      "notation": "standard",
+      "originalId": "deleted",
+      "sticky": "",
+      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},

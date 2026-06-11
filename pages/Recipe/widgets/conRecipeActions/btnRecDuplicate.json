@@ -4,7 +4,7 @@
   "bottomRow": 5,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
-  "buttonVariant": "PRIMARY",
+  "buttonVariant": "SECONDARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
     {
@@ -14,9 +14,18 @@
       "key": "borderRadius"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
   "isDefaultClickDisabled": true,
-  "isDisabled": true,
+  "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
   "key": "bv6gv3416k",
@@ -27,6 +36,7 @@
   "mobileRightColumn": 18,
   "mobileTopRow": 1,
   "needsErrorInfo": false,
+  "onClick": "{{ recRecipeSave.duplicateRecipe() }}",
   "parentColumnSpace": 19.5,
   "parentId": "v0yy3bish5",
   "parentRowSpace": 10,

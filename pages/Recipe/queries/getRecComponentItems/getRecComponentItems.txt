@@ -55,6 +55,7 @@ left join recipe_costs rc
   on rc.recipe_id = r.id
 where r.client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and r.active = true
+  and coalesce(r.deleted, false) = false
   and r.id <> {{ Number(appsmith.store.current_recipe_id || 0) }}
 
 order by item_type, name;

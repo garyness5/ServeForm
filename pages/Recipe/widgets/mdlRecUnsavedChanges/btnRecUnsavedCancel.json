@@ -17,9 +17,6 @@
   ],
   "dynamicPropertyPathList": [
     {
-      "key": "isDisabled"
-    },
-    {
       "key": "onClick"
     }
   ],
@@ -29,7 +26,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "",
+  "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -40,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ closeModal(\"mdlRecUnsavedChanges\") }}",
+  "onClick": "{{\n  storeValue(\"pendingRecipeAction\", null);\n  closeModal(\"mdlRecUnsavedChanges\");\n}}",
   "originalBottomRow": 24,
   "originalTopRow": 20,
   "parentId": "qtesy6qkrq",

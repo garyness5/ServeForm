@@ -199,6 +199,7 @@ export default {
 		await recCompTable.syncFromTable();
 
 		if (this.isDirty()) {
+			await storeValue("pendingRecipeAction", "close");
 			showModal("mdlRecUnsavedChanges");
 			return;
 		}
@@ -219,6 +220,95 @@ export default {
 		await recCompTable.clearDraftRows();
 		navigateTo("RecipeList");
 	},
+	
+  async duplicateRecipeSavedVersion() {
+    const result = await duplicateRecipe.run();
+    const newId = result?.[0]?.id;
+
+    if (!newId) {
+      showAlert("Recipe duplicate failed", "error");
+      return false;
+    }
+
+    await storeValue("current_recipe_id", newId);
+
+    await getRecItemById.run();
+    await getSelectedRecDietTags.run();
+    await getRecComponents.run();
+    await recCompTable.loadFromQuery();
+
+    showAlert("Recipe duplicated", "success");
+    return true;
+  },
+
+  async duplicateRecipe() {
+    if (this.isDirty()) {
+      await storeValue("pendingRecipeAction", "duplicate");
+      showModal("mdlRecUnsavedChanges");
+      return false;
+    }
+
+    return await this.duplicateRecipeSavedVersion();
+  },
+
+  async saveAndDuplicateRecipe() {
+    const saved = await this.saveRecipe();
+    if (!saved) return false;
+
+    closeModal("mdlRecUnsavedChanges");
+    return await this.duplicateRecipeSavedVersion();
+  },
+
+  async duplicateWithoutSaving() {
+    closeModal("mdlRecUnsavedChanges");
+    return await this.duplicateRecipeSavedVersion();
+  },
+	
+  async deleteRecipeStart() {
+    if (this.isDirty()) {
+      await storeValue("pendingRecipeAction", "delete");
+      showModal("mdlRecUnsavedChanges");
+      return false;
+    }
+
+    await getRecImpactCount.run();
+    showModal("mdlRecDeleteConfirm");
+    return true;
+  },
+
+  async deleteRecipeConfirm() {
+    await deleteRecipe.run();
+
+    closeModal("mdlRecDeleteConfirm");
+    await recCompTable.clearDraftRows();
+    await storeValue("current_recipe_id", 0);
+
+    showAlert("Recipe deleted", "success");
+    navigateTo("RecipeList");
+
+    return true;
+  },
+
+  async saveAndDeleteRecipe() {
+    const saved = await this.saveRecipe();
+    if (!saved) return false;
+
+    closeModal("mdlRecUnsavedChanges");
+
+    await getRecImpactCount.run();
+    showModal("mdlRecDeleteConfirm");
+
+    return true;
+  },
+
+  async deleteWithoutSaving() {
+    closeModal("mdlRecUnsavedChanges");
+
+    await getRecImpactCount.run();
+    showModal("mdlRecDeleteConfirm");
+
+    return true;
+  },
 
 	testSaveData() {
 		return {
