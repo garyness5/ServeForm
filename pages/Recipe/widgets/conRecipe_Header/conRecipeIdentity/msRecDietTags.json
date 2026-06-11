@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 24,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  (getSelectedRecDietTags.data || []).map(x => x.value) ))(msRecDietTags.options, msRecDietTags.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  Number(appsmith.store.current_recipe_id || 0) === 0\n    ? []\n    : (getSelectedRecDietTags.data || []).map(x => String(x.value))\n))(msRecDietTags.options, msRecDietTags.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -13,10 +13,10 @@
       "key": "borderRadius"
     },
     {
-      "key": "sourceData"
+      "key": "defaultOptionValue"
     },
     {
-      "key": "defaultOptionValue"
+      "key": "sourceData"
     }
   ],
   "dynamicHeight": "FIXED",
@@ -57,7 +57,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "serverSideFiltering": false,
-  "sourceData": "{{ getRecDietTags.data.map(x => ({\n  label: x.name,\n  value: String(x.id)\n})) }}",
+  "sourceData": "{{\n  (getRecDietTags.data || []).map(x => ({\n    label: x.name,\n    value: String(x.id)\n  }))\n}}",
   "topRow": 17,
   "type": "MULTI_SELECT_WIDGET_V2",
   "version": 1,

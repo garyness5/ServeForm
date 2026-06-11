@@ -1,0 +1,2 @@
+select
+  '{{ appsmith.store.current_client_id }}' as appsmith_client_id;

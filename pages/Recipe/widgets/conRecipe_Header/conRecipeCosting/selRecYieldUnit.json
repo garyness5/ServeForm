@@ -13,10 +13,10 @@
       "key": "borderRadius"
     },
     {
-      "key": "sourceData"
+      "key": "defaultOptionValue"
     },
     {
-      "key": "defaultOptionValue"
+      "key": "sourceData"
     }
   ],
   "dynamicHeight": "FIXED",
@@ -62,7 +62,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "serverSideFiltering": true,
-  "sourceData": "{{Select_public_units2.data}}",
+  "sourceData": "{{ Number(appsmith.store.current_recipe_id || 0) === 0 ? \"\" : String(getRecItemById.data?.[0]?.yield_unit_id || \"\") }}",
   "topRow": 1,
   "type": "SELECT_WIDGET",
   "version": 1,

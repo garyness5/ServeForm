@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 17,
+  "bottomRow": 19,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -33,7 +33,7 @@
   "mobileRightColumn": 18,
   "mobileTopRow": 8,
   "needsErrorInfo": false,
-  "originalBottomRow": 13,
+  "originalBottomRow": 17,
   "originalTopRow": 8,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 61,
   "shouldTruncate": false,
-  "text": "{{\n  appsmith.store.plReplaceAction === \"Replace\"\n\n    ? \"<b>Replace everywhere used?</b><br>    The original item will remain in the list.\"\n\n    : Number(getHelperIngredientImpactCount.data?.[0]?.ingredient_count || 0) > 0\n\n      ? \"<b>Delete item?</b><br>     This item is currently being used. Only the selected item will be deleted. Everything else will remain unchanged.\"\n\n      : \"<b>Delete unused item?</b><br>    The selected item is not currently being used.\"\n}}",
+  "text": "{{\n  appsmith.store.plReplaceAction === \"Replace\"\n\n    ? \"<b>Replace everywhere used?</b><br>    The original item will remain in the list.\"\n\n    : (\n        Number(getHelperIngredientImpactCount.data?.[0]?.ingredient_count || 0) +\n        Number(getHelperRecipeImpactCount.data?.[0]?.recipe_count || 0)\n      ) > 0\n\n      ? \"<b>Delete item?</b><br>     This item is currently being used in Ingredients and/or Recipes. See below. <br>Only the selected item will be deleted. Everything else will remain unchanged.\"\n\n      : \"<b>Delete unused item?</b><br>    The selected item is not currently being used.\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 8,

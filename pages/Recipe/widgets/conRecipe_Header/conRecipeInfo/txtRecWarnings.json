@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 13,
+  "bottomRow": 18,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -30,7 +30,7 @@
   "fontSize": "1rem",
   "fontStyle": "",
   "isLoading": false,
-  "isVisible": "{{ recWarnings.list().length > 0 }}",
+  "isVisible": "{{\n  Number(appsmith.store.current_recipe_id || 0) > 0 &&\n  recWarnings.list().length > 0\n}}",
   "key": "or4p3qeldn",
   "leftColumn": 0,
   "maxDynamicHeight": 9000,
@@ -41,7 +41,7 @@
   "mobileRightColumn": 17,
   "mobileTopRow": 2,
   "needsErrorInfo": false,
-  "originalBottomRow": 16,
+  "originalBottomRow": 18,
   "originalTopRow": 9,
   "overflow": "NONE",
   "parentColumnSpace": 6.6953125,

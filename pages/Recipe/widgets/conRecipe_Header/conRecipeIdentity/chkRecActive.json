@@ -4,7 +4,7 @@
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 29,
-  "defaultCheckedState": "{{\n  getRecItemById.data?.[0]\n    ? Boolean(getRecItemById.data[0].active)\n    : true\n}}",
+  "defaultCheckedState": "{{\n  Number(appsmith.store.current_recipe_id || 0) === 0\n    ? true\n    : getRecItemById.data?.[0]\n      ? Boolean(getRecItemById.data[0].active)\n      : true\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

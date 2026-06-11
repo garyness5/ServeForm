@@ -300,7 +300,11 @@ export default {
 			allergen_names: item.allergen_names,
 			diet_tag_names: item.diet_tag_names,
 
-			apply_wastage: item.wastage_percent ? true : true,
+			child_deleted: false,
+			child_active: true,
+			component_status: "active",
+
+			apply_wastage: true,
 			active: true,
 			line_cost: null
 		});
@@ -321,34 +325,52 @@ export default {
 		return await this.setRows(remaining);
 	},
 
-	rowsForSave() {
-		const rows = this.mergeUpdatedRows();
+rowsForSave() {
+	const rows = this.mergeUpdatedRows();
 
-		return this.normalizeRows(rows)
-			.filter(r => this.hasContent(r))
-			.map((r, index) => {
+	return this.normalizeRows(rows)
+		.filter(r => this.hasContent(r))
+		.map((r, index) => {
+			const isDeletedChild =
+				r.component_status === "child_deleted" ||
+				r.child_deleted === true;
+
+			if (isDeletedChild) {
+				return {
+					recipe_id: Number(appsmith.store.current_recipe_id || 0),
+					line_no: index + 1,
+					item_type: r.item_type || null,
+					ingredient_id: r.item_type === "ingredient" ? Number(r.ingredient_id || 0) || null : null,
+					child_recipe_id: r.item_type === "recipe" ? Number(r.child_recipe_id || 0) || null : null,
+					qty: r.saved_qty === "" || r.saved_qty == null ? null : Number(r.saved_qty),
+					unit_id: Number(r.saved_unit_id || 0) || null,
+					apply_wastage: r.apply_wastage === false ? false : true,
+					active: r.active === false ? false : true
+				};
+			}
+
 			const item = (getRecComponentItems.data || []).find(i =>
-																													i.item_type === r.item_type &&
-																													i.name === r.component_name
-																												 );
+				i.item_type === r.item_type &&
+				i.name === r.component_name
+			);
 
 			const unit = (getRecComponentUnits.data || []).find(u =>
-																													u.abbreviation === r.unit_abbreviation
-																												 );
+				u.abbreviation === r.unit_abbreviation
+			);
 
 			return {
 				recipe_id: Number(appsmith.store.current_recipe_id || 0),
 				line_no: index + 1,
 				item_type: r.item_type || null,
-				ingredient_id: r.item_type === "ingredient" ? item?.id || null : null,
-				child_recipe_id: r.item_type === "recipe" ? item?.id || null : null,
+				ingredient_id: r.item_type === "ingredient" ? Number(r.ingredient_id || item?.id || 0) || null : null,
+				child_recipe_id: r.item_type === "recipe" ? Number(r.child_recipe_id || item?.id || 0) || null : null,
 				qty: r.qty === "" || r.qty == null ? null : Number(r.qty),
-				unit_id: unit?.id || item?.default_unit_id || null,
+				unit_id: unit?.id || r.unit_id || item?.default_unit_id || null,
 				apply_wastage: r.apply_wastage === false ? false : true,
 				active: r.active === false ? false : true
 			};
 		});
-	},
+},
 	
 	unitOptions(row) {
 		const unitType = row?.unit_type;

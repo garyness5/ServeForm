@@ -75,6 +75,8 @@ export default {
 		await storeValue("current_recipe_id", 0);
 		await recCompTable.clearDraftRows();
 
+		await storeValue("rec_components_local_rows", recCompTable.normalizeRows([]));
+
 		await this.safeReset("inpRecName");
 		await this.safeReset("selRecCategory");
 		await this.safeReset("chkRecActive");
@@ -84,6 +86,8 @@ export default {
 		await this.safeReset("msRecDietTags");
 		await this.safeReset("rteRecNotes");
 		await this.safeReset("tblRecComponents");
+
+		await getRecComponents.run();
 
 		showAlert("Saved. Ready for new recipe.", "success");
 		return true;
@@ -145,15 +149,15 @@ export default {
 		return (rows || [])
 			.filter(r => r.item_type && (r.ingredient_id || r.child_recipe_id))
 			.map((r, index) => ({
-			line_no: index + 1,
-			item_type: r.item_type || null,
-			ingredient_id: r.item_type === "ingredient" ? this.clean(r.ingredient_id) : null,
-			child_recipe_id: r.item_type === "recipe" ? this.clean(r.child_recipe_id) : null,
-			qty: this.clean(r.qty),
-			unit_id: this.clean(r.unit_id),
-			apply_wastage: r.apply_wastage === false ? false : true,
-			active: r.active === false ? false : true
-		}));
+				line_no: index + 1,
+				item_type: r.item_type || null,
+				ingredient_id: r.item_type === "ingredient" ? this.clean(r.ingredient_id) : null,
+				child_recipe_id: r.item_type === "recipe" ? this.clean(r.child_recipe_id) : null,
+				qty: this.clean(r.saved_qty ?? r.qty),
+				unit_id: this.clean(r.saved_unit_id ?? r.unit_id),
+				apply_wastage: r.apply_wastage === false ? false : true,
+				active: r.active === false ? false : true
+			}));
 	},
 
 	currentComponentSnapshot() {

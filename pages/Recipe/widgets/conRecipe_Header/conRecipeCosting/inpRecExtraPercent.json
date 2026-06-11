@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 16,
   "boxShadow": "none",
-  "defaultText": "{{ getRecItemById.data?.[0]?.extra_percent ?? 0 }}",
+  "defaultText": "{{ Number(appsmith.store.current_recipe_id || 0) === 0 ? 0 : getRecItemById.data?.[0]?.extra_percent ?? 0 }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
