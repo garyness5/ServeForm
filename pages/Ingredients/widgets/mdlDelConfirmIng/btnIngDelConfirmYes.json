@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  delIngAllergens.run(() => {\n    delIngDietTags.run(() => {\n      delIng.run(() => {\n      resetWidget(\"tblIngredientsList\");\n        getIngredients.run();\n        closeModal(\"mdlDelConfirmIng\");\n        closeModal(\"mdlDeleteIng\");\n        showAlert(\"Ingredient deleted\", \"success\");\n      });\n    });\n  })\n}}",
+  "onClick": "{{\n  delIng.run(() => {\n    resetWidget(\"tblIngredientsList\");\n    getIngredients.run();\n    closeModal(\"mdlDelConfirmIng\");\n    showAlert(\"Ingredient deleted\", \"success\");\n  })\n}}",
   "originalBottomRow": 31,
   "originalTopRow": 27,
   "parentId": "6pp4tm9qzz",

@@ -1,4 +1,8 @@
--- Delete Ingredient
-delete from ing_items
+update public.ing_items
+set
+  active = false,
+  deleted = true,
+  updated_at = now()
 where id = {{ Number(tblIngredientsList.selectedRow.id) }}
-  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+returning *;

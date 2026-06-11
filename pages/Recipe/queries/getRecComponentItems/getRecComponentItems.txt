@@ -4,8 +4,7 @@ with recipe_costs as (
     sum(coalesce(vc.line_cost, 0)) as subtotal
   from public.vw_rec_components vc
   group by vc.recipe_id
-)
-
+)	
 select
   'ingredient'::text as item_type,
   id,
@@ -23,6 +22,7 @@ select
 from public.vw_ing_items
 where client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and active = true
+  and coalesce(deleted, false) = false
 
 union all
 

@@ -37,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{\n  !tblIngredientsList.selectedRow?.id\n    ? showAlert(\"Select an ingredient first\", \"warning\")\n    : showModal(\"mdlDeleteIng\")\n}}",
+  "onClick": "{{\n  !tblIngredientsList.selectedRow?.id\n    ? showAlert(\"Select an ingredient first\", \"warning\")\n    : showModal(\"mdlDelConfirmIng\")\n}}",
   "parentColumnSpace": 10.609375,
   "parentId": "0",
   "parentRowSpace": 10,
