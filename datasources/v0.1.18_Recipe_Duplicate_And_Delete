@@ -1,0 +1,142 @@
+v0.1.18_Recipe_Duplicate_And_Delete
+Date
+2026-06-10
+Summary
+Completed Recipe Duplicate and Recipe Delete functionality.
+Recipe records now support soft delete using a dedicated deleted flag, preserving downstream integrity and allowing future restoration.
+________________________________________
+Completed
+Recipe Duplicate
+Implemented duplicate recipe functionality from both Recipe page and Recipe List.
+Behavior:
+•	Creates exact copy of recipe header
+•	Copies diet tags
+•	Copies recipe components
+•	Copies notes
+•	Copies yield information
+•	Copies active status
+•	Opens duplicated recipe for editing
+Duplicate naming:
+•	Recipe Name (Copy)
+•	Recipe Name (Copy 2)
+•	Recipe Name (Copy 3)
+•	etc.
+Duplicate name generation uses existing normalization rules and respects case/accent-insensitive uniqueness.
+Examples considered equivalent:
+•	Tokay
+•	tokay
+•	Tókay
+•	toKày
+________________________________________
+Recipe Delete
+Implemented soft delete architecture.
+Delete action now:
+•	Sets active = false
+•	Sets deleted = true
+Recipe is removed from:
+•	Recipe List
+•	Recipe picklists
+•	Component recipe selectors
+Recipe remains stored in database.
+Benefits:
+•	Supports future restore capability
+•	Preserves downstream references
+•	Avoids accidental permanent data loss
+________________________________________
+Recipe Page
+Added:
+•	Delete button workflow
+•	Delete confirmation modal
+•	Impact count display
+•	Unsaved-changes integration
+Delete flow:
+Delete
+→ Unsaved Changes Check
+→ Delete Confirmation
+→ Delete
+→ Return to Recipe List
+________________________________________
+Recipe List
+Added:
+•	Duplicate selected recipe
+•	Delete selected recipe
+•	Delete confirmation modal
+•	Downstream impact count
+Buttons disabled when no recipe selected.
+________________________________________
+Downstream Impact Counting
+Added Recipe impact counting framework.
+Current:
+•	Recipe usage count operational
+Placeholders added for:
+•	Dishes
+•	Menus
+•	Events
+Framework ready for future domain expansion.
+________________________________________
+Database Changes
+Added:
+public.rec_items.deleted
+Type:
+boolean not null default false
+________________________________________
+View Changes
+Updated:
+public.vw_rec_items
+Added:
+deleted
+________________________________________
+Query Changes
+Updated Recipe queries to exclude deleted recipes.
+Pattern:
+deleted = false
+Applied to:
+•	Recipe List
+•	Recipe component recipe picklists
+________________________________________
+Recovery Capability
+Deleted recipes remain recoverable.
+Current restore method:
+Update deleted = false and active = true directly in Supabase.
+Future enhancement planned:
+Admin Restore Page.
+________________________________________
+Confirmed Working
+Recipe Page
+•	Save
+•	Save & New
+•	Close
+•	Duplicate
+•	Delete
+Recipe List
+•	Open
+•	Duplicate
+•	Delete
+Dirty State
+•	Close
+•	Duplicate
+•	Delete
+All correctly respect unsaved changes.
+________________________________________
+Future Work
+Admin Restore Page
+Potential future module:
+•	Deleted Ingredients
+•	Deleted Recipes
+•	Deleted Dishes
+•	Deleted Menus
+Actions:
+•	Restore
+•	Permanent Delete
+________________________________________
+Notes
+Soft delete architecture selected intentionally to support downstream warning behavior, recovery capability, and future cross-domain consistency.
+Target pattern:
+•	Ingredients
+•	Recipes
+•	Dishes
+•	Menus
+All to follow:
+active + deleted
+status model.
+
