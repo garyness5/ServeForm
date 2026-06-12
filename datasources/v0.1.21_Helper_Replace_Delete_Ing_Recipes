@@ -1,0 +1,192 @@
+SERVEFORM / SAVVEYRA
+Git Commit Log
+
+Version: v0.1.21
+
+Title:
+Complete Helper Replace/Delete Rules + Recipe Category Propagation
+
+Completed
+
+Recipes
+
+* Verified Recipe category impact counting.
+* Added Recipe category replacement propagation.
+* Fixed Recipe category replace-everywhere behavior.
+* Verified Recipe category rename behavior.
+* Verified Recipe category delete behavior.
+* Verified Recipe category replace + delete behavior.
+
+Recipe Components
+
+* Deleted child rows remain visible.
+* Deleted child rows preserve ItemType.
+* Deleted child rows preserve Category.
+* Deleted child rows preserve deleted item name.
+* Deleted child rows remove Qty.
+* Deleted child rows remove Unit.
+* Deleted child rows remove Line Cost.
+* Deleted child rows survive Save.
+* Deleted child rows survive reopen.
+* Deleted child replacement clears warning immediately.
+
+Inactive Components
+
+* Inactive rows remain visible.
+* Yellow warning background.
+* Qty retained.
+* Unit retained.
+* Line Cost blank.
+* Cost contribution excluded.
+
+Recipe Save & New
+
+* Components cleared.
+* Header fields cleared.
+* Category cleared.
+* Diet Tags cleared.
+* Yield fields cleared.
+* Notes cleared.
+* New recipe warnings hidden.
+
+Recipe Diet Tags
+
+* Restored Recipe Diet Tag picker.
+* Fixed selected values logic.
+* Fixed Save & New clearing behavior.
+
+Settings / Helpers
+
+Implemented final helper behavior rules.
+
+Ingredient Categories
+
+* Impact count working.
+* Replace working.
+* Replace + Delete working.
+* Delete blocked when category is in use and no replacement selected.
+
+Recipe Categories
+
+* Impact count working.
+* Replace working.
+* Replace + Delete working.
+* Delete blocked when category is in use and no replacement selected.
+* Fixed category propagation into rec_items.
+
+Diet Tags
+
+System Diet Tags
+
+* Cannot Rename.
+* Cannot Replace.
+* Cannot Delete.
+
+User Diet Tags
+
+* Can Rename.
+* Can Delete.
+* Cannot Replace.
+
+Delete behavior:
+
+* Ingredient tag links removed.
+* Recipe tag links removed.
+* No warnings retained.
+* No placeholders retained.
+
+Suppliers
+
+Delete behavior:
+
+* supplier_id cleared.
+* No warnings.
+* No placeholders.
+
+Optional behavior:
+
+* Replace and keep original.
+* Replace and delete original.
+* Delete only.
+
+Packaging
+
+Delete behavior:
+
+* packaging_id cleared.
+* No warnings.
+* No placeholders.
+
+Optional behavior:
+
+* Replace and keep original.
+* Replace and delete original.
+* Delete only.
+
+Replace/Delete Workflow
+
+* Combined Replace/Delete modal retained.
+* Category replacement enforcement added.
+* Impact counts integrated.
+* Final confirmation retained only for:
+
+  * Delete
+  * No replacement selected
+  * Impact count greater than zero
+
+Impact Counts
+
+* Added Recipe impact count support.
+* Fixed Recipe impact count query.
+* Corrected helper selection source.
+* Verified Ingredient counts.
+* Verified Recipe counts.
+
+UI
+
+* Replace/Delete modal behavior aligned with operational rules.
+* Category deletion protection implemented.
+* Diet Tag restrictions implemented.
+* Replacement picker corrected.
+
+Database / Queries
+
+Fixed:
+
+* updPicklistReplaceEverywhere now updates rec_items for recipe_category.
+* getHelperRecipeImpactCount now references selected helper correctly.
+
+Verified Working
+
+* Ingredient Categories
+* Recipe Categories
+* Diet Tags
+* Suppliers
+* Packaging
+* Ingredient propagation
+* Recipe propagation
+* Helper impact counts
+* Replace workflows
+* Delete workflows
+
+Deferred
+
+* Shared Ingredient Add refactor.
+* Recipe Quick Add Ingredient.
+* Dishes module.
+* Dish Category propagation.
+* Menu Category propagation.
+* Event impacts.
+
+Next Planned Work
+
+1. Refactor Ingredient Add into shared workflow.
+2. Add Recipe Quick Add Ingredient mode.
+3. Begin Dishes module.
+4. Extend helper impact/replace rules into Dishes and Menus.
+
+Checkpoint Status
+
+Helpers / Settings considered complete for Ingredients and Recipes.
+Recipe module considered operationally stable for current scope.
+Ready for Ingredient Add refactor and Dishes development.
