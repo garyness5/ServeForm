@@ -1,0 +1,87 @@
+SERVEFORM / SAVVEYRA
+Git Commit Log
+Version: v0.1.20
+Title:
+Recipe Hardening, Downstream Warning Behavior, Save & New Cleanup, Settings Impact Counts
+Completed
+Recipes
+•	Verified inactive ingredient downstream behavior.
+•	Verified deleted recipe/sub-recipe downstream behavior.
+•	Added component_status support in vw_rec_components.
+•	Added child_active support in vw_rec_components.
+•	Added child_deleted support in vw_rec_components.
+•	Added saved_qty support in vw_rec_components.
+•	Added saved_unit_id support in vw_rec_components.
+•	Added saved_unit_abbreviation support in vw_rec_components.
+Inactive Component Rules
+•	Component row remains visible.
+•	Yellow warning background.
+•	Qty remains visible.
+•	Unit remains visible.
+•	Line Cost excluded and blank.
+•	Header warnings displayed.
+Deleted Component Rules
+•	Component row remains visible.
+•	ItemType remains visible.
+•	Category remains visible.
+•	Item remains visible.
+•	Red warning background.
+•	Qty removed.
+•	Unit removed.
+•	Line Cost removed.
+•	Cost contribution excluded.
+•	Hidden from selection lists.
+•	Replacement clears warning immediately.
+Recipe Save Protection
+•	Fixed deleted child rows disappearing during save.
+•	Fixed rowsForSave preserving deleted child references.
+•	Fixed save_rec_components_snapshot interaction with deleted child rows.
+•	Deleted child rows now survive save and reopen correctly.
+•	Replacement behavior validated.
+Recipe Dirty State
+•	Reduced false dirty-state behavior caused by deleted child display values.
+•	Confirmed upstream inactive/deleted changes display correctly downstream.
+Recipe Save & New
+•	Components clear correctly.
+•	Header fields clear correctly.
+•	Category clears correctly.
+•	Diet Tags clear correctly.
+•	Yield fields clear correctly.
+•	Notes clear correctly.
+•	New recipe state restored after save.
+Recipe Warnings
+•	Hidden for new unsaved recipes.
+•	Continue displaying for saved recipes when applicable.
+Recipe Diet Tags
+•	Restored Recipe Diet Tag picker.
+•	Fixed selected values behavior.
+•	Fixed new recipe clearing behavior.
+Settings / Helper Impact Counts
+•	Added Recipe impact count support.
+•	Settings impact display now includes Recipes.
+•	Delete confirmation logic updated to consider Recipe impacts.
+•	Existing Ingredient impact logic retained.
+UI Improvements
+•	Inactive rows use yellow warning background.
+•	Deleted rows use red warning background.
+•	Replacement immediately removes warning styling without requiring save.
+Verified Working
+•	Helper propagation to Ingredients.
+•	Helper propagation to Recipes.
+•	Ingredient inactive propagation.
+•	Ingredient deleted propagation.
+•	Recipe deleted propagation.
+•	Recipe replacement workflow.
+•	Save & New workflow.
+•	Recipe Diet Tag selection.
+•	Recipe impact counts.
+Deferred
+•	Recipe Quick Add Ingredient.
+•	Shared Ingredient Add modal reuse from Recipes.
+•	Dishes module.
+•	Dish/Menu/Event impact counts.
+•	List-page inline editing improvements.
+Checkpoint Status
+Recipe module considered operationally stable for current scope.
+Recommended checkpoint before implementing Recipe Quick Add Ingredient and beginning Dishes module.
+
