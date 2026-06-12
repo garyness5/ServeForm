@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "update helper_list_items\nset\n  active = false,\n  updated_at = now()\nwhere id = {{ tblPicklistItems.selectedRow.id }};\n  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;",
+      "body": "update helper_list_items\nset active = false\nwhere id = {{ Number(tblPicklistItems.selectedRow.id) }}\n  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
