@@ -48,7 +48,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 18,
   "text": "Edit",
-  "tooltip": "Select an ingredient first",
+  "tooltip": "Edit selected ingredient",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,

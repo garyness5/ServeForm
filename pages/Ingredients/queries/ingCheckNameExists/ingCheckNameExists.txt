@@ -1,6 +1,12 @@
-select count(*) as match_count
+select
+  id,
+  name
 from public.ing_items
-where client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and coalesce(deleted, false) = false
-  and norm_name(name) = norm_name('{{ this.params.name }}')
-  and id <> {{ this.params.ingredient_id || 0 }};
+where client_id = {{ appsmith.store.current_client_id }}
+  and deleted = false
+  and name_norm = lower(trim({{ appsmith.store.IngForm_save_name }}))
+  and (
+    {{ appsmith.store.IngForm_mode !== "edit" }}
+    or id <> {{ appsmith.store.IngForm_edit_id || 0 }}
+  )
+limit 1;

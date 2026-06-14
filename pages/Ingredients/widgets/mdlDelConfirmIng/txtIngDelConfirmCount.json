@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 26,
+  "bottomRow": 25,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -30,7 +30,7 @@
   "fontSize": "0.875rem",
   "fontStyle": "",
   "isLoading": false,
-  "isVisible": "{{ \n  (getIngredientImpactCount.data?.[0]?.recipe_count || 0) > 0 ||\n  (getIngredientImpactCount.data?.[0]?.dish_count || 0) > 0 ||\n  (getIngredientImpactCount.data?.[0]?.menu_count || 0) > 0 ||\n  (getIngredientImpactCount.data?.[0]?.event_count || 0) > 0\n}}",
+  "isVisible": "{{ true }}",
   "key": "h29kmo3jn9",
   "leftColumn": 3,
   "maxDynamicHeight": 9000,
@@ -51,10 +51,10 @@
   "responsiveBehavior": "fill",
   "rightColumn": 25,
   "shouldTruncate": false,
-  "text": "{{\n`This will impact\n    Recipes: ${getIngredientImpactCount.data?.[0]?.recipe_count || 0}\n    Dishes: ${getIngredientImpactCount.data?.[0]?.dish_count || 0}\n    Menus: ${getIngredientImpactCount.data?.[0]?.menu_count || 0}\n    Events: ${getIngredientImpactCount.data?.[0]?.event_count || 0}`\n}}",
+  "text": "{{\n`This will impact\n   Recipes: ${getIngredientImpactCount.data?.[0]?.recipe_count || 0}\n   Dishes: ${getIngredientImpactCount.data?.[0]?.dish_count || 0}\n   Menus: ${getIngredientImpactCount.data?.[0]?.menu_count || 0}\n   Events: ${getIngredientImpactCount.data?.[0]?.event_count || 0}`\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 16,
+  "topRow": 15,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

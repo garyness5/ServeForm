@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 31,
+  "bottomRow": 30,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
   "buttonStyle": "PRIMARY",
@@ -15,7 +15,11 @@
       "key": "borderRadius"
     }
   ],
-  "dynamicPropertyPathList": [],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
   "dynamicTriggerPathList": [
     {
       "key": "onClick"
@@ -33,7 +37,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{closeModal(mdlDelConfirmIng.name);}}",
+  "onClick": "{{ IngForm.cancelDelete() }}",
   "originalBottomRow": 31,
   "originalTopRow": 27,
   "parentId": "6pp4tm9qzz",
@@ -44,7 +48,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 61,
   "text": "Cancel",
-  "topRow": 27,
+  "topRow": 26,
   "type": "BUTTON_WIDGET",
   "version": 1,
   "widgetId": "1q5pgrj9ax",

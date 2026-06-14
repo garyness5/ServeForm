@@ -66,9 +66,16 @@ export default {
     await storeValue("IngForm_save_notes", rteIngNotes.text || null);
     await storeValue("IngForm_save_active", chkIngActive.isChecked === false ? false : true);
     await storeValue("IngForm_save_allergens", msIngAllergens.selectedOptionValues || []);
-    await storeValue("IngForm_save_diet_tags", msIngDietTags.selectedOptionValues || []);
+		await storeValue("IngForm_save_diet_tags", msIngDietTags.selectedOptionValues || []);
 
-    let result;
+		const duplicate = await ingCheckNameExists.run();
+
+		if (duplicate && duplicate.length > 0) {
+			showAlert("An Ingredient with this name already exists.", "warning");
+			return;
+		}
+
+		let result;
 
     if (this.isEdit()) {
       result = await updateIngredient.run();
@@ -109,6 +116,37 @@ export default {
     resetWidget("mdlAddIng", true);
   },
 
+	async openDeleteConfirm() {
+		const row = tblIngList.selectedRow;
+
+		if (!row || !row.id) {
+			showAlert("Select an ingredient to delete.", "warning");
+			return;
+		}
+
+		await getIngredientImpactCount.run();
+		showModal("mdlDelConfirmIng");
+	},
+
+	async confirmDelete() {
+		const row = tblIngList.selectedRow;
+
+		if (!row || !row.id) {
+			showAlert("No ingredient selected.", "warning");
+			return;
+		}
+
+		await delIng.run();
+		await getIngredients.run();
+
+		closeModal("mdlDelConfirmIng");
+		showAlert("Ingredient deleted.", "success");
+	},
+
+	cancelDelete() {
+		closeModal("mdlDelConfirmIng");
+	},
+	
   cancel() {
     closeModal("mdlAddIng");
   }

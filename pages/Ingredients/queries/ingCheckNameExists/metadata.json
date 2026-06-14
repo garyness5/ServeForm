@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select count(*) as match_count\nfrom public.ing_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\n  and norm_name(name) = norm_name('{{ this.params.name }}')\n  and id <> {{ this.params.ingredient_id || 0 }};",
+      "body": "select\n  id,\n  name\nfrom public.ing_items\nwhere client_id = {{ appsmith.store.current_client_id }}\n  and deleted = false\n  and name_norm = lower(trim({{ appsmith.store.IngForm_save_name }}))\n  and (\n    {{ appsmith.store.IngForm_mode !== \"edit\" }}\n    or id <> {{ appsmith.store.IngForm_edit_id || 0 }}\n  )\nlimit 1;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
