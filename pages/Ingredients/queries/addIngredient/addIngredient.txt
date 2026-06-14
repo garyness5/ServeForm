@@ -1,0 +1,29 @@
+insert into public.ing_items (
+  client_id,
+  name,
+  category_id,
+  purchase_unit_id,
+  purchase_qty,
+  total_cost,
+  wastage_percent,
+  supplier_id,
+  packaging_id,
+  item_code,
+  notes,
+  active
+)
+values (
+  {{ appsmith.store.current_client_id }},
+  {{ appsmith.store.IngForm_save_name }},
+  {{ Number(appsmith.store.IngForm_save_category_id) }},
+  {{ appsmith.store.IngForm_save_purchase_unit_id ? Number(appsmith.store.IngForm_save_purchase_unit_id) : null }},
+  {{ appsmith.store.IngForm_save_purchase_qty ? Number(appsmith.store.IngForm_save_purchase_qty) : null }},
+  {{ appsmith.store.IngForm_save_total_cost ? Number(appsmith.store.IngForm_save_total_cost) : null }},
+  {{ appsmith.store.IngForm_save_wastage_percent ? Number(appsmith.store.IngForm_save_wastage_percent) : null }},
+  {{ appsmith.store.IngForm_save_supplier_id ? Number(appsmith.store.IngForm_save_supplier_id) : null }},
+  {{ appsmith.store.IngForm_save_packaging_id ? Number(appsmith.store.IngForm_save_packaging_id) : null }},
+  {{ appsmith.store.IngForm_save_item_code }},
+  {{ appsmith.store.IngForm_save_notes }},
+  {{ appsmith.store.IngForm_save_active }}
+)
+returning id;

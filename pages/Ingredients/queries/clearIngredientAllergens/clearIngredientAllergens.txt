@@ -1,0 +1,2 @@
+delete from public.ing_allergens
+where ingredient_id = {{ appsmith.store.IngForm_saved_id }};

@@ -1,0 +1,10 @@
+insert into public.ing_allergens (
+  ingredient_id,
+  helper_list_item_id
+)
+select
+  {{ appsmith.store.IngForm_saved_id }} as ingredient_id,
+  value::int as helper_list_item_id
+from jsonb_array_elements_text(
+  '{{ JSON.stringify(appsmith.store.IngForm_save_allergens || []) }}'::jsonb
+) as value;

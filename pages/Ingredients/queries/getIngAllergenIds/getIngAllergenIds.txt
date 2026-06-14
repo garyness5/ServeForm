@@ -1,0 +1,5 @@
+select
+  helper_list_item_id
+from public.ing_allergens
+where ingredient_id = {{ appsmith.store.IngForm_edit_id || 0 }}
+order by helper_list_item_id;

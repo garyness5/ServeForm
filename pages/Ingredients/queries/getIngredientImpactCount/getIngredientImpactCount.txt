@@ -3,7 +3,7 @@ select
     select count(*)
     from public.rec_components
     where item_type = 'ingredient'
-      and ingredient_id = {{ Number(tblIngredientsList.selectedRow?.id || 0) }}
+      and ingredient_id = {{ Number(tblIngList.selectedRow?.id || 0) }}
   ) as recipe_count,
 
   0 as dish_count,

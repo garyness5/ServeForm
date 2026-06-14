@@ -1,0 +1,56 @@
+{
+  "animateLoading": true,
+  "borderColor": "",
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 13,
+  "dynamicBindingPathList": [
+    {
+      "key": "truncateButtonColor"
+    },
+    {
+      "key": "fontFamily"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "text"
+    }
+  ],
+  "dynamicHeight": "AUTO_HEIGHT",
+  "dynamicTriggerPathList": [],
+  "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
+  "fontSize": "0.875rem",
+  "fontStyle": "",
+  "isLoading": false,
+  "isVisible": true,
+  "key": "aicurzl79h",
+  "leftColumn": 2,
+  "maxDynamicHeight": 9000,
+  "minDynamicHeight": 4,
+  "minWidth": 450,
+  "mobileBottomRow": 14,
+  "mobileLeftColumn": 18,
+  "mobileRightColumn": 34,
+  "mobileTopRow": 10,
+  "needsErrorInfo": false,
+  "originalBottomRow": 13,
+  "originalTopRow": 9,
+  "overflow": "NONE",
+  "parentColumnSpace": 6.395111083984375,
+  "parentId": "cr75ax36qd",
+  "parentRowSpace": 10,
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 31,
+  "shouldTruncate": false,
+  "text": "{{\n  inpRecIngQuantity.text && inpRecIngPurchaseCost.text\n    ? \"Cost / unit \" + (() => {\n        const qty = Number(inpRecIngQuantity.text);\n        const cost = Number(inpRecIngPurchaseCost.text);\n        const wastage = Number(inpRecIngWastage.text || 0);\n\n        const netYield = qty * (1 - wastage / 100);\n\n        if (!netYield || netYield <= 0) return \"\";\n\n        const v = cost / netYield;\n        const price = v % 1 === 0 ? v.toFixed(0) : v.toFixed(2);\n        const unit = selRecIngPurchaseUnit.selectedOptionLabel || \"\";\n\n        return unit ? `$${price} / ${unit}` : `$${price}`;\n      })()\n    : \"Cost / unit \"\n}}",
+  "textAlign": "LEFT",
+  "textColor": "#231F20",
+  "topRow": 9,
+  "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "type": "TEXT_WIDGET",
+  "version": 1,
+  "widgetId": "op4kvajm1h",
+  "widgetName": "txtRecIngPricePerUnitValue"
+}

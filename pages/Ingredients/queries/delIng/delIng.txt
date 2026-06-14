@@ -3,6 +3,6 @@ set
   active = false,
   deleted = true,
   updated_at = now()
-where id = {{ Number(tblIngredientsList.selectedRow.id) }}
+where id = {{ Number(tblIngList.selectedRow.id) }}
   and client_id = '{{ appsmith.store.current_client_id }}'::uuid
 returning *;

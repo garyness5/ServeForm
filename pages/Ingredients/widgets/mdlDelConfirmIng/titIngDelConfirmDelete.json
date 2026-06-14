@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 41,
   "shouldTruncate": false,
-  "text": "{{\n  \"Delete: \" + (tblIngredientsList.selectedRow?.name || \"\")\n}}",
+  "text": "{{\n  \"Delete: \" + (tblIngList.selectedRow?.name || \"\")\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,

@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select count(*) as match_count\nfrom ing_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and id <> {{ Number(tblIngredientsList.selectedRow.id) }}\n  and public.norm_name(name) = public.norm_name({{ inpIngRenameTo.text.trim() }});",
+      "body": "select count(*) as match_count\nfrom ing_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and id <> {{ Number(tblIngList.selectedRow.id) }}\n  and public.norm_name(name) = public.norm_name({{ inpIngRenameTo.text.trim() }});",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

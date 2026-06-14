@@ -2,5 +2,5 @@ update ing_items
 set
   name = {{ inpIngRenameTo.text.trim() }},
   updated_at = now()
-where id = {{ Number(tblIngredientsList.selectedRow.id) }}
+where id = {{ Number(tblIngList.selectedRow.id) }}
   and client_id = '{{ appsmith.store.current_client_id }}'::uuid;
