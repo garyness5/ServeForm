@@ -1,0 +1,16 @@
+v0.1.22_Ingredient_Rewire_Baseline
+
+Ingredient query cleanup baseline.
+Kept only:
+- checkIngRenameToExists
+- delIng
+- getIngCategories
+- getIngredientImpactCount
+- getIngredients
+- getPackaging
+- getSuppliers
+- getUnits
+- ingCheckNameExists
+- renameIngredient
+
+Removed old Ingredient add/edit/save wiring before clean rewire.
