@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 22,
   "boxShadow": "none",
-  "defaultOptionValue": "",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  ingForm.isEdit() ? ingForm.current().purchase_unit_id : \"\" ))(selPurchaseUnit.options, selPurchaseUnit.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -14,6 +14,9 @@
     },
     {
       "key": "sourceData"
+    },
+    {
+      "key": "defaultOptionValue"
     }
   ],
   "dynamicHeight": "FIXED",
@@ -34,7 +37,7 @@
   "labelText": "Unit",
   "labelTextSize": "0.875rem",
   "labelWidth": 5,
-  "leftColumn": 35,
+  "leftColumn": 33,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
@@ -55,7 +58,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 61,
   "serverSideFiltering": false,
-  "sourceData": "{{\n  getUnits.data.map((obj) => {\n    return {\n      label: obj.abbreviation,\n      value: String(obj.id)\n    }\n  })\n}}",
+  "sourceData": "{{\n  getUnits.data.map(u => ({\n    label: u.abbreviation,\n    value: u.id\n  }))\n}}",
   "topRow": 18,
   "type": "SELECT_WIDGET",
   "version": 1,

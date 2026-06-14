@@ -1,0 +1,6 @@
+select count(*) as match_count
+from public.ing_items
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+  and norm_name(name) = norm_name('{{ this.params.name }}')
+  and id <> {{ this.params.ingredient_id || 0 }};

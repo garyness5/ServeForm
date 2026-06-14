@@ -1,4 +1,0 @@
-SELECT helper_list_item_id::text AS id
-FROM ing_diet_tags
-WHERE ingredient_id = {{ Number(getIngredientById.data[0].id) }}
-ORDER BY helper_list_item_id;

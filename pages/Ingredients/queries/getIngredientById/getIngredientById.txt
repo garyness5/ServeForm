@@ -1,4 +1,0 @@
-SELECT *
-FROM ing_items
-WHERE id = {{ tblIngredientsList.selectedRow.id }}
-  AND client_id = '{{ appsmith.store.current_client_id }}'::uuid;

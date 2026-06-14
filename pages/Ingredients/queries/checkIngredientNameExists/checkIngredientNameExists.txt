@@ -1,4 +1,0 @@
-select count(*) as match_count
-from ing_items
-where client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and public.norm_name(name) = public.norm_name({{ inpIngredient.text.trim() }});

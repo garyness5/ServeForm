@@ -1,2 +1,0 @@
-delete from ing_diet_tags
-where ingredient_id = {{ Number(getIngredientById.data[0].id) }};

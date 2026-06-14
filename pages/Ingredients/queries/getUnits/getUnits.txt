@@ -1,10 +1,15 @@
-SELECT id, abbreviation, unit_type
-FROM public.units
-ORDER BY
-  CASE unit_type
-    WHEN 'weight' THEN 1
-    WHEN 'volume' THEN 2
-    WHEN 'count' THEN 3
-    ELSE 99
-  END,
-  abbreviation;
+select
+  id,
+  name,
+  abbreviation,
+  unit_type,
+  factor_to_base
+from public.units
+order by
+  case unit_type
+    when 'weight' then 1
+    when 'volume' then 2
+    when 'count' then 3
+    else 99
+  end,
+  name;
