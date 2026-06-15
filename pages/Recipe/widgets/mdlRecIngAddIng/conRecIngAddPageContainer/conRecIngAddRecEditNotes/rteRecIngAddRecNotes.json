@@ -3,7 +3,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 24,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
-  "defaultText": "{{ ingForm.isEdit() ? (getIngredientById.data?.[0]?.notes || \"\") : \"\" }}",
+  "defaultText": "{{ \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "borderRadius"

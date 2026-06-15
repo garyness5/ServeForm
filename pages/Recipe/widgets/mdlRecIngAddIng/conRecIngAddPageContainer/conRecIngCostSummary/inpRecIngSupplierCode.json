@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 34,
   "boxShadow": "none",
-  "defaultText": "{{ ingForm.isEdit() ? (getIngredientById.data?.[0]?.item_code || \"\") : \"\" }}",
+  "defaultText": "{{ \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
