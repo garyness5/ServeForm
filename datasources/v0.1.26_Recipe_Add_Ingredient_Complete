@@ -1,0 +1,143 @@
+ServeForm
+Version:
+v0.1.26_Recipe_Add_Ingredient_Complete
+Date:
+2026-06-14
+Scope:
+Ingredient Architecture Completion
+Recipe Quick Add Ingredient
+Completed
+Ingredient Architecture
+Ingredient Add
+•	Add Ingredient operational
+•	Validation implemented
+•	Name required
+•	Category required
+•	Placeholder Ingredients supported
+•	Save operational
+•	Save & New operational
+Ingredient Edit
+•	Full edit workflow operational
+•	Existing values load correctly
+•	Existing values save correctly
+•	Relationship data loads correctly
+Ingredient Duplicate
+•	Duplicate button implemented
+•	Opens Add modal using cloned data
+•	Smart naming implemented
+•	Creates new Ingredient record
+•	New ID generated correctly
+Examples:
+•	Tomatoes → Tomatoes - Copy
+•	Tomatoes → Tomatoes - Copy 2
+Ingredient Delete
+•	Soft delete operational
+•	active = false
+•	deleted = true
+Delete Confirmation
+•	Impact count implemented
+•	Recipe impact count operational
+•	Future Dish/Menu/Event placeholders retained
+Ingredient Relationships
+Allergens
+•	Save operational
+•	Edit load operational
+•	System-only allergen filtering implemented
+•	Legacy non-system entries excluded
+Diet Tags
+•	Save operational
+•	Edit load operational
+Relationship Save Pattern
+•	Clear existing relationships
+•	Rebuild selected relationships
+Tables
+•	ing_allergens
+•	ing_diet_tags
+Duplicate Protection
+Ingredient duplicate validation implemented.
+Validation now uses database normalization logic:
+norm_name(name)
+Behavior confirmed:
+Blocked:
+•	Pear
+•	PEAR
+•	Péar
+•	péàr
+•	Pear
+Allowed:
+•	Pears
+•	Roma Pear
+•	Pear 2
+Rename Rules
+Same-record normalization changes allowed.
+Examples:
+•	Péar → pear
+•	pear → PEAR
+•	PEAR → péàr
+Cross-record normalization collisions blocked.
+Examples:
+•	Pears → Pear (blocked when Pear already exists)
+Recipe Component Behavior
+Deleted Ingredient handling verified.
+Deleted child Ingredient now:
+•	Remains visible in Recipe
+•	Displays red warning
+•	Removes Qty
+•	Removes Unit
+•	Removes Cost
+•	Removes Allergens
+•	Removes Diet Tags
+View Updated
+•	vw_rec_components
+Recipe Quick Add Ingredient
+Implemented:
+btnRecAddIng
+Recipe Add Ingredient Modal
+•	Open
+•	Cancel
+•	Save
+•	Save & New
+Recipe Lookup Queries Added
+•	recGetIngCategories
+•	recGetSuppliers
+•	recGetPackaging
+•	recGetAllergens
+•	recGetDietTags
+•	recGetUnits
+Recipe Ingredient Save Queries Added
+•	recAddIngredient
+•	recClearIngredientAllergens
+•	recInsertIngredientAllergens
+•	recClearIngredientDietTags
+•	recInsertIngredientDietTags
+•	recIngCheckNameExists
+Recipe Ingredient Validation
+•	Name required
+•	Category required
+•	Duplicate protection implemented
+Recipe Workflow Verified
+Building Recipe
+→ Ingredient missing
+→ Add Ingredient from Recipe
+→ Save Ingredient
+→ Ingredient added to master Ingredient list
+→ Ingredient immediately available in Recipe component picker
+→ Continue Recipe build without leaving page
+Unit Standardization
+Weight
+Volume
+Count
+Unit sorting standardized for Recipe Add Ingredient workflow.
+Cleanup
+Removed obsolete Ingredient rename architecture:
+•	checkIngRenameToExists
+•	renameIngredient
+Edit workflow now handles all renaming requirements.
+Status
+Ingredient architecture complete and stable.
+Recipe Quick Add Ingredient complete and operational.
+Ready for next phase:
+•	Recipe architecture review
+•	Dish architecture planning
+•	Additional Recipe workflow refinement
+
