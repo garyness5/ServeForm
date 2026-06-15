@@ -42,7 +42,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 50,
   "shouldTruncate": false,
-  "text": "{{ \n  IngForm.isEdit()\n    ? \"Edit \" + (IngForm.editRow().name || \"Ingredient\")\n    : \"Add Ingredient\"\n}}",
+  "text": "{{\n  appsmith.store.IngForm_mode === \"edit\"\n    ? \"Edit \" + (IngForm.editRow().name || \"Ingredient\")\n    : appsmith.store.IngForm_mode === \"duplicate\"\n      ? \"Duplicate \" + (tblIngList.selectedRow?.name || \"Ingredient\")\n      : \"Add Ingredient\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,

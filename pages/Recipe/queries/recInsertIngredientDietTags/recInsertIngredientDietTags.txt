@@ -1,0 +1,10 @@
+insert into public.ing_diet_tags (
+  ingredient_id,
+  helper_list_item_id
+)
+select
+  {{ appsmith.store.RecIngForm_saved_id }} as ingredient_id,
+  value::int as helper_list_item_id
+from jsonb_array_elements_text(
+  '{{ JSON.stringify(appsmith.store.RecIngForm_save_diet_tags || []) }}'::jsonb
+) as value;

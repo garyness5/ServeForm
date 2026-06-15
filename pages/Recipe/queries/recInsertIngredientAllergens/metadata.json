@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_e6b0d474-4ca2-4898-bc71-e68fb7dace35",
-  "id": "Recipe_getIngCategories",
+  "gitSyncId": "6a0a1bde3214f344228346e7_67431191-8c8e-46c4-8910-57193e42275b",
+  "id": "Recipe_recInsertIngredientAllergens",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT hli.id, hli.name\nFROM helper_list_items hli\nJOIN helper_lists hl\n  ON hl.id = hli.list_id\nWHERE hl.list_code = 'ingredient_category'\n  AND hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  AND hli.active = true\nORDER BY hli.name;",
+      "body": "insert into public.ing_allergens (\n  ingredient_id,\n  helper_list_item_id\n)\nselect\n  {{ appsmith.store.RecIngForm_saved_id }} as ingredient_id,\n  value::int as helper_list_item_id\nfrom jsonb_array_elements_text(\n  '{{ JSON.stringify(appsmith.store.RecIngForm_save_allergens || []) }}'::jsonb\n) as value;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,7 +27,7 @@
         "key": "body"
       }
     ],
-    "name": "getIngCategories",
+    "name": "recInsertIngredientAllergens",
     "pageId": "Recipe",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

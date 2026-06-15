@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_e6b0d474-4ca2-4898-bc71-e68fb7dace35",
-  "id": "Recipe_getIngCategories",
+  "gitSyncId": "6a0a1bde3214f344228346e7_adb1f243-1c60-47b3-b671-0dceb9ae304a",
+  "id": "Ingredients_getIngDuplicateNames",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT hli.id, hli.name\nFROM helper_list_items hli\nJOIN helper_lists hl\n  ON hl.id = hli.list_id\nWHERE hl.list_code = 'ingredient_category'\n  AND hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  AND hli.active = true\nORDER BY hli.name;",
+      "body": "select\n  name\nfrom public.ing_items\nwhere client_id = {{ appsmith.store.current_client_id }}\n  and deleted = false\n  and (\n    name = {{ appsmith.store.IngDuplicate_base_name + ' - Copy' }}\n    or name ~ {{ '^' + appsmith.store.IngDuplicate_base_name.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&') + ' - Copy [0-9]+$' }}\n  )\norder by name;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,8 +27,8 @@
         "key": "body"
       }
     ],
-    "name": "getIngCategories",
-    "pageId": "Recipe",
+    "name": "getIngDuplicateNames",
+    "pageId": "Ingredients",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }

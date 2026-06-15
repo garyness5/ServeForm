@@ -1,0 +1,8 @@
+select
+  id,
+  name
+from public.ing_items
+where client_id = {{ appsmith.store.current_client_id }}
+  and deleted = false
+  and norm_name(name) = norm_name({{ appsmith.store.RecIngForm_save_name }})
+limit 1;

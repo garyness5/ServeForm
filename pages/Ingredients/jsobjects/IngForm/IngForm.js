@@ -32,9 +32,9 @@ export default {
     showModal("mdlAddIng");
   },
 
-  isEdit() {
-    return appsmith.store.IngForm_mode === "edit";
-  },
+	isEdit() {
+		return appsmith.store.IngForm_mode === "edit" || appsmith.store.IngForm_mode === "duplicate";
+	},
 
   editRow() {
     return appsmith.store.IngForm_edit_row || {};
@@ -77,7 +77,7 @@ export default {
 
 		let result;
 
-    if (this.isEdit()) {
+    if (appsmith.store.IngForm_mode === "edit") {
       result = await updateIngredient.run();
     } else {
       result = await addIngredient.run();
@@ -145,6 +145,54 @@ export default {
 
 	cancelDelete() {
 		closeModal("mdlDelConfirmIng");
+	},
+	
+	async openDuplicateFromIngredients() {
+		const row = tblIngList.selectedRow;
+
+		if (!row || !row.id) {
+			showAlert("Select an ingredient to duplicate.", "warning");
+			return;
+		}
+
+		await storeValue("IngDuplicate_base_name", row.name);
+
+		const existingCopies = await getIngDuplicateNames.run();
+
+		let copyName = `${row.name} - Copy`;
+
+		if (existingCopies && existingCopies.length > 0) {
+			const usedNumbers = existingCopies
+				.map(r => r.name)
+				.map(name => {
+					if (name === `${row.name} - Copy`) return 1;
+
+					const match = name.match(new RegExp(`^${row.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} - Copy (\\d+)$`));
+					return match ? Number(match[1]) : 0;
+				})
+				.filter(n => n > 0);
+
+			const nextNumber = usedNumbers.length > 0
+				? Math.max(...usedNumbers) + 1
+				: 2;
+
+			copyName = `${row.name} - Copy ${nextNumber}`;
+		}
+
+		await storeValue("IngForm_context", this.CONTEXT_ADD_INGREDIENTS);
+		await storeValue("IngForm_mode", "duplicate");
+		await storeValue("IngForm_edit_id", null);
+		await storeValue("IngForm_edit_row", {
+			...row,
+			id: null,
+			name: copyName
+		});
+
+		await getIngAllergenIds.run();
+		await getIngDietTagIds.run();
+
+		resetWidget("mdlAddIng", true);
+		showModal("mdlAddIng");
 	},
 	
   cancel() {
