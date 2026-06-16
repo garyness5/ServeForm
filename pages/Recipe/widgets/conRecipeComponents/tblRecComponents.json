@@ -64,7 +64,7 @@
     "saved_unit_id",
     "saved_unit_abbreviation"
   ],
-  "columnUpdatedAt": 1781623425239,
+  "columnUpdatedAt": 1781625511298,
   "columnWidthMap": {
     "active": 103,
     "allergen_names": 124,
@@ -249,7 +249,7 @@
   "horizontalAlignment": "LEFT",
   "inlineEditingSaveOption": "CUSTOM",
   "isLoading": false,
-  "isSortable": false,
+  "isSortable": true,
   "isVisible": true,
   "isVisibleDownload": true,
   "isVisibleFilters": false,
