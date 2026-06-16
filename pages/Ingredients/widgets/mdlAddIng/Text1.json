@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 186,
+  "bottomRow": 85,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -11,9 +11,6 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -33,8 +30,8 @@
   "mobileRightColumn": 19,
   "mobileTopRow": 85,
   "needsErrorInfo": false,
-  "originalBottomRow": 186,
-  "originalTopRow": 81,
+  "originalBottomRow": 88,
+  "originalTopRow": 84,
   "overflow": "NONE",
   "parentColumnSpace": 15.09375,
   "parentId": "n8150rk8r5",
@@ -43,7 +40,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 29,
   "shouldTruncate": false,
-  "text": "{{ JSON.stringify(getDietTags.data, null, 2) }}",
+  "text": "",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 81,
