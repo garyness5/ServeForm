@@ -1,0 +1,307 @@
+MILESTONE LOG
+
+Version
+
+v0.1.28_Pre_Dish_Architecture_Baseline
+
+==================================================
+
+STATUS
+
+Completed
+
+Settings / Helpers
+Ingredients
+Recipes
+
+stabilized and reviewed.
+
+Dish preparation phase begun.
+
+==================================================
+
+COMPLETED WORK
+
+Settings / Helpers
+
+Verified and stabilized:
+
+• Categories
+• Suppliers
+• Packaging
+• Diet Tags
+
+Verified operations:
+
+• Rename
+• Replace
+• Replace + Delete
+• Delete
+• Impact Counts
+
+Helper architecture considered stable.
+
+---
+
+Ingredients
+
+Completed stabilization and review.
+
+Implemented and verified:
+
+• Add
+• Edit
+• Duplicate
+• Delete
+• Active / Inactive
+• Soft Delete
+• Allergens
+• Diet Tags
+• Duplicate Prevention
+• Name Normalization
+• Impact Counts
+
+Confirmed behavior:
+
+Deleted Ingredients
+
+• Hidden from picklists
+• Remain visible where already used
+• Excluded from costing
+
+---
+
+Ingredient Duplicate
+
+Implemented.
+
+Behavior:
+
+Original
+
+Tomatoes
+
+Duplicate
+
+Tomatoes - Copy
+
+Additional duplicates
+
+Tomatoes - Copy 2
+Tomatoes - Copy 3
+
+etc.
+
+Creates new Ingredient record with new ID.
+
+---
+
+Ingredient Unit Guardrails
+
+Implemented.
+
+If Ingredient has no downstream usage:
+
+• Any unit allowed
+
+If Ingredient has downstream usage:
+
+• Unit changes restricted to same Unit Type
+
+Protection implemented through:
+
+• Unit filtering
+• Save validation
+
+Verified.
+
+---
+
+Recipe Quick Add Ingredient
+
+Implemented and verified.
+
+Workflow:
+
+Recipe
+→ Missing Ingredient
+→ Add Ingredient
+→ Save Ingredient
+→ Ingredient immediately available in Recipe Components
+
+No navigation required.
+
+---
+
+Recipe Deleted Component Cleanup
+
+Verified.
+
+Deleted child components:
+
+• Retain warning visibility
+• Remove costing contribution
+• Remove allergen contribution
+• Remove diet tag contribution
+
+Behavior verified through save/reload cycle.
+
+---
+
+Recipe Active / Inactive Components
+
+Verified.
+
+Inactive child components:
+
+• Remain visible
+• Retain Qty
+• Retain Unit
+• Line Cost blank
+• Excluded from costing
+
+---
+
+RecipeList Review
+
+Operational philosophy clarified.
+
+RecipeList is a maintenance page.
+
+Allowed:
+
+• Open
+• Duplicate
+• Delete
+• Active / Inactive
+
+Not allowed:
+
+• Category edits
+• Yield edits
+• Cost edits
+• Component edits
+• Diet Tag edits
+
+Structural edits remain on Recipe page.
+
+---
+
+Ingredients Table Review
+
+Active toggle implemented and verified.
+
+Decision:
+
+Do not use Appsmith native table editing for Qty, Unit, Cost, Wastage or Category at this time.
+
+Reason:
+
+Save / Discard behavior conflicts with desired immediate-save workflow.
+
+Future quick-maintenance modal may be reviewed later.
+
+==================================================
+
+MAJOR DECISIONS
+
+Recipe architecture is considered stable.
+
+Recipe implementation now serves as the reference implementation for future composition domains.
+
+Established reusable patterns:
+
+• Header
+• Components
+• Save
+• Save & New
+• Duplicate
+• Delete
+• Dirty State
+• Publication
+• Propagation
+• Deleted Child Handling
+• Active / Inactive Handling
+
+Future domains should reuse these patterns whenever practical.
+
+==================================================
+
+DISCOVERIES
+
+Published-state architecture is working well.
+
+Published upstream changes:
+
+• Propagate automatically
+• Do not require downstream save
+• Do not create dirty state
+
+This architecture should continue into Dishes, Menus and Events.
+
+---
+
+Unit Type protection is operationally important.
+
+Preventing Weight ↔ Volume ↔ Count changes after downstream usage protects composition integrity.
+
+==================================================
+
+CURRENT POSITION
+
+Infrastructure
+
+Stable
+
+Settings / Helpers
+
+Stable
+
+Ingredients
+
+Stable
+
+Recipes
+
+Stable
+
+Dishes
+
+Not Started
+
+Menus
+
+Not Started
+
+Events
+
+Not Started
+
+==================================================
+
+CURRENT FOCUS
+
+Dish Operational Contract Review
+
+Determine:
+
+• What Dish consumes
+• What Dish publishes
+• How Dish participates in costing
+• How Dish participates in Menu construction
+
+==================================================
+
+NEXT MILESTONE
+
+v0.1.28_Dish_Architecture_Review
+
+Expected Scope
+
+• Dish operational contract
+• Dish architecture
+• Dish publication model
+• Dish component model
+• Dish implementation planning
+
+Implementation should begin only after operational review is complete.
