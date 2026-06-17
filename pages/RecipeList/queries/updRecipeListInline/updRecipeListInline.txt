@@ -1,0 +1,8 @@
+update rec_items
+set
+  category_id = {{ Number(tblRecipeList.updatedRow.category_id || 0) || "null" }},
+  active = {{ tblRecipeList.updatedRow.active === false ? false : true }}
+where id = {{ Number(tblRecipeList.updatedRow.id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+returning id;

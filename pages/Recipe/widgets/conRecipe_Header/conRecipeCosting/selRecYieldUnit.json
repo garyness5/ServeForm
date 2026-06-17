@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 8,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  Number(getRecItemById.data?.[0]?.yield_unit_id || 0) ))(selRecYieldUnit.options, selRecYieldUnit.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  Number(appsmith.store.current_recipe_id || 0) === 0\n    ? \"\"\n    : String(getRecItemById.data?.[0]?.yield_unit_id || \"\")\n))(selRecYieldUnit.options, selRecYieldUnit.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -62,7 +62,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "serverSideFiltering": true,
-  "sourceData": "{{ Number(appsmith.store.current_recipe_id || 0) === 0 ? \"\" : String(getRecItemById.data?.[0]?.yield_unit_id || \"\") }}",
+  "sourceData": "{{ getRecComponentUnits.data || [] }}",
   "topRow": 1,
   "type": "SELECT_WIDGET",
   "version": 1,

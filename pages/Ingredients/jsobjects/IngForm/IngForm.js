@@ -27,6 +27,7 @@ export default {
 
     await getIngAllergenIds.run();
     await getIngDietTagIds.run();
+		await getIngredientImpactCount.run();
 
     resetWidget("mdlAddIng", true);
     showModal("mdlAddIng");
@@ -41,10 +42,40 @@ export default {
   },
 
   async save(closeAfterSave = true) {
-    const name = inpIngIngredient.text ? inpIngIngredient.text.trim() : "";
-    const categoryId = selIngCategory.selectedOptionValue;
+		const name = inpIngIngredient.text ? inpIngIngredient.text.trim() : "";
+		const categoryId = selIngCategory.selectedOptionValue;
 
-    if (!name) {
+		if (appsmith.store.IngForm_mode === "edit") {
+			const oldRow = this.editRow();
+			const oldUnitId = oldRow.purchase_unit_id ? String(oldRow.purchase_unit_id) : "";
+			const newUnitId = selIngPurchaseUnit.selectedOptionValue ? String(selIngPurchaseUnit.selectedOptionValue) : "";
+
+			if (oldUnitId && newUnitId && oldUnitId !== newUnitId) {
+				const oldUnitType = oldRow.unit_type;
+
+				const newUnit = (getUnits.data || []).find(u => String(u.id) === newUnitId);
+				const newUnitType = newUnit?.unit_type;
+
+				await getIngredientImpactCount.run();
+
+				const impact = getIngredientImpactCount.data?.[0] || {};
+				const totalImpact =
+					Number(impact.recipe_count || 0) +
+					Number(impact.dish_count || 0) +
+					Number(impact.menu_count || 0) +
+					Number(impact.event_count || 0);
+
+				if (totalImpact > 0 && oldUnitType && newUnitType && oldUnitType !== newUnitType) {
+					showAlert(
+						"This Ingredient is already used downstream. Purchase Unit can only be changed within the same unit type.",
+						"warning"
+					);
+					return;
+				}
+			}
+		}
+
+		if (!name) {
       showAlert("Ingredient Name is required.", "warning");
       return;
     }

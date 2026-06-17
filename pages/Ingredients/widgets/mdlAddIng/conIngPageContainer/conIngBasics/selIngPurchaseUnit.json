@@ -58,7 +58,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 61,
   "serverSideFiltering": false,
-  "sourceData": "{{\n  getUnits.data.map(u => ({\n    label: u.abbreviation,\n    value: String(u.id)\n  }))\n}}",
+  "sourceData": "{{\n  (() => {\n    const units = getUnits.data || [];\n\n    if (!IngForm.isEdit()) {\n      return units.map(u => ({\n        label: u.abbreviation,\n        value: String(u.id)\n      }));\n    }\n\n    const oldType = IngForm.editRow().unit_type;\n\n    const impact = getIngredientImpactCount.data?.[0] || {};\n    const totalImpact =\n      Number(impact.recipe_count || 0) +\n      Number(impact.dish_count || 0) +\n      Number(impact.menu_count || 0) +\n      Number(impact.event_count || 0);\n\n    const filtered =\n      totalImpact > 0 && oldType\n        ? units.filter(u => u.unit_type === oldType)\n        : units;\n\n    return filtered.map(u => ({\n      label: u.abbreviation,\n      value: String(u.id)\n    }));\n  })()\n}}",
   "topRow": 18,
   "type": "SELECT_WIDGET",
   "version": 1,

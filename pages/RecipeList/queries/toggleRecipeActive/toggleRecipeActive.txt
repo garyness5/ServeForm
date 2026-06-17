@@ -1,0 +1,6 @@
+update rec_items
+set active = not coalesce(active, true)
+where id = {{ Number(tblRecipeList.triggeredRow.id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+returning id, active;

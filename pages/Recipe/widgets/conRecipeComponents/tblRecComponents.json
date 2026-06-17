@@ -64,7 +64,7 @@
     "saved_unit_id",
     "saved_unit_abbreviation"
   ],
-  "columnUpdatedAt": 1781625511298,
+  "columnUpdatedAt": 1781666262669,
   "columnWidthMap": {
     "active": 103,
     "allergen_names": 124,
@@ -290,7 +290,7 @@
       "isEditable": true,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Status",
+      "label": "Active",
       "notation": "standard",
       "originalId": "active",
       "sticky": "",
