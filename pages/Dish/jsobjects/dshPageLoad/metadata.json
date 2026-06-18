@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "6a0a1bde3214f344228346e7_8f43fd8c-7edb-4776-a80f-949e1bc0c86b",
+  "id": "Dish_dshPageLoad",
+  "unpublishedCollection": {
+    "name": "dshPageLoad",
+    "pageId": "Dish",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}

@@ -1,0 +1,4 @@
+select *
+from public.delete_recipe(
+  {{ Number(appsmith.store.current_recipe_id || 0) }}
+);

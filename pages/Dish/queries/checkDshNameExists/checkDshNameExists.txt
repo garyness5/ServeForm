@@ -1,0 +1,6 @@
+select count(*) as match_count
+from public.dsh_items
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and public.norm_name(name) = public.norm_name('{{ inpDshName.text.trim().replaceAll("'", "''") }}')
+  and coalesce(deleted, false) = false
+  and id <> coalesce({{ Number(appsmith.store.current_dish_id || 0) }}, 0);

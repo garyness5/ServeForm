@@ -1,0 +1,5 @@
+select *
+from public.save_dsh_diet_tags_snapshot(
+  {{ Number(appsmith.store.current_dish_id || 0) }},
+  '{{ JSON.stringify((msDshDietTags.selectedOptionValues || []).map(id => ({ tag_id: Number(id) }))).replaceAll("'", "''") }}'::jsonb
+);

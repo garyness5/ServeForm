@@ -1,0 +1,4 @@
+select *
+from public.vw_dsh_components
+where dish_id = {{ Number(appsmith.store.current_dish_id || 0) }}
+order by line_no;

@@ -14,15 +14,19 @@
       "isDefault": true
     },
     {
-      "id": "Settings",
-      "isDefault": false
-    },
-    {
       "id": "RecipeList",
       "isDefault": false
     },
     {
       "id": "Recipe",
+      "isDefault": false
+    },
+    {
+      "id": "Settings",
+      "isDefault": false
+    },
+    {
+      "id": "Dish",
       "isDefault": false
     }
   ],

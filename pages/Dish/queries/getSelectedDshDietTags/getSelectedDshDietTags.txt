@@ -1,0 +1,5 @@
+select
+  helper_list_item_id::text as value
+from public.dsh_diet_tags
+where dish_id = {{ Number(appsmith.store.current_dish_id || 0) }}
+order by helper_list_item_id;

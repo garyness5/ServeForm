@@ -1,0 +1,5 @@
+select *
+from public.save_dsh_components_snapshot(
+  {{ Number(appsmith.store.current_dish_id || 0) }},
+  '{{ JSON.stringify(dshCompTable.rowsForSave()).replaceAll("'", "''") }}'::jsonb
+);

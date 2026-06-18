@@ -1,0 +1,25 @@
+insert into public.dsh_items
+(
+  client_id,
+  name,
+  category_id,
+  serve_form_id,
+  yield_qty,
+  yield_unit_id,
+  extra_percent,
+  notes,
+  active
+)
+values
+(
+  '{{ appsmith.store.current_client_id }}'::uuid,
+  NULLIF('{{ inpDshName.text.trim().replaceAll("'", "''") }}', ''),
+  {{ selDshCategory.selectedOptionValue ? Number(selDshCategory.selectedOptionValue) : null }},
+  {{ (selDshFormat.selectedOptionValues || [])[0] ? Number((selDshFormat.selectedOptionValues || [])[0]) : null }},
+  {{ inpDshYieldQty.text ? Number(inpDshYieldQty.text) : null }},
+  {{ selDshYieldUnit.selectedOptionValue ? Number(selDshYieldUnit.selectedOptionValue) : null }},
+  {{ inpDshExtraPercent.text ? Number(inpDshExtraPercent.text) : 0 }},
+  NULLIF('{{ (rteDshNotes.text || "").replaceAll("'", "''") }}', ''),
+  {{ chkDshActive.isChecked ? true : false }}
+)
+returning id;
