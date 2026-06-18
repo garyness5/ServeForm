@@ -35,7 +35,7 @@
   "labelAlignment": "left",
   "labelPosition": "Top",
   "labelStyle": "BOLD",
-  "labelText": "Label",
+  "labelText": "Unit",
   "labelTextSize": "1rem",
   "labelWidth": 5,
   "leftColumn": 35,

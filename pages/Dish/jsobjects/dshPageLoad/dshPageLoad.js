@@ -16,6 +16,7 @@ export default {
 
 	async loadNewDish() {
 		await storeValue("current_dish_id", 0);
+		await removeValue("dsh_components_local_rows");
 		await dshCompTable.clearDraftRows();
 		await storeValue("dsh_components_local_rows", dshCompTable.normalizeRows([]));
 	},

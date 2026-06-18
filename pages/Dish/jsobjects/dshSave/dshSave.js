@@ -39,12 +39,25 @@ export default {
 
 		await dshCompTable.syncFromTable();
 
-		const isExisting = Number(appsmith.store.current_dish_id || 0) > 0;
+		const currentId = Number(appsmith.store.current_dish_id || 0);
+		const savedId = Number(getDshItemById.data?.[0]?.id || 0);
+		const isExisting = currentId > 0 || savedId > 0;
+
+		if (savedId > 0 && currentId === 0) {
+			await storeValue("current_dish_id", savedId);
+		}
 		let result = null;
 
 		if (isExisting) {
 			result = await updDshItem.run();
 		} else {
+			const duplicate = await checkDshNameExists.run();
+
+			if (Number(duplicate?.[0]?.match_count || 0) > 0) {
+				showAlert("A Dish with this name already exists.", "warning");
+				return false;
+			}
+
 			result = await addDshItem.run();
 
 			const newId = result?.[0]?.id;
@@ -73,6 +86,7 @@ export default {
 		if (!result) return null;
 
 		await storeValue("current_dish_id", 0);
+		await removeValue("dsh_components_local_rows");
 		await dshCompTable.clearDraftRows();
 
 		await storeValue("dsh_components_local_rows", dshCompTable.normalizeRows([]));
@@ -227,6 +241,20 @@ export default {
 	async closeWithoutSaving() {
 		closeModal("mdlDshUnsavedChanges");
 		await dshCompTable.clearDraftRows();
+		await storeValue("current_dish_id", 0);
+		await removeValue("dsh_components_local_rows");
+
+		await this.safeReset("inpDshName");
+		await this.safeReset("selDshCategory");
+		await this.safeReset("selDshFormat");
+		await this.safeReset("chkDshActive");
+		await this.safeReset("inpDshYieldQty");
+		await this.safeReset("selDshYieldUnit");
+		await this.safeReset("inpDshExtraPercent");
+		await this.safeReset("msDshDietTags");
+		await this.safeReset("rteDshNotes");
+		await this.safeReset("tblDshComponents");
+
 		navigateTo("DishList");
 	},
 
