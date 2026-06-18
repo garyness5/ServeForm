@@ -1,100 +1,264 @@
-ServeForm v0.1.29_Dish_Architecture_Wired_Ready_For_Testing
+Version:
+v0.1.29_Dish_Architecture_Wired_Ready_For_Testing
 
-DISH FOUNDATION
+Date:
+2026-06-17
 
-* Created and validated Dish architecture using dedicated domain tables:
+==================================================
+SUMMARY
 
-  * dsh_items
-  * dsh_components
-  * dsh_diet_tags
+This milestone marks completion of the first full Dish architecture pass.
 
-* Added Dish publication layer:
+Dish is no longer a planned domain.
 
-  * vw_dsh_items
-  * vw_dsh_components
+Dish database architecture, publication architecture, Appsmith page architecture, helper architecture, and core workflows now exist.
 
-* Added Dish snapshot save functions:
+Current work has moved from architecture construction into stabilization and testing.
 
-  * save_dsh_components_snapshot()
-  * save_dsh_diet_tags_snapshot()
+==================================================
+COMPLETED
 
-* Added Dish duplicate and delete functions:
+Recipe Enhancements
 
-  * duplicateDish()
-  * deleteDish()
+• Recipe publication contract expanded
+• Total Cost publication added
+• Cost Per Unit publication retained
+• Cost Per Base Unit publication retained
+• Recipe publication prepared for downstream Dish consumption
 
-COSTING ARCHITECTURE
+---
 
-* Standardized cost publication architecture:
+Dish Database Architecture
 
-  * Ingredients publish cost_per_base_unit
-  * Recipes publish total_cost, cost_per_unit, cost_per_base_unit
-  * Dishes consume published Recipe costs
+Created:
 
-* Implemented Dish costing chain:
-  Ingredient → Recipe → Dish
+• dsh_items
+• dsh_components
+• dsh_diet_tags
 
-* Corrected Recipe publication layer to include:
+Implemented:
 
-  * total_cost
-  * cost_per_unit
-  * cost_per_base_unit
+• Save architecture
+• Snapshot architecture
+• Duplicate architecture
+• Delete architecture
 
-HELPER ARCHITECTURE
+---
 
-* Added Dish Categories helper query
+Dish Views
 
-* Added Dish Serve Forms helper query
+Created:
 
-* Connected Dish header controls:
+• vw_dsh_items
+• vw_dsh_components
 
-  * Category
-  * Serve Form
-  * Yield Qty
-  * Yield Unit
-  * Extra %
-  * Active
-  * Diet Tags
-  * Notes
+Implemented:
 
-APPSMITH
+• Dish publication layer
+• Dish component publication layer
+• Ingredient consumption
+• Recipe consumption
 
-* Cloned Recipe page architecture to Dish page
-* Rewired Dish page from Recipe references to Dish references
+---
 
-Updated:
+Dish Appsmith Page
 
-* dshSave
-* dshCompTable
-* dshPageLoad
-* Dish queries
-* Dish helper lookups
-* Dish component loading
-* Dish component saving
-* Dish diet tag loading
-* Dish diet tag saving
+Created:
 
-Removed:
+• Dish Add/Edit page
 
-* Recipe-specific references
-* Ingredient Add modal remnants
-* Obsolete cloned queries
+Implemented:
 
-TABLES
+• Header
+• Components
+• Save
+• Save & New
+• Duplicate
+• Delete
+• Dirty State
+• Unsaved Changes workflow
+• Diet Tags
+• Notes
+• Yield
+• Active / Inactive
 
-* Repaired tblDshComponents bindings
-* Replaced invalid currentRow event references with triggeredRow
-* Eliminated cloned widget reference issues
+---
 
-DEBUG
+Dish Header
 
-* Resolved all known Dish page linting errors
-* Debug count reduced to zero
+Implemented:
 
-STATUS
+• Name
+• Category
+• Serve Form
+• Active
+• Yield Qty
+• Yield Unit
+• Extra %
+• Diet Tags
+• Notes
 
-Dish page architecture complete.
+---
 
-Dish page wiring complete.
+Dish Helpers
 
-Ready for first functional Dish save/load/component/costing tests.
+Implemented:
+
+• Dish Categories
+• Serve Forms
+
+---
+
+Dish Component Architecture
+
+Implemented:
+
+Dish Components may currently contain:
+
+• Ingredients
+• Recipes
+
+Component table architecture cloned and adapted from Recipe architecture.
+
+---
+
+Appsmith Rewiring
+
+Completed:
+
+• Dish widgets rewired
+• Dish queries rewired
+• Dish JS objects rewired
+• Dish component table rewired
+• Obsolete Recipe references removed
+• Obsolete Ingredient modal references removed
+
+Debug errors reduced to zero.
+
+==================================================
+KNOWN CURRENT ISSUES
+
+Dish save/load lifecycle requires validation.
+
+Observed behavior indicates possible issues involving:
+
+• current_dish_id lifecycle
+• New Dish initialization
+• Save state synchronization
+• Widget reset behavior
+• Existing Dish reload behavior
+
+Current evidence suggests Appsmith state management rather than database architecture.
+
+No confirmed Supabase architecture blockers currently identified.
+
+==================================================
+CURRENT STATUS
+
+Infrastructure
+
+Stable
+
+Settings / Helpers
+
+Stable
+
+Ingredients
+
+Stable
+
+Recipes
+
+Stable
+
+Recipe Publication
+
+Stable
+
+Dish Architecture
+
+Implemented
+
+Dish Stabilization
+
+In Progress
+
+Dish Functional Testing
+
+In Progress
+
+Menus
+
+Not Started
+
+Events
+
+Not Started
+
+==================================================
+CURRENT TESTING TARGETS
+
+Validate:
+
+• Add Dish
+• Edit Dish
+• Save Dish
+• Save & New
+• Close
+• Duplicate
+• Delete
+
+Validate persistence of:
+
+• Components
+• Diet Tags
+• Yield
+• Serve Form
+• Notes
+• Status
+
+---
+
+Validate Publication
+
+Ingredient Cost Change
+
+→ Recipe updates
+
+Recipe Cost Change
+
+→ Dish updates
+
+No downstream save should be required.
+
+==================================================
+NEXT STEPS
+
+1. Stabilize Dish save/load lifecycle
+
+2. Verify Dish persistence behavior
+
+3. Verify Recipe → Dish propagation
+
+4. Verify deleted child behavior within Dishes
+
+5. Verify inactive child behavior within Dishes
+
+6. Confirm Dish publication contract
+
+7. Build Dish List page
+
+---
+
+After Dish Stabilization
+
+Begin Menu operational review.
+
+==================================================
+COMMIT REASON
+
+This commit establishes the first complete Dish architecture baseline.
+
+Dish architecture, publication architecture, and Appsmith wiring now exist.
+
+Remaining work is stabilization, validation, and testing rather than architecture construction.
