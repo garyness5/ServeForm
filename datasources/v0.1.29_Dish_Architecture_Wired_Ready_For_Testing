@@ -1,0 +1,100 @@
+ServeForm v0.1.29_Dish_Architecture_Wired_Ready_For_Testing
+
+DISH FOUNDATION
+
+* Created and validated Dish architecture using dedicated domain tables:
+
+  * dsh_items
+  * dsh_components
+  * dsh_diet_tags
+
+* Added Dish publication layer:
+
+  * vw_dsh_items
+  * vw_dsh_components
+
+* Added Dish snapshot save functions:
+
+  * save_dsh_components_snapshot()
+  * save_dsh_diet_tags_snapshot()
+
+* Added Dish duplicate and delete functions:
+
+  * duplicateDish()
+  * deleteDish()
+
+COSTING ARCHITECTURE
+
+* Standardized cost publication architecture:
+
+  * Ingredients publish cost_per_base_unit
+  * Recipes publish total_cost, cost_per_unit, cost_per_base_unit
+  * Dishes consume published Recipe costs
+
+* Implemented Dish costing chain:
+  Ingredient → Recipe → Dish
+
+* Corrected Recipe publication layer to include:
+
+  * total_cost
+  * cost_per_unit
+  * cost_per_base_unit
+
+HELPER ARCHITECTURE
+
+* Added Dish Categories helper query
+
+* Added Dish Serve Forms helper query
+
+* Connected Dish header controls:
+
+  * Category
+  * Serve Form
+  * Yield Qty
+  * Yield Unit
+  * Extra %
+  * Active
+  * Diet Tags
+  * Notes
+
+APPSMITH
+
+* Cloned Recipe page architecture to Dish page
+* Rewired Dish page from Recipe references to Dish references
+
+Updated:
+
+* dshSave
+* dshCompTable
+* dshPageLoad
+* Dish queries
+* Dish helper lookups
+* Dish component loading
+* Dish component saving
+* Dish diet tag loading
+* Dish diet tag saving
+
+Removed:
+
+* Recipe-specific references
+* Ingredient Add modal remnants
+* Obsolete cloned queries
+
+TABLES
+
+* Repaired tblDshComponents bindings
+* Replaced invalid currentRow event references with triggeredRow
+* Eliminated cloned widget reference issues
+
+DEBUG
+
+* Resolved all known Dish page linting errors
+* Debug count reduced to zero
+
+STATUS
+
+Dish page architecture complete.
+
+Dish page wiring complete.
+
+Ready for first functional Dish save/load/component/costing tests.
