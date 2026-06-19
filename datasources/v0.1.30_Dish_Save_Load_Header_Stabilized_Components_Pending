@@ -1,0 +1,267 @@
+ServeForm / Savveyra Development Log
+
+Suggested Commit: v0.1.30_Dish_Save_Load_Header_Stabilized_Components_Pending
+
+Session Objective
+
+Continue Dish stabilization.
+
+Focus areas:
+
+Dish Save lifecycle
+Dish Load lifecycle
+Dish Close behavior
+Dish header persistence
+Dish component table behavior
+Major Findings
+1. Save Architecture Was Not The Primary Problem
+
+Initial symptoms:
+
+Duplicate key errors on save
+Stale current_dish_id
+FK errors in child saves
+Page appearing partially cleared
+
+Investigation confirmed:
+
+addDshItem was successfully inserting records.
+Returned Dish IDs were being generated correctly.
+Duplicate errors occurred because rows already existed.
+
+Root issue:
+
+Appsmith page state became detached from the saved Dish.
+
+The page sometimes returned to:
+
+current_dish_id = 0
+
+while still visually displaying Dish data.
+
+2. Dish Header Save/Reload Stabilized
+
+Verified:
+
+New Dish save inserts correctly.
+Returned Dish ID is stored.
+Existing Dish save updates correctly.
+Header values reload correctly after save.
+
+Header widget defaults were aligned to the Recipe pattern:
+
+Example:
+
+{{ Number(appsmith.store.current_dish_id || 0) === 0
+    ? ""
+    : getDshItemById.data?.[0]?.name || ""
+}}
+
+Applied to:
+
+Dish Name
+Category
+Serve Form
+Yield Unit
+
+Result:
+
+New Dish = blank
+Existing Dish = loaded values
+3. Close Behavior Stabilized
+
+Close now:
+
+Clears Dish state
+Clears local component state
+Navigates to Dish List
+
+Added:
+
+storeValue("current_dish_id", 0)
+removeValue("dsh_components_local_rows")
+
+before navigation.
+
+4. Table Reset Was Damaging Component Table
+
+Important discovery:
+
+Using:
+
+resetWidget("tblDshComponents")
+
+was corrupting table configuration.
+
+Observed symptoms:
+
+Frozen cells
+Supabase column names appearing
+Table column configuration breaking
+
+Fix:
+
+Commented out all:
+
+await this.safeReset("tblDshComponents");
+
+occurrences.
+
+Result:
+
+Component table no longer corrupts during Close / Save & New.
+
+5. dshCompTable Lifecycle Bug Found
+
+A real bug was identified:
+
+Rows created during New Dish carried:
+
+dish_id = 0
+
+After save:
+
+current_dish_id = new ID
+
+but rows still referenced:
+
+dish_id = 0
+
+which caused:
+
+getRows()
+
+to discard them.
+
+Result:
+
+Page appeared to clear after save.
+
+A revised getRows() was implemented to allow draft rows to be adopted by the newly created Dish.
+
+This was a genuine lifecycle bug.
+
+Component Table Status
+Currently Working
+Component table loads.
+Component rows save.
+Table no longer self-destructs on Close.
+Lint errors cleared.
+Cyclic dependency errors cleared.
+Currently Broken
+Item Autofill
+
+Expected:
+
+Selecting Item should populate:
+
+Category
+Unit
+Costing metadata
+
+Currently not occurring consistently.
+
+Likely related to:
+
+onItemChange(currentRow)
+
+event wiring.
+
+Unit Picklist
+
+Current state:
+
+Unit picklist empty
+
+Current config:
+
+{{ dshCompTable.unitOptions(currentRow) }}
+
+Investigation incomplete.
+
+Most likely:
+
+currentRow.unit_type
+
+not being populated.
+
+Line Cost
+
+Potential bug found:
+
+Current formula references:
+
+getdshComponentItems.data
+
+Expected:
+
+getDshComponentItems.data
+
+Needs verification.
+
+Lint/Error Cleanup Completed
+
+Resolved:
+
+CompTable typo
+Select widget default issues
+Category select issues
+Serve Form select issues
+Yield Unit select issues
+Table reset corruption
+CurrentRow lint issues
+
+Current status:
+
+No remaining lint errors
+No remaining type errors
+Current Assessment
+Dish Header
+
+Status:
+
+Stable enough for continued testing
+
+Confirmed:
+
+Save
+Update
+Reload
+Close
+New Dish initialization
+
+all behaving much better.
+
+Dish Components
+
+Status:
+
+Needs focused stabilization
+
+Remaining work:
+
+Item autofill
+Unit picklist
+Line cost
+Component interaction logic
+Recommendation For Next Session
+
+Do NOT rebuild Dish page.
+
+Do NOT redesign Dish architecture.
+
+Continue from current state.
+
+Next priority:
+
+Dish Components
+
+Specifically:
+
+Restore Item autofill behavior.
+Restore Unit picklist population.
+Verify LineCost calculation.
+Validate component save/load.
+Validate Recipe → Dish propagation.
+
+The Dish page is now much closer to operational than it appeared at the beginning of the session. The remaining issues are concentrated inside the component table rather than the overall Dish lifecycle.
