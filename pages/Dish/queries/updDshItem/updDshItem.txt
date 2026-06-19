@@ -1,14 +1,14 @@
 update public.dsh_items
 set
-  name = NULLIF('{{ inpDshName.text.trim().replaceAll("'", "''") }}', ''),
-  category_id = {{ selDshCategory.selectedOptionValue && selDshCategory.selectedOptionValue !== "" ? Number(selDshCategory.selectedOptionValue) : null }},
-  serve_form_id = {{ (selDshFormat.selectedOptionValues || [])[0] ? Number((selDshFormat.selectedOptionValues || [])[0]) : null }},
-  yield_qty = {{ inpDshYieldQty.text && inpDshYieldQty.text !== "" ? Number(inpDshYieldQty.text) : null }},
-  yield_unit_id = {{ selDshYieldUnit.selectedOptionValue && selDshYieldUnit.selectedOptionValue !== "" ? Number(selDshYieldUnit.selectedOptionValue) : null }},
-  extra_percent = {{ inpDshExtraPercent.text && inpDshExtraPercent.text !== "" ? Number(inpDshExtraPercent.text) : 0 }},
+  name = '{{ inpDshName.text.trim().replaceAll("'", "''") }}',
+  category_id = {{ selDshCategory.selectedOptionValue ? Number(selDshCategory.selectedOptionValue) : null }},
+  serve_form_id = {{ selDshFormat.selectedOptionValue ? Number(selDshFormat.selectedOptionValue) : null }},
+  yield_qty = {{ inpDshYieldQty.text ? Number(inpDshYieldQty.text) : null }},
+  yield_unit_id = {{ selDshYieldUnit.selectedOptionValue ? Number(selDshYieldUnit.selectedOptionValue) : null }},
+  extra_percent = {{ inpDshExtraPercent.text ? Number(inpDshExtraPercent.text) : 0 }},
   notes = NULLIF('{{ (rteDshNotes.text || "").replaceAll("'", "''") }}', ''),
   active = {{ chkDshActive.isChecked ? true : false }},
   updated_at = now()
-where id = {{ Number(appsmith.store.current_dish_id) }}
+where id = {{ Number(appsmith.store.current_dish_id || 0) }}
   and client_id = '{{ appsmith.store.current_client_id }}'::uuid
 returning id;

@@ -39,17 +39,17 @@ export default {
 
 		await dshCompTable.syncFromTable();
 
-		const currentId = Number(appsmith.store.current_dish_id || 0);
-		const savedId = Number(getDshItemById.data?.[0]?.id || 0);
-		const isExisting = currentId > 0 || savedId > 0;
-
-		if (savedId > 0 && currentId === 0) {
-			await storeValue("current_dish_id", savedId);
-		}
+		let dishId = Number(appsmith.store.current_dish_id || 0);
 		let result = null;
 
-		if (isExisting) {
+		if (dishId > 0) {
 			result = await updDshItem.run();
+
+			if (!Array.isArray(result) || result.length === 0 || !result[0]?.id) {
+				showAlert("This Dish no longer exists. Reopen the Dish page before saving.", "error");
+				await storeValue("current_dish_id", 0);
+				return false;
+			}
 		} else {
 			const duplicate = await checkDshNameExists.run();
 
@@ -60,9 +60,17 @@ export default {
 
 			result = await addDshItem.run();
 
-			const newId = result?.[0]?.id;
-			if (newId) {
-				await storeValue("current_dish_id", newId);
+			dishId = Number(result?.[0]?.id || 0);
+
+			if (!dishId) {
+				showAlert("Dish save failed. No Dish ID was returned.", "error");
+				return false;
+			}
+
+			await storeValue("current_dish_id", dishId);
+			if (!dishId || dishId <= 0) {
+				showAlert("Cannot save Dish child records because no valid Dish ID exists.", "error");
+				return false;
 			}
 		}
 
@@ -100,7 +108,7 @@ export default {
 		await this.safeReset("inpDshExtraPercent");
 		await this.safeReset("msDshDietTags");
 		await this.safeReset("rteDshNotes");
-		await this.safeReset("tblDshComponents");
+		// await this.safeReset("tblDshComponents");
 
 		await getDshComponents.run();
 
@@ -124,7 +132,7 @@ export default {
 		return {
 			name: this.textClean(inpDshName.text),
 			category_id: this.clean(selDshCategory.selectedOptionValue),
-			serve_form_id: this.clean((selDshFormat.selectedOptionValues || [])[0]),
+			serve_form_id: this.clean(selDshFormat.selectedOptionValue),
 			active: chkDshActive.isChecked === false ? false : true,
 			yield_qty: this.clean(inpDshYieldQty.text),
 			yield_unit_id: this.clean(selDshYieldUnit.selectedOptionValue),
@@ -227,19 +235,6 @@ export default {
 			return;
 		}
 
-		navigateTo("DishList");
-	},
-
-	async saveAndCloseDish() {
-		const result = await this.saveDish();
-		if (!result) return null;
-
-		closeModal("mdlDshUnsavedChanges");
-		navigateTo("DishList");
-	},
-
-	async closeWithoutSaving() {
-		closeModal("mdlDshUnsavedChanges");
 		await dshCompTable.clearDraftRows();
 		await storeValue("current_dish_id", 0);
 		await removeValue("dsh_components_local_rows");
@@ -253,11 +248,56 @@ export default {
 		await this.safeReset("inpDshExtraPercent");
 		await this.safeReset("msDshDietTags");
 		await this.safeReset("rteDshNotes");
-		await this.safeReset("tblDshComponents");
+		// await this.safeReset("tblDshComponents");
 
 		navigateTo("DishList");
 	},
 
+	async saveAndCloseDish() {
+		const result = await this.saveDish();
+		if (!result) return null;
+
+		closeModal("mdlDshUnsavedChanges");
+
+		await dshCompTable.clearDraftRows();
+		await storeValue("current_dish_id", 0);
+		await removeValue("dsh_components_local_rows");
+
+		await this.safeReset("inpDshName");
+		await this.safeReset("selDshCategory");
+		await this.safeReset("selDshFormat");
+		await this.safeReset("chkDshActive");
+		await this.safeReset("inpDshYieldQty");
+		await this.safeReset("selDshYieldUnit");
+		await this.safeReset("inpDshExtraPercent");
+		await this.safeReset("msDshDietTags");
+		await this.safeReset("rteDshNotes");
+		// await this.safeReset("tblDshComponents");
+
+		navigateTo("DishList");
+	},
+
+	async closeWithoutSaving() {
+		closeModal("mdlDshUnsavedChanges");
+
+		await dshCompTable.clearDraftRows();
+		await storeValue("current_dish_id", 0);
+		await removeValue("dsh_components_local_rows");
+
+		await this.safeReset("inpDshName");
+		await this.safeReset("selDshCategory");
+		await this.safeReset("selDshFormat");
+		await this.safeReset("chkDshActive");
+		await this.safeReset("inpDshYieldQty");
+		await this.safeReset("selDshYieldUnit");
+		await this.safeReset("inpDshExtraPercent");
+		await this.safeReset("msDshDietTags");
+		await this.safeReset("rteDshNotes");
+		// await this.safeReset("tblDshComponents");
+
+		navigateTo("DishList");
+	},
+	
 	async duplicateDishSavedVersion() {
 		const result = await duplicateDish.run();
 		const newId = result?.[0]?.id;
@@ -319,6 +359,7 @@ export default {
 		closeModal("mdlDshDeleteConfirm");
 		await dshCompTable.clearDraftRows();
 		await storeValue("current_dish_id", 0);
+		await removeValue("dsh_components_local_rows");
 
 		showAlert("Dish deleted", "success");
 		navigateTo("DishList");

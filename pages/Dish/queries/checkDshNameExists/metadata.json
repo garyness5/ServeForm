@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select count(*) as match_count\nfrom public.dsh_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and public.norm_name(name) = public.norm_name('{{ inpDshName.text.trim().replaceAll(\"'\", \"''\") }}')\n  and coalesce(deleted, false) = false\n  and id <> coalesce({{ Number(appsmith.store.current_dish_id || 0) }}, 0);",
+      "body": "select\n  id,\n  name,\n  normalized_name,\n  deleted,\n  active,\n  created_at,\n  updated_at,\n  public.norm_name(name) as db_norm,\n  public.norm_name('{{ String(inpDshName.text || \"\").trim().replaceAll(\"'\", \"''\") }}') as input_norm\nfrom public.dsh_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\n  and public.norm_name(name) = public.norm_name('{{ String(inpDshName.text || \"\").trim().replaceAll(\"'\", \"''\") }}')\norder by id;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -29,7 +29,7 @@
     ],
     "name": "checkDshNameExists",
     "pageId": "Dish",
-    "runBehaviour": "MANUAL",
+    "runBehaviour": "AUTOMATIC",
     "userSetOnLoad": false
   }
 }

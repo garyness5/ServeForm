@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 131,
+  "bottomRow": 119,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -33,8 +33,8 @@
   "mobileRightColumn": 38,
   "mobileTopRow": 122,
   "needsErrorInfo": false,
-  "originalBottomRow": 131,
-  "originalTopRow": 122,
+  "originalBottomRow": 119,
+  "originalTopRow": 115,
   "overflow": "NONE",
   "parentColumnSpace": 17.9375,
   "parentId": "0",
@@ -43,10 +43,10 @@
   "responsiveBehavior": "fill",
   "rightColumn": 49,
   "shouldTruncate": false,
-  "text": "{{ JSON.stringify(addDshItem.data) }}",
+  "text": "{{ JSON.stringify({\n  current_dish_id: appsmith.store.current_dish_id,\n  name: inpDshName.text,\n  exists: checkDshNameExists.data\n}) }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 122,
+  "topRow": 115,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

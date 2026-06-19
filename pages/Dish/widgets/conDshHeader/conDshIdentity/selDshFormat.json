@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 24,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  Number(appsmith.store.current_dish_id || 0) === 0\n    ? \"\"\n    : String(getDshItemById.data?.[0]?.serve_form_id || \"\")\n))(Select1.options, Select1.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  Number(appsmith.store.current_dish_id || 0) === 0 ? \"\" : getDshItemById.data?.[0]?.serve_form_id || \"\" ))(selDshFormat.options, selDshFormat.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

@@ -13,9 +13,9 @@ insert into public.dsh_items
 values
 (
   '{{ appsmith.store.current_client_id }}'::uuid,
-  NULLIF('{{ inpDshName.text.trim().replaceAll("'", "''") }}', ''),
+  '{{ inpDshName.text.trim().replaceAll("'", "''") }}',
   {{ selDshCategory.selectedOptionValue ? Number(selDshCategory.selectedOptionValue) : null }},
-  {{ (selDshFormat.selectedOptionValues || [])[0] ? Number((selDshFormat.selectedOptionValues || [])[0]) : null }},
+  {{ selDshFormat.selectedOptionValue ? Number(selDshFormat.selectedOptionValue) : null }},
   {{ inpDshYieldQty.text ? Number(inpDshYieldQty.text) : null }},
   {{ selDshYieldUnit.selectedOptionValue ? Number(selDshYieldUnit.selectedOptionValue) : null }},
   {{ inpDshExtraPercent.text ? Number(inpDshExtraPercent.text) : 0 }},

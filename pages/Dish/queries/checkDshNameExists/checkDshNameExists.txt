@@ -1,6 +1,15 @@
-select count(*) as match_count
+select
+  id,
+  name,
+  normalized_name,
+  deleted,
+  active,
+  created_at,
+  updated_at,
+  public.norm_name(name) as db_norm,
+  public.norm_name('{{ String(inpDshName.text || "").trim().replaceAll("'", "''") }}') as input_norm
 from public.dsh_items
 where client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and public.norm_name(name) = public.norm_name('{{ inpDshName.text.trim().replaceAll("'", "''") }}')
   and coalesce(deleted, false) = false
-  and id <> coalesce({{ Number(appsmith.store.current_dish_id || 0) }}, 0);
+  and public.norm_name(name) = public.norm_name('{{ String(inpDshName.text || "").trim().replaceAll("'", "''") }}')
+order by id;

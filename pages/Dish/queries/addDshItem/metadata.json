@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "insert into public.dsh_items\n(\n  client_id,\n  name,\n  category_id,\n  serve_form_id,\n  yield_qty,\n  yield_unit_id,\n  extra_percent,\n  notes,\n  active\n)\nvalues\n(\n  '{{ appsmith.store.current_client_id }}'::uuid,\n  NULLIF('{{ inpDshName.text.trim().replaceAll(\"'\", \"''\") }}', ''),\n  {{ selDshCategory.selectedOptionValue ? Number(selDshCategory.selectedOptionValue) : null }},\n  {{ (selDshFormat.selectedOptionValues || [])[0] ? Number((selDshFormat.selectedOptionValues || [])[0]) : null }},\n  {{ inpDshYieldQty.text ? Number(inpDshYieldQty.text) : null }},\n  {{ selDshYieldUnit.selectedOptionValue ? Number(selDshYieldUnit.selectedOptionValue) : null }},\n  {{ inpDshExtraPercent.text ? Number(inpDshExtraPercent.text) : 0 }},\n  NULLIF('{{ (rteDshNotes.text || \"\").replaceAll(\"'\", \"''\") }}', ''),\n  {{ chkDshActive.isChecked ? true : false }}\n)\nreturning id;",
+      "body": "insert into public.dsh_items\n(\n  client_id,\n  name,\n  category_id,\n  serve_form_id,\n  yield_qty,\n  yield_unit_id,\n  extra_percent,\n  notes,\n  active\n)\nvalues\n(\n  '{{ appsmith.store.current_client_id }}'::uuid,\n  '{{ inpDshName.text.trim().replaceAll(\"'\", \"''\") }}',\n  {{ selDshCategory.selectedOptionValue ? Number(selDshCategory.selectedOptionValue) : null }},\n  {{ selDshFormat.selectedOptionValue ? Number(selDshFormat.selectedOptionValue) : null }},\n  {{ inpDshYieldQty.text ? Number(inpDshYieldQty.text) : null }},\n  {{ selDshYieldUnit.selectedOptionValue ? Number(selDshYieldUnit.selectedOptionValue) : null }},\n  {{ inpDshExtraPercent.text ? Number(inpDshExtraPercent.text) : 0 }},\n  NULLIF('{{ (rteDshNotes.text || \"\").replaceAll(\"'\", \"''\") }}', ''),\n  {{ chkDshActive.isChecked ? true : false }}\n)\nreturning id;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -29,7 +29,7 @@
     ],
     "name": "addDshItem",
     "pageId": "Dish",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }

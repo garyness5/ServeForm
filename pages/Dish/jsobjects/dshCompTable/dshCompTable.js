@@ -92,10 +92,32 @@ export default {
 		const currentDishId = Number(appsmith.store.current_dish_id || 0);
 
 		if (Array.isArray(rows) && rows.length > 0) {
-			const rowDishId = Number(rows[0]?.dish_id || 0);
+			const contentRows = rows.filter(r => this.hasContent(r));
 
-			if (rowDishId === currentDishId) {
-				return rows;
+			const contentDishIds = contentRows
+				.map(r => Number(r.dish_id || 0))
+				.filter(id => id > 0);
+
+			if (currentDishId > 0) {
+				const belongsToCurrentDish =
+					contentDishIds.length === 0 ||
+					contentDishIds.every(id => id === currentDishId);
+
+				if (belongsToCurrentDish) {
+					return rows.map((r, index) => ({
+						...r,
+						dish_id: currentDishId,
+						line_no: index + 1
+					}));
+				}
+			}
+
+			if (currentDishId === 0 && contentDishIds.length === 0) {
+				return rows.map((r, index) => ({
+					...r,
+					dish_id: 0,
+					line_no: index + 1
+				}));
 			}
 		}
 
