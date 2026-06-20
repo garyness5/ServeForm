@@ -300,7 +300,7 @@ export default {
 	
 	async duplicateDishSavedVersion() {
 		const result = await duplicateDish.run();
-		const newId = result?.[0]?.id;
+		const newId = result?.[0]?.new_id || result?.[0]?.id;
 
 		if (!newId) {
 			showAlert("Dish duplicate failed", "error");
@@ -361,9 +361,17 @@ export default {
 		await storeValue("current_dish_id", 0);
 		await removeValue("dsh_components_local_rows");
 
-		showAlert("Dish deleted", "success");
-		navigateTo("DishList");
+		await this.safeReset("inpDshName");
+		await this.safeReset("selDshCategory");
+		await this.safeReset("selDshFormat");
+		await this.safeReset("chkDshActive");
+		await this.safeReset("inpDshYieldQty");
+		await this.safeReset("selDshYieldUnit");
+		await this.safeReset("inpDshExtraPercent");
+		await this.safeReset("msDshDietTags");
+		await this.safeReset("rteDshNotes");
 
+		showAlert("Dish deleted", "success");
 		return true;
 	},
 

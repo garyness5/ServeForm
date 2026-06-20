@@ -29,7 +29,7 @@
     ],
     "name": "checkDshNameExists",
     "pageId": "Dish",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }

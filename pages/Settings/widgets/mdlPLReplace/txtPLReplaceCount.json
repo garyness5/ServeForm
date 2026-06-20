@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 25,
   "shouldTruncate": false,
-  "text": "{{\n`This will impact\n    Ingredients: ${getHelperIngredientImpactCount.data?.[0]?.ingredient_count || 0}\n    Recipes: ${getHelperRecipeImpactCount.data?.[0]?.recipe_count || 0}\n    Dishes: 0\n    Menus: 0\n    Events: 0`\n}}",
+  "text": "{{\n`This will impact\n    Ingredients: ${getHelperIngredientImpactCount.data?.[0]?.ingredient_count || 0}\n    Recipes: ${getHelperRecipeImpactCount.data?.[0]?.recipe_count || 0}\n    Dishes: ${getHelperDishImpactCount.data?.[0]?.dish_count || 0}\n    Menus: 0\n    Events: 0`\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 41,

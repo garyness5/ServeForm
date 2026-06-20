@@ -62,6 +62,22 @@ WHERE idt.ingredient_id = i.id
       AND hli.is_system = false
   );
 
+UPDATE dsh_items d
+SET category_id = NULL,
+    updated_at = now()
+WHERE d.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  AND d.category_id = {{ Number(tblPicklistItems.selectedRow.id) }}
+  AND EXISTS (
+    SELECT 1
+    FROM helper_list_items hli
+    JOIN helper_lists hl
+      ON hl.id = hli.list_id
+    WHERE hli.id = {{ Number(tblPicklistItems.selectedRow.id) }}
+      AND hl.list_code = 'dish_category'
+      AND hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+      AND hli.is_system = false
+  );
+
 DELETE FROM helper_list_items hli
 WHERE hli.id = {{ Number(tblPicklistItems.selectedRow.id) }}
   AND hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid

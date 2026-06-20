@@ -4,7 +4,7 @@ select
 from public.helper_lists hl
 join public.helper_list_items hli
   on hli.list_id = hl.id
-where hl.client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and hl.list_code = 'dish_categories'
+where hl.list_code = 'dish_category'
+  and hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and hli.active = true
 order by hli.sort_order, hli.name;

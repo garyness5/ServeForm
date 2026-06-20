@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  (\n    select count(*)\n    from public.rec_components\n    where item_type = 'ingredient'\n      and ingredient_id = {{ Number(tblIngList.selectedRow?.id || 0) }}\n  ) as recipe_count,\n\n  0 as dish_count,\n  0 as menu_count,\n  0 as event_count;",
+      "body": "select\n  (\n    select count(*)\n    from public.rec_components\n    where item_type = 'ingredient'\n      and ingredient_id = {{ Number(tblIngList.selectedRow?.id || 0) }}\n  ) as recipe_count,\n\n  (\n    select count(*)\n    from public.dsh_components\n    where item_type = 'ingredient'\n      and ingredient_id = {{ Number(tblIngList.selectedRow?.id || 0) }}\n  ) as dish_count,\n\n  0 as menu_count,\n  0 as event_count;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

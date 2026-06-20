@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 4,
+  "bottomRow": 6,
   "boxShadow": "none",
   "buttonColor": "#18181b",
   "buttonVariant": "TERTIARY",
@@ -48,7 +48,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 62,
   "text": "{{ appsmith.store.settingsAccordion === \"picklists\" ? \"▲ List Management\" : \"▼ List Management\" }}\n",
-  "topRow": 0,
+  "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
   "widgetId": "t5xy5mg14l",

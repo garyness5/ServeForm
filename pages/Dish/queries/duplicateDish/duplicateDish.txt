@@ -1,4 +1,4 @@
 select *
-from public.duplicate_recipe(
-  {{ Number(appsmith.store.current_recipe_id || 0) }}
+from public.duplicate_dish(
+  {{ Number(appsmith.store.current_dish_id || 0) }}
 );

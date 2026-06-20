@@ -22,11 +22,11 @@
       "isDefault": false
     },
     {
-      "id": "Settings",
+      "id": "Dish",
       "isDefault": false
     },
     {
-      "id": "Dish",
+      "id": "Settings",
       "isDefault": false
     }
   ],

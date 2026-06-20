@@ -9,8 +9,10 @@ where active = true
   and list_code in (
     'ingredient_category',
     'recipe_category',
+    'dish_category',
     'supplier',
     'packaging',
-    'diet_tag'
+    'diet_tag',
+    'serve_form'
   )
 order by lower(list_name);

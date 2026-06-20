@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT\n  hli.id,\n  hli.list_id,\n  hli.name,\n  hli.sort_order,\n  hli.is_system\nFROM helper_list_items hli\nJOIN helper_lists hl\n  ON hl.id = hli.list_id\nWHERE hli.list_id = {{ Number(selPicklistType.selectedOptionValue) }}\n  AND (\n    (\n      hl.list_code = 'diet_tag'\n      AND (\n        hli.is_system = true\n        OR hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n      )\n    )\n    OR\n    (\n      hl.list_code <> 'diet_tag'\n      AND hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n    )\n  )\nORDER BY hli.sort_order NULLS LAST, hli.name;",
+      "body": "select\n  id,\n  name,\n  active,\n  is_system\nfrom helper_list_items\nwhere list_id = {{ Number(selPicklistType.selectedOptionValue || 0) }}\n  and (\n    client_id = '{{ appsmith.store.current_client_id }}'::uuid\n    or is_system = true\n  )\norder by lower(name);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
