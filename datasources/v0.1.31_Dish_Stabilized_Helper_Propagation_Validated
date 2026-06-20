@@ -1,0 +1,245 @@
+ServeForm / Savveyra Development Log
+Version: v0.1.31_Dish_Stabilized_Helper_Propagation_Validated
+Session Objective
+
+Complete Dish stabilization and validate end-to-end propagation behavior.
+
+Dish Save / Load Lifecycle
+Fixed
+New Dish insert behavior.
+Update vs Insert behavior.
+current_dish_id lifecycle.
+Save reload behavior.
+Save & New behavior.
+Close behavior.
+Header persistence.
+Verified
+
+✅ Save
+
+✅ Save Again
+
+✅ Save & New
+
+✅ Close
+
+✅ Header reload
+
+✅ Existing Dish update
+
+Dish Component Table
+Fixed
+
+Recipe component table was copied and rewired to Dish.
+
+Resolved:
+
+Item autofill
+Category autofill
+Unit autofill
+Unit picklist
+Line cost calculation
+Component persistence
+Verified
+
+✅ Ingredient components
+
+✅ Recipe components
+
+✅ Qty changes
+
+✅ Use Wastage
+
+✅ Active / Inactive
+
+Dish Duplicate
+Fixed
+
+Duplicate query was incorrectly pointing to:
+
+duplicate_recipe()
+
+Rewired to:
+
+duplicate_dish()
+Fixed duplicate_dish()
+
+Corrected:
+
+old diet tag column references
+return ID handling
+duplicate naming logic
+Verified
+
+✅ Dish Copy
+
+✅ Dish Copy 2
+
+✅ Header duplicated
+
+✅ Components duplicated
+
+✅ Diet Tags duplicated
+
+✅ New ID generated
+
+Dish Delete
+Fixed
+Delete confirmation flow
+Dish delete execution
+Local state cleanup
+Verified
+
+✅ Delete Dish
+
+✅ State cleared
+
+✅ Page cleared
+
+Recipe → Dish Validation
+Verified
+
+Recipe used in Dish.
+
+Recipe cost changes propagate to Dish.
+
+Verified
+
+✅ Recipe cost propagation
+
+Recipe Inactive Behavior
+Verified
+
+When Recipe becomes inactive:
+
+Dish component remains visible
+LineCost removed
+Cost totals update
+
+Added visual warning:
+
+Yellow background
+Verified
+
+✅ Inactive propagation
+
+✅ Visual warning
+
+Recipe Deleted Behavior
+Verified
+
+When Recipe deleted:
+
+Dish component remains visible
+Cost removed
+Red warning displayed
+Verified
+
+✅ Deleted propagation
+
+✅ Visual warning
+
+Recipe Impact Count
+
+Updated:
+
+getRecListImpactCount
+
+Added Dish usage count.
+
+Verified
+
+✅ Recipe impact count includes Dish usage
+
+Helper Architecture
+Dish Categories
+
+Resolved helper list mismatch:
+
+Old:
+
+dish_categories
+
+Current:
+
+dish_category
+
+Moved helper items from old list to current list.
+
+Updated
+Helper list visibility
+Helper impact counts
+Replace Everywhere
+Delete cleanup
+Verified
+
+✅ Dish Category helper list
+
+✅ Dish Category replacement
+
+✅ Dish Category deletion
+
+Ingredient Impact Count
+
+Updated:
+
+getIngredientImpactCount
+
+Added Dish usage count.
+
+Verified
+
+✅ Ingredient impact count includes Dish usage
+
+Propagation Validation
+Verified
+
+Helpers → Dish
+
+✅ Working
+
+Ingredients → Dish
+
+✅ Working
+
+Recipes → Dish
+
+✅ Working
+
+Inactive Recipe → Dish
+
+✅ Working
+
+Deleted Recipe → Dish
+
+✅ Working
+
+Current Status
+Ingredients
+
+Stable
+
+Recipes
+
+Stable
+
+Dishes
+
+Stabilized and validated
+
+Core Add/Edit workflow operational.
+
+Remaining Dish Work
+DishList page
+Final list actions validation
+Next Domain Focus
+DishList
+
+After DishList validation:
+
+Menu operational review
+Overall Assessment
+
+Dish domain has moved from architecture/testing phase into stabilization-complete status.
+
+Core operational behaviors, propagation rules, helper integration, duplicate/delete workflows, and parent-child warning logic have been validated successfully.
