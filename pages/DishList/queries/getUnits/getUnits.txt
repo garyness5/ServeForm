@@ -1,0 +1,10 @@
+SELECT id, abbreviation, unit_type
+FROM public.units
+ORDER BY
+  CASE unit_type
+    WHEN 'weight' THEN 1
+    WHEN 'volume' THEN 2
+    WHEN 'count' THEN 3
+    ELSE 99
+  END,
+  abbreviation;

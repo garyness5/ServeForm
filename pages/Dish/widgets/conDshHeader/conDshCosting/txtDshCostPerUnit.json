@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "shouldTruncate": false,
-  "text": "{{\n  \"<b>Cost per \" +\n  (selDshYieldUnit.selectedOptionLabel || \"Unit\") +\n  \": </b>\" +\n  (\n    dshCompTable.costPerYieldUnit() == null\n      ? \"\"\n      : dshCompTable.costPerYieldUnit()\n  )\n}}",
+  "text": "{{\n  \"<b>Cost per \" +\n  (selDshYieldUnit.selectedOptionLabel || \"Unit\") +\n  \": </b>\" +\n  (\n    dshCompTable.costPerYieldUnit() == null\n      ? \"\"\n      : fmt.currency(dshCompTable.costPerYieldUnit())\n  )\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 22,

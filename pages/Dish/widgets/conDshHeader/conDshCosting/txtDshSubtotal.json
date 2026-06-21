@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 62,
   "shouldTruncate": false,
-  "text": "{{ \"<b>Sub-total:</b> \" + dshCompTable.subtotal() }}",
+  "text": "{{ \"<b>Sub-total:</b> \" + fmt.currency(dshCompTable.subtotal()) }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 14,

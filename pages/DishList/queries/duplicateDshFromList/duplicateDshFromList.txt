@@ -1,0 +1,4 @@
+select *
+from public.duplicate_dish(
+  {{ Number(tblDishList.selectedRow?.id || 0) }}
+);
