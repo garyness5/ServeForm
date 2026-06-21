@@ -1,0 +1,65 @@
+ServeForm / Savveyra
+v0.1.33_Dish_Components_Restored_Menu_Ready
+
+Completed final Dish stabilization and formatting cleanup.
+
+Dish Components
+- Restored tblDshComponents after Appsmith column regeneration.
+- Reapplied component table configuration.
+- Restored Item Type, Category, Item and Unit picklists.
+- Restored Active toggle.
+- Restored Use Wastage toggle.
+- Restored calculated Line Cost display.
+- Restored inactive/deleted visual warnings.
+- Verified propagation from Ingredients and Recipes.
+
+Formatting
+- Implemented page-level fmt formatter standard.
+- Currency displays with 2 decimals.
+- Numbers display whole numbers without decimals and fractional values with 1-2 decimals.
+- Applied formatting to Recipe and Dish costing displays.
+
+Dish
+- Save verified.
+- Save & New verified.
+- Close verified.
+- Duplicate verified.
+- Delete verified.
+- Helper propagation verified.
+- Ingredient propagation verified.
+- Recipe propagation verified.
+- Inactive child handling verified.
+- Deleted child handling verified.
+
+Dish List
+- Add verified.
+- Edit verified.
+- Duplicate verified.
+- Delete verified.
+- Active/Inactive verified.
+- Impact counts verified.
+- Category display verified.
+- Serve Form display verified.
+- Cost display verified.
+
+Appsmith Notes
+- Confirmed component table behavior differs depending on Pagination / Server-side / Infinite Scroll settings.
+- Confirmed currentRow lint warnings remain editor noise where runtime behavior is correct.
+- Established Recipe and Dish component tables as reference implementations for future Menu development.
+
+Project Status
+
+Ingredients
+✓ Stable
+
+Recipes
+✓ Stable
+
+Dishes
+✓ Stable
+
+DishList
+✓ Stable
+
+Next Domain
+→ Menu operational review and implementation.
