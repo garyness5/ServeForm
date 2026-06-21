@@ -1,0 +1,37 @@
+ServeForm / Savveyra
+v0.1.32_DishList_Complete_Format_Standardized
+
+Completed DishList implementation.
+
+DishList was created from the RecipeList pattern and rewired to Dish-specific data, state, navigation, and actions.
+
+Completed / verified:
+- getDishList pulls Dish records from Supabase.
+- DishList displays Dish data correctly.
+- Add Dish opens a clean Dish page.
+- Edit Dish opens the selected Dish.
+- Edited Dish values save and refresh back to DishList.
+- Duplicate Dish from DishList works.
+- Delete Dish from DishList works.
+- Active / Inactive toggle works.
+- Dish Category display corrected.
+- Serve Form display included.
+- Dish-specific queries replaced copied Recipe references.
+- DishList refreshes after actions.
+- Dish page/component cost and number displays now use standardized formatting.
+
+Formatting standard confirmed:
+- Currency always displays 2 decimals.
+- General numbers display whole numbers without decimals.
+- General numbers with decimals display 1 to 2 decimals.
+
+Known accepted issue:
+- Appsmith table row-context lint warnings may remain where currentRow is required for working table behavior.
+- Runtime behavior has been verified, so these are treated as editor lint noise unless they cause runtime failure.
+
+Current status:
+- Ingredients stable.
+- Recipes stable.
+- Dishes stable.
+- DishList complete.
+- Ready to begin Menu operational review / implementation.
