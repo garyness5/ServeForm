@@ -1,0 +1,52 @@
+Menu domain substantially implemented and entering stabilization/testing phase.
+
+Completed:
+- Menu database foundation
+- Menu Categories helper
+- Menu page creation
+- MenuList creation
+- Menu component table
+- Ingredient components
+- Recipe components
+- Dish components
+- Menu costing
+- Derived allergens
+- Derived diet tags
+- Manual parent diet tags
+- Save
+- Save & New
+- Edit
+- Reopen
+- Duplicate
+- Delete
+- Dirty state protection
+- Header persistence
+- Component persistence
+- Diet tag persistence
+- Line cost display
+- Subtotal calculation
+- Total cost calculation
+- Cost per unit calculation
+
+Validated:
+- Ingredient → Recipe propagation
+- Recipe → Dish propagation
+- Dish domain stable
+- DishList stable
+
+Current blocker:
+- MenuList display corruption after Duplicate/Delete actions.
+- Database operations succeed.
+- Page refresh displays correct data.
+- Immediate post-action display shows old and refreshed data simultaneously.
+- Root cause not yet identified.
+- Requires fresh-eye investigation in next session.
+
+Next objective:
+- Resolve MenuList display corruption.
+- Complete Menu validation.
+- Mark Menu stable.
+- Begin Event operational analysis.
+
+Status:
+Menu implementation complete enough for stabilization and testing.
