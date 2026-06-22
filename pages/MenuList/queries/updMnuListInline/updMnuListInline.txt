@@ -1,0 +1,9 @@
+update public.mnu_items
+set
+  category_id = {{ Number(tblMnuList.updatedRow.category_id || 0) || "null" }},
+  active = {{ tblMnuList.updatedRow.active === false ? false : true }},
+  updated_at = now()
+where id = {{ Number(tblMnuList.updatedRow.id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+returning id;

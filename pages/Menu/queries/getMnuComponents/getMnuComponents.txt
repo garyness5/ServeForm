@@ -1,0 +1,4 @@
+select *
+from public.vw_mnu_components
+where menu_id = {{ Number(appsmith.store.current_menu_id || 0) }}
+order by line_no;

@@ -1,0 +1,8 @@
+select count(*) as match_count
+from rec_items
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and public.norm_name(name) = public.norm_name('{{ inpMnuName.text.trim().replaceAll("'", "''") }}')
+  and (
+    {{ appsmith.store.current_recipe_id ? Number(appsmith.store.current_recipe_id) : "null" }} is null
+    or id <> {{ appsmith.store.current_recipe_id ? Number(appsmith.store.current_recipe_id) : "null" }}
+  );

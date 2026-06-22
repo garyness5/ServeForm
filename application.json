@@ -30,6 +30,14 @@
       "isDefault": false
     },
     {
+      "id": "MenuList",
+      "isDefault": false
+    },
+    {
+      "id": "Menu",
+      "isDefault": false
+    },
+    {
       "id": "Settings",
       "isDefault": false
     }

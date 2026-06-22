@@ -1,0 +1,6 @@
+select
+  helper_list_item_id::text as value,
+  helper_list_item_id
+from public.mnu_diet_tags
+where menu_id = {{ Number(appsmith.store.current_menu_id || 0) }}
+order by helper_list_item_id;
