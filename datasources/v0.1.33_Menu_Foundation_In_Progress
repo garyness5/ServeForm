@@ -1,0 +1,46 @@
+Started Menu domain foundation.
+
+Completed:
+- Created Supabase Menu foundation:
+  - mnu_items
+  - mnu_components
+  - mnu_diet_tags
+  - vw_mnu_items
+  - vw_mnu_components
+- Added Menu Category helper with initial seed values:
+  - Breakfast
+  - Lunch
+  - Dinner
+  - Reception
+  - Beverage
+- Added Menu costing functions:
+  - get_menu_total_cost
+  - get_menu_cost_per_unit
+  - get_menu_cost_per_base_unit
+- Added Menu derived summary functions:
+  - get_menu_derived_allergens
+  - get_menu_derived_diet_tags
+- Added Menu operations:
+  - duplicate_menu
+  - delete_menu
+  - save_mnu_components_snapshot
+  - save_mnu_diet_tags_snapshot
+- Began Appsmith MenuList rewiring from DishList.
+- Began Appsmith Menu page rewiring from Dish/Recipe patterns.
+- Fixed major copied Recipe/Dish references in Menu component table logic.
+- Fixed Menu component table to use mnu_components_local_rows and current_menu_id.
+- Fixed getMnuComponents to read vw_mnu_components by menu_id.
+- Fixed major Menu save queries that were still writing to Recipe tables.
+
+Known incomplete:
+- Menu page queries still need full audit.
+- Menu JS still needs full audit.
+- MenuList linting errors remain.
+- Menu name duplicate checking not yet confirmed/rewired.
+- Menu Save behavior should remain on Menu page after save/refresh.
+- Bad Recipe test row may need cleanup if created during copied-query testing.
+- Menu testing not complete.
+
+Status:
+Menu foundation started but not stable.
+Continue next with full Menu query audit, then Menu JS audit, then MenuList lint cleanup.
