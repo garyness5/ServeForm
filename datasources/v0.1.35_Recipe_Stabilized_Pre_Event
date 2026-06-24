@@ -1,0 +1,52 @@
+Version:
+v0.1.35_Recipe_Stabilized_Pre_Event
+
+Summary
+
+Recipe component table successfully stabilized following corruption of previous implementation.
+
+Recipe Work Completed
+
+* Rebuilt Recipe component table configuration.
+* Restored inline editing workflow.
+* Restored ItemType selection persistence.
+* Restored Category selection persistence.
+* Restored Item selection and component loading.
+* Restored Qty and Unit editing.
+* Restored Use Wastage checkbox behavior.
+* Restored Status checkbox behavior.
+* Restored row-level Delete functionality.
+* Restored live component costing calculations.
+* Restored Recipe subtotal calculation.
+* Restored Recipe total cost calculation.
+* Restored Recipe cost-per-unit calculation.
+* Restored RecipeList value publication.
+
+Validation Completed
+
+* Save Recipe successful.
+* Save & New clears workspace correctly.
+* Recipe reload successful after save.
+* Component data reload successful.
+* New Ingredient creation verified.
+* New Ingredient available in Recipe component selection after creation.
+* Sub-recipe selection verified.
+* Propagation verified.
+* Header calculations update immediately from component changes.
+
+Architectural Notes
+
+* Recipe remains aligned with Dish/Menu inline component editing approach.
+* Recipe retains Recipe-specific Add Ingredient workflow.
+* Recipe supports Ingredient and Recipe child components.
+* Recipe does not use Dish/Menu Format column.
+* Quotation and Grocery modules remain downstream manual-control layers.
+* Event domain remains the next major implementation target.
+
+Status
+
+Recipe domain considered operationally stable for current milestone.
+
+Next Focus
+
+Event domain analysis and implementation.
