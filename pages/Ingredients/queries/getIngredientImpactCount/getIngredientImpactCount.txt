@@ -13,5 +13,11 @@ select
       and ingredient_id = {{ Number(tblIngList.selectedRow?.id || 0) }}
   ) as dish_count,
 
-  0 as menu_count,
+  (
+    select count(*)
+    from public.mnu_components
+    where item_type = 'ingredient'
+      and ingredient_id = {{ Number(tblIngList.selectedRow?.id || 0) }}
+  ) as menu_count,
+
   0 as event_count;

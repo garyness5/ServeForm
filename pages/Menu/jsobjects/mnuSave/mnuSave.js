@@ -23,7 +23,7 @@ export default {
 		return `You need to have a ${missing.join(" and a ")} selected before you can save.`;
 	},
 
-	validateBeforeSave() {
+	async validateBeforeSave() {
 		const message = this.requiredSaveMessage();
 
 		if (message) {
@@ -31,11 +31,20 @@ export default {
 			return false;
 		}
 
+		await checkMnuNameExists.run();
+
+		const matchCount = Number(checkMnuNameExists.data?.[0]?.match_count || 0);
+
+		if (matchCount > 0) {
+			showAlert("A menu with this name already exists.", "warning");
+			return false;
+		}
+
 		return true;
 	},
 
 	async saveMenu() {
-		if (!this.validateBeforeSave()) return false;
+		if (!(await this.validateBeforeSave())) return false;
 
 		await mnuCompTable.syncFromTable();
 

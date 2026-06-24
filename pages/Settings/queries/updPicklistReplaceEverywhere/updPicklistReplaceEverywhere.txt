@@ -1,6 +1,5 @@
 with selected_helper as (
-  select
-    hl.list_code
+  select hl.list_code
   from helper_list_items hli
   join helper_lists hl
     on hl.id = hli.list_id
@@ -16,14 +15,12 @@ set
     then {{ Number(appsmith.store.plReplaceToId) }}
     else i.supplier_id
   end,
-
   packaging_id = case
     when selected_helper.list_code = 'packaging'
       and i.packaging_id = {{ Number(tblPicklistItems.selectedRow.id) }}
     then {{ Number(appsmith.store.plReplaceToId) }}
     else i.packaging_id
   end,
-
   category_id = case
     when selected_helper.list_code = 'ingredient_category'
       and i.category_id = {{ Number(tblPicklistItems.selectedRow.id) }}
@@ -35,15 +32,12 @@ where i.client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and {{ Number(appsmith.store.plReplaceToId || 0) }} > 0
   and (
     (selected_helper.list_code = 'supplier' and i.supplier_id = {{ Number(tblPicklistItems.selectedRow.id) }})
-    or
-    (selected_helper.list_code = 'packaging' and i.packaging_id = {{ Number(tblPicklistItems.selectedRow.id) }})
-    or
-    (selected_helper.list_code = 'ingredient_category' and i.category_id = {{ Number(tblPicklistItems.selectedRow.id) }})
+    or (selected_helper.list_code = 'packaging' and i.packaging_id = {{ Number(tblPicklistItems.selectedRow.id) }})
+    or (selected_helper.list_code = 'ingredient_category' and i.category_id = {{ Number(tblPicklistItems.selectedRow.id) }})
   );
 
 with selected_helper as (
-  select
-    hl.list_code
+  select hl.list_code
   from helper_list_items hli
   join helper_lists hl
     on hl.id = hli.list_id
@@ -52,10 +46,43 @@ with selected_helper as (
 )
 
 update rec_items r
-set
-  category_id = {{ Number(appsmith.store.plReplaceToId) }}
+set category_id = {{ Number(appsmith.store.plReplaceToId) }}
 from selected_helper
 where r.client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and {{ Number(appsmith.store.plReplaceToId || 0) }} > 0
   and selected_helper.list_code = 'recipe_category'
   and r.category_id = {{ Number(tblPicklistItems.selectedRow.id) }};
+
+with selected_helper as (
+  select hl.list_code
+  from helper_list_items hli
+  join helper_lists hl
+    on hl.id = hli.list_id
+  where hli.id = {{ Number(tblPicklistItems.selectedRow.id) }}
+    and hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+)
+
+update dsh_items d
+set category_id = {{ Number(appsmith.store.plReplaceToId) }}
+from selected_helper
+where d.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and {{ Number(appsmith.store.plReplaceToId || 0) }} > 0
+  and selected_helper.list_code = 'dish_category'
+  and d.category_id = {{ Number(tblPicklistItems.selectedRow.id) }};
+
+with selected_helper as (
+  select hl.list_code
+  from helper_list_items hli
+  join helper_lists hl
+    on hl.id = hli.list_id
+  where hli.id = {{ Number(tblPicklistItems.selectedRow.id) }}
+    and hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+)
+
+update mnu_items m
+set category_id = {{ Number(appsmith.store.plReplaceToId) }}
+from selected_helper
+where m.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and {{ Number(appsmith.store.plReplaceToId || 0) }} > 0
+  and selected_helper.list_code = 'menu_category'
+  and m.category_id = {{ Number(tblPicklistItems.selectedRow.id) }};

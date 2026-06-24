@@ -1,0 +1,32 @@
+select
+  case
+    when (
+      select list_code
+      from helper_lists
+      where id = {{ Number(selPicklistType.selectedOptionValue) }}
+    ) = 'menu_category'
+      then (
+        select count(*)
+        from mnu_items
+        where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+          and category_id = {{ Number(tblPicklistItems.selectedRow.id) }}
+          and coalesce(deleted, false) = false
+      )
+
+    when (
+      select list_code
+      from helper_lists
+      where id = {{ Number(selPicklistType.selectedOptionValue) }}
+    ) = 'diet_tag'
+      then (
+        select count(distinct mdt.menu_id)
+        from mnu_diet_tags mdt
+        join mnu_items m
+          on m.id = mdt.menu_id
+        where m.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+          and mdt.helper_list_item_id = {{ Number(tblPicklistItems.selectedRow.id) }}
+          and coalesce(m.deleted, false) = false
+      )
+
+    else 0
+  end as menu_count;

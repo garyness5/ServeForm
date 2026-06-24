@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select count(*) as match_count\nfrom rec_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and public.norm_name(name) = public.norm_name('{{ inpMnuName.text.trim().replaceAll(\"'\", \"''\") }}')\n  and (\n    {{ appsmith.store.current_recipe_id ? Number(appsmith.store.current_recipe_id) : \"null\" }} is null\n    or id <> {{ appsmith.store.current_recipe_id ? Number(appsmith.store.current_recipe_id) : \"null\" }}\n  );",
+      "body": "select count(*) as match_count\nfrom public.mnu_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\n  and public.norm_name(name) = public.norm_name('{{ inpMnuName.text.trim().replaceAll(\"'\", \"''\") }}')\n  and (\n    {{ Number(appsmith.store.current_menu_id || 0) }} = 0\n    or id <> {{ Number(appsmith.store.current_menu_id || 0) }}\n  );",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

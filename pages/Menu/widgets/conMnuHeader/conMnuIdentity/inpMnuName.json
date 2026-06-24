@@ -26,7 +26,7 @@
   "isRequired": false,
   "isVisible": true,
   "key": "26f1e1ruiw",
-  "label": "Recipe name",
+  "label": "Menu name",
   "labelAlignment": "left",
   "labelPosition": "Top",
   "labelStyle": "BOLD",

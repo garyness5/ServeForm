@@ -34,7 +34,7 @@ export default {
 		}
 
 		await getRecListImpactCount.run();
-		showModal("mdlRecListDeleteConfirm");
+		showModal("mdlRecDelete");
 
 		return true;
 	},
@@ -47,12 +47,12 @@ export default {
 
 		await deleteRecipeFromList.run();
 
-		closeModal("mdlRecListDeleteConfirm");
+		await removeValue("current_recipe_id");
+		closeModal("mdlRecDelete");
 
 		await getRecipes.run();
 
 		showAlert("Recipe deleted.", "success");
-
 		return true;
-	},
+	}
 }

@@ -46,6 +46,7 @@ export default {
 	},
 
 	async deleteSelectedMenuStart() {
+
 		if (!this.hasSelection()) {
 			showAlert("Select a menu first.", "warning");
 			return false;
@@ -70,7 +71,6 @@ export default {
 		await getMnuList.run();
 
 		showAlert("Menu deleted.", "success");
-
 		return true;
 	}
 }

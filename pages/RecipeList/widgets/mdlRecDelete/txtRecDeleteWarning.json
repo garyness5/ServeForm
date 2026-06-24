@@ -2,7 +2,7 @@
   "animateLoading": true,
   "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 12,
+  "bottomRow": 11,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -34,8 +34,8 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 6,
   "needsErrorInfo": false,
-  "originalBottomRow": 12,
-  "originalTopRow": 6,
+  "originalBottomRow": 14,
+  "originalTopRow": 8,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
   "parentId": "8uevqmxa6a",
@@ -44,7 +44,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 60,
   "shouldTruncate": false,
-  "text": "{{ \"This ingredient will no longer be available for use. This action cannot be undone. It will show in red where it was present. \" }}",
+  "text": "{{ \"This Recipe will no longer be available for use. This action cannot be undone. It will show in red where it was present. \" }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 6,

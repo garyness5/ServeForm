@@ -269,45 +269,51 @@ export default {
 	async onItemChange(row) {
 		if (!row?.draft_row_id) return;
 
-		await this.syncFromTable();
-
-		const freshRow = this.getRows().find(r => r.draft_row_id === row.draft_row_id) || row;
+		const rows = appsmith.store.rec_components_local_rows || [];
+		const freshRow = rows.find(r => r.draft_row_id === row.draft_row_id) || row;
 
 		const item = (getRecComponentItems.data || []).find(i =>
-																												i.item_type === freshRow.item_type &&
-																												i.name === freshRow.component_name
-																											 );
+			i.item_type === freshRow.item_type &&
+			i.name === row.component_name
+		);
 
 		if (!item) return;
 
-		return await this.patchRow(freshRow, {
-			item_type: item.item_type,
-			component_category: item.category_name,
-			component_name: item.name,
+		const patched = rows.map(r =>
+			r.draft_row_id === row.draft_row_id
+				? {
+						...r,
+						item_type: item.item_type,
+						component_category: item.category_name,
+						component_name: item.name,
 
-			ingredient_id: item.item_type === "ingredient" ? item.id : null,
-			child_recipe_id: item.item_type === "recipe" ? item.id : null,
+						ingredient_id: item.item_type === "ingredient" ? item.id : null,
+						child_recipe_id: item.item_type === "recipe" ? item.id : null,
 
-			unit_id: item.default_unit_id,
-			unit_abbreviation: item.default_unit,
-			unit_type: item.unit_type,
+						unit_id: item.default_unit_id,
+						unit_abbreviation: item.default_unit,
+						unit_type: item.unit_type,
 
-			wastage_percent: item.wastage_percent,
-			price_per_unit: item.price_per_unit,
-			cost_per_base_unit: item.cost_per_base_unit,
-			factor_to_base: item.factor_to_base,
+						wastage_percent: item.wastage_percent,
+						price_per_unit: item.price_per_unit,
+						cost_per_base_unit: item.cost_per_base_unit,
+						factor_to_base: item.factor_to_base,
 
-			allergen_names: item.allergen_names,
-			diet_tag_names: item.diet_tag_names,
+						allergen_names: item.allergen_names,
+						diet_tag_names: item.diet_tag_names,
 
-			child_deleted: false,
-			child_active: true,
-			component_status: "active",
+						child_deleted: false,
+						child_active: true,
+						component_status: "active",
 
-			apply_wastage: true,
-			active: true,
-			line_cost: null
-		});
+						apply_wastage: true,
+						active: true,
+						line_cost: null
+					}
+				: r
+		);
+
+		return await this.setRows(patched);
 	},
 
 	async clearDraftRows() {

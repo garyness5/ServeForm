@@ -7,11 +7,11 @@ select
 from public.units
 where active = true
 order by
-  case unit_type
-    when 'weight' then 1
-    when 'volume' then 2
-    when 'count' then 3
+  case lower(unit_type)
+    when 'count' then 1
+    when 'weight' then 2
+    when 'volume' then 3
     else 99
   end,
-  factor_to_base desc,
+  sort_order,
   abbreviation;

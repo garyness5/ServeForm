@@ -94,10 +94,32 @@ export default {
 		const currentMenuId = Number(appsmith.store.current_menu_id || 0);
 
 		if (Array.isArray(rows) && rows.length > 0) {
-			const rowMenuId = Number(rows[0]?.menu_id || 0);
+			const contentRows = rows.filter(r => this.hasContent(r));
 
-			if (rowMenuId === currentMenuId) {
-				return rows;
+			const contentMenuIds = contentRows
+				.map(r => Number(r.menu_id || 0))
+				.filter(id => id > 0);
+
+			if (currentMenuId > 0) {
+				const belongsToCurrentMenu =
+					contentMenuIds.length === 0 ||
+					contentMenuIds.every(id => id === currentMenuId);
+
+				if (belongsToCurrentMenu) {
+					return rows.map((r, index) => ({
+						...r,
+						menu_id: currentMenuId,
+						line_no: index + 1
+					}));
+				}
+			}
+
+			if (currentMenuId === 0 && contentMenuIds.length === 0) {
+				return rows.map((r, index) => ({
+					...r,
+					menu_id: 0,
+					line_no: index + 1
+				}));
 			}
 		}
 
@@ -339,6 +361,21 @@ export default {
 					r.component_status === "child_deleted" ||
 					r.child_deleted === true;
 
+				if (isDeletedChild) {
+					return {
+						menu_id: Number(appsmith.store.current_menu_id || 0),
+						line_no: index + 1,
+						item_type: r.item_type || null,
+						ingredient_id: r.item_type === "ingredient" ? Number(r.ingredient_id || 0) || null : null,
+						child_recipe_id: r.item_type === "recipe" ? Number(r.child_recipe_id || 0) || null : null,
+						child_dish_id: r.item_type === "dish" ? Number(r.child_dish_id || 0) || null : null,
+						qty: r.saved_qty === "" || r.saved_qty == null ? null : Number(r.saved_qty),
+						unit_id: Number(r.saved_unit_id || 0) || null,
+						apply_wastage: r.apply_wastage === false ? false : true,
+						active: r.active === false ? false : true
+					};
+				}
+
 				const item = (getMnuComponentItems.data || []).find(i =>
 					i.item_type === r.item_type &&
 					i.name === r.component_name
@@ -352,27 +389,11 @@ export default {
 					menu_id: Number(appsmith.store.current_menu_id || 0),
 					line_no: index + 1,
 					item_type: r.item_type || null,
-
-					ingredient_id: r.item_type === "ingredient"
-						? Number(r.ingredient_id || item?.id || 0) || null
-						: null,
-
-					child_recipe_id: r.item_type === "recipe"
-						? Number(r.child_recipe_id || item?.id || 0) || null
-						: null,
-
-					child_dish_id: r.item_type === "dish"
-						? Number(r.child_dish_id || item?.id || 0) || null
-						: null,
-
-					qty: isDeletedChild
-						? (r.saved_qty === "" || r.saved_qty == null ? null : Number(r.saved_qty))
-						: (r.qty === "" || r.qty == null ? null : Number(r.qty)),
-
-					unit_id: isDeletedChild
-						? Number(r.saved_unit_id || 0) || null
-						: unit?.id || r.unit_id || item?.default_unit_id || null,
-
+					ingredient_id: r.item_type === "ingredient" ? Number(r.ingredient_id || item?.id || 0) || null : null,
+					child_recipe_id: r.item_type === "recipe" ? Number(r.child_recipe_id || item?.id || 0) || null : null,
+					child_dish_id: r.item_type === "dish" ? Number(r.child_dish_id || item?.id || 0) || null : null,
+					qty: r.qty === "" || r.qty == null ? null : Number(r.qty),
+					unit_id: unit?.id || r.unit_id || item?.default_unit_id || null,
 					apply_wastage: r.apply_wastage === false ? false : true,
 					active: r.active === false ? false : true
 				};

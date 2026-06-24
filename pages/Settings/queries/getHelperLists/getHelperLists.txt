@@ -10,6 +10,7 @@ where active = true
     'ingredient_category',
     'recipe_category',
     'dish_category',
+    'menu_category',
     'supplier',
     'packaging',
     'diet_tag',

@@ -3,10 +3,13 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 5,
   "boxShadow": "none",
-  "buttonColor": "#7f1d1d",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
   "buttonVariant": "SECONDARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
     {
       "key": "borderRadius"
     },
@@ -55,6 +58,6 @@
   "topRow": 1,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "jid0f2uxk2",
+  "widgetId": "855ijl7f2h",
   "widgetName": "btnDeleteListMenu"
 }
