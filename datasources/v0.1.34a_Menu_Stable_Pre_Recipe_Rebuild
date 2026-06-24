@@ -1,0 +1,265 @@
+ServeForm / Savveyra Development Log
+
+Checkpoint: v0.1.34a_Menu_Stable_Pre_Recipe_Rebuild
+
+Completed Today
+List Page Stabilization
+
+Resolved Appsmith table corruption affecting:
+
+RecipeList
+DishList
+MenuList
+IngredientList
+
+Root cause determined to be:
+
+Infinite Scroll + Server-side Pagination behavior
+
+Not:
+
+Supabase
+Duplicate procedures
+Delete procedures
+Views
+Propagation logic
+
+Final standard:
+
+Infinite Scroll: OFF
+Pagination: ON
+Server-side Pagination: ON (where required by Appsmith)
+Large page size
+
+Result:
+
+Duplicate works
+Delete works
+Immediate display remains correct
+Refresh remains correct
+Menu Domain
+
+Completed:
+
+Menu Categories added to Helpers
+getMnuCategories corrected to menu_category
+Menu category display fixed in MenuList
+Menu category replacement propagation working
+Menu category rename working
+Menu category delete working
+Duplicate name validation working
+
+Verified propagation:
+
+Helper
+→ Menu Category
+→ Menu
+→ MenuList display
+Delete Modal Cleanup
+
+Direction standardized:
+
+Single delete modal only
+
+Removed:
+
+Delete modal
+→ Confirm modal
+→ Actual delete
+
+Replaced with:
+
+Delete modal
+→ Delete
+
+Applies moving forward to:
+
+Helpers
+Recipes
+Dishes
+Menus
+Ingredients
+Impact Count Review
+
+Clarified architecture:
+
+Ingredients
+→ Recipes
+→ Dishes
+→ Menus
+
+Recipes
+→ Recipes (sub-recipes)
+→ Dishes
+→ Menus
+
+Dishes
+→ Menus
+
+Menus
+→ Events only
+
+Events not yet implemented.
+
+Ingredient Impact Counts
+
+Updated and verified.
+
+Current:
+
+Ingredient
+→ Recipe count
+→ Dish count
+→ Menu count
+→ Event count = 0
+
+Working.
+
+Menu Impact Counts
+
+Corrected.
+
+Menu now only impacts:
+
+Events
+
+Current value:
+
+0
+
+until Event domain exists.
+
+Helper Domain
+
+Menu Categories successfully integrated.
+
+Verified:
+
+Add
+Rename
+Replace
+Delete
+Duplicate-name prevention
+Propagation
+
+all working.
+
+Recipe Domain Findings
+
+RecipeList reviewed.
+
+Issues identified:
+
+Delete Count Text
+
+Old:
+
+Recipes: 0
+Dishes: 0
+Menus: 0
+Events: 0
+
+Needs dynamic counts.
+
+Recipe Impact Counts
+
+Need update:
+
+Recipe
+→ Recipes
+→ Dishes
+→ Menus
+→ Events
+
+Current implementation partially incomplete.
+
+Recipe Delete Flow
+
+Issue found:
+
+Delete removes recipe
+Next recipe automatically appears
+
+Desired:
+
+Delete
+→ Return to RecipeList
+
+Requires clearing selection/current_recipe_id.
+
+Recipe Components Table
+
+Current status:
+
+Corrupted widget state suspected
+
+Observed:
+
+Columns unexpectedly non-editable
+Blank phantom columns
+Property panel inconsistent
+Selections clearing unrelated fields
+Column settings appearing/disappearing
+
+Important:
+
+Underlying JS object may still be salvageable.
+Table widget itself likely corrupted.
+
+No final decision made yet.
+
+Next Session Plan
+First
+
+Commit current state:
+
+v0.1.34a_Menu_Stable_Pre_Recipe_Rebuild
+Then
+
+Fresh-eye review:
+
+Recipe page
+RecipeList page
+Recipe component table
+
+Determine:
+
+Repair existing table
+or
+Rebuild table widget
+or
+Rebuild table + JS
+
+Do NOT decide until JSON review.
+
+After Recipe Stabilization
+
+Continue:
+
+Recipe impact counts
+Dish impact counts
+Propagation verification
+
+Ingredient → Menu
+Recipe → Menu
+Dish → Menu
+Current Assessment
+Stable
+Helpers
+Ingredients
+Menu Categories
+MenuList
+Pagination strategy
+Delete modal architecture
+Needs Review
+Recipe Components Table
+Recipe Impact Counts
+Dish Impact Counts
+Not Started
+Events
+Event impact counts
+Menu → Event propagation
+
+Target Next Milestone
+
+v0.1.35_Menu_Stable
