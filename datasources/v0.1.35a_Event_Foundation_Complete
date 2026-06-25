@@ -1,0 +1,38 @@
+v0.1.35a_Event_Foundation_Complete
+
+RECIPE
+- Completed Recipe component table rebuild
+- Restored inline component editing
+- Verified save, reopen, save & new
+- Verified ingredient and sub-recipe selection
+- Verified downstream propagation
+
+MENU
+- Fixed Menu ItemType support for Dish selection
+- Corrected MenuList delete workflow
+- Removed unused double-confirm delete pattern
+
+EVENTS
+- Created Event foundation in Supabase
+- Added customers table
+- Added evt_items
+- Added evt_components
+- Added evt_diet_tags
+- Added vw_evt_items
+- Added vw_evt_components
+- Added duplicate_event()
+- Added delete_event()
+- Added save_evt_components_snapshot()
+- Added save_evt_diet_tags_snapshot()
+
+EVENTLIST
+- Cloned from MenuList
+- Converted queries to Event architecture
+- Wired Event delete workflow
+- Standardized single-modal delete pattern
+
+ARCHITECTURE
+- Confirmed Customer master record strategy
+- Event stores customer_id
+- Propagation continues through Events
+- Quotation and Groceries remain downstream manual modules
