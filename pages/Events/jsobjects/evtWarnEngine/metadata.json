@@ -1,0 +1,11 @@
+{
+  "gitSyncId": "6a0a1bde3214f344228346e7_1f61695c-2383-4e46-812c-085caffc95e7",
+  "id": "Events_evtWarnEngine",
+  "unpublishedCollection": {
+    "name": "evtWarnEngine",
+    "pageId": "Events",
+    "pluginId": "js-plugin",
+    "pluginType": "JS",
+    "variables": []
+  }
+}

@@ -1,0 +1,3 @@
+select public.delete_event(
+  {{ Number(tblEvtList.selectedRow?.id || 0) }}
+);

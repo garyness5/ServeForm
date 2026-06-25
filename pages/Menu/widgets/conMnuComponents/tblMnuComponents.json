@@ -65,7 +65,7 @@
     "saved_unit_id",
     "saved_unit_abbreviation"
   ],
-  "columnUpdatedAt": 1782320643278,
+  "columnUpdatedAt": 1782404850523,
   "columnWidthMap": {
     "active": 103,
     "allergen_names": 124,
@@ -886,7 +886,7 @@
       "label": "Item type",
       "notation": "standard",
       "originalId": "item_type",
-      "selectOptions": "{{(() => { const tableData = tblMnuComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n[\n  { label: \"Ingredient\", value: \"ingredient\" },\n  { label: \"Recipe\", value: \"recipe\" }\n]\n)) : \n[\n  { label: \"Ingredient\", value: \"ingredient\" },\n  { label: \"Recipe\", value: \"recipe\" }\n]\n })()}}",
+      "selectOptions": "{{(() => { const tableData = tblMnuComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n[\n  { label: \"Ingredient\", value: \"ingredient\" },\n  { label: \"Recipe\", value: \"recipe\" },\n  { label: \"Dish\", value: \"dish\" }\n]\n)) : \n[\n  { label: \"Ingredient\", value: \"ingredient\" },\n  { label: \"Recipe\", value: \"recipe\" },\n  { label: \"Dish\", value: \"dish\" }\n]\n })()}}",
       "sticky": "left",
       "textSize": "0.875rem",
       "thousandSeparator": true,

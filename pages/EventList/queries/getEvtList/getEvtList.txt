@@ -1,0 +1,18 @@
+select
+  id,
+  name,
+  event_date,
+  customer_name,
+  status,
+  active,
+  format,
+  menu_count,
+  total_guests,
+  total_cost,
+  diet_tag_names,
+  warning_count,
+  deleted
+from public.vw_evt_items
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+order by event_date nulls last, lower(name), id;

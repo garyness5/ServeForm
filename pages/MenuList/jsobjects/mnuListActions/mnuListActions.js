@@ -53,11 +53,11 @@ export default {
 		}
 
 		await getMnuListImpactCount.run();
-		showModal("mdlMnuListDeleteConfirm");
+		showModal("mdlMnuDelete");
 
 		return true;
 	},
-
+	
 	async deleteSelectedMenuConfirm() {
 		if (!this.hasSelection()) {
 			showAlert("Select a menu first.", "warning");
@@ -66,7 +66,7 @@ export default {
 
 		await deleteMnuFromList.run();
 
-		closeModal("mdlMnuListDeleteConfirm");
+		closeModal("mdlMnuDelete");
 
 		await getMnuList.run();
 

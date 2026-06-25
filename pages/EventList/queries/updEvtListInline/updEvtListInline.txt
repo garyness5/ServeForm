@@ -1,0 +1,9 @@
+update public.evt_items
+set
+  status = coalesce(nullif('{{ tblEvtList.updatedRow.status || "" }}', ''), status),
+  active = {{ tblEvtList.updatedRow.active === false ? false : true }},
+  updated_at = now()
+where id = {{ Number(tblEvtList.updatedRow.id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+returning id;

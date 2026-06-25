@@ -1,0 +1,23 @@
+insert into public.mnu_items
+(
+  client_id,
+  name,
+  category_id,
+  yield_qty,
+  yield_unit_id,
+  extra_percent,
+  notes,
+  active
+)
+values
+(
+  '{{ appsmith.store.current_client_id }}'::uuid,
+  NULLIF('{{ inpMnuName.text.trim().replaceAll("'", "''") }}', ''),
+  {{ selMnuCategory.selectedOptionValue ? Number(selMnuCategory.selectedOptionValue) : null }},
+  {{ inpMnuYieldQty.text ? Number(inpMnuYieldQty.text) : null }},
+  {{ selMnuYieldUnit.selectedOptionValue ? Number(selMnuYieldUnit.selectedOptionValue) : null }},
+  {{ inpMnuExtraPercent.text ? Number(inpMnuExtraPercent.text) : 0 }},
+  NULLIF('{{ (rteEvtNotes.text || "").replaceAll("'", "''") }}', ''),
+  {{ chkMnuActive.isChecked ? true : false }}
+)
+returning id;

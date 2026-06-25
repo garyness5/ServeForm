@@ -1,0 +1,4 @@
+select *
+from public.duplicate_menu(
+  {{ Number(tblEvtList.selectedRow?.id || 0) }}
+);

@@ -38,6 +38,14 @@
       "isDefault": false
     },
     {
+      "id": "EventList",
+      "isDefault": false
+    },
+    {
+      "id": "Events",
+      "isDefault": false
+    },
+    {
       "id": "Settings",
       "isDefault": false
     }

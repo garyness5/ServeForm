@@ -1,0 +1,13 @@
+update public.mnu_items
+set
+  name = NULLIF('{{ inpMnuName.text.trim().replaceAll("'", "''") }}', ''),
+  category_id = {{ selMnuCategory.selectedOptionValue && selMnuCategory.selectedOptionValue !== "" ? Number(selMnuCategory.selectedOptionValue) : null }},
+  yield_qty = {{ inpMnuYieldQty.text && inpMnuYieldQty.text !== "" ? Number(inpMnuYieldQty.text) : null }},
+  yield_unit_id = {{ selMnuYieldUnit.selectedOptionValue && selMnuYieldUnit.selectedOptionValue !== "" ? Number(selMnuYieldUnit.selectedOptionValue) : null }},
+  extra_percent = {{ inpMnuExtraPercent.text && inpMnuExtraPercent.text !== "" ? Number(inpMnuExtraPercent.text) : 0 }},
+  notes = NULLIF('{{ (rteEvtNotes.text || "").replaceAll("'", "''") }}', ''),
+  active = {{ chkMnuActive.isChecked ? true : false }},
+  updated_at = now()
+where id = {{ Number(appsmith.store.current_menu_id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+returning id;
