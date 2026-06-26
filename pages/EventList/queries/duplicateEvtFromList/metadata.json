@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.duplicate_menu(\n  {{ Number(tblEvtList.selectedRow?.id || 0) }}\n);",
+      "body": "select *\nfrom public.duplicate_event(\n  {{ Number(tblEvtList.selectedRow?.id || 0) }}\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

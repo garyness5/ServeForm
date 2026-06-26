@@ -14,6 +14,8 @@ export default {
 		}
 
 		await storeValue("current_event_id", this.selectedEventId());
+		await removeValue("evt_components_local_rows");
+
 		navigateTo("Events");
 		return true;
 	},

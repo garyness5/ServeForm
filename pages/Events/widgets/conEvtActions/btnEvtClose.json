@@ -47,7 +47,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 22,
   "text": "Close",
-  "tooltip": "Return to Recipe List",
+  "tooltip": "Return to Events List",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,

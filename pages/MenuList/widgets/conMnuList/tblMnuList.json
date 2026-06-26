@@ -414,7 +414,7 @@
       "label": "Active",
       "labelColor": "#FFFFFF",
       "notation": "standard",
-      "onClick": "{{\n  toggleMnuActive.run(() => {\n    getMenus.run();\n  }, () => {\n    showAlert(\"Recipe status was not updated\", \"error\");\n  })\n}}",
+      "onClick": "{{\n  toggleMnuActive.run(() => {\n    getMenus.run();\n  }, () => {\n    showAlert(\"Menu status was not updated\", \"error\");\n  })\n}}",
       "originalId": "customColumn1",
       "sticky": "",
       "textSize": "0.875rem",

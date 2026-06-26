@@ -285,15 +285,18 @@ export default {
 		}
 
 		await getMnuImpactCount.run();
-		showModal("mdlMnuDeleteConfirm");
+		showModal("mdlMnuDelete");
 		return true;
 	},
 
 	async deleteMenuConfirm() {
 		await deleteMnu.run();
 
-		closeModal("mdlMnuDeleteConfirm");
+		closeModal("mdlMnuDelete");
+		closeModal("mdlMnuUnsavedChanges");
+
 		await mnuCompTable.clearDraftRows();
+		await removeValue("mnu_components_local_rows");
 		await storeValue("current_menu_id", 0);
 
 		showAlert("Menu deleted", "success");
@@ -309,7 +312,7 @@ export default {
 		closeModal("mdlMnuUnsavedChanges");
 
 		await getMnuImpactCount.run();
-		showModal("mdlMnuDeleteConfirm");
+		showModal("mdlMnuDelete");
 
 		return true;
 	},
@@ -318,7 +321,7 @@ export default {
 		closeModal("mdlMnuUnsavedChanges");
 
 		await getMnuImpactCount.run();
-		showModal("mdlMnuDeleteConfirm");
+		showModal("mdlMnuDelete");
 
 		return true;
 	},

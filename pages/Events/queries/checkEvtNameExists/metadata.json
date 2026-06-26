@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select count(*) as match_count\nfrom public.mnu_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\n  and public.norm_name(name) = public.norm_name('{{ inpEvtName.text.trim().replaceAll(\"'\", \"''\") }}')\n  and (\n    {{ Number(appsmith.store.current_menu_id || 0) }} = 0\n    or id <> {{ Number(appsmith.store.current_menu_id || 0) }}\n  );",
+      "body": "select count(*) as match_count\nfrom public.evt_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\n  and public.norm_name(name) = public.norm_name('{{ inpEvtName.text.trim().replaceAll(\"'\", \"''\") }}')\n  and (\n    {{ Number(appsmith.store.current_event_id || 0) }} = 0\n    or id <> {{ Number(appsmith.store.current_event_id || 0) }}\n  );",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

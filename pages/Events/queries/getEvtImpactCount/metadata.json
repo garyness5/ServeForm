@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  (\n    select count(*)\n    from public.rec_components\n    where item_type = 'recipe'\n      and child_recipe_id = {{ Number(appsmith.store.current_recipe_id || 0) }}\n  ) as recipe_count,\n\n  0 as dish_count,\n  0 as menu_count,\n  0 as event_count;",
+      "body": "select\n  0 as recipe_count,\n  0 as dish_count,\n  0 as menu_count,\n  0 as event_count;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -22,11 +22,7 @@
       "name": "FoodCostingDB",
       "pluginId": "postgres-plugin"
     },
-    "dynamicBindingPathList": [
-      {
-        "key": "body"
-      }
-    ],
+    "dynamicBindingPathList": [],
     "name": "getEvtImpactCount",
     "pageId": "Events",
     "runBehaviour": "AUTOMATIC",

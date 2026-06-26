@@ -1,11 +1,2 @@
 select
-  (
-    select count(*)
-    from public.rec_components
-    where item_type = 'recipe'
-      and child_recipe_id = {{ Number(appsmith.store.current_recipe_id || 0) }}
-  ) as recipe_count,
-
-  0 as dish_count,
-  0 as menu_count,
   0 as event_count;

@@ -44,7 +44,9 @@ export default {
 	headerSnapshotFromPage() {
 		return {
 			name: this.textClean(inpEvtName.text),
-			event_date: datEvtDate.selectedDate || null,
+			event_date: datEvtDate.selectedDate
+				? moment(datEvtDate.selectedDate).format("YYYY-MM-DD")
+				: null,
 			customer_id: selEvtCustomer.selectedOptionValue ? Number(selEvtCustomer.selectedOptionValue) : null,
 			status: selEvtStatus.selectedOptionValue || "Draft",
 			format: selEvtFormat.selectedOptionValue || null,
@@ -72,7 +74,9 @@ export default {
 
 		return {
 			name: this.textClean(r.name),
-			event_date: r.event_date || null,
+			event_date: r.event_date
+				? moment(r.event_date).format("YYYY-MM-DD")
+				: null,
 			customer_id: r.customer_id ? Number(r.customer_id) : null,
 			status: r.status || "Draft",
 			format: r.format || null,

@@ -42,7 +42,7 @@
   "mobileRightColumn": 18,
   "mobileTopRow": 1,
   "needsErrorInfo": false,
-  "onClick": "{{ evtSave.saveEvent() }}",
+  "onClick": "{{ evtSave.saveAndNew() }}",
   "parentColumnSpace": 19.5,
   "parentId": "v0yy3bish5",
   "parentRowSpace": 10,
