@@ -1,0 +1,46 @@
+Git Commit Summary
+v0.1.34b_Menu_Stable_Fixes_Update
+
+Menu Domain
+
+✓ Menu Categories fully implemented in Helpers
+✓ Menu Category propagation verified
+✓ Menu category display fixed in MenuList
+✓ Menu helper impact counts implemented
+✓ MenuList Duplicate verified
+✓ MenuList Delete verified
+✓ Menu page Delete verified
+✓ Return to MenuList after Menu delete implemented
+✓ Single-modal delete flow standardized
+✓ Redundant confirm modal removed
+
+List Pages
+
+✓ Pagination/scroll strategy standardized
+✓ Server-side pagination enabled where required
+✓ Infinite scroll abandoned
+✓ List refresh corruption resolved
+
+Cleanup
+
+✓ Menu delete flow cleaned up
+✓ MenuList delete function retained
+✓ Obsolete Menu confirm modal identified for removal
+✓ Recipe references found and corrected in Menu domain
+✓ Menu status alert corrected
+✓ Menu notes binding corrected
+✓ Menu impact count query identified for future Event wiring
+
+Recipe Review
+
+✓ Recipe rebuild deferred
+✓ Recipe component table identified as current blocker
+✓ Inline editing remains approved workflow
+✓ No modal-based redesign approved
+
+Current Status
+
+✓ Menu domain considered stable
+✓ Events development resumed
+✓ Remaining Menu impact counts to be validated during Event testing
+✓ Next focus: Event implementation and Event ↔ Menu impact validation
