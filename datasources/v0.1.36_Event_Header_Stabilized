@@ -1,0 +1,85 @@
+Version: v0.1.36_Event_Header_Stabilized
+
+Completed
+
+EventList
+
+* Cleaned EventList query wiring.
+* Removed duplicate getEvents query.
+* Standardized EventList on getEvtList.
+* Fixed EventList initialization.
+* Fixed Event open/edit routing using current_event_id.
+* Fixed EventList duplicate action.
+* Fixed EventList delete action.
+* Removed remaining Menu-based EventList behavior.
+
+Events Header
+
+* Corrected Event page loading to use Event domain references.
+* Fixed Close behavior.
+* Fixed dirty-state detection.
+* Fixed unsaved-changes workflow.
+* Fixed Save workflow.
+* Fixed Save & New workflow wiring.
+* Corrected duplicate Event action.
+* Corrected delete Event action.
+* Corrected Event name validation.
+
+Supabase
+
+* Replaced duplicate_event() logic.
+* Added automatic duplicate naming.
+* Prevented duplicate-name collisions during duplication.
+* Duplicate naming now follows:
+
+  * Event Name
+  * Event Name Copy
+  * Event Name Copy 2
+  * Event Name Copy 3
+  * etc.
+
+Testing Completed
+
+* EventList load.
+* EventList edit.
+* EventList duplicate.
+* EventList delete.
+* Event open.
+* Event save.
+* Event save and remain open.
+* Event close.
+* Event duplicate.
+* Event delete.
+* Unsaved-change prompts.
+* Duplicate naming behavior.
+
+Operational Decisions Confirmed
+
+* Event propagation terminates at Events.
+* Groceries and Quotations remain manual downstream modules.
+* Event impact logic will be based on Grocery participation rather than Recipe/Dish/Menu dependencies.
+* Future Event impact states:
+
+  * In Groceries Queue
+  * In Order (Exploded)
+
+Next Development Target
+
+Event Components
+
+Planned sequence:
+
+1. Complete remaining Event page cleanup.
+2. Remove remaining Menu-copy component logic.
+3. Build Customer modal.
+4. Rebuild Event Components for Menu-only consumption.
+5. Implement Event rollups.
+6. Implement Event warnings.
+7. Implement Event status routing.
+8. Validate complete Event workflow.
+
+Status
+
+Event Header and EventList considered stable.
+
+Primary remaining Event work is Event Components and downstream rollups.
