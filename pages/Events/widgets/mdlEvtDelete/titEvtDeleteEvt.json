@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 54,
   "shouldTruncate": false,
-  "text": "{{ \"Delete: \" + (inpMnuName.text || \"\") }}",
+  "text": "{{ \"Delete: \" + (inpEvtName.text || \"\") }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,

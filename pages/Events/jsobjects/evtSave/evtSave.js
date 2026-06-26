@@ -7,104 +7,8 @@ export default {
 		}
 	},
 
-	requiredSaveMessage() {
-		const missing = [];
-
-		if (!String(inpMnuName.text || "").trim()) {
-			missing.push("Menu name");
-		}
-
-		if (!selMnuCategory.selectedOptionValue) {
-			missing.push("Category");
-		}
-
-		if (!missing.length) return null;
-
-		return `You need to have a ${missing.join(" and a ")} selected before you can save.`;
-	},
-
-	async validateBeforeSave() {
-		const message = this.requiredSaveMessage();
-
-		if (message) {
-			showAlert(message, "warning");
-			return false;
-		}
-
-		await checkEvtNameExists.run();
-
-		const matchCount = Number(checkEvtNameExists.data?.[0]?.match_count || 0);
-
-		if (matchCount > 0) {
-			showAlert("A menu with this name already exists.", "warning");
-			return false;
-		}
-
-		return true;
-	},
-
-	async saveMenu() {
-		if (!(await this.validateBeforeSave())) return false;
-
-		await evtCompTable.syncFromTable();
-
-		const isExisting = Number(appsmith.store.current_menu_id || 0) > 0;
-		let result = null;
-
-		if (isExisting) {
-			result = await updEvtItem.run();
-		} else {
-			result = await addMnuItem.run();
-
-			const newId = result?.[0]?.id;
-			if (newId) {
-				await storeValue("current_menu_id", newId);
-			}
-		}
-
-		await evtCompTable.syncFromTable();
-
-		await saveEvtDietTagsSnapshot.run();
-		await saveEvtComponentsSnapshot.run();
-
-		await getEvtItemById.run();
-		await getSelectedEvtDietTags.run();
-		await getEvtComponents.run();
-
-		await evtCompTable.loadFromQuery();
-
-		showAlert("Menu saved", "success");
-		return true;
-	},
-
-	async saveAndNew() {
-		const result = await this.saveMenu();
-		if (!result) return null;
-
-		await storeValue("current_menu_id", 0);
-		await evtCompTable.clearDraftRows();
-		await storeValue("mnu_components_local_rows", evtCompTable.normalizeRows([]));
-
-		await this.safeReset("inpMnuName");
-		await this.safeReset("selMnuCategory");
-		await this.safeReset("chkMnuActive");
-		await this.safeReset("inpMnuYieldQty");
-		await this.safeReset("selMnuYieldUnit");
-		await this.safeReset("inpMnuExtraPercent");
-		await this.safeReset("msMnuDietTags");
-		await this.safeReset("rteMnuNotes");
-		await this.safeReset("tblMnuComponents");
-
-		await getEvtComponents.run();
-
-		showAlert("Saved. Ready for new menu.", "success");
-		return true;
-	},
-
 	clean(value) {
 		if (value === undefined || value === "") return null;
-		if (typeof value === "number") return Number(value);
-		if (!isNaN(value) && value !== null && value !== true && value !== false) return Number(value);
 		return value;
 	},
 
@@ -113,15 +17,39 @@ export default {
 		return text || null;
 	},
 
+	requiredSaveMessage() {
+		if (!String(inpEvtName.text || "").trim()) {
+			return "You need an Event name before you can save.";
+		}
+		return null;
+	},
+
+	async validateBeforeSave() {
+		const message = this.requiredSaveMessage();
+		if (message) {
+			showAlert(message, "warning");
+			return false;
+		}
+
+		await checkEvtNameExists.run();
+
+		if (Number(checkEvtNameExists.data?.[0]?.match_count || 0) > 0) {
+			showAlert("An event with this name already exists.", "warning");
+			return false;
+		}
+
+		return true;
+	},
+
 	headerSnapshotFromPage() {
 		return {
-			name: this.textClean(inpMnuName.text),
-			category_id: this.clean(selMnuCategory.selectedOptionValue),
-			active: chkMnuActive.isChecked === false ? false : true,
-			yield_qty: this.clean(inpMnuYieldQty.text),
-			yield_unit_id: this.clean(selMnuYieldUnit.selectedOptionValue),
-			extra_percent: this.clean(inpMnuExtraPercent.text),
-			notes: typeof rteEvtNotes !== "undefined" ? this.textClean(rteEvtNotes.value) : null
+			name: this.textClean(inpEvtName.text),
+			event_date: datEvtDate.selectedDate || null,
+			customer_id: selEvtCustomer.selectedOptionValue ? Number(selEvtCustomer.selectedOptionValue) : null,
+			status: selEvtStatus.selectedOptionValue || "Draft",
+			format: selEvtFormat.selectedOptionValue || null,
+			active: chkEvtActive.isChecked === false ? false : true,
+			notes: typeof rteEvtNotes !== "undefined" ? this.textClean(rteEvtNotes.text || rteEvtNotes.value) : null
 		};
 	},
 
@@ -133,213 +61,204 @@ export default {
 		if (!r) {
 			return {
 				name: null,
-				category_id: null,
+				event_date: null,
+				customer_id: null,
+				status: "Draft",
+				format: null,
 				active: true,
-				yield_qty: null,
-				yield_unit_id: null,
-				extra_percent: 0,
 				notes: null
 			};
 		}
 
 		return {
 			name: this.textClean(r.name),
-			category_id: this.clean(r.category_id),
+			event_date: r.event_date || null,
+			customer_id: r.customer_id ? Number(r.customer_id) : null,
+			status: r.status || "Draft",
+			format: r.format || null,
 			active: r.active === false ? false : true,
-			yield_qty: this.clean(r.yield_qty),
-			yield_unit_id: this.clean(r.yield_unit_id),
-			extra_percent: this.clean(r.extra_percent),
 			notes: this.textClean(r.notes)
 		};
 	},
 
-	componentSnapshot(rows) {
-		return (rows || [])
-			.filter(r => r.item_type && (r.ingredient_id || r.child_recipe_id || r.child_dish_id))
-			.map((r, index) => ({
-				line_no: index + 1,
-				item_type: r.item_type || null,
-				ingredient_id: r.item_type === "ingredient" ? this.clean(r.ingredient_id) : null,
-				child_recipe_id: r.item_type === "recipe" ? this.clean(r.child_recipe_id) : null,
-				child_dish_id: r.item_type === "dish" ? this.clean(r.child_dish_id) : null,
-				qty: this.clean(r.saved_qty ?? r.qty),
-				unit_id: this.clean(r.saved_unit_id ?? r.unit_id),
-				apply_wastage: r.apply_wastage === false ? false : true,
-				active: r.active === false ? false : true
-			}));
-	},
-
-	currentComponentSnapshot() {
-		return this.componentSnapshot(evtCompTable.rowsForSave());
-	},
-
-	savedComponentSnapshot() {
-		return this.componentSnapshot(getEvtComponents.data || []);
-	},
-
-	isNewBlankMenu() {
-		return Number(appsmith.store.current_menu_id || 0) === 0 &&
-			!this.headerSnapshotFromPage().name &&
-			!this.headerSnapshotFromPage().category_id &&
-			this.currentComponentSnapshot().length === 0;
-	},
-
 	dietTagSnapshotFromPage() {
-		return (msMnuDietTags.selectedOptionValues || [])
-			.map(x => Number(x))
-			.filter(x => x)
-			.sort((a, b) => a - b);
+		return [];
 	},
 
 	dietTagSnapshotFromSaved() {
-		return (getSelectedEvtDietTags.data || [])
-			.map(r => Number(r.value ?? r.helper_list_item_id ?? r.tag_id))
-			.filter(x => x)
-			.sort((a, b) => a - b);
+		return [];
+	},
+
+	isNewBlankEvent() {
+		const h = this.headerSnapshotFromPage();
+		return Number(appsmith.store.current_event_id || 0) === 0 &&
+			!h.name &&
+			!h.event_date &&
+			!h.customer_id &&
+			!h.format &&
+			this.dietTagSnapshotFromPage().length === 0;
 	},
 
 	isDirty() {
-		if (this.isNewBlankMenu()) return false;
+		if (this.isNewBlankEvent()) return false;
 
 		return (
 			JSON.stringify(this.headerSnapshotFromPage()) !== JSON.stringify(this.headerSnapshotFromSaved()) ||
-			JSON.stringify(this.currentComponentSnapshot()) !== JSON.stringify(this.savedComponentSnapshot()) ||
 			JSON.stringify(this.dietTagSnapshotFromPage()) !== JSON.stringify(this.dietTagSnapshotFromSaved())
 		);
 	},
 
-	async closeMenu() {
-		await evtCompTable.syncFromTable();
+	async saveEvent() {
+		if (!(await this.validateBeforeSave())) return false;
 
+		const isExisting = Number(appsmith.store.current_event_id || 0) > 0;
+		let result = null;
+
+		if (isExisting) {
+			result = await updEvtItem.run();
+		} else {
+			result = await addEvtItem.run();
+			const newId = result?.[0]?.id;
+			if (newId) {
+				await storeValue("current_event_id", newId);
+			}
+		}
+
+		await getEvtItemById.run();
+
+		showAlert("Event saved.", "success");
+		return true;
+	},
+
+	async saveAndNew() {
+		const result = await this.saveEvent();
+		if (!result) return null;
+
+		await storeValue("current_event_id", 0);
+		await removeValue("evt_components_local_rows");
+
+		await this.safeReset("inpEvtName");
+		await this.safeReset("datEvtDate");
+		await this.safeReset("selEvtCustomer");
+		await this.safeReset("chkEvtActive");
+		await this.safeReset("selEvtStatus");
+		await this.safeReset("selEvtFormat");
+		await this.safeReset("msEvtDietTags");
+		await this.safeReset("rteEvtNotes");
+
+		showAlert("Saved. Ready for new event.", "success");
+		return true;
+	},
+
+	async closeEvent() {
 		if (this.isDirty()) {
-			await storeValue("pendingMenuAction", "close");
-			showModal("mdlMnuUnsavedChanges");
+			await storeValue("pendingEventAction", "close");
+			showModal("mdlEvtUnsavedChanges");
 			return;
 		}
 
-		navigateTo("MenuList");
+		navigateTo("EventList");
 	},
 
-	async saveAndCloseMenu() {
-		const result = await this.saveMenu();
+	async saveAndCloseEvent() {
+		const result = await this.saveEvent();
 		if (!result) return null;
 
-		closeModal("mdlMnuUnsavedChanges");
-		navigateTo("MenuList");
+		closeModal("mdlEvtUnsavedChanges");
+		navigateTo("EventList");
 	},
 
 	async closeWithoutSaving() {
-		closeModal("mdlMnuUnsavedChanges");
-		await evtCompTable.clearDraftRows();
-		navigateTo("MenuList");
+		closeModal("mdlEvtUnsavedChanges");
+		await removeValue("evt_components_local_rows");
+		navigateTo("EventList");
 	},
 
-	async duplicateMenuSavedVersion() {
+	async duplicateEventSavedVersion() {
 		const result = await duplicateEvent.run();
 		const newId = result?.[0]?.new_id || result?.[0]?.id;
 
 		if (!newId) {
-			showAlert("Menu duplicate failed", "error");
+			showAlert("Event duplicate failed.", "error");
 			return false;
 		}
 
-		await storeValue("current_menu_id", newId);
-
+		await storeValue("current_event_id", newId);
 		await getEvtItemById.run();
 		await getSelectedEvtDietTags.run();
-		await getEvtComponents.run();
-		await evtCompTable.loadFromQuery();
 
-		showAlert("Menu duplicated", "success");
+		showAlert("Event duplicated.", "success");
 		return true;
 	},
 
-	async duplicateMenu() {
+	async duplicateEvent() {
 		if (this.isDirty()) {
-			await storeValue("pendingMenuAction", "duplicate");
-			showModal("mdlMnuUnsavedChanges");
+			await storeValue("pendingEventAction", "duplicate");
+			showModal("mdlEvtUnsavedChanges");
 			return false;
 		}
 
-		return await this.duplicateMenuSavedVersion();
+		return await this.duplicateEventSavedVersion();
 	},
 
-	async saveAndDuplicateMenu() {
-		const saved = await this.saveMenu();
+	async saveAndDuplicateEvent() {
+		const saved = await this.saveEvent();
 		if (!saved) return false;
 
-		closeModal("mdlMnuUnsavedChanges");
-		return await this.duplicateMenuSavedVersion();
+		closeModal("mdlEvtUnsavedChanges");
+		return await this.duplicateEventSavedVersion();
 	},
 
 	async duplicateWithoutSaving() {
-		closeModal("mdlMnuUnsavedChanges");
-		return await this.duplicateMenuSavedVersion();
+		closeModal("mdlEvtUnsavedChanges");
+		return await this.duplicateEventSavedVersion();
 	},
 
-	async deleteMenuStart() {
+	async deleteEventStart() {
 		if (this.isDirty()) {
-			await storeValue("pendingMenuAction", "delete");
-			showModal("mdlMnuUnsavedChanges");
+			await storeValue("pendingEventAction", "delete");
+			showModal("mdlEvtUnsavedChanges");
 			return false;
 		}
 
-		await getEvtImpactCount.run();
-		showModal("mdlMnuDeleteConfirm");
+		showModal("mdlEvtDelete");
 		return true;
 	},
 
-	async deleteMenuConfirm() {
+	async deleteEventConfirm() {
 		await deleteEvent.run();
 
-		closeModal("mdlMnuDeleteConfirm");
-		await evtCompTable.clearDraftRows();
-		await storeValue("current_menu_id", 0);
+		closeModal("mdlEvtDelete");
+		await removeValue("evt_components_local_rows");
+		await storeValue("current_event_id", 0);
 
-		showAlert("Menu deleted", "success");
-		navigateTo("MenuList");
+		showAlert("Event deleted.", "success");
+		navigateTo("EventList");
 
 		return true;
 	},
 
-	async saveAndDeleteMenu() {
-		const saved = await this.saveMenu();
+	async saveAndDeleteEvent() {
+		const saved = await this.saveEvent();
 		if (!saved) return false;
 
-		closeModal("mdlMnuUnsavedChanges");
-
-		await getEvtImpactCount.run();
-		showModal("mdlMnuDeleteConfirm");
+		closeModal("mdlEvtUnsavedChanges");
+		showModal("mdlEvtDelete");
 
 		return true;
 	},
 
 	async deleteWithoutSaving() {
-		closeModal("mdlMnuUnsavedChanges");
-
-		await getEvtImpactCount.run();
-		showModal("mdlMnuDeleteConfirm");
-
+		closeModal("mdlEvtUnsavedChanges");
+		showModal("mdlEvtDelete");
 		return true;
-	},
-
-	testSaveData() {
-		return {
-			current_menu_id: appsmith.store.current_menu_id,
-			rowsForSave: evtCompTable.rowsForSave()
-		};
 	},
 
 	testDirtyData() {
 		return {
 			isDirty: this.isDirty(),
-
 			headerCurrent: this.headerSnapshotFromPage(),
 			headerSaved: this.headerSnapshotFromSaved(),
-
-			componentCurrent: this.currentComponentSnapshot(),
-			componentSaved: this.savedComponentSnapshot(),
-
 			dietTagsCurrent: this.dietTagSnapshotFromPage(),
 			dietTagsSaved: this.dietTagSnapshotFromSaved()
 		};

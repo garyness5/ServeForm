@@ -3,7 +3,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 26,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
-  "defaultText": "{{ Number(appsmith.store.current_recipe_id || 0) === 0 ? \"\" : getEvtItemById.data?.[0]?.notes || \"\" }}",
+  "defaultText": "{{ Number(appsmith.store.current_event_id || 0) === 0 ? \"\" : getEvtItemById.data?.[0]?.notes || \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "borderRadius"

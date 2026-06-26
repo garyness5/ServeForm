@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  storeValue(\"pendingMenuAction\", null);\n  closeModal(\"mdlMnuUnsavedChanges\");\n}}",
+  "onClick": "{{\n  storeValue(\"pendingEventAction\", null);\n  closeModal(\"mdlEvtUnsavedChanges\");\n}}",
   "originalBottomRow": 24,
   "originalTopRow": 20,
   "parentId": "qtesy6qkrq",

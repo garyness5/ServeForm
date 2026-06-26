@@ -1,13 +1,13 @@
-update public.mnu_items
+update public.evt_items
 set
-  name = NULLIF('{{ inpMnuName.text.trim().replaceAll("'", "''") }}', ''),
-  category_id = {{ selMnuCategory.selectedOptionValue && selMnuCategory.selectedOptionValue !== "" ? Number(selMnuCategory.selectedOptionValue) : null }},
-  yield_qty = {{ inpMnuYieldQty.text && inpMnuYieldQty.text !== "" ? Number(inpMnuYieldQty.text) : null }},
-  yield_unit_id = {{ selMnuYieldUnit.selectedOptionValue && selMnuYieldUnit.selectedOptionValue !== "" ? Number(selMnuYieldUnit.selectedOptionValue) : null }},
-  extra_percent = {{ inpMnuExtraPercent.text && inpMnuExtraPercent.text !== "" ? Number(inpMnuExtraPercent.text) : 0 }},
+  name = NULLIF('{{ inpEvtName.text.trim().replaceAll("'", "''") }}', ''),
+  customer_id = {{ selEvtCustomer.selectedOptionValue ? Number(selEvtCustomer.selectedOptionValue) : "null" }},
+  event_date = {{ datEvtDate.selectedDate ? moment(datEvtDate.selectedDate).format("YYYY-MM-DD") : null }},
+  status = NULLIF('{{ (selEvtStatus.selectedOptionValue || "Draft").replaceAll("'", "''") }}', ''),
+  format = NULLIF('{{ (selEvtFormat.selectedOptionValue || "").replaceAll("'", "''") }}', ''),
   notes = NULLIF('{{ (rteEvtNotes.text || "").replaceAll("'", "''") }}', ''),
-  active = {{ chkMnuActive.isChecked ? true : false }},
+  active = {{ chkEvtActive.isChecked ? true : false }},
   updated_at = now()
-where id = {{ Number(appsmith.store.current_menu_id || 0) }}
+where id = {{ Number(appsmith.store.current_event_id || 0) }}
   and client_id = '{{ appsmith.store.current_client_id }}'::uuid
 returning id;

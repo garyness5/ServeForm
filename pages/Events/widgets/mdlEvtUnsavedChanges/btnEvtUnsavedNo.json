@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  (() => {\n    const action = appsmith.store.pendingMenuAction;\n\n    if (action === \"close\") return evtSave.closeWithoutSaving();\n    if (action === \"duplicate\") return evtSave.duplicateWithoutSaving();\n    if (action === \"delete\") return evtSave.deleteWithoutSaving();\n\n    return closeModal(\"mdlMnuUnsavedChanges\");\n  })()\n}}",
+  "onClick": "{{\n  (() => {\n    const action = appsmith.store.pendingEventAction;\n\n    if (action === \"close\") return evtSave.closeWithoutSaving();\n    if (action === \"duplicate\") return evtSave.duplicateWithoutSaving();\n    if (action === \"delete\") return evtSave.deleteWithoutSaving();\n\n    return closeModal(\"mdlEvtUnsavedChanges\");\n  })()\n}}",
   "originalBottomRow": 24,
   "originalTopRow": 20,
   "parentId": "qtesy6qkrq",

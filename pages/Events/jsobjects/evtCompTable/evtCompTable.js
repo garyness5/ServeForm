@@ -462,14 +462,14 @@ export default {
 
 	totalCost() {
 		const subtotal = this.subtotal();
-		const extra = Number(inpMnuExtraPercent.text || 0);
+		const extra = Number(selEvtFormat.text || 0);
 
 		return Math.round((subtotal * (1 + extra / 100)) * 100) / 100;
 	},
 
 	costPerYieldUnit() {
 		const total = this.totalCost();
-		const yieldQty = Number(inpMnuYieldQty.text || 0);
+		const yieldQty = Number(inpEvtYieldQty.text || 0);
 
 		if (!yieldQty) return null;
 

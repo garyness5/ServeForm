@@ -2,7 +2,7 @@ select count(*) as match_count
 from public.mnu_items
 where client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and coalesce(deleted, false) = false
-  and public.norm_name(name) = public.norm_name('{{ inpMnuName.text.trim().replaceAll("'", "''") }}')
+  and public.norm_name(name) = public.norm_name('{{ inpEvtName.text.trim().replaceAll("'", "''") }}')
   and (
     {{ Number(appsmith.store.current_menu_id || 0) }} = 0
     or id <> {{ Number(appsmith.store.current_menu_id || 0) }}

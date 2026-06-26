@@ -37,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ mnuListActions.addMenu() }}",
+  "onClick": "{{ evtListActions.addMenu() }}",
   "parentColumnSpace": 10.609375,
   "parentId": "0",
   "parentRowSpace": 10,

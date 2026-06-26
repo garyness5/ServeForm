@@ -40,7 +40,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ mnuListActions.deleteSelectedMenuConfirm() }}",
+  "onClick": "{{ evtListActions.deleteSelectedMenuConfirm() }}",
   "originalBottomRow": 42,
   "originalTopRow": 38,
   "parentId": "8uevqmxa6a",

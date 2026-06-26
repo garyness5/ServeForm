@@ -1,23 +1,23 @@
-insert into public.mnu_items
+insert into public.evt_items
 (
   client_id,
   name,
-  category_id,
-  yield_qty,
-  yield_unit_id,
-  extra_percent,
+  customer_id,
+  event_date,
+  status,
+  format,
   notes,
   active
 )
 values
 (
   '{{ appsmith.store.current_client_id }}'::uuid,
-  NULLIF('{{ inpMnuName.text.trim().replaceAll("'", "''") }}', ''),
-  {{ selMnuCategory.selectedOptionValue ? Number(selMnuCategory.selectedOptionValue) : null }},
-  {{ inpMnuYieldQty.text ? Number(inpMnuYieldQty.text) : null }},
-  {{ selMnuYieldUnit.selectedOptionValue ? Number(selMnuYieldUnit.selectedOptionValue) : null }},
-  {{ inpMnuExtraPercent.text ? Number(inpMnuExtraPercent.text) : 0 }},
+  NULLIF('{{ inpEvtName.text.trim().replaceAll("'", "''") }}', ''),
+  {{ selEvtCustomer.selectedOptionValue ? Number(selEvtCustomer.selectedOptionValue) : "null" }},
+    {{ datEvtDate.selectedDate ? moment(datEvtDate.selectedDate).format("YYYY-MM-DD") : null }},
+  NULLIF('{{ (selEvtStatus.selectedOptionValue || "Draft").replaceAll("'", "''") }}', ''),
+  NULLIF('{{ (selEvtFormat.selectedOptionValue || "").replaceAll("'", "''") }}', ''),
   NULLIF('{{ (rteEvtNotes.text || "").replaceAll("'", "''") }}', ''),
-  {{ chkMnuActive.isChecked ? true : false }}
+  {{ chkEvtActive.isChecked ? true : false }}
 )
 returning id;

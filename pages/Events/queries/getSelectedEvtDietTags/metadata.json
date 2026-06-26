@@ -29,7 +29,7 @@
     ],
     "name": "getSelectedEvtDietTags",
     "pageId": "Events",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }

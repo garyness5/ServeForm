@@ -29,7 +29,7 @@
     ],
     "name": "getEvtCategories",
     "pageId": "Events",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }
