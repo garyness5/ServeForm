@@ -1,0 +1,151 @@
+Version:
+v0.1.36_Event_Foundation_In_Progress
+
+Date:
+2026-06-25
+
+==================================================
+SUMMARY
+
+Completed major project documentation rewrite to reflect current operational, architectural, and implementation reality.
+
+Continued Event domain implementation.
+
+Event foundation established and validated.
+
+==================================================
+DOCUMENTATION
+
+Rewrote:
+
+• Project Handoff
+• Implementation Status
+• Canonical Specifications
+• Domain Rules
+• Architecture
+
+Documentation now reflects:
+
+• Stable Ingredient, Recipe, Dish, and Menu domains
+• Event implementation in progress
+• Customer model direction
+• Grocery module direction
+• Quotation module direction
+• Current operational planning positioning
+• Updated propagation model
+• Updated output-module architecture
+
+==================================================
+EVENTS
+
+Implemented:
+
+• Event database foundation
+• Event views
+• Event page
+• Event list page
+• Event header save/load
+• Event open/reopen workflow
+• Event delete modal
+• Event unsaved-changes workflow
+
+Validated:
+
+• Add Event
+• Save Event
+• Reopen Event
+• Header persistence
+
+==================================================
+EVENT DESIGN
+
+Confirmed operational design for:
+
+Header
+
+• Event Name
+• Event Date
+• Customer
+• Active
+• Event Diet Tags
+• Status
+• Format
+• Total Guests
+• Menu Count
+• Total Cost
+
+Rollups
+
+• Allergens
+• Diet Tags
+• Warnings
+
+Components
+
+• Category
+• Menu
+• Guests
+• Extra %
+• Line Cost
+• Active
+• Delete
+
+==================================================
+CUSTOMERS
+
+Confirmed direction:
+
+• Lightweight customer management
+• Customer selector on Event page
+• Customer modal for Add/Edit/View
+
+Planned fields:
+
+• Customer Name
+• Company
+• Contact Person
+• Address
+• Phone
+• Email
+• Notes
+
+==================================================
+GROCERIES
+
+Confirmed operational behavior:
+
+• Ordered + Active Events enter Grocery queue
+• Grocery generation is manual
+• User triggers Update All
+• Ingredient explosion occurs only during Grocery generation
+• Groceries become detached from propagation after generation
+
+==================================================
+QUOTATIONS
+
+Confirmed operational direction:
+
+• Status = Sent routes Event to Quotations
+• Quotations are downstream output documents
+• Quotations do not affect costing
+• Quotations do not affect composition
+• Quotations are not CRM
+
+==================================================
+NEXT OBJECTIVE
+
+Complete Event domain:
+
+• Finish Event query cleanup
+• Build Customer modal
+• Rebuild Event component table
+• Implement Event rollups
+• Implement Event warnings
+• Re-enable Event Diet Tags
+• Implement Status routing
+• Complete Event validation and testing
+
+==================================================
+NEXT TARGET VERSION
+
+v0.1.37_Event_Stable
