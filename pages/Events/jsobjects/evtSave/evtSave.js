@@ -93,6 +93,21 @@ export default {
 		return [];
 	},
 
+	componentSnapshotFromPage() {
+		return evtCompTable.rowsForSave();
+	},
+
+	componentSnapshotFromSaved() {
+		return (getEvtComponents.data || []).map((r, index) => ({
+			event_id: Number(appsmith.store.current_event_id || 0),
+			line_no: index + 1,
+			menu_id: Number(r.menu_id || 0) || null,
+			guests: r.guests === "" || r.guests == null ? null : Number(r.guests),
+			extra_percent: r.extra_percent === "" || r.extra_percent == null ? 0 : Number(r.extra_percent),
+			active: r.active === false ? false : true
+		}));
+	},
+
 	isNewBlankEvent() {
 		const h = this.headerSnapshotFromPage();
 		return Number(appsmith.store.current_event_id || 0) === 0 &&
@@ -108,7 +123,8 @@ export default {
 
 		return (
 			JSON.stringify(this.headerSnapshotFromPage()) !== JSON.stringify(this.headerSnapshotFromSaved()) ||
-			JSON.stringify(this.dietTagSnapshotFromPage()) !== JSON.stringify(this.dietTagSnapshotFromSaved())
+			JSON.stringify(this.dietTagSnapshotFromPage()) !== JSON.stringify(this.dietTagSnapshotFromSaved()) ||
+			JSON.stringify(this.componentSnapshotFromPage()) !== JSON.stringify(this.componentSnapshotFromSaved())
 		);
 	},
 
@@ -128,7 +144,10 @@ export default {
 			}
 		}
 
+		await saveEvtComponentsSnapshot.run();
 		await getEvtItemById.run();
+		await getEvtComponents.run();
+		await evtCompTable.loadFromQuery();
 
 		showAlert("Event saved.", "success");
 		return true;

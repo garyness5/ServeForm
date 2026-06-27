@@ -49,9 +49,17 @@ export default {
 		return {
 			...this.blankRow(lineNo),
 			...row,
+
+			category_id: row?.category_id || row?.menu_category_id || null,
+			category_name: row?.category_name || row?.menu_category_name || null,
+
+			menu_id: row?.menu_id || null,
+			menu_name: row?.menu_name || null,
+
 			draft_row_id: row?.draft_row_id || this.makeDraftId(),
 			event_id: Number(appsmith.store.current_event_id || 0),
 			line_no: lineNo,
+
 			active: row?.active === false ? false : true,
 			extra_percent: row?.extra_percent == null || row?.extra_percent === "" ? 0 : Number(row.extra_percent)
 		};
@@ -291,7 +299,7 @@ export default {
 		const guests = Number(row.guests || 0);
 		const extra = Number(row.extra_percent || 0);
 
-		const cost = guests * menuCost * (1 + extra / 100);
+		const cost = (guests + extra) * menuCost;
 
 		return Math.round(cost * 100) / 100;
 	},
@@ -309,6 +317,19 @@ export default {
 		return this.mergeUpdatedRows()
 			.filter(r => r.active !== false && r.menu_name)
 			.length;
+	},
+
+	toProduce() {
+		const rows = this.mergeUpdatedRows();
+
+		return rows.reduce((sum, row) => {
+			if (row.active === false) return sum;
+
+			const guests = Number(row.guests || 0);
+			const extra = Number(row.extra_percent || 0);
+
+			return sum + guests + extra;
+		}, 0);
 	},
 
 	totalCost() {
@@ -330,7 +351,7 @@ export default {
 			.map(x => x.trim())
 			.filter(x => x);
 	},
-
+	
 	componentAllergenSummary() {
 		const rows = this.mergeUpdatedRows();
 
