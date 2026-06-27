@@ -1,5 +1,5 @@
 select *
-from public.save_mnu_components_snapshot(
-  {{ Number(appsmith.store.current_menu_id || 0) }},
+from public.save_evt_components_snapshot(
+  {{ Number(appsmith.store.current_event_id || 0) }},
   '{{ JSON.stringify(evtCompTable.rowsForSave()).replaceAll("'", "''") }}'::jsonb
 );
