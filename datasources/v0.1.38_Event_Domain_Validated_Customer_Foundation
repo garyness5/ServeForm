@@ -1,0 +1,115 @@
+Version: v0.1.38_Event_Domain_Validated_Customer_Foundation
+
+Completed
+
+Event Components
+
+* Event component save logic validated.
+* Event component reload logic validated.
+* Event component persistence confirmed in evt_components.
+* Category reload issue corrected.
+* Menu reload issue corrected.
+* Guests reload validated.
+* Extra value reload validated.
+* Active status reload validated.
+* Allergens reload validated.
+* Diet Tags reload validated.
+
+Event Propagation
+
+* Menu cost changes propagate correctly into Events.
+* Event line costs update from Menu changes.
+* Event total costs update from Menu changes.
+* No Event save required for upstream Menu cost changes.
+
+Event Rollups
+
+* Total Guests rollup implemented.
+* To Produce rollup implemented.
+* Total Cost rollup implemented.
+* Allergen summary rollup implemented.
+* Diet Tag summary rollup implemented.
+
+Event Operational Logic
+
+* Extra % concept replaced operationally with Extra quantity.
+* Event costing now based on:
+  Guests + Extra
+* Total Guests remains actual/expected guest count.
+* To Produce represents production quantity.
+* Total Cost reflects production quantity.
+* Direction aligned with original Excel operational model.
+
+Formatting
+
+* fmt.number updated to use thousand separators.
+* fmt.currency updated to use thousand separators.
+* Formatting validated on Event page.
+* Formatter suitable for rollout across remaining domains.
+
+Event Status
+
+* EventList functioning correctly.
+* Event open/edit functioning correctly.
+* Event save functioning correctly.
+* Event save & new functioning correctly.
+* Event duplicate functioning correctly.
+* Event delete functioning correctly.
+* Event close handling functioning correctly.
+
+Customer Foundation Review
+
+* Existing customer architecture reviewed.
+* Existing customers table discovered and retained.
+* Existing customer_contacts table discovered and retained.
+* Existing evt_items customer_id confirmed.
+* Existing evt_items contact_id confirmed.
+* Existing client ownership model confirmed.
+* Duplicate protection indexes added successfully.
+
+Existing Customer Structure Confirmed
+
+customers
+
+* id
+* client_id
+* customer_name
+* normalized_name (generated)
+* company
+* contact_person
+* address
+* phone
+* email
+* notes
+* active
+* deleted
+
+customer_contacts
+
+* id
+* customer_id
+* contact_name
+* contact_name_norm (generated)
+* email
+* phone
+* notes
+* active
+* deleted
+
+Next Priority
+
+Customer foundation completion:
+
+1. Review existing customer implementation.
+2. Determine what can be reused.
+3. Build Event Customer selector.
+4. Build Event Contact selector.
+5. Build Customer modal.
+6. Build Contact modal.
+7. Prepare customer data flow for future Quotations.
+
+Status
+
+Event domain is operationally functional and validated.
+
+Current development focus shifts from Events to Customer foundation.
