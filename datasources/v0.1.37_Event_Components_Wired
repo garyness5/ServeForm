@@ -1,0 +1,106 @@
+Version: v0.1.37_Event_Components_Wired
+
+Completed
+
+EventList
+
+* EventList query cleanup completed.
+* EventList duplicate working.
+* EventList delete working.
+* EventList edit/open working.
+* EventList routing corrected to Event domain.
+
+Events Header
+
+* Save working.
+* Save & New working.
+* Close working.
+* Unsaved-change detection corrected.
+* Event duplicate working.
+* Event delete working.
+* Event name validation corrected.
+* Event routing corrected to use current_event_id.
+
+Supabase
+
+* duplicate_event() rebuilt.
+* Automatic duplicate naming implemented.
+* Duplicate naming now supports:
+
+  * Copy
+  * Copy 2
+  * Copy 3
+  * etc.
+* Duplicate naming collision prevention added.
+
+Event Components Foundation
+
+* Replaced Menu-clone component logic.
+* Rebuilt Event Components around Menu-only consumption.
+* getEvtComponents replaced.
+* getEvtComponentItems replaced.
+* saveEvtComponentsSnapshot replaced.
+* evtCompTable rebuilt.
+
+Event Components UI
+
+* Category selection working.
+* Menu selection working.
+* Category filtering working.
+* Duplicate Menu prevention implemented.
+* Guests editable.
+* Extra % editable.
+* Active checkbox working.
+* Active defaults to checked.
+* Line Cost calculation working.
+* Allergens auto-populate from selected Menu.
+* Diet Tags auto-populate from selected Menu.
+
+Event Rollup Inputs
+
+* Menu Count now intended to be component-derived.
+* Total Guests now component-derived.
+* Total Cost now component-derived.
+* Event allergen and diet-tag summaries available from component data.
+
+Operational Decisions Confirmed
+
+* Events consume Menus only.
+* Event propagation terminates at Events.
+* Groceries and Quotations remain downstream manual modules.
+* Event impact will be based on Grocery participation rather than upstream dependency counts.
+
+Testing Completed
+
+* EventList load.
+* EventList edit.
+* EventList duplicate.
+* EventList delete.
+* Event save.
+* Event save & new.
+* Event close.
+* Event duplicate.
+* Event delete.
+* Component category selection.
+* Component menu selection.
+* Component guest entry.
+* Component extra % entry.
+* Component allergen propagation.
+* Component diet-tag propagation.
+* Component line-cost calculation.
+
+Next Development Target
+
+1. Event Component save/reload validation.
+2. Event header rollups.
+3. Customer modal.
+4. Event warning engine.
+5. Event status routing.
+6. Event workflow validation.
+7. Groceries foundation.
+
+Status
+
+Event Components are wired and operational.
+
+Next focus is persistence validation and Event completion.
