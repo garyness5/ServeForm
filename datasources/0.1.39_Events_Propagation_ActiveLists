@@ -1,0 +1,85 @@
+0.1.39_Events_Propagation_ActiveLists
+
+EVENTS
+
+- Added Event Customer selection
+- Added Event Contact selection
+- Added contact_id support through Event save/update/load flow
+- Fixed Event open state falsely showing Save/Save New as dirty
+- Fixed Event save persistence for Customer and Contact
+- Fixed Event refresh/open behavior for Customer and Contact
+- Save & New now clears Customer and Contact selections
+- Fixed Event duplicate behavior
+- Event duplicate now copies components
+- Event duplicate now copies diet tags
+- Event duplicate now copies Customer
+- Event duplicate now copies Contact
+- Event duplicate creates Draft status copy
+- Event delete working from Event page
+- Event delete working from EventList
+- Added Event warnings display
+- Added Event warning count to EventList
+- Added deleted/inactive Menu warning propagation into Events
+
+EVENT PROPAGATION
+
+- Inactive Menu propagation verified
+- Deleted Menu propagation verified
+- Deleted Menu rows now retain:
+    Category
+    Menu display text
+    Active flag
+- Deleted Menu rows now clear:
+    Menu reference
+    Guests
+    Extra %
+    Menu-derived costs
+    Line cost
+    Allergens
+    Diet tags
+    Yield/menu metadata
+- Event totals now exclude deleted Menu contributions
+- Warning messaging cleaned up to prevent duplicate deleted/inactive warnings
+
+MENU LIST
+
+- Removed legacy custom Active icon column
+- Added direct Active checkbox toggle
+- Active toggle saves immediately without Save/Discard workflow
+- Active propagation verified downstream
+
+DISH LIST
+
+- Added direct Active checkbox toggle
+- Active propagation verified downstream
+
+RECIPE LIST
+
+- Added direct Active checkbox toggle
+- Active propagation verified downstream
+- Updated RecipeList Active refresh query references
+
+INGREDIENT LIST
+
+- Added direct Active checkbox toggle
+- Active propagation verified downstream
+
+GENERAL
+
+- Standardized Active toggle behavior across:
+    Ingredients
+    Recipes
+    Dishes
+    Menus
+
+- Standardized deleted vs inactive downstream behavior
+
+OPEN ITEMS / DEFERRED
+
+- Status workflow implementation
+- Active workflow business rules
+- Groceries integration
+- Quotations integration
+- Ingredient inline editing modernization
+- RecipeList modernization
+- DishList frozen-column issue (deferred)
