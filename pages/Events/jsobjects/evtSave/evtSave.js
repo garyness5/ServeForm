@@ -48,6 +48,7 @@ export default {
 				? moment(datEvtDate.selectedDate).format("YYYY-MM-DD")
 				: null,
 			customer_id: selEvtCustomer.selectedOptionValue ? Number(selEvtCustomer.selectedOptionValue) : null,
+			contact_id: selEvtContact.selectedOptionValue ? Number(selEvtContact.selectedOptionValue) : null,
 			status: selEvtStatus.selectedOptionValue || "Draft",
 			format: selEvtFormat.selectedOptionValue || null,
 			active: chkEvtActive.isChecked === false ? false : true,
@@ -65,6 +66,7 @@ export default {
 				name: null,
 				event_date: null,
 				customer_id: null,
+				contact_id: null,
 				status: "Draft",
 				format: null,
 				active: true,
@@ -78,6 +80,7 @@ export default {
 				? moment(r.event_date).format("YYYY-MM-DD")
 				: null,
 			customer_id: r.customer_id ? Number(r.customer_id) : null,
+			contact_id: r.contact_id ? Number(r.contact_id) : null,
 			status: r.status || "Draft",
 			format: r.format || null,
 			active: r.active === false ? false : true,
@@ -159,15 +162,21 @@ export default {
 
 		await storeValue("current_event_id", 0);
 		await removeValue("evt_components_local_rows");
+		await removeValue("eventCustomerId");
+		await removeValue("eventContactId");
 
 		await this.safeReset("inpEvtName");
 		await this.safeReset("datEvtDate");
 		await this.safeReset("selEvtCustomer");
+		await this.safeReset("selEvtContact");
 		await this.safeReset("chkEvtActive");
 		await this.safeReset("selEvtStatus");
 		await this.safeReset("selEvtFormat");
 		await this.safeReset("msEvtDietTags");
 		await this.safeReset("rteEvtNotes");
+		
+		await getEvtItemById.clear();
+		await getEvtContacts.clear();
 
 		showAlert("Saved. Ready for new event.", "success");
 		return true;
@@ -207,8 +216,11 @@ export default {
 		}
 
 		await storeValue("current_event_id", newId);
+		await removeValue("evt_components_local_rows");
+
 		await getEvtItemById.run();
-		await getSelectedEvtDietTags.run();
+		await getEvtComponents.run();
+		await evtCompTable.loadFromQuery();
 
 		showAlert("Event duplicated.", "success");
 		return true;

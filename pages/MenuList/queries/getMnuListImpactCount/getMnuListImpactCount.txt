@@ -1,2 +1,7 @@
 select
-  0 as event_count;
+  count(distinct ec.event_id) as event_count
+from public.evt_components ec
+join public.evt_items e
+  on e.id = ec.event_id
+where ec.menu_id = {{ Number(tblMnuList.selectedRow?.id || 0) }}
+  and coalesce(e.deleted, false) = false;

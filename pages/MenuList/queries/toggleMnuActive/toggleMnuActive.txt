@@ -1,7 +1,8 @@
 update public.mnu_items
-set active = not coalesce(active, true),
-    updated_at = now()
-where id = {{ Number(tblMnuList.triggeredRow.id || 0) }}
+set
+  active = {{ tblMnuList.updatedRow.active === false ? false : true }},
+  updated_at = now()
+where id = {{ Number(tblMnuList.updatedRow.id || 0) }}
   and client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and coalesce(deleted, false) = false
 returning id, active;

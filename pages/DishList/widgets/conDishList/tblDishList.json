@@ -5,7 +5,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 92,
+  "bottomRow": 128,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "cachedTableData": {},
   "canFreezeColumn": true,
@@ -41,13 +41,11 @@
     "total_cost",
     "cost_per_unit",
     "diet_tag_names",
-    "customColumn1",
-    "id",
-    "deleted",
     "active",
-    "EditActions1"
+    "id",
+    "deleted"
   ],
-  "columnUpdatedAt": 1782003006924,
+  "columnUpdatedAt": 1782680634454,
   "columnWidthMap": {
     "active": 98,
     "category_id": 118,
@@ -116,27 +114,6 @@
       "key": "primaryColumns.category_name.selectOptions"
     },
     {
-      "key": "primaryColumns.customColumn1.buttonLabel"
-    },
-    {
-      "key": "primaryColumns.customColumn1.iconName"
-    },
-    {
-      "key": "primaryColumns.EditActions1.saveButtonColor"
-    },
-    {
-      "key": "primaryColumns.EditActions1.saveBorderRadius"
-    },
-    {
-      "key": "primaryColumns.EditActions1.discardBorderRadius"
-    },
-    {
-      "key": "primaryColumns.EditActions1.isSaveDisabled"
-    },
-    {
-      "key": "primaryColumns.EditActions1.isDiscardDisabled"
-    },
-    {
       "key": "primaryColumns.total_cost.computedValue"
     },
     {
@@ -144,18 +121,6 @@
     },
     {
       "key": "primaryColumns.serve_form_name.computedValue"
-    },
-    {
-      "key": "primaryColumns.active.boxShadow"
-    },
-    {
-      "key": "primaryColumns.active.borderRadius"
-    },
-    {
-      "key": "primaryColumns.active.buttonColor"
-    },
-    {
-      "key": "primaryColumns.active.iconName"
     }
   ],
   "dynamicPropertyPathList": [
@@ -166,30 +131,21 @@
       "key": "onRowSelected"
     },
     {
-      "key": "primaryColumns.customColumn1.onClick"
-    },
-    {
-      "key": "primaryColumns.customColumn1.iconName"
-    },
-    {
-      "key": "primaryColumns.EditActions1.isSaveDisabled"
-    },
-    {
-      "key": "primaryColumns.EditActions1.isDiscardDisabled"
-    },
-    {
       "key": "primaryColumns.active.iconName"
     },
     {
       "key": "primaryColumns.active.onClick"
+    },
+    {
+      "key": "primaryColumns.active.onCheckChange"
     }
   ],
   "dynamicTriggerPathList": [
     {
-      "key": "primaryColumns.customColumn1.onClick"
+      "key": "primaryColumns.active.onClick"
     },
     {
-      "key": "primaryColumns.active.onClick"
+      "key": "primaryColumns.active.onCheckChange"
     }
   ],
   "enableClientSideSearch": true,
@@ -198,7 +154,7 @@
   "headerRowColor": "#d8a463",
   "horizontalAlignment": "LEFT",
   "infiniteScrollEnabled": false,
-  "inlineEditingSaveOption": "ROW_LEVEL",
+  "inlineEditingSaveOption": "CUSTOM",
   "isLoading": false,
   "isSortable": true,
   "isVisible": true,
@@ -221,62 +177,19 @@
   "parentId": "mjt4lnkxih",
   "parentRowSpace": 10,
   "primaryColumns": {
-    "EditActions1": {
-      "alias": "EditActions1",
-      "allowCellWrapping": false,
-      "allowSameOptionsInNewRow": true,
-      "buttonStyle": "rgb(3, 179, 101)",
-      "columnType": "editActions",
-      "computedValue": "",
-      "currencyCode": "USD",
-      "decimals": 0,
-      "discardActionLabel": "Discard",
-      "discardBorderRadius": "{{tblDishList.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
-      "discardButtonColor": "#F22B2B",
-      "discardButtonVariant": "TERTIARY",
-      "discardIconAlign": "left",
-      "enableFilter": true,
-      "enableSort": true,
-      "id": "EditActions1",
-      "index": 10,
-      "isCellEditable": true,
-      "isCellVisible": true,
-      "isDerived": true,
-      "isDisabled": false,
-      "isDiscardDisabled": "{{tblDishList.processedTableData.map((currentRow, currentIndex) => ( !tblDishList.updatedRowIndices.includes(currentIndex)))}}",
-      "isDiscardVisible": true,
-      "isEditable": true,
-      "isSaveDisabled": "{{tblDishList.processedTableData.map((currentRow, currentIndex) => ( !tblDishList.updatedRowIndices.includes(currentIndex)))}}",
-      "isSaveVisible": true,
-      "isVisible": false,
-      "label": "Save / Discard",
-      "notation": "standard",
-      "originalId": "EditActions1",
-      "saveActionLabel": "Save",
-      "saveBorderRadius": "{{tblDishList.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
-      "saveButtonColor": "{{tblDishList.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.colors.primaryColor)))}}",
-      "saveIconAlign": "left",
-      "sticky": "right",
-      "thousandSeparator": true,
-      "validation": {},
-      "width": 150
-    },
     "active": {
       "alias": "active",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
-      "borderRadius": "{{tblDishList.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
-      "boxShadow": "{{tblDishList.processedTableData.map((currentRow, currentIndex) => ( \"none\"))}}",
-      "buttonColor": "{{tblDishList.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.colors.primaryColor)))}}",
-      "columnType": "iconButton",
+      "columnType": "checkbox",
       "computedValue": "{{(() => { const tableData = tblDishList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.active )) :  currentRow.active  })()}}",
       "currencyCode": "USD",
       "customAlias": "",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
-      "horizontalAlignment": "LEFT",
-      "iconName": "{{(() => { const tableData = tblDishList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.active ? \"tick-circle\" : \"circle\" )) :  currentRow.active ? \"tick-circle\" : \"circle\"  })()}}",
+      "horizontalAlignment": "CENTER",
+      "iconName": "",
       "id": "active",
       "index": 12,
       "isCellEditable": true,
@@ -286,9 +199,10 @@
       "isDiscardVisible": true,
       "isEditable": true,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "Active",
       "notation": "standard",
+      "onCheckChange": "{{ toggleDishActive.run().then(() => getDishList.run()) }}",
       "onClick": "{{\n  toggleDshActive.run(() => {\n    getDishList.run();\n  }, () => {\n    showAlert(\"Dish status was not updated\", \"error\");\n  })\n}}",
       "originalId": "active",
       "sticky": "",
@@ -311,12 +225,12 @@
       "horizontalAlignment": "LEFT",
       "id": "category_name",
       "index": 5,
-      "isCellEditable": true,
+      "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": true,
+      "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
       "label": "Category",
@@ -345,12 +259,12 @@
       "horizontalAlignment": "LEFT",
       "id": "cost_per_unit",
       "index": 18,
-      "isCellEditable": true,
+      "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": true,
+      "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
       "label": "Cost/Unit",
@@ -358,46 +272,6 @@
       "originalId": "cost_per_unit",
       "sticky": "",
       "textColor": "",
-      "textSize": "0.875rem",
-      "thousandSeparator": true,
-      "validation": {},
-      "verticalAlignment": "CENTER",
-      "width": 150
-    },
-    "customColumn1": {
-      "alias": "Active",
-      "allowCellWrapping": false,
-      "allowSameOptionsInNewRow": true,
-      "boxShadow": "none",
-      "buttonColor": "#71717a",
-      "buttonLabel": "{{(() => { const tableData = tblDishList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.active ? \"Active\" : \"Inactive\" )) :  currentRow.active ? \"Active\" : \"Inactive\"  })()}}",
-      "buttonStyle": "rgb(3, 179, 101)",
-      "buttonVariant": "TERTIARY",
-      "columnType": "iconButton",
-      "computedValue": "",
-      "currencyCode": "USD",
-      "customAlias": "",
-      "decimals": 0,
-      "enableFilter": true,
-      "enableSort": true,
-      "horizontalAlignment": "LEFT",
-      "iconName": "{{(() => { const tableData = tblDishList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.active ? \"tick-circle\" : \"circle\" )) :  currentRow.active ? \"tick-circle\" : \"circle\"  })()}}",
-      "id": "customColumn1",
-      "index": 10,
-      "isCellEditable": false,
-      "isCellVisible": true,
-      "isDerived": true,
-      "isDisabled": false,
-      "isDiscardVisible": true,
-      "isEditable": false,
-      "isSaveVisible": true,
-      "isVisible": true,
-      "label": "Active",
-      "labelColor": "#FFFFFF",
-      "notation": "standard",
-      "onClick": "{{\n  toggleDshActive.run(() => {\n    getDishList.run();\n  }, () => {\n    showAlert(\"Dish status was not updated\", \"error\");\n  })\n}}",
-      "originalId": "customColumn1",
-      "sticky": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},
@@ -453,12 +327,12 @@
       "horizontalAlignment": "LEFT",
       "id": "diet_tag_names",
       "index": 15,
-      "isCellEditable": true,
+      "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": true,
+      "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
       "label": "Diet Tags",
@@ -516,15 +390,15 @@
       "horizontalAlignment": "LEFT",
       "id": "name",
       "index": 2,
-      "isCellEditable": true,
+      "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": true,
+      "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Ingredient",
+      "label": "Dish",
       "notation": "standard",
       "originalId": "name",
       "sticky": "left",
@@ -547,12 +421,12 @@
       "horizontalAlignment": "LEFT",
       "id": "serve_form_name",
       "index": 3,
-      "isCellEditable": true,
+      "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": true,
+      "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
       "label": "Format",
@@ -580,12 +454,12 @@
       "horizontalAlignment": "LEFT",
       "id": "total_cost",
       "index": 17,
-      "isCellEditable": true,
+      "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": true,
+      "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
       "label": "Total Cost",
@@ -612,12 +486,12 @@
       "horizontalAlignment": "RIGHT",
       "id": "yield_qty",
       "index": 6,
-      "isCellEditable": true,
+      "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": true,
+      "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
       "label": "Qty",
@@ -643,12 +517,12 @@
       "horizontalAlignment": "LEFT",
       "id": "yield_unit",
       "index": 8,
-      "isCellEditable": true,
+      "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": true,
+      "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
       "label": "Unit",
@@ -664,7 +538,7 @@
   },
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 64,
+  "rightColumn": 63,
   "searchKey": "",
   "serverSidePaginationEnabled": true,
   "showInlineEditingOptionDropdown": true,
@@ -675,6 +549,6 @@
   "type": "TABLE_WIDGET_V2",
   "version": 2,
   "verticalAlignment": "CENTER",
-  "widgetId": "2gezbmos1x",
+  "widgetId": "d9rsh07dae",
   "widgetName": "tblDishList"
 }

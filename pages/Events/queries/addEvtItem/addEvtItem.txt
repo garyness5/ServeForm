@@ -3,6 +3,7 @@ insert into public.evt_items
   client_id,
   name,
   customer_id,
+  contact_id,
   event_date,
   status,
   format,
@@ -12,12 +13,13 @@ insert into public.evt_items
 values
 (
   '{{ appsmith.store.current_client_id }}'::uuid,
-  NULLIF('{{ inpEvtName.text.trim().replaceAll("'", "''") }}', ''),
-  {{ selEvtCustomer.selectedOptionValue ? Number(selEvtCustomer.selectedOptionValue) : "null" }},
-    {{ datEvtDate.selectedDate ? moment(datEvtDate.selectedDate).format("YYYY-MM-DD") : null }},
-  NULLIF('{{ (selEvtStatus.selectedOptionValue || "Draft").replaceAll("'", "''") }}', ''),
-  NULLIF('{{ (selEvtFormat.selectedOptionValue || "").replaceAll("'", "''") }}', ''),
-  NULLIF('{{ (rteEvtNotes.text || "").replaceAll("'", "''") }}', ''),
-  {{ chkEvtActive.isChecked ? true : false }}
+  NULLIF('{{ evtSave.headerSnapshotFromPage().name?.replaceAll("'", "''") || "" }}', ''),
+	{{ evtSave.headerSnapshotFromPage().customer_id ? evtSave.headerSnapshotFromPage().customer_id : "null" }},
+	{{ evtSave.headerSnapshotFromPage().contact_id ? evtSave.headerSnapshotFromPage().contact_id : "null" }},
+  {{ evtSave.headerSnapshotFromPage().event_date ? "'" + evtSave.headerSnapshotFromPage().event_date + "'" : "null" }},
+  NULLIF('{{ (evtSave.headerSnapshotFromPage().status || "Draft").replaceAll("'", "''") }}', ''),
+  NULLIF('{{ (evtSave.headerSnapshotFromPage().format || "").replaceAll("'", "''") }}', ''),
+  NULLIF('{{ (evtSave.headerSnapshotFromPage().notes || "").replaceAll("'", "''") }}', ''),
+  {{ evtSave.headerSnapshotFromPage().active ? true : false }}
 )
 returning id;

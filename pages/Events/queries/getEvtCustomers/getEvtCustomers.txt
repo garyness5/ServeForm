@@ -1,0 +1,11 @@
+select
+  id as value,
+  customer_name as label,
+  company,
+  contact_person,
+  phone,
+  email
+from public.customers
+where active = true
+  and deleted = false
+order by customer_name;

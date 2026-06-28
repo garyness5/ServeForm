@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  0 as event_count;",
+      "body": "select\n  count(distinct ec.event_id) as event_count\nfrom public.evt_components ec\njoin public.evt_items e\n  on e.id = ec.event_id\nwhere ec.menu_id = {{ Number(tblMnuList.selectedRow?.id || 0) }}\n  and coalesce(e.deleted, false) = false;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -22,7 +22,11 @@
       "name": "FoodCostingDB",
       "pluginId": "postgres-plugin"
     },
-    "dynamicBindingPathList": [],
+    "dynamicBindingPathList": [
+      {
+        "key": "body"
+      }
+    ],
     "name": "getMnuListImpactCount",
     "pageId": "MenuList",
     "runBehaviour": "AUTOMATIC",

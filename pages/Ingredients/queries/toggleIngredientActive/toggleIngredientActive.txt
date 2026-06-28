@@ -1,6 +1,8 @@
-SELECT * FROM auth."audit_log_entries" LIMIT 10;update ing_items
-set active = not coalesce(active, true)
-where id = {{ Number(tblIngList.triggeredRow.id || 0) }}
+update public.ing_items
+set
+  active = {{ tblIngList.updatedRow.active === false ? false : true }},
+  updated_at = now()
+where id = {{ Number(tblIngList.updatedRow.id || 0) }}
   and client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and coalesce(deleted, false) = false
 returning id, active;

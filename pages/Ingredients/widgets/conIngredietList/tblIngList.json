@@ -5,7 +5,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 108,
+  "bottomRow": 56,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "cachedTableData": {},
   "canFreezeColumn": true,
@@ -46,7 +46,6 @@
     "item_code",
     "supplier_name",
     "packaging_name",
-    "customColumn1",
     "active",
     "price_per_unit",
     "cost_per_base_unit",
@@ -68,7 +67,7 @@
     "deleted",
     "created_at"
   ],
-  "columnUpdatedAt": 1781666128148,
+  "columnUpdatedAt": 1782682893496,
   "columnWidthMap": {
     "active": 95,
     "allergen_names": 60,
@@ -226,18 +225,6 @@
       "key": "primaryColumns.deleted.computedValue"
     },
     {
-      "key": "primaryColumns.customColumn1.iconName"
-    },
-    {
-      "key": "primaryColumns.customColumn1.computedValue"
-    },
-    {
-      "key": "primaryColumns.customColumn1.boxShadow"
-    },
-    {
-      "key": "primaryColumns.customColumn1.borderRadius"
-    },
-    {
       "key": "oddRowColor"
     },
     {
@@ -249,15 +236,12 @@
       "key": "tableData"
     },
     {
-      "key": "primaryColumns.customColumn1.iconName"
-    },
-    {
-      "key": "primaryColumns.customColumn1.onClick"
+      "key": "primaryColumns.active.onCheckChange"
     }
   ],
   "dynamicTriggerPathList": [
     {
-      "key": "primaryColumns.customColumn1.onClick"
+      "key": "primaryColumns.active.onCheckChange"
     }
   ],
   "enableClientSideSearch": true,
@@ -296,7 +280,7 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "columnType": "checkbox",
-      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"active\"])) : active })()}}",
+      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.active )) :  currentRow.active  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -311,9 +295,10 @@
       "isDiscardVisible": true,
       "isEditable": true,
       "isSaveVisible": true,
-      "isVisible": false,
-      "label": "Active-orig",
+      "isVisible": true,
+      "label": "Active",
       "notation": "standard",
+      "onCheckChange": "{{ toggleIngredientActive.run().then(() => getIngredients.run()) }}{{}}",
       "originalId": "active",
       "sticky": "",
       "textSize": "0.875rem",
@@ -439,12 +424,12 @@
       "horizontalAlignment": "RIGHT",
       "id": "category_name",
       "index": 5,
-      "isCellEditable": true,
+      "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": true,
+      "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
       "label": "Category",
@@ -550,46 +535,6 @@
       "label": "created_at",
       "notation": "standard",
       "originalId": "created_at",
-      "sticky": "",
-      "textSize": "0.875rem",
-      "thousandSeparator": true,
-      "validation": {},
-      "verticalAlignment": "CENTER",
-      "width": 150
-    },
-    "customColumn1": {
-      "alias": "Active",
-      "allowCellWrapping": false,
-      "allowSameOptionsInNewRow": true,
-      "borderRadius": "{{tblIngList.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
-      "boxShadow": "{{tblIngList.processedTableData.map((currentRow, currentIndex) => ( \"none\"))}}",
-      "buttonColor": "#71717a",
-      "buttonStyle": "rgb(3, 179, 101)",
-      "buttonVariant": "TERTIARY",
-      "columnType": "iconButton",
-      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"active\"])) : currentRow[\"active\"] })()}}",
-      "currencyCode": "USD",
-      "customAlias": "",
-      "decimals": 0,
-      "enableFilter": true,
-      "enableSort": true,
-      "horizontalAlignment": "LEFT",
-      "iconName": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.active ? \"tick-circle\" : \"circle\" )) :  currentRow.active ? \"tick-circle\" : \"circle\"  })()}}",
-      "id": "customColumn1",
-      "index": 10,
-      "isCellEditable": false,
-      "isCellVisible": true,
-      "isDerived": true,
-      "isDisabled": false,
-      "isDiscardVisible": true,
-      "isEditable": false,
-      "isSaveVisible": true,
-      "isVisible": true,
-      "label": "Active",
-      "labelColor": "#FFFFFF",
-      "notation": "standard",
-      "onClick": "{{\n  toggleIngredientActive.run(() => {\n    getIngredients.run();\n  }, () => {\n    showAlert(\"Ingredient status was not updated\", \"error\");\n  })\n}}",
-      "originalId": "customColumn1",
       "sticky": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
@@ -1007,7 +952,7 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "text",
+      "columnType": "select",
       "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"purchase_unit\"])) : purchase_unit })()}}",
       "currencyCode": "USD",
       "decimals": 0,

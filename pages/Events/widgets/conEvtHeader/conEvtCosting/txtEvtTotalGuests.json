@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 18,
+  "bottomRow": 14,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -33,20 +33,20 @@
   "mobileRightColumn": 19,
   "mobileTopRow": 20,
   "needsErrorInfo": false,
-  "originalBottomRow": 34,
-  "originalTopRow": 30,
+  "originalBottomRow": 18,
+  "originalTopRow": 14,
   "overflow": "NONE",
   "parentColumnSpace": 4.5625,
   "parentId": "o4uwuew4ll",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 60,
+  "rightColumn": 59,
   "shouldTruncate": false,
   "text": "{{ \"<b>Total Guests:</b>  \" + fmt.number(evtCompTable.totalGuests()) }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 14,
+  "topRow": 10,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

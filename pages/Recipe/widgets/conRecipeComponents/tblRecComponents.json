@@ -60,9 +60,11 @@
     "component_status",
     "saved_qty",
     "saved_unit_id",
-    "saved_unit_abbreviation"
+    "saved_unit_abbreviation",
+    "created_at",
+    "updated_at"
   ],
-  "columnUpdatedAt": 1782320278880,
+  "columnUpdatedAt": 1782683778052,
   "columnWidthMap": {
     "active": 60,
     "allergen_names": 60,
@@ -200,6 +202,15 @@
     },
     {
       "key": "primaryColumns.customColumn1.boxShadow"
+    },
+    {
+      "key": "primaryColumns.created_at.computedValue"
+    },
+    {
+      "key": "primaryColumns.updated_at.computedValue"
+    },
+    {
+      "key": "primaryColumns.component_name.cellBackground"
     }
   ],
   "dynamicPropertyPathList": [
@@ -220,6 +231,9 @@
     },
     {
       "key": "primaryColumns.customColumn1.buttonColor"
+    },
+    {
+      "key": "primaryColumns.component_name.cellBackground"
     }
   ],
   "dynamicTriggerPathList": [
@@ -485,6 +499,7 @@
       "alias": "component_name",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
+      "cellBackground": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  currentRow.child_deleted === true || currentRow.component_status === \"Deleted\"\n    ? \"#FFE6E6\"\n    : currentRow.child_active === false || currentRow.component_status === \"Inactive\"\n      ? \"#FFF3CD\"\n      : \"\"\n)) : \n  currentRow.child_deleted === true || currentRow.component_status === \"Deleted\"\n    ? \"#FFE6E6\"\n    : currentRow.child_active === false || currentRow.component_status === \"Inactive\"\n      ? \"#FFF3CD\"\n      : \"\"\n })()}}",
       "columnType": "select",
       "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"component_name\"])) : component_name })()}}",
       "currencyCode": "USD",
@@ -570,6 +585,40 @@
       "notation": "standard",
       "originalId": "cost_per_base_unit",
       "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "created_at": {
+      "alias": "created_at",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"created_at\"])) : created_at })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "created_at",
+      "index": 28,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "created_at",
+      "notation": "standard",
+      "originalId": "created_at",
+      "sticky": "",
+      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},
@@ -1140,6 +1189,40 @@
       "notation": "standard",
       "originalId": "unit_type",
       "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "updated_at": {
+      "alias": "updated_at",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"updated_at\"])) : updated_at })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "updated_at",
+      "index": 29,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "updated_at",
+      "notation": "standard",
+      "originalId": "updated_at",
+      "sticky": "",
+      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},

@@ -30,7 +30,7 @@
   "fontSize": "1rem",
   "fontStyle": "",
   "isLoading": false,
-  "isVisible": "{{\n  Number(appsmith.store.current_recipe_id || 0) > 0 &&\n  mnuWarnings.list().length > 0\n}}",
+  "isVisible": "{{\n  Number(appsmith.store.current_event_id || 0) > 0 &&\n  evtWarnings.list().length > 0\n}}",
   "key": "or4p3qeldn",
   "leftColumn": 0,
   "maxDynamicHeight": 9000,

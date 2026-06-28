@@ -1,0 +1,12 @@
+select
+  id as value,
+  contact_name as label,
+  customer_id,
+  email,
+  phone,
+  notes
+from public.customer_contacts
+where active = true
+  and deleted = false
+  and customer_id = {{ selEvtCustomer.selectedOptionValue || getEvtItemById.data?.[0]?.customer_id || 0 }}
+order by contact_name;
