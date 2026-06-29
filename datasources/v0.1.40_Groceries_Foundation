@@ -1,0 +1,229 @@
+SERVEFORM / SAVVEYRA
+
+Version:
+v0.1.40_Groceries_Foundation
+
+==================================================
+SUMMARY
+
+Completed initial Groceries architecture and page foundation.
+
+This version establishes the Grocery workflow structure, queue behavior, batch architecture, and page framework.
+
+No ingredient explosion or Order generation has been implemented yet.
+
+==================================================
+EVENTS FIXES
+
+Event Save corrected.
+
+Issue:
+
+* Empty bigint values were being passed as "" causing save failures.
+
+Result:
+
+* Event Status changes now save correctly.
+* Event Active changes save correctly.
+* Event header updates persist correctly.
+
+---
+
+Event Add corrected.
+
+Issue:
+
+* Empty bigint values were being passed as "null" causing insert failures.
+
+Result:
+
+* New Events can be created with only Event Name.
+* Customer and Contact remain optional.
+* Default Status remains Draft.
+
+---
+
+EventList inline Status update corrected.
+
+Issue:
+
+* Status changes appeared in the table but were not being persisted.
+
+Result:
+
+* Status changes now immediately update Supabase.
+* Table refreshes correctly.
+* Ordered Events remain Ordered after refresh.
+
+==================================================
+GROCERIES ARCHITECTURE
+
+Added grocery batch architecture.
+
+New table:
+
+* gro_batches
+
+Purpose:
+
+* Parent grocery run.
+* Supports future multiple grocery runs.
+* Current implementation uses a single active batch.
+
+---
+
+Added grocery workflow tables:
+
+* gro_events
+* gro_details
+* gro_order
+* gro_print
+
+All grocery tables now support batch ownership.
+
+==================================================
+GROCERIES PAGE STRUCTURE
+
+Confirmed pages:
+
+* Groceries
+* Details
+* Order
+* Print
+
+Pages created in Appsmith.
+
+Layout established.
+
+==================================================
+GROCERIES QUEUE
+
+Created:
+
+* vw_gro_events
+
+Groceries queue now displays:
+
+* Event Name
+* Event Date
+* Total Guests
+* ToOrder
+* Notes
+
+Eligibility Rules:
+
+Status = Ordered
+
+AND
+
+Active = True
+
+Eligible Events automatically load into Groceries queue.
+
+---
+
+ToOrder behavior implemented.
+
+Rules:
+
+* ToOrder does NOT explode ingredients.
+* ToOrder only marks Event participation.
+* Event remains visible in Groceries.
+
+Checkbox updates persist correctly.
+
+==================================================
+GROCERIES OPERATIONAL RULES CONFIRMED
+
+Events controls eligibility.
+
+Groceries controls participation.
+
+---
+
+If Event loses eligibility:
+
+* Status no longer Ordered
+  OR
+* Active = False
+
+Event is removed from Groceries.
+
+Rebuild rules will apply when downstream grocery data exists.
+
+---
+
+If ToOrder changes:
+
+Event remains in Groceries.
+
+Only downstream participation changes.
+
+==================================================
+UPDATE ALL RULES CONFIRMED
+
+Same selected Events:
+
+* Refresh quantities
+* Keep manual buy quantities
+* No warning
+
+---
+
+Events added or removed:
+
+If no manual buy quantities:
+
+* Rebuild normally
+
+If manual buy quantities exist:
+
+* Warning
+* Keep
+* Delete
+
+---
+
+Print clears when source Event selection changes.
+
+Print does not automatically rebuild.
+
+==================================================
+UI DECISIONS
+
+Details selected as page name.
+
+Confirmed page order:
+
+* Groceries
+* Details
+* Order
+* Print
+
+---
+
+Update All should be visually emphasized.
+
+Current direction:
+
+* Red Update All button
+* Especially important on Order page
+
+==================================================
+NEXT PHASE
+
+Build Details foundation.
+
+Implement first Update All.
+
+Explode selected ToOrder Events into gro_details.
+
+Validate:
+
+Event
+→ Menu
+→ Ingredient
+
+relationship and quantity calculations.
+
+Order and Print remain unimplemented.
