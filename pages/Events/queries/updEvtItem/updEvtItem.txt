@@ -1,12 +1,12 @@
 update public.evt_items
 set
-  name = NULLIF('{{ evtSave.headerSnapshotFromPage().name?.replaceAll("'", "''") || "" }}', ''),
-	customer_id = NULLIF('{{ evtSave.headerSnapshotFromPage().customer_id || "" }}', '')::bigint,
-	contact_id = NULLIF('{{ evtSave.headerSnapshotFromPage().contact_id || "" }}', '')::bigint,
+  name = nullif('{{ (evtSave.headerSnapshotFromPage().name || "").replaceAll("'", "''") }}', ''),
+  customer_id = {{ evtSave.headerSnapshotFromPage().customer_id ? Number(evtSave.headerSnapshotFromPage().customer_id) : "null" }},
+  contact_id = {{ evtSave.headerSnapshotFromPage().contact_id ? Number(evtSave.headerSnapshotFromPage().contact_id) : "null" }},
   event_date = {{ evtSave.headerSnapshotFromPage().event_date ? "'" + evtSave.headerSnapshotFromPage().event_date + "'" : "null" }},
-  status = NULLIF('{{ (evtSave.headerSnapshotFromPage().status || "Draft").replaceAll("'", "''") }}', ''),
-  format = NULLIF('{{ (evtSave.headerSnapshotFromPage().format || "").replaceAll("'", "''") }}', ''),
-  notes = NULLIF('{{ (evtSave.headerSnapshotFromPage().notes || "").replaceAll("'", "''") }}', ''),
+  status = nullif('{{ (evtSave.headerSnapshotFromPage().status || "Draft").replaceAll("'", "''") }}', ''),
+  format = nullif('{{ (evtSave.headerSnapshotFromPage().format || "").replaceAll("'", "''") }}', ''),
+  notes = nullif('{{ (evtSave.headerSnapshotFromPage().notes || "").replaceAll("'", "''") }}', ''),
   active = {{ evtSave.headerSnapshotFromPage().active ? true : false }},
   updated_at = now()
 where id = {{ Number(appsmith.store.current_event_id || 0) }}

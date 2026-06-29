@@ -144,9 +144,16 @@
     },
     {
       "key": "onRowSelected"
+    },
+    {
+      "key": "primaryColumns.status.onOptionChange"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicTriggerPathList": [
+    {
+      "key": "primaryColumns.status.onOptionChange"
+    }
+  ],
   "enableClientSideSearch": true,
   "endOfData": false,
   "flexVerticalAlignment": "start",
@@ -503,6 +510,7 @@
       "isVisible": true,
       "label": "Status",
       "notation": "standard",
+      "onOptionChange": "{{\n  updEvtListInline.run()\n    .then(() => getEvtList.run())\n}}",
       "originalId": "status",
       "selectOptions": "[\n  { \"label\": \"Draft\", \"value\": \"Draft\" },\n  { \"label\": \"Sent\", \"value\": \"Sent\" },\n  { \"label\": \"Accepted\", \"value\": \"Accepted\" },\n  { \"label\": \"Ordered\", \"value\": \"Ordered\" },\n  { \"label\": \"Closed\", \"value\": \"Closed\" },\n  { \"label\": \"Cancelled\", \"value\": \"Cancelled\" }\n]",
       "sticky": "",

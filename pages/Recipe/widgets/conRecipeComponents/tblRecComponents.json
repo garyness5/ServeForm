@@ -64,7 +64,7 @@
     "created_at",
     "updated_at"
   ],
-  "columnUpdatedAt": 1782683778052,
+  "columnUpdatedAt": 1782746171350,
   "columnWidthMap": {
     "active": 60,
     "allergen_names": 60,
@@ -204,13 +204,13 @@
       "key": "primaryColumns.customColumn1.boxShadow"
     },
     {
+      "key": "primaryColumns.component_name.cellBackground"
+    },
+    {
       "key": "primaryColumns.created_at.computedValue"
     },
     {
       "key": "primaryColumns.updated_at.computedValue"
-    },
-    {
-      "key": "primaryColumns.component_name.cellBackground"
     }
   ],
   "dynamicPropertyPathList": [

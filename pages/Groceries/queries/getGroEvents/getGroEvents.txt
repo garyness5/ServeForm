@@ -1,0 +1,12 @@
+select
+  gro_event_id,
+  batch_id,
+  event_id,
+  event_name,
+  event_date,
+  total_guests,
+  to_order,
+  notes
+from public.vw_gro_events
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+order by event_date nulls last, lower(event_name);

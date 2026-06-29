@@ -13,13 +13,13 @@ insert into public.evt_items
 values
 (
   '{{ appsmith.store.current_client_id }}'::uuid,
-  NULLIF('{{ evtSave.headerSnapshotFromPage().name?.replaceAll("'", "''") || "" }}', ''),
-	{{ evtSave.headerSnapshotFromPage().customer_id ? evtSave.headerSnapshotFromPage().customer_id : "null" }},
-	{{ evtSave.headerSnapshotFromPage().contact_id ? evtSave.headerSnapshotFromPage().contact_id : "null" }},
-  {{ evtSave.headerSnapshotFromPage().event_date ? "'" + evtSave.headerSnapshotFromPage().event_date + "'" : "null" }},
-  NULLIF('{{ (evtSave.headerSnapshotFromPage().status || "Draft").replaceAll("'", "''") }}', ''),
-  NULLIF('{{ (evtSave.headerSnapshotFromPage().format || "").replaceAll("'", "''") }}', ''),
-  NULLIF('{{ (evtSave.headerSnapshotFromPage().notes || "").replaceAll("'", "''") }}', ''),
+  nullif('{{ (evtSave.headerSnapshotFromPage().name || "").replaceAll("'", "''") }}', ''),
+  {{ evtSave.headerSnapshotFromPage().customer_id ? Number(evtSave.headerSnapshotFromPage().customer_id) : null }},
+  {{ evtSave.headerSnapshotFromPage().contact_id ? Number(evtSave.headerSnapshotFromPage().contact_id) : null }},
+  {{ evtSave.headerSnapshotFromPage().event_date ? "'" + evtSave.headerSnapshotFromPage().event_date + "'" : null }},
+  '{{ (evtSave.headerSnapshotFromPage().status || "Draft").replaceAll("'", "''") }}',
+  nullif('{{ (evtSave.headerSnapshotFromPage().format || "").replaceAll("'", "''") }}', ''),
+  nullif('{{ (evtSave.headerSnapshotFromPage().notes || "").replaceAll("'", "''") }}', ''),
   {{ evtSave.headerSnapshotFromPage().active ? true : false }}
 )
 returning id;
