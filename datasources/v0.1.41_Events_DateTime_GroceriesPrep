@@ -1,4 +1,39 @@
+Fresh-eye review. We need to step back and fix Events date/time properly before continuing Groceries.
+
+Current version:
 v0.1.41_Events_DateTime_GroceriesPrep
+
+Uploaded files:
+- Savveyra_Events.json
+- Savveyra_EventList.json
+- Savveyra_Groceries.json
+- Savveyra_Details.json
+
+Current known issue:
+- Date saves.
+- Time partially saves.
+- EventList still shows time wrong/00:00.
+- Events page stays dirty after save.
+- We added event_datetime after event_date because event_date was originally date-only and already used by views.
+
+Before fixing:
+Review the current Events architecture and decide whether:
+1. event_date remains date-only and event_datetime becomes the operational field.
+2. event_date is retired and event_datetime becomes the single source of truth.
+3. Another approach is better.
+
+Operational requirements:
+- Event Ref# is informational and displays in EventList, Groceries, and Details.
+- Total Guests = manually entered contracted guests.
+- To Produce = sum of component Guests + Extra.
+- Kitchen produces To Produce, not Total Guests.
+- Events pull Menus and guest counts only.
+- Groceries explodes and aggregates:
+    - Per Event in Details.
+    - Across all Events in Order.
+
+After date/time architecture is settled:
+Continue Groceries development.v0.1.41_Events_DateTime_GroceriesPrep
 
 - Added event_ref to Events.
 - Added total_guests_manual to Events.
