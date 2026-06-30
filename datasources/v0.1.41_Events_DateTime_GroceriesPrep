@@ -1,0 +1,13 @@
+v0.1.41_Events_DateTime_GroceriesPrep
+
+- Added event_ref to Events.
+- Added total_guests_manual to Events.
+- Added event_datetime to Events.
+- Updated vw_evt_items to expose event_ref, total_guests_manual, to_produce, event_datetime.
+- Event # saves and reloads.
+- Manual Total Guests saves and reloads.
+- EventList displays Event #.
+- Groceries foundation exists from v0.1.40.
+- Date/time handling remains unresolved.
+- Current issue: event_datetime can save time, but page remains dirty and EventList displays time incorrectly.
+- Next session should fresh-review Events header/save/load/dirty logic before continuing Groceries.
