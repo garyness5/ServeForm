@@ -46,11 +46,11 @@ export default {
 			name: this.textClean(inpEvtName.text),
 
 			event_date: datEvtDate.selectedDate
-				? moment.utc(datEvtDate.selectedDate).format("YYYY-MM-DD")
+				? moment(datEvtDate.selectedDate).format("YYYY-MM-DD")
 				: null,
 
 			event_datetime: datEvtDate.selectedDate
-				? moment.utc(datEvtDate.selectedDate).format("YYYY-MM-DD HH:mm:ss")
+				? moment(datEvtDate.selectedDate).format("YYYY-MM-DD HH:mm:ss")
 				: null,
 
 			customer_id: selEvtCustomer.selectedOptionValue ? Number(selEvtCustomer.selectedOptionValue) : null,
@@ -91,7 +91,7 @@ export default {
 				? moment(r.event_date).format("YYYY-MM-DD")
 				: null,
 			event_datetime: r.event_datetime
-				? moment(r.event_datetime).format("YYYY-MM-DD HH:mm:ss")
+				? moment(r.event_datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
 				: null,
 			customer_id: r.customer_id ? Number(r.customer_id) : null,
 			contact_id: r.contact_id ? Number(r.contact_id) : null,

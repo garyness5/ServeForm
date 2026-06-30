@@ -1,6 +1,9 @@
 select
   id,
   event_date,
+  event_time,
+  event_datetime,
+  event_datetime_display,
   event_ref,
   name,
   customer_name,
@@ -15,4 +18,4 @@ select
 from public.vw_evt_items
 where client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and coalesce(deleted, false) = false
-order by event_date nulls last, lower(name), id;
+order by event_datetime nulls last, lower(name), id;

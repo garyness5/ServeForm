@@ -7,7 +7,7 @@
   "closeOnSelection": true,
   "dateFormat": "YY-MM-DD | HH:mm",
   "datePickerType": "DATE_PICKER",
-  "defaultDate": "{{ Number(appsmith.store.current_event_id || 0) === 0 ? \"\" : getEvtItemById.data?.[0]?.event_datetime || getEvtItemById.data?.[0]?.event_date || \"\" }}",
+  "defaultDate": "{{\n  getEvtItemById.data?.[0]?.event_datetime\n    ? moment(getEvtItemById.data[0].event_datetime, \"YYYY-MM-DD HH:mm:ss\").format(\"YYYY-MM-DDTHH:mm:ss\")\n    : \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

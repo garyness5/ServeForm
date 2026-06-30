@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  id,\n  event_date,\n  event_ref,\n  name,\n  customer_name,\n  status,\n  active,\n  menu_count,\n  total_guests,\n  to_produce,\n  total_cost,\n  warning_count,\n  deleted\nfrom public.vw_evt_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\norder by event_date nulls last, lower(name), id;",
+      "body": "select\n  id,\n  event_date,\n  event_time,\n  event_datetime,\n  event_datetime_display,\n  event_ref,\n  name,\n  customer_name,\n  status,\n  active,\n  menu_count,\n  total_guests,\n  to_produce,\n  total_cost,\n  warning_count,\n  deleted\nfrom public.vw_evt_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\norder by event_datetime nulls last, lower(name), id;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
