@@ -4,7 +4,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 36,
+  "bottomRow": 35,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "cachedTableData": {},
   "canFreezeColumn": true,
@@ -63,7 +63,7 @@
     "created_at",
     "updated_at"
   ],
-  "columnUpdatedAt": 1782753259713,
+  "columnUpdatedAt": 1782778702825,
   "columnWidthMap": {
     "active": 103,
     "allergen_names": 124,
@@ -1283,7 +1283,7 @@
   },
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 59,
+  "rightColumn": 64,
   "searchKey": "",
   "showInlineEditingOptionDropdown": true,
   "tableData": "{{ evtCompTable.getRows() }}",

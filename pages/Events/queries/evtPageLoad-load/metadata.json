@@ -25,7 +25,7 @@
     "fullyQualifiedName": "evtPageLoad.load",
     "name": "load",
     "pageId": "Events",
-    "runBehaviour": "MANUAL",
-    "userSetOnLoad": false
+    "runBehaviour": "ON_PAGE_LOAD",
+    "userSetOnLoad": true
   }
 }

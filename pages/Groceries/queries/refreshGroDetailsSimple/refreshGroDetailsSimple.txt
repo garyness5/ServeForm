@@ -1,0 +1,82 @@
+insert into public.gro_events (
+  client_id,
+  batch_id,
+  event_id,
+  to_order
+)
+select
+  e.client_id,
+  b.id,
+  e.id,
+  false
+from public.vw_evt_items e
+join public.gro_batches b
+  on b.client_id = e.client_id
+ and b.status = 'Open'
+ and b.active = true
+where e.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and e.status = 'Ordered'
+  and e.active = true
+  and coalesce(e.deleted, false) = false
+on conflict (batch_id, event_id) do nothing;
+
+delete from public.gro_details
+where batch_id = 1
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;
+
+insert into public.gro_details
+(
+  client_id,
+  batch_id,
+  gro_event_id,
+  event_id,
+  ingredient_id,
+  ingredient_name,
+  required_qty,
+  required_unit_id,
+  required_unit
+)
+select
+  ge.client_id,
+  ge.batch_id,
+  ge.id as gro_event_id,
+  ge.event_id,
+  mc.ingredient_id,
+  mc.component_name as ingredient_name,
+  sum(
+    coalesce(ec.guests, 0)
+    * coalesce(mc.qty, 0)
+  )::numeric as required_qty,
+  mc.unit_id as required_unit_id,
+  mc.unit_abbreviation as required_unit
+from public.gro_events ge
+join public.vw_evt_items e
+  on e.id = ge.event_id
+join public.vw_evt_components ec
+  on ec.event_id = ge.event_id
+join public.vw_mnu_components mc
+  on mc.menu_id = ec.menu_id
+where ge.batch_id = 1
+  and ge.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and ge.to_order = true
+  and coalesce(ec.active, true) = true
+  and coalesce(ec.child_deleted, false) = false
+  and coalesce(ec.child_active, true) = true
+  and mc.ingredient_id is not null
+  and coalesce(mc.active, true) = true
+  and coalesce(mc.child_deleted, false) = false
+  and coalesce(mc.child_active, true) = true
+group by
+  ge.client_id,
+  ge.batch_id,
+  ge.id,
+  ge.event_id,
+  mc.ingredient_id,
+  mc.component_name,
+  mc.unit_id,
+  mc.unit_abbreviation;
+
+select count(*) as detail_rows
+from public.gro_details
+where batch_id = 1
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;

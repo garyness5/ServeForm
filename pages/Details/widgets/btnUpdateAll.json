@@ -12,17 +12,11 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -32,7 +26,7 @@
   ],
   "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ !evtListActions.hasSelection() }}",
+  "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
   "key": "o01hoigeqy",
@@ -43,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ evtListActions.openSelectedEvent() }}",
+  "onClick": "{{\n  refreshGroDetailsSimple.run()\n    .then(() => getGroDetails.run())\n    .then(() => showAlert(\"Details updated.\", \"success\"))\n}}",
   "parentColumnSpace": 10.609375,
   "parentId": "0",
   "parentRowSpace": 10,

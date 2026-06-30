@@ -44,11 +44,19 @@ export default {
 	headerSnapshotFromPage() {
 		return {
 			name: this.textClean(inpEvtName.text),
+
 			event_date: datEvtDate.selectedDate
-				? moment(datEvtDate.selectedDate).format("YYYY-MM-DD")
+				? moment.utc(datEvtDate.selectedDate).format("YYYY-MM-DD")
 				: null,
+
+			event_datetime: datEvtDate.selectedDate
+				? moment.utc(datEvtDate.selectedDate).format("YYYY-MM-DD HH:mm:ss")
+				: null,
+
 			customer_id: selEvtCustomer.selectedOptionValue ? Number(selEvtCustomer.selectedOptionValue) : null,
 			contact_id: selEvtContact.selectedOptionValue ? Number(selEvtContact.selectedOptionValue) : null,
+			event_ref: this.textClean(inpEvtRef.text),
+			total_guests_manual: inpTotalGuests.text ? Number(inpTotalGuests.text) : null,
 			status: selEvtStatus.selectedOptionValue || "Draft",
 			format: selEvtFormat.selectedOptionValue || null,
 			active: chkEvtActive.isChecked === false ? false : true,
@@ -65,8 +73,11 @@ export default {
 			return {
 				name: null,
 				event_date: null,
+				event_datetime: null,
 				customer_id: null,
 				contact_id: null,
+				event_ref: null,
+				total_guests_manual: null,
 				status: "Draft",
 				format: null,
 				active: true,
@@ -79,8 +90,13 @@ export default {
 			event_date: r.event_date
 				? moment(r.event_date).format("YYYY-MM-DD")
 				: null,
+			event_datetime: r.event_datetime
+				? moment(r.event_datetime).format("YYYY-MM-DD HH:mm:ss")
+				: null,
 			customer_id: r.customer_id ? Number(r.customer_id) : null,
 			contact_id: r.contact_id ? Number(r.contact_id) : null,
+			event_ref: this.textClean(r.event_ref),
+			total_guests_manual: r.total_guests_manual == null ? null : Number(r.total_guests_manual),
 			status: r.status || "Draft",
 			format: r.format || null,
 			active: r.active === false ? false : true,

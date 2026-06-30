@@ -5,9 +5,9 @@
   "bottomRow": 26,
   "boxShadow": "none",
   "closeOnSelection": true,
-  "dateFormat": "YYYY-MM-DD",
+  "dateFormat": "YY-MM-DD | HH:mm",
   "datePickerType": "DATE_PICKER",
-  "defaultDate": "{{ Number(appsmith.store.current_event_id || 0) === 0 ? \"\" : getEvtItemById.data?.[0]?.event_date || \"\" }}",
+  "defaultDate": "{{ Number(appsmith.store.current_event_id || 0) === 0 ? \"\" : getEvtItemById.data?.[0]?.event_datetime || getEvtItemById.data?.[0]?.event_date || \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -23,6 +23,9 @@
   "dynamicPropertyPathList": [
     {
       "key": "defaultDate"
+    },
+    {
+      "key": "dateFormat"
     }
   ],
   "dynamicTriggerPathList": [],
@@ -37,7 +40,7 @@
   "labelPosition": "Left",
   "labelStyle": "BOLD",
   "labelTextSize": "1rem",
-  "labelWidth": "8",
+  "labelWidth": "7",
   "leftColumn": 0,
   "maxDate": "2121-12-31T18:29:00.000Z",
   "maxDynamicHeight": 9000,
@@ -54,7 +57,7 @@
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 29,
+  "rightColumn": 30,
   "shortcuts": false,
   "timePrecision": "minute",
   "topRow": 22,

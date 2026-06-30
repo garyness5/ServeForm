@@ -1,13 +1,16 @@
 select
-  id,
-  event_id,
-  menu_name,
-  ingredient_name,
-  required_qty,
-  required_unit
-from public.gro_details
-where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  gd.id,
+  gd.event_id,
+  e.name as event_name,
+  gd.ingredient_id,
+  gd.ingredient_name,
+  gd.required_qty,
+  gd.required_unit
+from public.gro_details gd
+join public.evt_items e
+  on e.id = gd.event_id
+where gd.batch_id = 1
+  and gd.client_id = '{{ appsmith.store.current_client_id }}'::uuid
 order by
-  event_id,
-  lower(coalesce(menu_name,'')),
-  lower(coalesce(ingredient_name,''));
+  lower(e.name),
+  lower(gd.ingredient_name);

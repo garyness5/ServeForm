@@ -1,15 +1,15 @@
 select
   id,
-  name,
   event_date,
+  event_ref,
+  name,
   customer_name,
   status,
   active,
-  format,
   menu_count,
   total_guests,
+  to_produce,
   total_cost,
-  diet_tag_names,
   warning_count,
   deleted
 from public.vw_evt_items

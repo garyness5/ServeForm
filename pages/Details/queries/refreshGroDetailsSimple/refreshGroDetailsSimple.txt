@@ -1,0 +1,53 @@
+delete from public.gro_details
+where batch_id = 1
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;
+
+insert into public.gro_details
+(
+  client_id,
+  batch_id,
+  gro_event_id,
+  event_id,
+  menu_id,
+  menu_name,
+  ingredient_id,
+  ingredient_name,
+  required_qty,
+  required_unit_id,
+  required_unit
+)
+select
+  ge.client_id,
+  ge.batch_id,
+  ge.id as gro_event_id,
+  ge.event_id,
+  ec.menu_id,
+  ec.menu_name,
+  mc.ingredient_id,
+  mc.component_name as ingredient_name,
+  (
+    coalesce(ec.guests, 0)
+    * coalesce(mc.qty, 0)
+  )::numeric as required_qty,
+  mc.unit_id as required_unit_id,
+  mc.unit_abbreviation as required_unit
+from public.gro_events ge
+join public.vw_evt_components ec
+  on ec.event_id = ge.event_id
+join public.vw_mnu_components mc
+  on mc.menu_id = ec.menu_id
+where ge.batch_id = 1
+  and ge.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and ge.to_order = true
+  and coalesce(ec.active, true) = true
+  and coalesce(ec.child_deleted, false) = false
+  and coalesce(ec.child_active, true) = true
+  and mc.ingredient_id is not null
+  and coalesce(mc.active, true) = true
+  and coalesce(mc.child_deleted, false) = false
+  and coalesce(mc.child_active, true) = true;
+
+select count(*) as detail_rows
+from public.gro_details
+where batch_id = 1
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;

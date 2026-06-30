@@ -36,32 +36,37 @@
   "columnOrder": [
     "event_date",
     "name",
+    "event_ref",
     "customer_name",
     "status",
     "active",
-    "format",
-    "menu_count",
     "total_guests",
+    "to_produce",
     "total_cost",
-    "diet_tag_names",
+    "menu_count",
     "warning_count",
     "id",
     "deleted"
   ],
-  "columnUpdatedAt": 1782669198383,
+  "columnUpdatedAt": 1782778550207,
   "columnWidthMap": {
     "active": 102,
     "category_id": 118,
     "category_name": 154,
     "cost_per_unit": 104,
     "customColumn1": 85,
+    "customer_name": 106,
     "diet_tag_names": 181,
+    "event_date": 206,
+    "event_ref": 115,
     "extra_percent": 90,
     "format": 104,
     "id": 78,
     "menu_count": 85,
-    "name": 220,
+    "name": 117,
     "name_norm": 142,
+    "status": 90,
+    "to_produce": 117,
     "total_cost": 113,
     "total_guests": 87,
     "warning_count": 140,
@@ -102,9 +107,6 @@
       "key": "primaryColumns.active.computedValue"
     },
     {
-      "key": "primaryColumns.diet_tag_names.computedValue"
-    },
-    {
       "key": "primaryColumns.deleted.computedValue"
     },
     {
@@ -126,9 +128,6 @@
       "key": "primaryColumns.status.computedValue"
     },
     {
-      "key": "primaryColumns.format.computedValue"
-    },
-    {
       "key": "primaryColumns.menu_count.computedValue"
     },
     {
@@ -136,6 +135,12 @@
     },
     {
       "key": "primaryColumns.warning_count.computedValue"
+    },
+    {
+      "key": "primaryColumns.event_ref.computedValue"
+    },
+    {
+      "key": "primaryColumns.to_produce.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -147,6 +152,12 @@
     },
     {
       "key": "primaryColumns.status.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.event_date.inputFormat"
+    },
+    {
+      "key": "primaryColumns.event_date.outputFormat"
     }
   ],
   "dynamicTriggerPathList": [
@@ -285,40 +296,6 @@
       "verticalAlignment": "CENTER",
       "width": 150
     },
-    "diet_tag_names": {
-      "alias": "diet_tag_names",
-      "allowCellWrapping": false,
-      "allowSameOptionsInNewRow": true,
-      "cellBackground": "",
-      "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblEvtList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"diet_tag_names\"])) : diet_tag_names })()}}",
-      "currencyCode": "USD",
-      "decimals": 0,
-      "enableFilter": true,
-      "enableSort": true,
-      "fontStyle": "",
-      "horizontalAlignment": "LEFT",
-      "id": "diet_tag_names",
-      "index": 15,
-      "isCellEditable": false,
-      "isCellVisible": true,
-      "isDerived": false,
-      "isDisabled": false,
-      "isDiscardVisible": true,
-      "isEditable": false,
-      "isSaveVisible": true,
-      "isVisible": true,
-      "label": "Diet Tags",
-      "notation": "standard",
-      "originalId": "diet_tag_names",
-      "sticky": "",
-      "textColor": "",
-      "textSize": "0.875rem",
-      "thousandSeparator": true,
-      "validation": {},
-      "verticalAlignment": "CENTER",
-      "width": 150
-    },
     "event_date": {
       "alias": "event_date",
       "allowCellWrapping": false,
@@ -334,6 +311,7 @@
       "horizontalAlignment": "LEFT",
       "id": "event_date",
       "index": 2,
+      "inputFormat": "YY-MM-DD HH:mm",
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
@@ -345,6 +323,7 @@
       "label": "Event DatetblEv",
       "notation": "standard",
       "originalId": "event_date",
+      "outputFormat": "YY-MM-DD | HH:mm",
       "sticky": "left",
       "textColor": "",
       "textSize": "0.875rem",
@@ -353,21 +332,21 @@
       "verticalAlignment": "CENTER",
       "width": 150
     },
-    "format": {
-      "alias": "format",
+    "event_ref": {
+      "alias": "event_ref",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblEvtList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"format\"])) : format })()}}",
+      "computedValue": "{{(() => { const tableData = tblEvtList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"event_ref\"])) : event_ref })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
       "horizontalAlignment": "LEFT",
-      "id": "format",
-      "index": 6,
+      "id": "event_ref",
+      "index": 2,
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
@@ -376,9 +355,9 @@
       "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Format",
+      "label": "Ref. #",
       "notation": "standard",
-      "originalId": "format",
+      "originalId": "event_ref",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
@@ -513,6 +492,40 @@
       "onOptionChange": "{{\n  updEvtListInline.run()\n    .then(() => getEvtList.run())\n}}",
       "originalId": "status",
       "selectOptions": "[\n  { \"label\": \"Draft\", \"value\": \"Draft\" },\n  { \"label\": \"Sent\", \"value\": \"Sent\" },\n  { \"label\": \"Accepted\", \"value\": \"Accepted\" },\n  { \"label\": \"Ordered\", \"value\": \"Ordered\" },\n  { \"label\": \"Closed\", \"value\": \"Closed\" },\n  { \"label\": \"Cancelled\", \"value\": \"Cancelled\" }\n]",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "to_produce": {
+      "alias": "to_produce",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = tblEvtList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"to_produce\"])) : to_produce })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "RIGHT",
+      "id": "to_produce",
+      "index": 10,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "To Produce",
+      "notation": "standard",
+      "originalId": "to_produce",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",

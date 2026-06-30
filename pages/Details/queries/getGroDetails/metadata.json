@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  id,\n  event_id,\n  menu_name,\n  ingredient_name,\n  required_qty,\n  required_unit\nfrom public.gro_details\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\norder by\n  event_id,\n  lower(coalesce(menu_name,'')),\n  lower(coalesce(ingredient_name,''));",
+      "body": "select\n  gd.id,\n  gd.event_id,\n  e.name as event_name,\n  gd.ingredient_id,\n  gd.ingredient_name,\n  gd.required_qty,\n  gd.required_unit\nfrom public.gro_details gd\njoin public.evt_items e\n  on e.id = gd.event_id\nwhere gd.batch_id = 1\n  and gd.client_id = '{{ appsmith.store.current_client_id }}'::uuid\norder by\n  lower(e.name),\n  lower(gd.ingredient_name);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

@@ -1,14 +1,17 @@
 update public.evt_items
 set
   name = nullif('{{ (evtSave.headerSnapshotFromPage().name || "").replaceAll("'", "''") }}', ''),
-  customer_id = {{ evtSave.headerSnapshotFromPage().customer_id ? Number(evtSave.headerSnapshotFromPage().customer_id) : "null" }},
-  contact_id = {{ evtSave.headerSnapshotFromPage().contact_id ? Number(evtSave.headerSnapshotFromPage().contact_id) : "null" }},
-  event_date = {{ evtSave.headerSnapshotFromPage().event_date ? "'" + evtSave.headerSnapshotFromPage().event_date + "'" : "null" }},
-  status = nullif('{{ (evtSave.headerSnapshotFromPage().status || "Draft").replaceAll("'", "''") }}', ''),
+  customer_id = {{ evtSave.headerSnapshotFromPage().customer_id ? Number(evtSave.headerSnapshotFromPage().customer_id) : null }},
+  contact_id = {{ evtSave.headerSnapshotFromPage().contact_id ? Number(evtSave.headerSnapshotFromPage().contact_id) : null }},
+  event_date = {{ evtSave.headerSnapshotFromPage().event_date ? "'" + evtSave.headerSnapshotFromPage().event_date + "'" : null }},
+  event_datetime = {{ evtSave.headerSnapshotFromPage().event_datetime ? "'" + evtSave.headerSnapshotFromPage().event_datetime + "'" : null }},
+  event_ref = nullif('{{ (evtSave.headerSnapshotFromPage().event_ref || "").replaceAll("'", "''") }}', ''),
+  total_guests_manual = {{ evtSave.headerSnapshotFromPage().total_guests_manual ? Number(evtSave.headerSnapshotFromPage().total_guests_manual) : null }},
+  status = '{{ (evtSave.headerSnapshotFromPage().status || "Draft").replaceAll("'", "''") }}',
   format = nullif('{{ (evtSave.headerSnapshotFromPage().format || "").replaceAll("'", "''") }}', ''),
   notes = nullif('{{ (evtSave.headerSnapshotFromPage().notes || "").replaceAll("'", "''") }}', ''),
   active = {{ evtSave.headerSnapshotFromPage().active ? true : false }},
   updated_at = now()
 where id = {{ Number(appsmith.store.current_event_id || 0) }}
   and client_id = '{{ appsmith.store.current_client_id }}'::uuid
-returning id, customer_id, contact_id;
+returning id, name, event_date, event_datetime, event_ref, total_guests_manual;
