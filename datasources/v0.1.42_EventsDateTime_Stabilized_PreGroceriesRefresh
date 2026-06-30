@@ -1,0 +1,130 @@
+Savveyra v0.1.42_EventsDateTime_Stabilized_PreGroceriesRefresh
+
+Events Date/Time Review and Stabilization
+
+Database
+
+* Confirmed Event Date/Time operational importance for multi-service events, production scheduling, and future grocery batching.
+* Adopted Event DateTime as the authoritative event scheduling field.
+* Backfilled existing Event records so Event DateTime is populated from legacy Event Date values.
+* Updated vw_evt_items to expose:
+
+  * event_datetime
+  * event_time (derived)
+  * event_datetime_display
+* Added formatted display value:
+
+  * YY-MM-DD | HH:mm
+
+Events Page
+
+* Corrected Event DateTime save behavior.
+* Corrected Event DateTime reload behavior.
+* Removed UTC conversion issues causing displayed time offsets.
+* Verified Event DateTime persists correctly after save and page refresh.
+* Verified Event DateTime reopens correctly after closing and reopening Events.
+* Corrected dirty-state logic caused by DateTime timezone conversion mismatch.
+* Save button now clears correctly after successful save.
+
+Event Header
+
+* Verified Event Ref saves and reloads correctly.
+* Verified Total Guests saves correctly.
+* Added missing default value binding for Total Guests input control.
+* Confirmed Event header values reload correctly after save.
+
+Event List
+
+* Updated EventList query to include:
+
+  * event_datetime
+  * event_time
+  * event_datetime_display
+* Configured EventList to display formatted Date/Time value.
+* Verified EventList displays correct local Event time.
+* Hidden raw helper fields from user display:
+
+  * event_date
+  * event_time
+  * event_datetime
+* Retained helper fields in view for downstream use.
+
+Operational Status
+
+* Events DateTime architecture stabilized.
+* Events save/load/display cycle validated.
+* Dirty-state behavior validated.
+* Ready to continue Groceries review and Update All propagation work from a stable Event scheduling foundation.
+
+Next Focus
+
+* Groceries
+* Details
+* Order
+* Update All refresh architecture
+* Event DateTime integration into Groceries workflow
+Savveyra v0.1.42_EventsDateTime_Stabilized_PreGroceriesRefresh
+
+Events Date/Time Review and Stabilization
+
+Database
+
+* Confirmed Event Date/Time operational importance for multi-service events, production scheduling, and future grocery batching.
+* Adopted Event DateTime as the authoritative event scheduling field.
+* Backfilled existing Event records so Event DateTime is populated from legacy Event Date values.
+* Updated vw_evt_items to expose:
+
+  * event_datetime
+  * event_time (derived)
+  * event_datetime_display
+* Added formatted display value:
+
+  * YY-MM-DD | HH:mm
+
+Events Page
+
+* Corrected Event DateTime save behavior.
+* Corrected Event DateTime reload behavior.
+* Removed UTC conversion issues causing displayed time offsets.
+* Verified Event DateTime persists correctly after save and page refresh.
+* Verified Event DateTime reopens correctly after closing and reopening Events.
+* Corrected dirty-state logic caused by DateTime timezone conversion mismatch.
+* Save button now clears correctly after successful save.
+
+Event Header
+
+* Verified Event Ref saves and reloads correctly.
+* Verified Total Guests saves correctly.
+* Added missing default value binding for Total Guests input control.
+* Confirmed Event header values reload correctly after save.
+
+Event List
+
+* Updated EventList query to include:
+
+  * event_datetime
+  * event_time
+  * event_datetime_display
+* Configured EventList to display formatted Date/Time value.
+* Verified EventList displays correct local Event time.
+* Hidden raw helper fields from user display:
+
+  * event_date
+  * event_time
+  * event_datetime
+* Retained helper fields in view for downstream use.
+
+Operational Status
+
+* Events DateTime architecture stabilized.
+* Events save/load/display cycle validated.
+* Dirty-state behavior validated.
+* Ready to continue Groceries review and Update All propagation work from a stable Event scheduling foundation.
+
+Next Focus
+
+* Groceries
+* Details
+* Order
+* Update All refresh architecture
+* Event DateTime integration into Groceries workflow
