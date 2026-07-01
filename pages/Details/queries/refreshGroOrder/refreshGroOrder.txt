@@ -1,0 +1,105 @@
+drop table if exists tmp_gro_order_refresh;
+
+create temporary table tmp_gro_order_refresh as
+select *
+from public.gro_order
+where batch_id = 1
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;
+
+delete from public.gro_order
+where batch_id = 1
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;
+
+insert into public.gro_order
+(
+  client_id,
+  batch_id,
+  line_no,
+  ingredient_id,
+  ingredient_code,
+  ingredient_name,
+  category_name,
+  required_qty,
+  required_unit_id,
+  required_unit,
+  buy_qty,
+  buy_unit_id,
+  buy_unit,
+  to_order,
+  purchased,
+  supplier_id,
+  supplier_name,
+  packaging_id,
+  packaging_name,
+  packs_to_order,
+  notes
+)
+select
+  no.client_id,
+  no.batch_id,
+  row_number() over (order by lower(no.ingredient_name)) as line_no,
+  no.ingredient_id,
+  no.ingredient_code,
+  no.ingredient_name,
+  no.category_name,
+  round(no.required_qty, 2) as required_qty,
+  no.required_unit_id,
+  no.required_unit,
+
+  eo.buy_qty,
+  eo.buy_unit_id,
+  eo.buy_unit,
+  coalesce(eo.to_order, true) as to_order,
+  coalesce(eo.purchased, false) as purchased,
+
+  coalesce(eo.supplier_id, no.supplier_id) as supplier_id,
+  coalesce(eo.supplier_name, no.supplier_name) as supplier_name,
+  coalesce(eo.packaging_id, no.packaging_id) as packaging_id,
+  coalesce(eo.packaging_name, no.packaging_name) as packaging_name,
+
+  eo.packs_to_order,
+  eo.notes
+
+from (
+  select
+    gd.client_id,
+    gd.batch_id,
+    gd.ingredient_id,
+    gd.ingredient_name,
+    ing.item_code as ingredient_code,
+    gd.category_name,
+    ing.supplier_id,
+    ing.supplier_name,
+    ing.packaging_id,
+    ing.packaging_name,
+    sum(gd.required_qty)::numeric as required_qty,
+    gd.required_unit_id,
+    gd.required_unit
+  from public.gro_details gd
+  left join public.vw_ing_items ing
+    on ing.id = gd.ingredient_id
+  where gd.batch_id = 1
+    and gd.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  group by
+    gd.client_id,
+    gd.batch_id,
+    gd.ingredient_id,
+    gd.ingredient_name,
+    ing.item_code,
+    gd.category_name,
+    ing.supplier_id,
+    ing.supplier_name,
+    ing.packaging_id,
+    ing.packaging_name,
+    gd.required_unit_id,
+    gd.required_unit
+) no
+left join tmp_gro_order_refresh eo
+  on eo.ingredient_id = no.ingredient_id
+ and eo.required_unit_id = no.required_unit_id
+order by lower(no.ingredient_name);
+
+select count(*) as order_rows
+from public.gro_order
+where batch_id = 1
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;

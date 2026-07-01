@@ -12,9 +12,6 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
@@ -32,7 +29,7 @@
   ],
   "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ !evtListActions.hasSelection() }}",
+  "isDisabled": "",
   "isLoading": false,
   "isVisible": true,
   "key": "o01hoigeqy",
@@ -43,7 +40,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ evtListActions.openSelectedEvent() }}",
+  "onClick": "{{\n  groActions.updateAll()\n    .then(() => getGroOrder.run())\n    .then(() => showAlert(\"Groceries group updated.\", \"success\"))\n}}",
   "parentColumnSpace": 10.609375,
   "parentId": "0",
   "parentRowSpace": 10,

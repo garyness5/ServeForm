@@ -1,0 +1,12 @@
+update public.gro_order
+set
+  packs_to_order = {{
+    appsmith.store.current_packs_to_order === "" ||
+    appsmith.store.current_packs_to_order == null
+      ? null
+      : Number(appsmith.store.current_packs_to_order)
+  }},
+  updated_at = now()
+where id = {{ Number(appsmith.store.current_gro_order_id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+returning id, packs_to_order;

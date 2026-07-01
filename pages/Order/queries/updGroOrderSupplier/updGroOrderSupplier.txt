@@ -1,0 +1,12 @@
+update public.gro_order
+set
+	supplier_id = {{
+		appsmith.store.current_supplier_id === "" ||
+		appsmith.store.current_supplier_id == null
+			? null
+			: Number(appsmith.store.current_supplier_id)
+	}},
+  updated_at = now()
+where id = {{ Number(appsmith.store.current_gro_order_id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+returning id, supplier_id;

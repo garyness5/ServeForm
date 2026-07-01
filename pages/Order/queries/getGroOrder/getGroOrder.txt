@@ -1,0 +1,25 @@
+select
+  id,
+  line_no,
+  ingredient_id,
+  ingredient_code,
+  ingredient_name,
+  category_name,
+  required_qty,
+  required_unit_id,
+  required_unit,
+  buy_qty,
+  buy_unit_id,
+  buy_unit,
+  to_order,
+  purchased,
+  supplier_id,
+  supplier_name,
+  packaging_id,
+  packaging_name,
+  packs_to_order,
+  notes
+from public.gro_order
+where batch_id = 1
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+order by line_no;

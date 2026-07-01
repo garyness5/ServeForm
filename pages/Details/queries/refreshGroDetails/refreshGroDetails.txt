@@ -22,14 +22,14 @@ insert into public.gro_details
   required_unit
 )
 select
-  gei.client_id,
-  1 as batch_id,
+  '{{ appsmith.store.current_client_id }}'::uuid,
+  1,
   ge.gro_event_id,
   gei.event_id,
-	row_number() over (
-		partition by gei.event_id
-		order by lower(gei.ingredient_name)
-	) as line_no,
+  row_number() over (
+    partition by gei.event_id
+    order by lower(gei.ingredient_name)
+  ),
   gei.event_ref,
   gei.event_datetime,
   gei.event_datetime_display,
@@ -38,15 +38,10 @@ select
   gei.ingredient_name,
   gei.category_name,
   gei.supplier_name,
-  round(gei.needed_qty, 2) as required_qty,
-  gei.needed_unit_id as required_unit_id,
-  gei.needed_unit as required_unit
-from (
-  select
-    '{{ appsmith.store.current_client_id }}'::uuid as client_id,
-    *
-  from public.vw_gro_event_ingredients
-) gei
+  round(gei.needed_qty, 2),
+  gei.needed_unit_id,
+  gei.needed_unit
+from public.vw_gro_event_ingredients gei
 join public.vw_gro_events ge
   on ge.event_id = gei.event_id
 where ge.client_id = '{{ appsmith.store.current_client_id }}'::uuid
@@ -54,7 +49,7 @@ where ge.client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and ge.to_order = true
 order by
   lower(gei.event_name),
-  line_no;
+  lower(gei.ingredient_name);
 
 select count(*) as detail_rows
 from public.gro_details

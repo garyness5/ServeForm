@@ -29,7 +29,7 @@
     ],
     "name": "getGroEvents",
     "pageId": "Order",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }

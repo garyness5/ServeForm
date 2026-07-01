@@ -64,6 +64,10 @@
     {
       "id": "Settings",
       "isDefault": false
+    },
+    {
+      "id": "Order Copy",
+      "isDefault": false
     }
   ],
   "unpublishedAppLayout": {

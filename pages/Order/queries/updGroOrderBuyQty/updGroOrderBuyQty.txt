@@ -1,0 +1,11 @@
+update public.gro_order
+set
+  buy_qty = {{
+    appsmith.store.current_gro_order_buy_qty === "" || appsmith.store.current_gro_order_buy_qty == null
+      ? null
+      : Number(String(appsmith.store.current_gro_order_buy_qty).replaceAll(",", ""))
+  }},
+  updated_at = now()
+where id = {{ Number(appsmith.store.current_gro_order_id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+returning id, ingredient_name, buy_qty, updated_at;

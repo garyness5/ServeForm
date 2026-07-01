@@ -1,0 +1,7 @@
+update public.gro_order
+set
+  to_order = not coalesce(to_order, true),
+  updated_at = now()
+where id = {{ Number(appsmith.store.current_gro_order_id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+returning id, to_order;
