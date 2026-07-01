@@ -5,7 +5,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 60,
+  "bottomRow": 58,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "cachedTableData": {},
   "canFreezeColumn": true,
@@ -34,16 +34,18 @@
     }
   },
   "columnOrder": [
-    "event_date",
+    "event_datetime_display",
     "event_name",
+    "event_ref",
     "total_guests",
     "to_order",
     "notes",
-    "gro_event_id",
+    "event_id",
+    "event_datetime",
     "batch_id",
-    "event_id"
+    "gro_event_id"
   ],
-  "columnUpdatedAt": 1782754757138,
+  "columnUpdatedAt": 1782840386833,
   "columnWidthMap": {
     "active": 102,
     "category_id": 118,
@@ -52,6 +54,8 @@
     "customColumn1": 85,
     "diet_tag_names": 181,
     "event_date": 213,
+    "event_datetime_display": 132,
+    "event_ref": 122,
     "extra_percent": 90,
     "format": 104,
     "id": 78,
@@ -96,9 +100,6 @@
       "key": "headerTextColor"
     },
     {
-      "key": "primaryColumns.event_date.computedValue"
-    },
-    {
       "key": "primaryColumns.total_guests.computedValue"
     },
     {
@@ -118,6 +119,15 @@
     },
     {
       "key": "primaryColumns.notes.computedValue"
+    },
+    {
+      "key": "primaryColumns.event_ref.computedValue"
+    },
+    {
+      "key": "primaryColumns.event_datetime.computedValue"
+    },
+    {
+      "key": "primaryColumns.event_datetime_display.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -126,9 +136,6 @@
     },
     {
       "key": "onRowSelected"
-    },
-    {
-      "key": "primaryColumns.event_date.inputFormat"
     },
     {
       "key": "primaryColumns.to_order.onCheckChange"
@@ -205,22 +212,55 @@
       "verticalAlignment": "CENTER",
       "width": 150
     },
-    "event_date": {
-      "alias": "event_date",
+    "event_datetime": {
+      "alias": "event_datetime",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "date",
-      "computedValue": "{{(() => { const tableData = tblGroEvents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"event_date\"])) : event_date })()}}",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblGroEvents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"event_datetime\"])) : event_datetime })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
       "horizontalAlignment": "LEFT",
-      "id": "event_date",
-      "index": 2,
-      "inputFormat": "YYYY-MM-DD   HH:mm",
+      "id": "event_datetime",
+      "index": 8,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": false,
+      "label": "event_datetime",
+      "notation": "standard",
+      "originalId": "event_datetime",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "event_datetime_display": {
+      "alias": "event_datetime_display",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblGroEvents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"event_datetime_display\"])) : event_datetime_display })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "event_datetime_display",
+      "index": 9,
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
@@ -229,10 +269,9 @@
       "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Event DatetblEv",
+      "label": "Date | Time",
       "notation": "standard",
-      "originalId": "event_date",
-      "outputFormat": "YYYY-MM-DD HH:mm",
+      "originalId": "event_datetime_display",
       "sticky": "left",
       "textColor": "",
       "textSize": "0.875rem",
@@ -302,6 +341,40 @@
       "notation": "standard",
       "originalId": "event_name",
       "sticky": "left",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "event_ref": {
+      "alias": "event_ref",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblGroEvents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"event_ref\"])) : event_ref })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "event_ref",
+      "index": 7,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Reference",
+      "notation": "standard",
+      "originalId": "event_ref",
+      "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,

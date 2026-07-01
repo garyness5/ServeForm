@@ -30,51 +30,107 @@ insert into public.gro_details
   batch_id,
   gro_event_id,
   event_id,
+  line_no,
+  event_ref,
+  event_datetime,
+  event_datetime_display,
   ingredient_id,
   ingredient_name,
+  category_name,
+  supplier_name,
   required_qty,
   required_unit_id,
   required_unit
 )
 select
-  ge.client_id,
-  ge.batch_id,
-  ge.id as gro_event_id,
-  ge.event_id,
-  mc.ingredient_id,
-  mc.component_name as ingredient_name,
-  sum(
-    coalesce(ec.guests, 0)
-    * coalesce(mc.qty, 0)
-  )::numeric as required_qty,
-  mc.unit_id as required_unit_id,
-  mc.unit_abbreviation as required_unit
-from public.gro_events ge
-join public.vw_evt_items e
-  on e.id = ge.event_id
-join public.vw_evt_components ec
-  on ec.event_id = ge.event_id
-join public.vw_mnu_components mc
-  on mc.menu_id = ec.menu_id
-where ge.batch_id = 1
-  and ge.client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and ge.to_order = true
-  and coalesce(ec.active, true) = true
-  and coalesce(ec.child_deleted, false) = false
-  and coalesce(ec.child_active, true) = true
-  and mc.ingredient_id is not null
-  and coalesce(mc.active, true) = true
-  and coalesce(mc.child_deleted, false) = false
-  and coalesce(mc.child_active, true) = true
-group by
-  ge.client_id,
-  ge.batch_id,
-  ge.id,
-  ge.event_id,
-  mc.ingredient_id,
-  mc.component_name,
-  mc.unit_id,
-  mc.unit_abbreviation;
+  x.client_id,
+  x.batch_id,
+  x.gro_event_id,
+  x.event_id,
+  row_number() over (
+    order by
+      x.event_datetime nulls last,
+      lower(x.event_name),
+      lower(x.ingredient_name)
+  ) as line_no,
+  x.event_ref,
+  x.event_datetime,
+  x.event_datetime_display,
+  x.ingredient_id,
+  x.ingredient_name,
+  x.category_name,
+  x.supplier_name,
+  x.required_qty,
+  x.required_unit_id,
+  x.required_unit
+from (
+  select
+    ge.client_id,
+    ge.batch_id,
+    ge.id as gro_event_id,
+    ge.event_id,
+
+    e.event_ref,
+    e.event_datetime,
+    e.event_datetime_display,
+    e.name as event_name,
+
+    mc.ingredient_id,
+    mc.component_name as ingredient_name,
+    ing.category_name,
+    ing.supplier_name,
+
+    sum(
+      (coalesce(ec.guests, 0) + coalesce(ec.extra_percent, 0))
+      * coalesce(mc.qty, 0)
+    )::numeric as required_qty,
+
+    mc.unit_id as required_unit_id,
+    mc.unit_abbreviation as required_unit
+
+  from public.gro_events ge
+  join public.vw_evt_items e
+    on e.id = ge.event_id
+  join public.vw_evt_components ec
+    on ec.event_id = ge.event_id
+  join public.vw_mnu_components mc
+    on mc.menu_id = ec.menu_id
+  left join public.vw_ing_items ing
+    on ing.id = mc.ingredient_id
+
+  where ge.batch_id = 1
+    and ge.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+    and ge.to_order = true
+
+    and e.status = 'Ordered'
+    and e.active = true
+    and coalesce(e.deleted, false) = false
+
+    and coalesce(ec.active, true) = true
+    and coalesce(ec.child_deleted, false) = false
+    and coalesce(ec.child_active, true) = true
+
+    and mc.ingredient_id is not null
+    and coalesce(mc.active, true) = true
+    and coalesce(mc.child_deleted, false) = false
+    and coalesce(mc.child_active, true) = true
+
+  group by
+    ge.client_id,
+    ge.batch_id,
+    ge.id,
+    ge.event_id,
+    e.event_ref,
+    e.event_datetime,
+    e.event_datetime_display,
+    e.name,
+    mc.ingredient_id,
+    mc.component_name,
+    ing.category_name,
+    ing.supplier_name,
+    mc.unit_id,
+    mc.unit_abbreviation
+) x;
 
 select count(*) as detail_rows
 from public.gro_details
