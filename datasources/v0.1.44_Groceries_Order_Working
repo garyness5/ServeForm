@@ -1,0 +1,79 @@
+v0.1.44_Groceries_Order_Working
+
+ORDER PAGE
+
+- Rebuilt tblGroOrder after table corruption/state issues
+- Restored full Order table visibility
+- Restored editable Order workflow
+
+ORDER DATA
+
+- Confirmed getGroOrder aggregation functioning
+- Confirmed gro_order data generation functioning
+- Confirmed Order page loading all aggregated ingredients
+
+ORDER EDITING
+
+- Implemented immediate-save pattern
+- Eliminated Accept/Dismiss workflow
+- Eliminated persistent dirty-state behavior
+
+ORDER CHECKBOXES
+
+- To Order
+  - Saves immediately
+  - Refreshes correctly
+  - Persists to Supabase
+
+- Purchased
+  - Saves immediately
+  - Refreshes correctly
+  - Persists to Supabase
+
+ORDER QUANTITIES
+
+- Buy Qty
+  - Saves correctly
+  - Persists to Supabase
+  - Survives page refresh
+
+- Packs To Order
+  - Saves correctly
+  - Persists to Supabase
+  - Survives page refresh
+
+ORDER LOOKUPS
+
+- Supplier
+  - Supports blank value
+  - Supports selection changes
+  - Persists to Supabase
+
+- Packaging
+  - Supports blank value
+  - Supports selection changes
+  - Persists to Supabase
+
+UI
+
+- Converted Supplier editing from supplier_name to supplier_id
+- Converted Packaging editing from packaging_name to packaging_id
+- Established editable numeric field rule:
+  - Editable fields use raw values
+  - Display-only fields use fmt.number()
+
+VALIDATION
+
+- Verified checkbox persistence
+- Verified quantity persistence
+- Verified lookup persistence
+- Verified page refresh persistence
+- Confirmed Order operational workflow functioning
+
+NEXT
+
+- Buy Unit save behavior
+- Required Unit display conversion
+- Update All preservation testing
+- Order rebuild validation
+- Print page implementation
