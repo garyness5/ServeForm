@@ -1,0 +1,43 @@
+File name in Masters Savveyra_v0.9.98_Groceries_Details_Working
+
+Groceries
+
+- Fixed Event DateTime handling and display
+- Fixed Groceries Event queue display
+- Renamed Event component field from extra_percent to extra_guests
+- Rebuilt vw_gro_events
+- Built recursive vw_gro_recipe_ingredients
+- Added yield-aware sub-recipe expansion
+- Added unit conversion support for recipe recursion
+- Built vw_gro_event_ingredients
+- Added ingredient normalization to purchase units
+- Implemented Update All → Details workflow
+- Populated gro_details from exploded Event ingredients
+- Added Event Ref, DateTime, Category and Supplier support to Details
+- Added per-Event line numbering
+- Added Details sorting by Event and Ingredient
+- Added shared fmt.number() formatting to Details
+
+Order
+
+- Expanded gro_order structure
+- Added ingredient_code
+- Added category_name
+- Added supplier fields
+- Added packaging fields
+- Added packs_to_order
+
+Print
+
+- Expanded gro_print structure
+- Added ingredient_code
+- Added supplier fields
+- Added packaging fields
+- Added packs_to_order
+
+Status
+
+- Details fully operational
+- Order schema ready
+- Print schema ready
+- Next step: build Order aggregation and preservation logic
