@@ -40,7 +40,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{\n  groActions.updateAll()\n    .then(() => getGroOrder.run())\n    .then(() => showAlert(\"Groceries group updated.\", \"success\"))\n}}",
+  "onClick": "{{ groOrderTable.updateAll() }}",
   "parentColumnSpace": 10.609375,
   "parentId": "0",
   "parentRowSpace": 10,

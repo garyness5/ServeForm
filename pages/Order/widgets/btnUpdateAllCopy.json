@@ -37,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{\n  showAlert(JSON.stringify(tblGroOrder.updatedRows), \"info\")\n}}",
+  "onClick": "{{\n  saveGroOrderRows.run()\n    .then(() => getGroOrder.run())\n\t\t.then(() => storeValue(\"gro_order_local_rows\", getGroOrder.data))\n    .then(() => resetWidget(\"tblGroOrder\", true))\n    .then(() => tblGroOrder.setData(getGroOrder.data))\n    .then(() => showAlert(\"Order saved.\", \"success\"))\n}}",
   "parentColumnSpace": 10.609375,
   "parentId": "0",
   "parentRowSpace": 10,

@@ -1,0 +1,55 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 360,
+  "dynamicBindingPathList": [
+    {
+      "key": "truncateButtonColor"
+    },
+    {
+      "key": "fontFamily"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "text"
+    }
+  ],
+  "dynamicHeight": "AUTO_HEIGHT",
+  "dynamicTriggerPathList": [],
+  "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
+  "fontSize": "1rem",
+  "fontStyle": "BOLD",
+  "isLoading": false,
+  "isVisible": true,
+  "key": "ztb41chbju",
+  "leftColumn": 1,
+  "maxDynamicHeight": 9000,
+  "minDynamicHeight": 4,
+  "minWidth": 450,
+  "mobileBottomRow": 73,
+  "mobileLeftColumn": 1,
+  "mobileRightColumn": 17,
+  "mobileTopRow": 69,
+  "needsErrorInfo": false,
+  "originalBottomRow": 360,
+  "originalTopRow": 69,
+  "overflow": "NONE",
+  "parentColumnSpace": 17.9375,
+  "parentId": "0",
+  "parentRowSpace": 10,
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 17,
+  "shouldTruncate": false,
+  "text": "{{ JSON.stringify(groOrderTable.testSaveData(), null, 2) }}",
+  "textAlign": "LEFT",
+  "textColor": "#231F20",
+  "topRow": 69,
+  "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "type": "TEXT_WIDGET",
+  "version": 1,
+  "widgetId": "yvz0m9mtsj",
+  "widgetName": "text1"
+}

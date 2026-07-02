@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  id,\n  line_no,\n  ingredient_id,\n  ingredient_code,\n  ingredient_name,\n  category_name,\n  required_qty,\n  required_unit_id,\n  required_unit,\n  buy_qty,\n  buy_unit_id,\n  buy_unit,\n  to_order,\n  purchased,\n  supplier_id,\n  supplier_name,\n  packaging_id,\n  packaging_name,\n  packs_to_order,\n  notes\nfrom public.gro_order\nwhere batch_id = 1\n  and client_id = '{{ appsmith.store.current_client_id }}'::uuid\norder by line_no;",
+      "body": "select\n  go.id,\n  go.line_no,\n  go.ingredient_id,\n  go.ingredient_code,\n  go.ingredient_name,\n  go.category_name,\n\n  -- stored/base requirement\n  go.required_qty as stored_required_qty,\n  go.required_unit_id as stored_required_unit_id,\n  go.required_unit as stored_required_unit,\n\n  -- user's display unit preference\n  coalesce(go.display_required_unit_id, go.required_unit_id) as required_unit_id,\n\n  round(\n    go.required_qty\n    * stored_u.factor_to_base\n    / display_u.factor_to_base,\n    2\n  ) as required_qty,\n\n  display_u.abbreviation as required_unit,\n\n  go.buy_qty,\n  go.buy_unit_id,\n  go.buy_unit,\n  go.to_order,\n  go.purchased,\n  go.supplier_id,\n  go.supplier_name,\n  go.packaging_id,\n  go.packaging_name,\n  go.packs_to_order\n\nfrom public.gro_order go\njoin public.units stored_u\n  on stored_u.id = go.required_unit_id\njoin public.units display_u\n  on display_u.id = coalesce(go.display_required_unit_id, go.required_unit_id)\nwhere go.batch_id = 1\n  and go.client_id = '{{ appsmith.store.current_client_id }}'::uuid\norder by go.line_no;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
