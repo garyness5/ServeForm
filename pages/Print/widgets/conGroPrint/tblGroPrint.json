@@ -33,6 +33,7 @@
   },
   "columnOrder": [
     "supplier_name",
+    "category_name",
     "ingredient_code",
     "ingredient_name",
     "buy_qty",
@@ -42,11 +43,17 @@
     "purchased",
     "id",
     "line_no",
-    "EditActions1"
+    "print_sort_no"
   ],
-  "columnUpdatedAt": 1783012233001,
+  "columnUpdatedAt": 1783014844064,
   "columnWidthMap": {
-    "purchased": 62
+    "buy_qty": 76,
+    "buy_unit": 74,
+    "category_name": 106,
+    "ingredient_code": 74,
+    "packs_to_order": 90,
+    "purchased": 62,
+    "supplier_name": 115
   },
   "customIsLoading": false,
   "customIsLoadingValue": "",
@@ -100,30 +107,15 @@
       "key": "primaryColumns.purchased.computedValue"
     },
     {
-      "key": "primaryColumns.EditActions1.saveButtonColor"
+      "key": "primaryColumns.category_name.computedValue"
     },
     {
-      "key": "primaryColumns.EditActions1.saveBorderRadius"
-    },
-    {
-      "key": "primaryColumns.EditActions1.discardBorderRadius"
-    },
-    {
-      "key": "primaryColumns.EditActions1.isSaveDisabled"
-    },
-    {
-      "key": "primaryColumns.EditActions1.isDiscardDisabled"
+      "key": "primaryColumns.print_sort_no.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "tableData"
-    },
-    {
-      "key": "primaryColumns.EditActions1.isSaveDisabled"
-    },
-    {
-      "key": "primaryColumns.EditActions1.isDiscardDisabled"
     }
   ],
   "dynamicTriggerPathList": [],
@@ -131,7 +123,7 @@
   "endOfData": false,
   "flexVerticalAlignment": "start",
   "horizontalAlignment": "LEFT",
-  "inlineEditingSaveOption": "ROW_LEVEL",
+  "inlineEditingSaveOption": "CUSTOM",
   "isLoading": false,
   "isSortable": true,
   "isVisible": true,
@@ -152,46 +144,6 @@
   "parentId": "mjt4lnkxih",
   "parentRowSpace": 10,
   "primaryColumns": {
-    "EditActions1": {
-      "alias": "EditActions1",
-      "allowCellWrapping": false,
-      "allowSameOptionsInNewRow": true,
-      "buttonStyle": "rgb(3, 179, 101)",
-      "columnType": "editActions",
-      "computedValue": "",
-      "currencyCode": "USD",
-      "decimals": 0,
-      "discardActionLabel": "Discard",
-      "discardBorderRadius": "{{tblGroPrint.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
-      "discardButtonColor": "#F22B2B",
-      "discardButtonVariant": "TERTIARY",
-      "discardIconAlign": "left",
-      "enableFilter": true,
-      "enableSort": true,
-      "id": "EditActions1",
-      "index": 10,
-      "isCellEditable": false,
-      "isCellVisible": true,
-      "isDerived": true,
-      "isDisabled": false,
-      "isDiscardDisabled": "{{tblGroPrint.processedTableData.map((currentRow, currentIndex) => ( !tblGroPrint.updatedRowIndices.includes(currentIndex)))}}",
-      "isDiscardVisible": true,
-      "isEditable": false,
-      "isSaveDisabled": "{{tblGroPrint.processedTableData.map((currentRow, currentIndex) => ( !tblGroPrint.updatedRowIndices.includes(currentIndex)))}}",
-      "isSaveVisible": true,
-      "isVisible": false,
-      "label": "Save / Discard",
-      "notation": "standard",
-      "originalId": "EditActions1",
-      "saveActionLabel": "Save",
-      "saveBorderRadius": "{{tblGroPrint.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
-      "saveButtonColor": "{{tblGroPrint.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.colors.primaryColor)))}}",
-      "saveIconAlign": "left",
-      "sticky": "right",
-      "thousandSeparator": true,
-      "validation": {},
-      "width": 150
-    },
     "buy_qty": {
       "alias": "buy_qty",
       "allowCellWrapping": false,
@@ -252,6 +204,40 @@
       "label": "Unit",
       "notation": "standard",
       "originalId": "buy_unit",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "category_name": {
+      "alias": "category_name",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblGroPrint.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"category_name\"])) : category_name })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "category_name",
+      "index": 3,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Category",
+      "notation": "standard",
+      "originalId": "category_name",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
@@ -456,6 +442,40 @@
       "label": "Packs",
       "notation": "standard",
       "originalId": "packs_to_order",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "print_sort_no": {
+      "alias": "print_sort_no",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblGroPrint.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"print_sort_no\"])) : print_sort_no })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "print_sort_no",
+      "index": 11,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "print_sort_no",
+      "notation": "standard",
+      "originalId": "print_sort_no",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",

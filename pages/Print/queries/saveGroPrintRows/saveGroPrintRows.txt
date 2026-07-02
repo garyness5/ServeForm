@@ -1,0 +1,7 @@
+select *
+from public.save_gro_print_rows(
+  '{{ appsmith.store.current_client_id }}'::uuid,
+  1,
+  '{{ JSON.stringify(groPrintTable.rowsForSave()).replaceAll("'", "''") }}'::jsonb,
+  {{ JSON.stringify(rteGroPrint.text || "") }}
+);

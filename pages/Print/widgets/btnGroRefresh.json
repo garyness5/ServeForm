@@ -12,9 +12,6 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
@@ -32,7 +29,7 @@
   ],
   "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ !evtListActions.hasSelection() }}",
+  "isDisabled": "",
   "isLoading": false,
   "isVisible": true,
   "key": "o01hoigeqy",
@@ -43,7 +40,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ evtListActions.openSelectedEvent() }}",
+  "onClick": "{{\n  sendGroOrderToPrint.run()\n    .then(() => getGroPrint.run())\n    .then(() => resetWidget(\"tblGroPrint\", true))\n    .then(() => showAlert(\"Print refreshed.\", \"success\"))\n}}",
   "parentColumnSpace": 10.609375,
   "parentId": "0",
   "parentRowSpace": 10,
@@ -53,11 +50,11 @@
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
   "rightColumn": 18,
-  "text": "Update All",
+  "text": "Refresh",
   "tooltip": "Edit selected dish",
   "topRow": 1,
   "type": "BUTTON_WIDGET",
   "version": 1,
   "widgetId": "lxs3e4vx0r",
-  "widgetName": "btnUpdateAll"
+  "widgetName": "btnGroRefresh"
 }
