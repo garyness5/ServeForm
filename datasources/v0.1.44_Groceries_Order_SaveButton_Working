@@ -1,0 +1,27 @@
+v0.1.44_Groceries_Order_SaveButton_Working
+
+Groceries / Order
+
+- Rebuilt tblGroOrder after prior table corruption/state issues
+- Restored Order table row display
+- Confirmed Order aggregation data loads correctly from gro_order
+- Added Save Order workflow
+- Added public.save_gro_order_rows bulk-save function
+- Changed Order editing direction from per-cell immediate save to manual Save Order button
+- Confirmed Buy Qty saves and persists
+- Confirmed Packs To Order saves and persists
+- Confirmed Supplier saves, changes, clears to blank, and persists
+- Confirmed Packaging saves, changes, clears to blank, and persists
+- Confirmed editable numeric fields should use raw currentRow values, not fmt.number()
+- Confirmed display-only numeric fields may continue using fmt.number()
+- Confirmed Order Notes are not needed for now; final purchasing notes should likely belong on Print page
+- Identified Buy Unit as remaining blocker
+- Buy Unit currently does not save/display correctly after changing unit
+- Debug showed Appsmith sending selected unit through buy_unit instead of buy_unit_id
+- Updated save_gro_order_rows with fallback for buy_unit_id / buy_unit, but issue remains unresolved
+
+Next
+
+- Fresh-eye review of tblGroOrder Buy Unit only
+- Validate Save Order preservation with Update All
+- Build Print page after Order is stable
