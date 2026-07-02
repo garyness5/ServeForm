@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_54e54591-7e73-4cec-8646-17b3684a2729",
-  "id": "Order_updGroOrderBuyQty",
+  "gitSyncId": "6a0a1bde3214f344228346e7_cc761e77-bd5f-458c-a8f7-c94e7ff0399b",
+  "id": "Order_saveGroOrderRows",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "update public.gro_order\nset\n  buy_qty = {{ appsmith.store.current_gro_order_buy_qty === \"\" || appsmith.store.current_gro_order_buy_qty == null ? null : Number(appsmith.store.current_gro_order_buy_qty) }},\n  updated_at = now()\nwhere id = {{ Number(appsmith.store.current_gro_order_id || 0) }}\n  and client_id = '{{ appsmith.store.current_client_id }}'::uuid\nreturning id, buy_qty;",
+      "body": "select *\nfrom public.save_gro_order_rows(\n  '{{ appsmith.store.current_client_id }}'::uuid,\n  1,\n  '{{ JSON.stringify(tblGroOrder.updatedRows || []).replaceAll(\"'\", \"''\") }}'::jsonb\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,7 +27,7 @@
         "key": "body"
       }
     ],
-    "name": "updGroOrderBuyQty",
+    "name": "saveGroOrderRows",
     "pageId": "Order",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

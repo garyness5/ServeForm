@@ -39,10 +39,10 @@
     "required_unit",
     "buy_qty",
     "buy_unit",
-    "ingredient_code",
     "to_order",
     "purchased",
     "supplier_id",
+    "ingredient_code",
     "packs_to_order",
     "packaging_id",
     "notes",
@@ -53,7 +53,7 @@
     "required_unit_id",
     "buy_unit_id"
   ],
-  "columnUpdatedAt": 1782940716482,
+  "columnUpdatedAt": 1782944352486,
   "columnWidthMap": {
     "buy_qty": 133,
     "buy_unit": 95,
@@ -160,25 +160,7 @@
       "key": "tableData"
     },
     {
-      "key": "primaryColumns.to_order.onCheckChange"
-    },
-    {
-      "key": "primaryColumns.purchased.onCheckChange"
-    },
-    {
-      "key": "primaryColumns.buy_qty.onSubmit"
-    },
-    {
-      "key": "primaryColumns.packs_to_order.onSubmit"
-    },
-    {
       "key": "primaryColumns.supplier_name.onOptionChange"
-    },
-    {
-      "key": "primaryColumns.supplier_id.onOptionChange"
-    },
-    {
-      "key": "primaryColumns.packaging_id.onOptionChange"
     }
   ],
   "dynamicTriggerPathList": [
@@ -202,6 +184,9 @@
     },
     {
       "key": "primaryColumns.packaging_id.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.buy_unit.onOptionChange"
     }
   ],
   "enableClientSideSearch": true,
@@ -252,7 +237,7 @@
       "isVisible": true,
       "label": "Buy Qty",
       "notation": "standard",
-      "onSubmit": "{{\n  storeValue(\"current_gro_order_id\", tblGroOrder.updatedRow.id)\n    .then(() => storeValue(\"current_gro_order_buy_qty\", tblGroOrder.updatedRow.buy_qty))\n    .then(() => updGroOrderBuyQty.run())\n    .then(() => getGroOrder.run())\n    .then(() => resetWidget(\"tblGroOrder\", true))\n}}",
+      "onSubmit": "",
       "originalId": "buy_qty",
       "sticky": "",
       "textSize": "0.875rem",
@@ -266,7 +251,7 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "columnType": "select",
-      "computedValue": "{{(() => { const tableData = tblGroOrder.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.buy_unit_id )) :  currentRow.buy_unit_id  })()}}",
+      "computedValue": "{{(() => { const tableData = tblGroOrder.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.buy_unit_id == null ? null : Number(currentRow.buy_unit_id) )) :  currentRow.buy_unit_id == null ? null : Number(currentRow.buy_unit_id)  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -284,8 +269,9 @@
       "isVisible": true,
       "label": "Unit",
       "notation": "standard",
+      "onOptionChange": "",
       "originalId": "buy_unit",
-      "selectOptions": "{{(() => { const tableData = tblGroOrder.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( (getUnits.data || []).map(u => ({\n  label: u.abbreviation,\n  value: u.id\n})) )) :  (getUnits.data || []).map(u => ({\n  label: u.abbreviation,\n  value: u.id\n}))  })()}}",
+      "selectOptions": "{{(() => { const tableData = tblGroOrder.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  (getUnits.data || [])\n    .filter(u =>\n      u.unit_type === (\n        (getUnits.data || []).find(x => Number(x.id) === Number(currentRow.required_unit_id))?.unit_type\n      )\n    )\n    .map(u => ({\n      label: u.abbreviation,\n      value: Number(u.id)\n    }))\n)) : \n  (getUnits.data || [])\n    .filter(u =>\n      u.unit_type === (\n        (getUnits.data || []).find(x => Number(x.id) === Number(currentRow.required_unit_id))?.unit_type\n      )\n    )\n    .map(u => ({\n      label: u.abbreviation,\n      value: Number(u.id)\n    }))\n })()}}",
       "sticky": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
@@ -564,7 +550,7 @@
       "isVisible": true,
       "label": "Packaging",
       "notation": "standard",
-      "onOptionChange": "{{\n  storeValue(\"current_gro_order_id\", tblGroOrder.updatedRow.id)\n    .then(() => storeValue(\"current_packaging_id\", tblGroOrder.updatedRow.packaging_id))\n    .then(() => updGroOrderPackaging.run())\n    .then(() => getGroOrder.run())\n    .then(() => resetWidget(\"tblGroOrder\", true))\n}}",
+      "onOptionChange": "",
       "originalId": "packaging_id",
       "selectOptions": "{{(() => { const tableData = tblGroOrder.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( [\n  { label: \"\", value: \"\" },\n  ...(getPackaging.data || []).map(p => ({\n    label: p.name,\n    value: String(p.id)\n  }))\n] )) :  [\n  { label: \"\", value: \"\" },\n  ...(getPackaging.data || []).map(p => ({\n    label: p.name,\n    value: String(p.id)\n  }))\n]  })()}}",
       "sticky": "",
@@ -630,7 +616,7 @@
       "isVisible": true,
       "label": "Packs",
       "notation": "standard",
-      "onSubmit": "{{\n  storeValue(\"current_gro_order_id\", tblGroOrder.updatedRow.id)\n    .then(() => storeValue(\"current_packs_to_order\", tblGroOrder.updatedRow.packs_to_order))\n    .then(() => updGroOrderPacksToOrder.run())\n    .then(() => getGroOrder.run())\n    .then(() => resetWidget(\"tblGroOrder\", true))\n}}",
+      "onSubmit": "",
       "originalId": "packs_to_order",
       "sticky": "",
       "textSize": "0.875rem",
@@ -662,7 +648,7 @@
       "isVisible": true,
       "label": "Purchased",
       "notation": "standard",
-      "onCheckChange": "{{\n  storeValue(\"current_gro_order_id\", currentRow.id)\n    .then(() => toggleGroOrderPurchased.run())\n    .then(() => getGroOrder.run())\n}}",
+      "onCheckChange": "",
       "originalId": "purchased",
       "sticky": "",
       "textSize": "0.875rem",
@@ -787,7 +773,7 @@
       "isVisible": true,
       "label": "Supplier",
       "notation": "standard",
-      "onOptionChange": "{{\n  storeValue(\"current_gro_order_id\", tblGroOrder.updatedRow.id)\n    .then(() => storeValue(\"current_supplier_id\", tblGroOrder.updatedRow.supplier_id))\n    .then(() => updGroOrderSupplier.run())\n    .then(() => getGroOrder.run())\n    .then(() => resetWidget(\"tblGroOrder\", true))\n}}",
+      "onOptionChange": "",
       "originalId": "supplier_id",
       "selectOptions": "{{(() => { const tableData = tblGroOrder.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( [\n  { label: \"\", value: \"\" },\n  ...(getSuppliers.data || []).map(s => ({\n    label: s.name,\n    value: String(s.id)\n  }))\n] )) :  [\n  { label: \"\", value: \"\" },\n  ...(getSuppliers.data || []).map(s => ({\n    label: s.name,\n    value: String(s.id)\n  }))\n]  })()}}",
       "sticky": "",
@@ -801,7 +787,7 @@
       "alias": "supplier_name",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
-      "columnType": "select",
+      "columnType": "text",
       "computedValue": "{{(() => { const tableData = tblGroOrder.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.supplier_name )) :  currentRow.supplier_name  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
@@ -853,7 +839,7 @@
       "isVisible": true,
       "label": "To Order",
       "notation": "standard",
-      "onCheckChange": "{{\n  storeValue(\"current_gro_order_id\", currentRow.id)\n    .then(() => toggleGroOrderToOrder.run())\n    .then(() => getGroOrder.run())\n}}",
+      "onCheckChange": "",
       "originalId": "to_order",
       "sticky": "",
       "textSize": "0.875rem",
