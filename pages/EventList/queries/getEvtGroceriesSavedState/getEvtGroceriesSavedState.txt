@@ -1,0 +1,9 @@
+select
+  id,
+  name,
+  status,
+  active
+from public.evt_items
+where id = {{ Number(appsmith.store.pending_evt_id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false;

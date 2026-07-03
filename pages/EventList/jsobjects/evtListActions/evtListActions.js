@@ -74,45 +74,50 @@ export default {
 	},
 	
 	async syncGroceriesEligibilityFromList() {
-		const oldRow = tblEvtList.triggeredRow || {};
-		const newRow = tblEvtList.updatedRow || {};
+		const row = tblEvtList.updatedRow || tblEvtList.triggeredRow || {};
+		const eventId = Number(row.id || 0);
 
-		const eventId = Number(newRow.id || oldRow.id || 0);
+		if (!eventId) {
+			showAlert("Event could not be identified.", "error");
+			await getEvtList.run();
+			await resetWidget("tblEvtList", true);
+			return false;
+		}
 
-		const oldStatus = oldRow.status || "Draft";
-		const newStatus = newRow.status || oldRow.status || "Draft";
-
-		const oldActive = oldRow.active === false ? false : true;
-		const newActive =
-			Object.prototype.hasOwnProperty.call(newRow, "active")
-				? newRow.active !== false
-				: oldActive;
+		const newStatus = row.status || "Draft";
+		const newActive = row.active === false ? false : true;
 
 		await storeValue("pending_evt_id", eventId);
-		await storeValue("pending_evt_name", newRow.name || oldRow.name || "this Event");
 		await storeValue("pending_evt_status", newStatus);
 		await storeValue("pending_evt_active", newActive);
+
+		await getEvtGroceriesSavedState.run();
+
+		const old = getEvtGroceriesSavedState.data?.[0] || {};
+		const oldStatus = old.status || "Draft";
+		const oldActive = old.active === false ? false : true;
+
+		await storeValue("pending_evt_name", old.name || row.name || "this Event");
 
 		const oldEligible = oldStatus === "Ordered" && oldActive === true;
 		const newEligible = newStatus === "Ordered" && newActive === true;
 
-		// Going TO Groceries
 		if (!oldEligible && newEligible) {
 			await updEvtListPendingInline.run();
 			await syncEvtGroceriesEligibility.run();
 			await getEvtList.run();
+			await resetWidget("tblEvtList", true);
 			showAlert("Event added to Groceries.", "success");
 			return true;
 		}
 
-		// Staying eligible or staying ineligible — just save Status/Active
 		if (oldEligible === newEligible) {
 			await updEvtListPendingInline.run();
 			await getEvtList.run();
+			await resetWidget("tblEvtList", true);
 			return true;
 		}
 
-		// Going FROM Groceries
 		await checkEvtGroceriesManualImpact.run();
 
 		const hasManual =
