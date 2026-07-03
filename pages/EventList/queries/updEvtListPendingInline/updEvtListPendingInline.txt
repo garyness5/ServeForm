@@ -1,0 +1,9 @@
+update public.evt_items
+set
+  status = '{{ appsmith.store.pending_evt_status }}',
+  active = {{ appsmith.store.pending_evt_active === false ? false : true }},
+  updated_at = now()
+where id = {{ Number(appsmith.store.pending_evt_id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+returning id, status, active;

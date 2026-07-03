@@ -71,5 +71,91 @@ export default {
 
 		showAlert("Event deleted.", "success");
 		return true;
+	},
+	
+	async syncGroceriesEligibilityFromList() {
+		const oldRow = tblEvtList.triggeredRow || {};
+		const newRow = tblEvtList.updatedRow || {};
+
+		const eventId = Number(newRow.id || oldRow.id || 0);
+
+		const oldStatus = oldRow.status || "Draft";
+		const newStatus = newRow.status || oldRow.status || "Draft";
+
+		const oldActive = oldRow.active === false ? false : true;
+		const newActive =
+			Object.prototype.hasOwnProperty.call(newRow, "active")
+				? newRow.active !== false
+				: oldActive;
+
+		await storeValue("pending_evt_id", eventId);
+		await storeValue("pending_evt_name", newRow.name || oldRow.name || "this Event");
+		await storeValue("pending_evt_status", newStatus);
+		await storeValue("pending_evt_active", newActive);
+
+		const oldEligible = oldStatus === "Ordered" && oldActive === true;
+		const newEligible = newStatus === "Ordered" && newActive === true;
+
+		// Going TO Groceries
+		if (!oldEligible && newEligible) {
+			await updEvtListPendingInline.run();
+			await syncEvtGroceriesEligibility.run();
+			await getEvtList.run();
+			showAlert("Event added to Groceries.", "success");
+			return true;
+		}
+
+		// Staying eligible or staying ineligible — just save Status/Active
+		if (oldEligible === newEligible) {
+			await updEvtListPendingInline.run();
+			await getEvtList.run();
+			return true;
+		}
+
+		// Going FROM Groceries
+		await checkEvtGroceriesManualImpact.run();
+
+		const hasManual =
+			checkEvtGroceriesManualImpact.data?.[0]?.has_manual_values === true;
+
+		if (hasManual) {
+			showModal("mdlEvtListRemove");
+			return false;
+		}
+
+		return await this.confirmGroceriesRemoval(true);
+	},
+
+	async cancelGroceriesRemoval() {
+		closeModal("mdlEvtListRemove");
+		await getEvtList.run();
+		await resetWidget("tblEvtList", true);
+		return true;
+	},
+
+	async confirmGroceriesRemoval(keepManual = true) {
+		await updEvtListPendingInline.run();
+		await syncEvtGroceriesEligibility.run();
+
+		await refreshGroDetails.run();
+		await refreshGroOrder.run();
+
+		if (!keepManual) {
+			await clearGroOrderManualValues.run();
+		}
+
+		await clearGroPrint.run();
+		await getEvtList.run();
+
+		closeModal("mdlEvtListRemove");
+
+		showAlert(
+			keepManual
+				? "Event removed from Groceries. Quantities kept. Print cleared."
+				: "Event removed from Groceries. Quantities deleted. Print cleared.",
+			"success"
+		);
+
+		return true;
 	}
 }

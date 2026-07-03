@@ -81,14 +81,15 @@ export default {
 	async updateAll() {
 		await refreshGroDetails.run();
 		await refreshGroOrder.run();
-		await getGroOrder.run();
+		await clearGroPrint.run();
 
+		await getGroOrder.run();
 		await storeValue("gro_order_local_rows", getGroOrder.data);
 
 		await resetWidget("tblGroOrder", true);
 		await tblGroOrder.setData(getGroOrder.data);
 
-		showAlert("Order updated.", "success");
+		showAlert("Update complete. Print list cleared.", "success");
 		return true;
 	},
 	

@@ -1,0 +1,5 @@
+select public.add_event_to_groceries(
+  '{{ appsmith.store.current_client_id }}'::uuid,
+  {{ Number(tblEvtList.triggeredRow.id || 0) }},
+  1
+);

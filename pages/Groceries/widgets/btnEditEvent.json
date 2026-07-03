@@ -37,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{\n  groActions.updateAll()\n    .then(() => getGroEvents.run())\n    .then(() => showAlert(\"Groceries group updated.\", \"success\"))\n}}",
+  "onClick": "{{\n  refreshGroDetails.run()\n    .then(() => refreshGroOrder.run())\n    .then(() => clearGroPrint.run())\n    .then(() => getGroEvents.run())\n    .then(() => showAlert(\"Update complete. Print list cleared.\", \"success\"))\n}}",
   "parentColumnSpace": 10.609375,
   "parentId": "0",
   "parentRowSpace": 10,

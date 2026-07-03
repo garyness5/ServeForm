@@ -122,7 +122,7 @@ export default {
 			line_no: index + 1,
 			menu_id: Number(r.menu_id || 0) || null,
 			guests: r.guests === "" || r.guests == null ? null : Number(r.guests),
-			extra_percent: r.extra_percent === "" || r.extra_percent == null ? 0 : Number(r.extra_percent),
+			extra_guests: r.extra_guests === "" || r.extra_guests == null ? 0 : Number(r.extra_guests),
 			active: r.active === false ? false : true
 		}));
 	},
@@ -311,7 +311,9 @@ export default {
 			headerCurrent: this.headerSnapshotFromPage(),
 			headerSaved: this.headerSnapshotFromSaved(),
 			dietTagsCurrent: this.dietTagSnapshotFromPage(),
-			dietTagsSaved: this.dietTagSnapshotFromSaved()
+			dietTagsSaved: this.dietTagSnapshotFromSaved(),
+			componentCurrent: this.componentSnapshotFromPage(),
+			componentSaved: this.componentSnapshotFromSaved()
 		};
 	}
 }

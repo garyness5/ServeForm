@@ -61,7 +61,7 @@
     "customer_name": 106,
     "diet_tag_names": 181,
     "event_date": 203,
-    "event_ref": 115,
+    "event_ref": 94,
     "extra_percent": 90,
     "format": 104,
     "id": 78,
@@ -170,11 +170,17 @@
     },
     {
       "key": "primaryColumns.event_date.outputFormat"
+    },
+    {
+      "key": "primaryColumns.active.onCheckChange"
     }
   ],
   "dynamicTriggerPathList": [
     {
       "key": "primaryColumns.status.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.active.onCheckChange"
     }
   ],
   "enableClientSideSearch": true,
@@ -232,6 +238,7 @@
       "isVisible": true,
       "label": "Active",
       "notation": "standard",
+      "onCheckChange": "{{ evtListActions.syncGroceriesEligibilityFromList() }}",
       "originalId": "active",
       "sticky": "",
       "textSize": "0.875rem",
@@ -603,7 +610,7 @@
       "isVisible": true,
       "label": "Status",
       "notation": "standard",
-      "onOptionChange": "{{\n  updEvtListInline.run()\n    .then(() => getEvtList.run())\n}}",
+      "onOptionChange": "{{ evtListActions.syncGroceriesEligibilityFromList() }}",
       "originalId": "status",
       "selectOptions": "[\n  { \"label\": \"Draft\", \"value\": \"Draft\" },\n  { \"label\": \"Sent\", \"value\": \"Sent\" },\n  { \"label\": \"Accepted\", \"value\": \"Accepted\" },\n  { \"label\": \"Ordered\", \"value\": \"Ordered\" },\n  { \"label\": \"Closed\", \"value\": \"Closed\" },\n  { \"label\": \"Cancelled\", \"value\": \"Cancelled\" }\n]",
       "sticky": "",

@@ -19,7 +19,7 @@ export default {
 			menu_name: null,
 
 			guests: null,
-			extra_percent: null,
+			extra_guests: null,
 			active: true,
 
 			menu_cost: null,
@@ -40,7 +40,7 @@ export default {
 				row.menu_id ||
 				row.menu_name ||
 				row.guests ||
-				row.extra_percent
+				row.extra_guests
 			)
 		);
 	},
@@ -61,7 +61,7 @@ export default {
 			line_no: lineNo,
 
 			active: row?.active === false ? false : true,
-			extra_percent: row?.extra_percent == null || row?.extra_percent === "" ? 0 : Number(row.extra_percent)
+			extra_guests: row?.extra_guests == null || row?.extra_guests === "" ? 0 : Number(row.extra_guests)
 		};
 	},
 
@@ -273,7 +273,7 @@ export default {
 					line_no: index + 1,
 					menu_id: Number(r.menu_id || item?.id || 0) || null,
 					guests: r.guests === "" || r.guests == null ? null : Number(r.guests),
-					extra_percent: r.extra_percent === "" || r.extra_percent == null ? 0 : Number(r.extra_percent),
+					extra_guests: r.extra_guests === "" || r.extra_guests == null ? 0 : Number(r.extra_guests),
 					active: r.active === false ? false : true
 				};
 			});
@@ -297,7 +297,7 @@ export default {
 
 		const menuCost = Number(item.cost_per_unit ?? item.total_cost ?? 0);
 		const guests = Number(row.guests || 0);
-		const extra = Number(row.extra_percent || 0);
+		const extra = Number(row.extra_guests || 0);
 
 		const cost = (guests + extra) * menuCost;
 
@@ -326,7 +326,7 @@ export default {
 			if (row.active === false) return sum;
 
 			const guests = Number(row.guests || 0);
-			const extra = Number(row.extra_percent || 0);
+			const extra = Number(row.extra_guests || 0);
 
 			return sum + guests + extra;
 		}, 0);

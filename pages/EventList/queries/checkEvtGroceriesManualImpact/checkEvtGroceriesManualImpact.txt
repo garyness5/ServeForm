@@ -1,0 +1,11 @@
+select
+  exists (
+    select 1
+    from public.gro_order
+    where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+      and batch_id = 1
+      and (
+        buy_qty is not null
+        or packs_to_order is not null
+      )
+  ) as has_manual_values;
