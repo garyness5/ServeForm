@@ -36,7 +36,7 @@
   "mobileRightColumn": 64,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onClick": "{{ evtListActions.cancelGroceriesRemoval() }}",
+  "onClick": "{{ evtSave.cancelGroceriesRemovalSave() }}",
   "parentId": "1hdbugvmom",
   "renderMode": "CANVAS",
   "responsiveBehavior": "hug",

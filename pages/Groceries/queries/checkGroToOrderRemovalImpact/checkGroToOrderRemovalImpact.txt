@@ -1,11 +1,5 @@
 select
-  exists (
-    select 1
-    from public.gro_details gd
-    where gd.client_id = '{{ appsmith.store.current_client_id }}'::uuid
-      and gd.batch_id = 1
-      and gd.event_id = {{ Number(appsmith.store.pending_gro_event_id || 0) }}
-  ) as has_generated,
+  count(distinct gd.event_id) as excluded_generated_count,
 
   exists (
     select 1
@@ -20,8 +14,17 @@ select
 
   (
     select count(*)
-    from public.gro_events ge
-    where ge.client_id = '{{ appsmith.store.current_client_id }}'::uuid
-      and ge.batch_id = 1
-      and coalesce(ge.to_order, false) = true
-  ) as participating_count;
+    from public.gro_events ge2
+    where ge2.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+      and ge2.batch_id = 1
+      and coalesce(ge2.to_order, false) = true
+  ) as participating_count
+
+from public.gro_details gd
+join public.gro_events ge
+  on ge.client_id = gd.client_id
+ and ge.batch_id = gd.batch_id
+ and ge.event_id = gd.event_id
+where gd.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and gd.batch_id = 1
+  and coalesce(ge.to_order, false) = false;
