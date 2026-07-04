@@ -1,0 +1,35 @@
+insert into public.gro_events
+(
+  client_id,
+  batch_id,
+  event_id,
+  to_order
+)
+select
+  ei.client_id,
+  1,
+  ei.id,
+  false
+from public.evt_items ei
+where ei.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and ei.status = 'Ordered'
+  and coalesce(ei.active, true) = true
+  and coalesce(ei.deleted, false) = false
+  and not exists (
+    select 1
+    from public.gro_events ge
+    where ge.client_id = ei.client_id
+      and ge.batch_id = 1
+      and ge.event_id = ei.id
+  );
+
+select count(*) as synced_events
+from public.gro_events ge
+join public.evt_items ei
+  on ei.id = ge.event_id
+ and ei.client_id = ge.client_id
+where ge.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and ge.batch_id = 1
+  and ei.status = 'Ordered'
+  and coalesce(ei.active, true) = true
+  and coalesce(ei.deleted, false) = false;

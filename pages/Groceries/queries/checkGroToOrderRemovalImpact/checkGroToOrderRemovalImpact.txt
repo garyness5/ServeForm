@@ -1,0 +1,27 @@
+select
+  exists (
+    select 1
+    from public.gro_details gd
+    where gd.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+      and gd.batch_id = 1
+      and gd.event_id = {{ Number(appsmith.store.pending_gro_event_id || 0) }}
+  ) as has_generated,
+
+  exists (
+    select 1
+    from public.gro_order go
+    where go.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+      and go.batch_id = 1
+      and (
+        go.buy_qty is not null
+        or go.packs_to_order is not null
+      )
+  ) as has_manual_values,
+
+  (
+    select count(*)
+    from public.gro_events ge
+    where ge.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+      and ge.batch_id = 1
+      and coalesce(ge.to_order, false) = true
+  ) as participating_count;

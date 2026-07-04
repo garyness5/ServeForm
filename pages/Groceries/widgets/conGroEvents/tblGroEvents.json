@@ -45,7 +45,7 @@
     "batch_id",
     "gro_event_id"
   ],
-  "columnUpdatedAt": 1782840386833,
+  "columnUpdatedAt": 1783184200788,
   "columnWidthMap": {
     "active": 102,
     "category_id": 118,
@@ -475,7 +475,7 @@
       "isVisible": true,
       "label": "To order",
       "notation": "standard",
-      "onCheckChange": "{{\n  updGroEventToOrder.run()\n    .then(() => getGroEvents.run())\n}}",
+      "onCheckChange": "{{ updGroEventToOrder.run().then(() => getGroEvents.run()) }}",
       "originalId": "to_order",
       "sticky": "",
       "textColor": "",

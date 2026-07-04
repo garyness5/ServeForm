@@ -1,0 +1,20 @@
+update public.gro_events ge
+set
+  to_order = true,
+  updated_at = now()
+where ge.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and ge.batch_id = 1
+  and coalesce(ge.to_order, false) = false
+  and exists (
+    select 1
+    from public.gro_details gd
+    where gd.client_id = ge.client_id
+      and gd.batch_id = ge.batch_id
+      and gd.event_id = ge.event_id
+  );
+
+select count(*) as restored_events
+from public.gro_events ge
+where ge.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and ge.batch_id = 1
+  and coalesce(ge.to_order, false) = true;

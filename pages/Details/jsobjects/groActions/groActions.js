@@ -1,5 +1,6 @@
 export default {
   async updateAll() {
+    await syncEligibleGroEvents.run();
     await refreshGroDetails.run();
     await refreshGroOrder.run();
     await clearGroPrint.run();

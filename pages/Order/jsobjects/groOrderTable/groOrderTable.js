@@ -79,13 +79,12 @@ export default {
 	},
 
 	async updateAll() {
+		await syncEligibleGroEvents.run();
 		await refreshGroDetails.run();
 		await refreshGroOrder.run();
 		await clearGroPrint.run();
 
 		await getGroOrder.run();
-		await storeValue("gro_order_local_rows", getGroOrder.data);
-
 		await resetWidget("tblGroOrder", true);
 		await tblGroOrder.setData(getGroOrder.data);
 
