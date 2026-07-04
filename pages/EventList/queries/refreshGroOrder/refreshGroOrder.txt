@@ -47,8 +47,8 @@ select
   no.required_unit,
 
   eo.buy_qty,
-	coalesce(eo.buy_unit_id, no.required_unit_id) as buy_unit_id,
-	coalesce(eo.buy_unit, no.required_unit) as buy_unit,
+  coalesce(eo.buy_unit_id, no.required_unit_id) as buy_unit_id,
+  coalesce(eo.buy_unit, no.required_unit) as buy_unit,
   coalesce(eo.to_order, true) as to_order,
   coalesce(eo.purchased, false) as purchased,
 

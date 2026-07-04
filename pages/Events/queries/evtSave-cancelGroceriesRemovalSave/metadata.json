@@ -1,17 +1,12 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_9e9622fc-7b54-424a-a2ec-0947760b027b",
-  "id": "Events_evtSave.saveEvent",
+  "gitSyncId": "6a0a1bde3214f344228346e7_768d2422-9185-4275-8ed5-9ed2ec40f338",
+  "id": "Events_evtSave.cancelGroceriesRemovalSave",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
     "actionConfiguration": {
       "encodeParamsToggle": true,
-      "jsArguments": [
-        {
-          "name": "skipGroceriesCheck",
-          "value": "{{false}}"
-        }
-      ],
+      "jsArguments": [],
       "paginationType": "NONE",
       "timeoutInMillisecond": 10000
     },
@@ -27,8 +22,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "evtSave.saveEvent",
-    "name": "saveEvent",
+    "fullyQualifiedName": "evtSave.cancelGroceriesRemovalSave",
+    "name": "cancelGroceriesRemovalSave",
     "pageId": "Events",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

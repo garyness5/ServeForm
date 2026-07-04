@@ -1,0 +1,3 @@
+delete from public.gro_print
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and batch_id = 1;

@@ -906,7 +906,7 @@
   "rightColumn": 64,
   "searchKey": "",
   "showInlineEditingOptionDropdown": true,
-  "tableData": "{{ appsmith.store.gro_order_local_rows || getGroOrder.data }}",
+  "tableData": "{{ getGroOrder.data || [] }}",
   "textSize": "0.875rem",
   "topRow": 0,
   "totalRecordsCount": 0,

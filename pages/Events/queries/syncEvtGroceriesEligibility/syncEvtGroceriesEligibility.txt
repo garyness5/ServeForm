@@ -1,0 +1,6 @@
+select *
+from public.sync_event_groceries_eligibility(
+  '{{ appsmith.store.current_client_id }}'::uuid,
+  {{ Number(appsmith.store.current_event_id || 0) }},
+  1
+);

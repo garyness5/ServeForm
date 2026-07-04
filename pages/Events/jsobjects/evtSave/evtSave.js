@@ -147,10 +147,40 @@ export default {
 		);
 	},
 
-	async saveEvent() {
+	async saveEvent(skipGroceriesCheck = false) {
 		if (!(await this.validateBeforeSave())) return false;
 
 		const isExisting = Number(appsmith.store.current_event_id || 0) > 0;
+
+		const oldHeader = this.headerSnapshotFromSaved();
+		const newHeader = this.headerSnapshotFromPage();
+
+		const oldEligible =
+			oldHeader.status === "Ordered" &&
+			oldHeader.active === true;
+
+		const newEligible =
+			newHeader.status === "Ordered" &&
+			newHeader.active === true;
+
+		if (
+			isExisting &&
+			!skipGroceriesCheck &&
+			oldEligible &&
+			!newEligible
+		) {
+			await checkEvtGroceriesManualImpact.run();
+
+			const hasManual =
+				checkEvtGroceriesManualImpact.data?.[0]?.has_manual_values === true;
+
+			if (hasManual) {
+				await storeValue("pendingEventAction", "groceries_removal_save");
+				showModal("mdlEvtRemoveFromGroceries");
+				return false;
+			}
+		}
+
 		let result = null;
 
 		if (isExisting) {
@@ -164,6 +194,15 @@ export default {
 		}
 
 		await saveEvtComponentsSnapshot.run();
+
+		await syncEvtGroceriesEligibility.run();
+
+		if (isExisting && oldEligible && !newEligible) {
+			await refreshGroDetails.run();
+			await refreshGroOrder.run();
+			await clearGroPrint.run();
+		}
+
 		await getEvtItemById.run();
 		await getEvtComponents.run();
 		await evtCompTable.loadFromQuery();
@@ -302,6 +341,35 @@ export default {
 	async deleteWithoutSaving() {
 		closeModal("mdlEvtUnsavedChanges");
 		showModal("mdlEvtDelete");
+		return true;
+	},
+	
+	async cancelGroceriesRemovalSave() {
+		closeModal("mdlEvtRemoveFromGroceries");
+		await removeValue("pendingEventAction");
+		return true;
+	},
+
+	async confirmGroceriesRemovalSave(keepManual = true) {
+		closeModal("mdlEvtRemoveFromGroceries");
+
+		const saved = await this.saveEvent(true);
+		if (!saved) return false;
+
+		if (!keepManual) {
+			await clearGroOrderManualValues.run();
+			await refreshGroOrder.run();
+		}
+
+		await clearGroPrint.run();
+
+		showAlert(
+			keepManual
+				? "Event saved. Quantities kept. Print cleared."
+				: "Event saved. Quantities deleted. Print cleared.",
+			"success"
+		);
+
 		return true;
 	},
 

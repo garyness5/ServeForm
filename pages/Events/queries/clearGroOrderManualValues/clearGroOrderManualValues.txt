@@ -1,0 +1,7 @@
+update public.gro_order
+set
+  buy_qty = null,
+  packs_to_order = null,
+  updated_at = now()
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and batch_id = 1;
