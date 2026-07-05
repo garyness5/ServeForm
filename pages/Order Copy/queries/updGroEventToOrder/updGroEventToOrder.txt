@@ -1,6 +1,0 @@
-update public.gro_events
-set
-  to_order = {{ tblGroOrder.updatedRow.to_order === true ? true : false }},
-  updated_at = now()
-where id = {{ Number(tblGroOrder.updatedRow.gro_event_id) }}
-returning id, to_order;

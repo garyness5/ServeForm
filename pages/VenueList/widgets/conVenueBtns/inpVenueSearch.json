@@ -3,55 +3,65 @@
   "animateLoading": true,
   "autoFocus": false,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 22,
+  "bottomRow": 6,
   "boxShadow": "none",
-  "defaultText": "{{ getEvtItemById.data?.[0]?.total_guests_manual ?? \"\" }}",
+  "defaultText": "",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "defaultText"
     }
   ],
   "dynamicHeight": "FIXED",
-  "dynamicTriggerPathList": [],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onTextChanged"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onTextChanged"
+    }
+  ],
   "iconAlign": "left",
+  "iconName": "search",
   "inputType": "TEXT",
   "isDisabled": false,
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,
-  "key": "9r3t3azwi8",
-  "label": "Total Guests",
+  "key": "3shkd4vjfo",
+  "label": "",
   "labelAlignment": "left",
   "labelPosition": "Left",
-  "labelStyle": "BOLD",
-  "labelTextSize": "1rem",
-  "labelWidth": "26",
-  "leftColumn": 0,
+  "labelStyle": "",
+  "labelTextSize": "0.875rem",
+  "labelWidth": 5,
+  "leftColumn": 42,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
-  "mobileBottomRow": 18,
-  "mobileLeftColumn": 0,
-  "mobileRightColumn": 19,
-  "mobileTopRow": 11,
+  "mobileBottomRow": 16,
+  "mobileLeftColumn": 29,
+  "mobileRightColumn": 49,
+  "mobileTopRow": 9,
   "needsErrorInfo": false,
-  "parentColumnSpace": 4.09375,
-  "parentId": "o4uwuew4ll",
+  "onTextChanged": "{{ getVenues.run() }}",
+  "parentColumnSpace": 17.625,
+  "parentId": "8i3nf8awq8",
   "parentRowSpace": 10,
+  "placeholderText": "Search venues...",
   "renderMode": "CANVAS",
   "resetOnSubmit": true,
   "responsiveBehavior": "fill",
-  "rightColumn": 60,
+  "rightColumn": 53,
   "showStepArrows": false,
-  "topRow": 18,
+  "tooltip": "",
+  "topRow": 2,
   "type": "INPUT_WIDGET_V2",
   "version": 2,
-  "widgetId": "eq98ouu6ic",
-  "widgetName": "inpTotalGuests"
+  "widgetId": "r1z5brmd6w",
+  "widgetName": "inpVenueSearch"
 }
