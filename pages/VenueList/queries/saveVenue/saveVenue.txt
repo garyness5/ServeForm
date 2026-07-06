@@ -1,0 +1,28 @@
+insert into public.venues
+(
+  client_id,
+  venue_name,
+  venue_name_norm,
+  address,
+  phone,
+  email,
+  contact_name,
+  generic_notes,
+  active,
+  mobile
+)
+values
+(
+  '{{ appsmith.store.current_client_id }}'::uuid,
+  '{{ (inpVenueName.text || "").replaceAll("'", "''") }}',
+  lower(trim('{{ (inpVenueName.text || "").replaceAll("'", "''") }}')),
+  nullif('{{ (inpVenueAddress.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpVenuePhone.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpVenueEmail.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpVenueContact.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpVenueNotes.text || "").replaceAll("'", "''") }}',''),
+  {{ chkVenueActive.isChecked === false ? false : true }},
+  nullif('{{ (inpVenueMobile.text || "").replaceAll("'", "''") }}','')
+);
+
+select 1;

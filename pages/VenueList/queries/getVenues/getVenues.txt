@@ -3,6 +3,7 @@ select
   venue_name,
   address,
   phone,
+  mobile,
   email,
   contact_name,
   generic_notes,

@@ -1,0 +1,6 @@
+update public.customer_contacts
+set
+  active = {{ tblContacts.updatedRow.active === false ? false : true }},
+  updated_at = now()
+where id = {{ Number(tblContacts.updatedRow.id || tblContacts.triggeredRow.id || 0) }}
+returning id, active;

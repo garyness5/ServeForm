@@ -1,0 +1,28 @@
+insert into public.customers
+(
+  client_id,
+  customer_name,
+  company,
+  address,
+  phone,
+  mobile,
+  email,
+  website,
+  notes,
+  active
+)
+values
+(
+  '{{ appsmith.store.current_client_id }}'::uuid,
+  '{{ (inpCustomerName.text || "").replaceAll("'", "''") }}',
+  nullif('{{ (inpCustomerCompany.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpCustomerAddress.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpCustomerPhone.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpCustomerMobile.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpCustomerEmail.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpCustomerWebsite.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpCustomerNotes.text || "").replaceAll("'", "''") }}',''),
+  {{ chkCustomerActive.isChecked === false ? false : true }}
+);
+
+select 1;

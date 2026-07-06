@@ -1,0 +1,33 @@
+select
+  id,
+  customer_name,
+  company,
+  address,
+  phone,
+  mobile,
+  email,
+  website,
+  notes,
+  active
+from public.vw_customers
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+  and (
+    '{{ selCustomerFilter.selectedOptionValue || "active" }}' = 'all'
+    or (
+      '{{ selCustomerFilter.selectedOptionValue || "active" }}' = 'active'
+      and active = true
+    )
+    or (
+      '{{ selCustomerFilter.selectedOptionValue || "active" }}' = 'inactive'
+      and active = false
+    )
+  )
+  and (
+    '{{ (inpCustomerSearch.text || "").trim().replaceAll("'", "''") }}' = ''
+    or customer_name ilike '%' || '{{ (inpCustomerSearch.text || "").trim().replaceAll("'", "''") }}' || '%'
+    or coalesce(company, '') ilike '%' || '{{ (inpCustomerSearch.text || "").trim().replaceAll("'", "''") }}' || '%'
+    or coalesce(address, '') ilike '%' || '{{ (inpCustomerSearch.text || "").trim().replaceAll("'", "''") }}' || '%'
+    or coalesce(email, '') ilike '%' || '{{ (inpCustomerSearch.text || "").trim().replaceAll("'", "''") }}' || '%'
+  )
+order by lower(customer_name);

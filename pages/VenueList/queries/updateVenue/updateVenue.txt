@@ -1,0 +1,16 @@
+update public.venues
+set
+  venue_name = '{{ (inpVenueName.text || "").replaceAll("'", "''") }}',
+  venue_name_norm = lower(trim('{{ (inpVenueName.text || "").replaceAll("'", "''") }}')),
+  address = nullif('{{ (inpVenueAddress.text || "").replaceAll("'", "''") }}',''),
+  phone = nullif('{{ (inpVenuePhone.text || "").replaceAll("'", "''") }}',''),
+  mobile = nullif('{{ (inpVenueMobile.text || "").replaceAll("'", "''") }}',''),
+  email = nullif('{{ (inpVenueEmail.text || "").replaceAll("'", "''") }}',''),
+  contact_name = nullif('{{ (inpVenueContact.text || "").replaceAll("'", "''") }}',''),
+  generic_notes = nullif('{{ (inpVenueNotes.text || "").replaceAll("'", "''") }}',''),
+  active = {{ chkVenueActive.isChecked === false ? false : true }},
+  updated_at = now()
+where id = {{ Number(appsmith.store.current_venue_id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;
+
+select 1;

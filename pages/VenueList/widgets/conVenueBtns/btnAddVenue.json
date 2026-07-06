@@ -37,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ groActions.updateAll() }}",
+  "onClick": "{{\n  storeValue(\"venue_form_mode\", \"add\")\n    .then(() => resetWidget(\"mdlVenue\", true))\n    .then(() => showModal(\"mdlVenue\"))\n}}",
   "parentColumnSpace": 10.609375,
   "parentId": "8i3nf8awq8",
   "parentRowSpace": 10,

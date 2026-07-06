@@ -4,7 +4,7 @@
   "bottomRow": 9,
   "boxShadow": "none",
   "buttonColor": "#231f20",
-  "buttonVariant": "SECONDARY",
+  "buttonVariant": "PRIMARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
     {

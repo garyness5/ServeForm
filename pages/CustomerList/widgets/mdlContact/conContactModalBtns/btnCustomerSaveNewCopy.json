@@ -1,0 +1,59 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 6,
+  "boxShadow": "none",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonStyle": "PRIMARY_BUTTON",
+  "buttonVariant": "PRIMARY",
+  "disabledWhenInvalid": false,
+  "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
+    {
+      "key": "borderRadius"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "isDisabled"
+    },
+    {
+      "key": "onClick"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "isDefaultClickDisabled": true,
+  "isDisabled": "",
+  "isLoading": false,
+  "isVisible": true,
+  "key": "oy0hw5tj7l",
+  "leftColumn": 31,
+  "minWidth": 120,
+  "mobileBottomRow": 22,
+  "mobileLeftColumn": 47,
+  "mobileRightColumn": 63,
+  "mobileTopRow": 18,
+  "needsErrorInfo": false,
+  "onClick": "{{\n  !inpCustomerName.text || !inpCustomerName.text.trim()\n    ? showAlert(\"Customer name is required.\", \"warning\")\n    : (\n        appsmith.store.customer_form_mode === \"edit\"\n          ? updateCustomer.run()\n          : saveCustomer.run()\n      )\n        .then(() => getCustomers.run())\n        .then(() => storeValue(\"customer_form_mode\", \"add\"))\n        .then(() => storeValue(\"current_customer_id\", null))\n        .then(() => resetWidget(\"mdlCustomerCopy\", true))\n        .then(() => showAlert(\"Customer saved. Ready for next customer.\", \"success\"))\n}}",
+  "originalBottomRow": 71,
+  "originalTopRow": 67,
+  "parentId": "cfpmybya7o",
+  "placement": "CENTER",
+  "recaptchaType": "V3",
+  "renderMode": "CANVAS",
+  "resetFormOnClick": false,
+  "responsiveBehavior": "hug",
+  "rightColumn": 46,
+  "text": "Save & New",
+  "topRow": 2,
+  "type": "BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "cw37hx5crj",
+  "widgetName": "btnCustomerSaveNewCopy"
+}

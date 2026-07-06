@@ -1,0 +1,33 @@
+select
+  id,
+  customer_id,
+  customer_name,
+  contact_name,
+  title,
+  phone,
+  mobile,
+  email,
+  notes,
+  active
+from public.vw_customer_contacts
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+  and (
+    '{{ selContactFilter.selectedOptionValue || "active" }}' = 'all'
+    or (
+      '{{ selContactFilter.selectedOptionValue || "active" }}' = 'active'
+      and active = true
+    )
+    or (
+      '{{ selContactFilter.selectedOptionValue || "active" }}' = 'inactive'
+      and active = false
+    )
+  )
+  and (
+    '{{ (inpContactSearch.text || "").trim().replaceAll("'", "''") }}' = ''
+    or contact_name ilike '%' || '{{ (inpContactSearch.text || "").trim().replaceAll("'", "''") }}' || '%'
+    or customer_name ilike '%' || '{{ (inpContactSearch.text || "").trim().replaceAll("'", "''") }}' || '%'
+    or coalesce(title, '') ilike '%' || '{{ (inpContactSearch.text || "").trim().replaceAll("'", "''") }}' || '%'
+    or coalesce(email, '') ilike '%' || '{{ (inpContactSearch.text || "").trim().replaceAll("'", "''") }}' || '%'
+  )
+order by lower(customer_name), lower(contact_name);

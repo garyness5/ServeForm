@@ -37,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ groActions.updateAll() }}",
+  "onClick": "{{\n  !tblVenues.selectedRow?.id\n    ? showAlert(\"Select a venue to edit.\", \"warning\")\n    : storeValue(\"venue_form_mode\", \"edit\")\n        .then(() => storeValue(\"current_venue_id\", tblVenues.selectedRow.id))\n        .then(() => resetWidget(\"mdlVenue\", true))\n        .then(() => showModal(\"mdlVenue\"))\n}}",
   "parentColumnSpace": 10.609375,
   "parentId": "8i3nf8awq8",
   "parentRowSpace": 10,

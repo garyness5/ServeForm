@@ -1,0 +1,16 @@
+update public.customers
+set
+  customer_name = '{{ (inpCustomerName.text || "").replaceAll("'", "''") }}',
+  company = nullif('{{ (inpCustomerCompany.text || "").replaceAll("'", "''") }}',''),
+  address = nullif('{{ (inpCustomerAddress.text || "").replaceAll("'", "''") }}',''),
+  phone = nullif('{{ (inpCustomerPhone.text || "").replaceAll("'", "''") }}',''),
+  mobile = nullif('{{ (inpCustomerMobile.text || "").replaceAll("'", "''") }}',''),
+  email = nullif('{{ (inpCustomerEmail.text || "").replaceAll("'", "''") }}',''),
+  website = nullif('{{ (inpCustomerWebsite.text || "").replaceAll("'", "''") }}',''),
+  notes = nullif('{{ (inpCustomerNotes.text || "").replaceAll("'", "''") }}',''),
+  active = {{ chkCustomerActive.isChecked === false ? false : true }},
+  updated_at = now()
+where id = {{ Number(appsmith.store.current_customer_id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;
+
+select 1;

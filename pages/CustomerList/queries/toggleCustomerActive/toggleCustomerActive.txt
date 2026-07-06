@@ -1,0 +1,7 @@
+update public.customers
+set
+  active = {{ tblCustomers.updatedRow.active === false ? false : true }},
+  updated_at = now()
+where id = {{ Number(tblCustomers.updatedRow.id || tblCustomers.triggeredRow.id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+returning id, active;

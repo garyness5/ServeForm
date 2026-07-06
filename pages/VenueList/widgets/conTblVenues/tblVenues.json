@@ -37,13 +37,14 @@
     "venue_name",
     "address",
     "phone",
+    "mobile",
     "email",
     "contact_name",
     "active",
     "id",
     "generic_notes"
   ],
-  "columnUpdatedAt": 1783216944857,
+  "columnUpdatedAt": 1783265949990,
   "columnWidthMap": {
     "active": 101,
     "address": 208,
@@ -124,6 +125,9 @@
     },
     {
       "key": "primaryColumns.active.computedValue"
+    },
+    {
+      "key": "primaryColumns.mobile.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -132,9 +136,16 @@
     },
     {
       "key": "onRowSelected"
+    },
+    {
+      "key": "primaryColumns.active.onCheckChange"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicTriggerPathList": [
+    {
+      "key": "primaryColumns.active.onCheckChange"
+    }
+  ],
   "enableClientSideSearch": true,
   "endOfData": false,
   "flexVerticalAlignment": "start",
@@ -190,8 +201,9 @@
       "isEditable": true,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "active",
+      "label": "Active",
       "notation": "standard",
+      "onCheckChange": "{{\n  toggleVenueActive.run()\n    .then(() => getVenues.run())\n}}",
       "originalId": "active",
       "sticky": "",
       "textColor": "",
@@ -363,6 +375,40 @@
       "label": "id",
       "notation": "standard",
       "originalId": "id",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "mobile": {
+      "alias": "mobile",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblVenues.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"mobile\"])) : mobile })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "mobile",
+      "index": 8,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Mobile",
+      "notation": "standard",
+      "originalId": "mobile",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",

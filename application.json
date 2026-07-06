@@ -68,6 +68,14 @@
     {
       "id": "VenueList",
       "isDefault": false
+    },
+    {
+      "id": "CustomerList",
+      "isDefault": false
+    },
+    {
+      "id": "ContactList",
+      "isDefault": false
     }
   ],
   "unpublishedAppLayout": {

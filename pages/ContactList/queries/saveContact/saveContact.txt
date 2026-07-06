@@ -1,0 +1,24 @@
+insert into public.customer_contacts
+(
+  customer_id,
+  contact_name,
+  title,
+  phone,
+  mobile,
+  email,
+  notes,
+  active
+)
+values
+(
+  {{ Number(selContactCustomer.selectedOptionValue || 0) }},
+  '{{ (inpContactName.text || "").replaceAll("'", "''") }}',
+  nullif('{{ (inpContactTitle.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpContactPhone.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpContactMobile.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpContactEmail.text || "").replaceAll("'", "''") }}',''),
+  nullif('{{ (inpContactNotes.text || "").replaceAll("'", "''") }}',''),
+  {{ chkContactActive.isChecked === false ? false : true }}
+);
+
+select 1;
