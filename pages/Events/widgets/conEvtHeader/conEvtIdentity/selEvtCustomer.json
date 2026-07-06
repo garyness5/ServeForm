@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 15,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  getEvtItemById.data?.[0]?.customer_id ))(selEvtCustomer.options, selEvtCustomer.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  getEvtItemById.data?.[0]?.customer_id || \"\" ))(selEvtCustomer.options, selEvtCustomer.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -54,7 +54,7 @@
   "mobileRightColumn": 16,
   "mobileTopRow": 14,
   "needsErrorInfo": false,
-  "onOptionChange": "{{\n  storeValue(\"eventCustomerId\", selEvtCustomer.selectedOptionValue);\n  storeValue(\"eventContactId\", null);\n  resetWidget(\"selEvtContact\", true);\n  getEvtContacts.run();\n}}",
+  "onOptionChange": "{{\n  resetWidget(\"selEvtContact\", true)\n    .then(() => getEvtContacts.run())\n}}",
   "optionLabel": "label",
   "optionValue": "value",
   "parentColumnSpace": 6.021484375,
@@ -65,7 +65,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 57,
   "serverSideFiltering": false,
-  "sourceData": "{{ getEvtCustomers.data }}",
+  "sourceData": "{{ getEvtCustomers.data || [] }}",
   "topRow": 8,
   "type": "SELECT_WIDGET",
   "version": 1,

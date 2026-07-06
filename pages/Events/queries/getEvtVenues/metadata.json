@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_b9f6d24a-724c-493e-b0c2-8a0b57c42bd7",
-  "id": "Events_getEvtCustomers",
+  "gitSyncId": "6a0a1bde3214f344228346e7_0109e2cd-1556-4d0f-95bb-56875d1369fa",
+  "id": "Events_getEvtVenues",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  id as value,\n  customer_name as label,\n  company,\n  phone,\n  mobile,\n  email\nfrom public.vw_customers\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and active = true\n  and coalesce(deleted, false) = false\norder by lower(customer_name);",
+      "body": "select\n  id as value,\n  venue_name as label,\n  address,\n  phone,\n  mobile,\n  email,\n  contact_name,\n  generic_notes\nfrom public.vw_venues\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and active = true\n  and coalesce(deleted, false) = false\norder by lower(venue_name);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,9 +27,9 @@
         "key": "body"
       }
     ],
-    "name": "getEvtCustomers",
+    "name": "getEvtVenues",
     "pageId": "Events",
     "runBehaviour": "AUTOMATIC",
-    "userSetOnLoad": false
+    "userSetOnLoad": true
   }
 }

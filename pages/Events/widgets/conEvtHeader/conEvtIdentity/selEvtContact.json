@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 22,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  getEvtItemById.data?.[0]?.contact_id ))(selEvtContact.options, selEvtContact.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  getEvtItemById.data?.[0]?.contact_id || \"\" ))(selEvtContact.options, selEvtContact.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -65,7 +65,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 57,
   "serverSideFiltering": false,
-  "sourceData": "{{ getEvtContacts.data }}",
+  "sourceData": "{{ getEvtContacts.data || [] }}",
   "topRow": 15,
   "type": "SELECT_WIDGET",
   "version": 1,

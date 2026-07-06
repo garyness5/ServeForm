@@ -3,6 +3,7 @@ set
   name = nullif('{{ (evtSave.headerSnapshotFromPage().name || "").replaceAll("'", "''") }}', ''),
   customer_id = {{ evtSave.headerSnapshotFromPage().customer_id ? Number(evtSave.headerSnapshotFromPage().customer_id) : null }},
   contact_id = {{ evtSave.headerSnapshotFromPage().contact_id ? Number(evtSave.headerSnapshotFromPage().contact_id) : null }},
+  venue_id = {{ evtSave.headerSnapshotFromPage().venue_id ? Number(evtSave.headerSnapshotFromPage().venue_id) : null }},
   event_date = {{ evtSave.headerSnapshotFromPage().event_date ? "'" + evtSave.headerSnapshotFromPage().event_date + "'" : null }},
   event_datetime = {{ evtSave.headerSnapshotFromPage().event_datetime ? "'" + evtSave.headerSnapshotFromPage().event_datetime + "'" : null }},
   event_ref = nullif('{{ (evtSave.headerSnapshotFromPage().event_ref || "").replaceAll("'", "''") }}', ''),
@@ -13,5 +14,6 @@ set
   active = {{ evtSave.headerSnapshotFromPage().active ? true : false }},
   updated_at = now()
 where id = {{ Number(appsmith.store.current_event_id || 0) }}
-  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
-returning id, name, event_date, event_datetime, event_ref, total_guests_manual;
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid;
+
+select 1;

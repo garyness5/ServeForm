@@ -2,11 +2,14 @@ select
   id as value,
   contact_name as label,
   customer_id,
-  email,
+  title,
   phone,
+  mobile,
+  email,
   notes
-from public.customer_contacts
-where active = true
-  and deleted = false
-  and customer_id = {{ selEvtCustomer.selectedOptionValue || getEvtItemById.data?.[0]?.customer_id || 0 }}
-order by contact_name;
+from public.vw_customer_contacts
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and active = true
+  and coalesce(deleted, false) = false
+  and customer_id = {{ Number(selEvtCustomer.selectedOptionValue || getEvtItemById.data?.[0]?.customer_id || 0) }}
+order by lower(contact_name);

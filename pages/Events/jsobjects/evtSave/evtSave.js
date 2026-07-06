@@ -21,6 +21,11 @@ export default {
 		if (!String(inpEvtName.text || "").trim()) {
 			return "You need an Event name before you can save.";
 		}
+
+		if (!selEvtCustomer.selectedOptionValue) {
+			return "You need a Customer before you can save this Event.";
+		}
+
 		return null;
 	},
 
@@ -55,6 +60,7 @@ export default {
 
 			customer_id: selEvtCustomer.selectedOptionValue ? Number(selEvtCustomer.selectedOptionValue) : null,
 			contact_id: selEvtContact.selectedOptionValue ? Number(selEvtContact.selectedOptionValue) : null,
+			venue_id: selEvtVenue.selectedOptionValue ? Number(selEvtVenue.selectedOptionValue) : null,
 			event_ref: this.textClean(inpEvtRef.text),
 			total_guests_manual: inpTotalGuests.text ? Number(inpTotalGuests.text) : null,
 			status: selEvtStatus.selectedOptionValue || "Draft",
@@ -76,6 +82,7 @@ export default {
 				event_datetime: null,
 				customer_id: null,
 				contact_id: null,
+				venue_id: null,
 				event_ref: null,
 				total_guests_manual: null,
 				status: "Draft",
@@ -95,6 +102,7 @@ export default {
 				: null,
 			customer_id: r.customer_id ? Number(r.customer_id) : null,
 			contact_id: r.contact_id ? Number(r.contact_id) : null,
+			venue_id: r.venue_id ? Number(r.venue_id) : null,
 			event_ref: this.textClean(r.event_ref),
 			total_guests_manual: r.total_guests_manual == null ? null : Number(r.total_guests_manual),
 			status: r.status || "Draft",
@@ -133,6 +141,7 @@ export default {
 			!h.name &&
 			!h.event_date &&
 			!h.customer_id &&
+			!h.venue_id &&
 			!h.format &&
 			this.dietTagSnapshotFromPage().length === 0;
 	},
@@ -224,6 +233,7 @@ export default {
 		await this.safeReset("datEvtDate");
 		await this.safeReset("selEvtCustomer");
 		await this.safeReset("selEvtContact");
+		await this.safeReset("selEvtVenue");
 		await this.safeReset("chkEvtActive");
 		await this.safeReset("selEvtStatus");
 		await this.safeReset("selEvtFormat");

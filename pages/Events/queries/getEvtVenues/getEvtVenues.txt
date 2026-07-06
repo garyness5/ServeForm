@@ -1,12 +1,14 @@
 select
   id as value,
-  customer_name as label,
-  company,
+  venue_name as label,
+  address,
   phone,
   mobile,
-  email
-from public.vw_customers
+  email,
+  contact_name,
+  generic_notes
+from public.vw_venues
 where client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and active = true
   and coalesce(deleted, false) = false
-order by lower(customer_name);
+order by lower(venue_name);

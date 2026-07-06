@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  id as value,\n  contact_name as label,\n  customer_id,\n  email,\n  phone,\n  notes\nfrom public.customer_contacts\nwhere active = true\n  and deleted = false\n  and customer_id = {{ selEvtCustomer.selectedOptionValue || getEvtItemById.data?.[0]?.customer_id || 0 }}\norder by contact_name;",
+      "body": "select\n  id as value,\n  contact_name as label,\n  customer_id,\n  title,\n  phone,\n  mobile,\n  email,\n  notes\nfrom public.vw_customer_contacts\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and active = true\n  and coalesce(deleted, false) = false\n  and customer_id = {{ Number(selEvtCustomer.selectedOptionValue || getEvtItemById.data?.[0]?.customer_id || 0) }}\norder by lower(contact_name);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
