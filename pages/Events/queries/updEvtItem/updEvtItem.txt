@@ -12,6 +12,12 @@ set
   format = nullif('{{ (evtSave.headerSnapshotFromPage().format || "").replaceAll("'", "''") }}', ''),
   notes = nullif('{{ (evtSave.headerSnapshotFromPage().notes || "").replaceAll("'", "''") }}', ''),
   active = {{ evtSave.headerSnapshotFromPage().active ? true : false }},
+  quotation_revision_no =
+    case
+      when '{{ (evtSave.headerSnapshotFromPage().status || "Draft").replaceAll("'", "''") }}' in ('Sent', 'Ordered')
+        then coalesce(quotation_revision_no, 1) + 1
+      else quotation_revision_no
+    end,
   updated_at = now()
 where id = {{ Number(appsmith.store.current_event_id || 0) }}
   and client_id = '{{ appsmith.store.current_client_id }}'::uuid;
