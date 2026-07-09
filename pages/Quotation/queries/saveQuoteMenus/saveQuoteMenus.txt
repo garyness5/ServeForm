@@ -1,0 +1,5 @@
+select *
+from public.update_quote_menus_bulk(
+  {{ Number(appsmith.store.selectedQuoteEventId || 0) }},
+  '{{ JSON.stringify((tblQuoteMenus.updatedRows || []).map(r => ({ ...r.allFields, ...r.updatedFields }))).replaceAll("'", "''") }}'::jsonb
+);
