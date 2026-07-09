@@ -1,0 +1,4 @@
+select *
+from public.sync_quotation_eligibility(
+  '1315144c-801a-4371-aae4-52f2a78873d1'::uuid
+);

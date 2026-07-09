@@ -1,0 +1,12 @@
+select *
+from public.vw_quo_quotes_for_event
+where event_id = {{ appsmith.store.selectedQuotationEventId }}
+  and client_id = '1315144c-801a-4371-aae4-52f2a78873d1'::uuid
+order by
+  case quote_status
+    when 'Draft' then 1
+    when 'Issued' then 2
+    when 'Accepted' then 3
+    else 4
+  end,
+  created_at desc;

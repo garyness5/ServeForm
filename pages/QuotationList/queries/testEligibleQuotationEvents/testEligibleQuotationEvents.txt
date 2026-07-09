@@ -1,0 +1,11 @@
+select
+  id,
+  name,
+  status,
+  deleted,
+  quotation_revision_no
+from public.evt_items
+where client_id = '{{appsmith.store.client_id}}'::uuid
+  and status in ('Sent', 'Ordered', 'Accepted')
+  and coalesce(deleted, false) = false
+order by event_date desc nulls last, name;

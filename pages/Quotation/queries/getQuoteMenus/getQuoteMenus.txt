@@ -1,0 +1,4 @@
+select *
+from public.vw_quo_menus
+where quote_event_id = {{ appsmith.store.selectedQuoteEventId || 0 }}
+order by line_no;

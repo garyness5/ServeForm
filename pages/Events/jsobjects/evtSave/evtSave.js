@@ -66,7 +66,7 @@ export default {
 			status: selEvtStatus.selectedOptionValue || "Draft",
 			format: selEvtFormat.selectedOptionValue || null,
 			active: chkEvtActive.isChecked === false ? false : true,
-			notes: typeof rteEvtNotes !== "undefined" ? this.textClean(rteEvtNotes.text || rteEvtNotes.value) : null
+			notes: typeof rteEvtNotes !== "undefined" ? this.textClean(rteEvtNotes.text || rteEvtNotes.value || "") : null
 		};
 	},
 

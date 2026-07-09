@@ -1,0 +1,4 @@
+select *
+from public.vw_quo_event_inbox
+where client_id = '1315144c-801a-4371-aae4-52f2a78873d1'::uuid
+order by event_date desc nulls last, event_name;

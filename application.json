@@ -10,18 +10,6 @@
   "icon": "bicycle",
   "pages": [
     {
-      "id": "Ingredients",
-      "isDefault": true
-    },
-    {
-      "id": "RecipeList",
-      "isDefault": false
-    },
-    {
-      "id": "Recipe",
-      "isDefault": false
-    },
-    {
       "id": "DishList",
       "isDefault": false
     },
@@ -43,6 +31,26 @@
     },
     {
       "id": "Events",
+      "isDefault": false
+    },
+    {
+      "id": "QuotationList",
+      "isDefault": false
+    },
+    {
+      "id": "Quotation",
+      "isDefault": false
+    },
+    {
+      "id": "Ingredients",
+      "isDefault": true
+    },
+    {
+      "id": "RecipeList",
+      "isDefault": false
+    },
+    {
+      "id": "Recipe",
       "isDefault": false
     },
     {
