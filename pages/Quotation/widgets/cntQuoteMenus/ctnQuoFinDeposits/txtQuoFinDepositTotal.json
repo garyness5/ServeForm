@@ -1,0 +1,55 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 26,
+  "dynamicBindingPathList": [
+    {
+      "key": "truncateButtonColor"
+    },
+    {
+      "key": "fontFamily"
+    },
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "text"
+    }
+  ],
+  "dynamicHeight": "AUTO_HEIGHT",
+  "dynamicTriggerPathList": [],
+  "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
+  "fontSize": "1rem",
+  "fontStyle": "BOLD",
+  "isLoading": false,
+  "isVisible": true,
+  "key": "4unk980zzv",
+  "leftColumn": 25,
+  "maxDynamicHeight": 9000,
+  "minDynamicHeight": 4,
+  "minWidth": 450,
+  "mobileBottomRow": 25,
+  "mobileLeftColumn": 39,
+  "mobileRightColumn": 55,
+  "mobileTopRow": 21,
+  "needsErrorInfo": false,
+  "originalBottomRow": 26,
+  "originalTopRow": 21,
+  "overflow": "NONE",
+  "parentColumnSpace": 8.5,
+  "parentId": "euupw1phn9",
+  "parentRowSpace": 10,
+  "renderMode": "CANVAS",
+  "responsiveBehavior": "fill",
+  "rightColumn": 50,
+  "shouldTruncate": false,
+  "text": "{{\n  \"Total Received:  \" +\n  fmt.currency(\n    (tblQuoFinDeposits.updatedRows || []).length\n      ? (getEventDeposits.data || []).map(row => {\n          const edit = (tblQuoFinDeposits.updatedRows || [])\n            .find(x => x.allFields?.deposit_id === row.deposit_id);\n\n          return edit\n            ? { ...row, ...edit.allFields, ...edit.updatedFields }\n            : row;\n        }).reduce(\n          (sum, row) => sum + Number(row.amount_received || 0),\n          0\n        )\n      : (getEventDeposits.data || []).reduce(\n          (sum, row) => sum + Number(row.amount_received || 0),\n          0\n        )\n  )\n}}",
+  "textAlign": "RIGHT",
+  "textColor": "#231F20",
+  "topRow": 22,
+  "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "type": "TEXT_WIDGET",
+  "version": 1,
+  "widgetId": "97kr6206uv",
+  "widgetName": "txtQuoFinDepositTotal"
+}

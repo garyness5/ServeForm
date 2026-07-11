@@ -1,55 +1,71 @@
 select *
 from public.update_quote_header(
-  {{ Number(appsmith.store.selectedQuoteEventId || 0) }},
+	{{ Number(appsmith.store.selectedQuoteEventId || 0) }}::bigint,
 
-  nullif(
-    '{{ (inpQuoteReference.text || "").replaceAll("'", "''") }}',
-    ''
-  ),
+	nullif(
+		{{ (inpQuoteReference.text || "").trim() }},
+		''
+	)::text,
 
-  {{
-    dateQuoteValidUntil.selectedDate
-      ? "'" + moment(dateQuoteValidUntil.selectedDate).format("YYYY-MM-DD") + "'"
-      : null
-  }},
+	{{
+	dateQuoteValidUntil.selectedDate
+	? moment(dateQuoteValidUntil.selectedDate).format("YYYY-MM-DD")
+	: null
+	}}::date,
 
-  '{{ selPricingMode.selectedOptionValue || "per_menu" }}',
+	{{ selPricingMode.selectedOptionValue || "per_menu" }}::text,
 
-  {{
-    inpEventPriceTotal.text
-      ? Number(inpEventPriceTotal.text)
-      : null
-  }},
+	{{
+	inpEventPriceTotal.text !== "" &&
+	inpEventPriceTotal.text !== null &&
+	inpEventPriceTotal.text !== undefined
+	? Number(inpEventPriceTotal.text)
+	: null
+	}}::numeric,
 
-  {{
-    inpServiceCharge.text
-      ? Number(inpServiceCharge.text)
-      : null
-  }},
+	{{
+	inpServiceCharge.text !== "" &&
+	inpServiceCharge.text !== null &&
+	inpServiceCharge.text !== undefined
+	? Number(inpServiceCharge.text)
+	: null
+	}}::numeric,
 
-  {{
-    dateFinalDueDate.selectedDate
-      ? "'" + moment(dateFinalDueDate.selectedDate).format("YYYY-MM-DD") + "'"
-      : null
-  }},
+	{{
+	dateFinalDueDate.selectedDate
+	? moment(dateFinalDueDate.selectedDate).format("YYYY-MM-DD")
+	: null
+	}}::date,
 
-  nullif(
-    '{{ (rteQuoteCustomerNotes.text || rteQuoteCustomerNotes.value || "").replaceAll("'", "''") }}',
-    ''
-  ),
+	nullif(
+		{{
+		rteQuoteCustomerNotes.text ||
+		rteQuoteCustomerNotes.value ||
+		""
+		}},
+		''
+	)::text,
 
-  nullif(
-    '{{ (rteQuoteInternalNotes.text || rteQuoteInternalNotes.value || "").replaceAll("'", "''") }}',
-    ''
-  ),
+	nullif(
+		{{
+		rteQuoteInternalNotes.text ||
+		rteQuoteInternalNotes.value ||
+		""
+		}},
+		''
+	)::text,
 
-  nullif(
-    '{{ (rteQuoteTerms.text || rteQuoteTerms.value || "").replaceAll("'", "''") }}',
-    ''
-  ),
+	nullif(
+		{{
+		rteQuoteTerms.text ||
+		rteQuoteTerms.value ||
+		""
+		}},
+		''
+	)::text,
 
-  nullif(
-    '{{ (inpQuoVnuInstructions.text || "").replaceAll("'", "''") }}',
-    ''
-  )
+	nullif(
+		{{ inpQuoVnuInstructions.text || "" }},
+		''
+	)::text
 );

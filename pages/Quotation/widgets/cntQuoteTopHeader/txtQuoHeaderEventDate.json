@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 36,
   "shouldTruncate": false,
-  "text": "{{ getQuotationEventInboxRow.data?.[0]?.event_date || \"\" }}",
+  "text": "{{  \"Event Date:  \" + getQuotationEventInboxRow.data?.[0]?.event_date || \"\" }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 4,

@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 12,
+  "bottomRow": 61,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -11,9 +11,6 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -23,31 +20,33 @@
   "fontStyle": "BOLD",
   "isLoading": false,
   "isVisible": true,
-  "key": "8806ao0lov",
-  "leftColumn": 20,
+  "key": "l2aqhe34n6",
+  "leftColumn": 3,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
-  "mobileBottomRow": 12,
-  "mobileLeftColumn": 24,
-  "mobileRightColumn": 40,
-  "mobileTopRow": 8,
+  "mobileBottomRow": 69,
+  "mobileLeftColumn": 3,
+  "mobileRightColumn": 19,
+  "mobileTopRow": 65,
   "needsErrorInfo": false,
+  "originalBottomRow": 61,
+  "originalTopRow": 57,
   "overflow": "NONE",
-  "parentColumnSpace": 17.625,
-  "parentId": "humsgwov1c",
+  "parentColumnSpace": 17.9375,
+  "parentId": "0",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 36,
+  "rightColumn": 40,
   "shouldTruncate": false,
-  "text": "{{ \"Total # of Guests:   \" + (getQuotationEventInboxRow.data?.[0]?.total_guests || 0) + \" guests\" }}",
+  "text": "Event Information",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 8,
+  "topRow": 57,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "sc2al3ypsa",
-  "widgetName": "txtQuoHeaderGuests"
+  "widgetId": "2f8ixky9qo",
+  "widgetName": "txtEventInfo"
 }
