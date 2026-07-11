@@ -32,7 +32,7 @@
   ],
   "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\n  !appsmith.store.selectedQuoteEventId ||\n  (getSelectedQuote.data?.[0]?.quote_status || \"\") !== \"Draft\"\n}}",
+  "isDisabled": "{{\n  !appsmith.store.selectedQuoteEventId ||\n  (getSelectedQuote.data?.[0]?.quote_status || \"\") !== \"Draft\" ||\n  !quoPage.isDirty()\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "o01hoigeqy",

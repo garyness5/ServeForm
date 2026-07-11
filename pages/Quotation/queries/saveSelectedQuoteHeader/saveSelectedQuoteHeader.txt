@@ -1,13 +1,55 @@
 select *
 from public.update_quote_header(
   {{ Number(appsmith.store.selectedQuoteEventId || 0) }},
-  nullif('{{ (inpQuoteReference.text || "").replaceAll("'", "''") }}', ''),
-  {{ dateQuoteValidUntil.selectedDate ? "'" + moment(dateQuoteValidUntil.selectedDate).format("YYYY-MM-DD") + "'" : null }},
+
+  nullif(
+    '{{ (inpQuoteReference.text || "").replaceAll("'", "''") }}',
+    ''
+  ),
+
+  {{
+    dateQuoteValidUntil.selectedDate
+      ? "'" + moment(dateQuoteValidUntil.selectedDate).format("YYYY-MM-DD") + "'"
+      : null
+  }},
+
   '{{ selPricingMode.selectedOptionValue || "per_menu" }}',
-  {{ inpEventPriceTotal.text ? Number(inpEventPriceTotal.text) : null }},
-  {{ inpServiceCharge.text ? Number(inpServiceCharge.text) : null }},
-  {{ dateFinalDueDate.selectedDate ? "'" + moment(dateFinalDueDate.selectedDate).format("YYYY-MM-DD") + "'" : null }},
-  nullif('{{ (rteQuoteCustomerNotes.text || rteQuoteCustomerNotes.value || "").replaceAll("'", "''") }}', ''),
-  nullif('{{ (rteQuoteInternalNotes.text || rteQuoteInternalNotes.value || "").replaceAll("'", "''") }}', ''),
-  nullif('{{ (rteQuoteTerms.text || rteQuoteTerms.value || "").replaceAll("'", "''") }}', '')
+
+  {{
+    inpEventPriceTotal.text
+      ? Number(inpEventPriceTotal.text)
+      : null
+  }},
+
+  {{
+    inpServiceCharge.text
+      ? Number(inpServiceCharge.text)
+      : null
+  }},
+
+  {{
+    dateFinalDueDate.selectedDate
+      ? "'" + moment(dateFinalDueDate.selectedDate).format("YYYY-MM-DD") + "'"
+      : null
+  }},
+
+  nullif(
+    '{{ (rteQuoteCustomerNotes.text || rteQuoteCustomerNotes.value || "").replaceAll("'", "''") }}',
+    ''
+  ),
+
+  nullif(
+    '{{ (rteQuoteInternalNotes.text || rteQuoteInternalNotes.value || "").replaceAll("'", "''") }}',
+    ''
+  ),
+
+  nullif(
+    '{{ (rteQuoteTerms.text || rteQuoteTerms.value || "").replaceAll("'", "''") }}',
+    ''
+  ),
+
+  nullif(
+    '{{ (inpQuoVnuInstructions.text || "").replaceAll("'", "''") }}',
+    ''
+  )
 );

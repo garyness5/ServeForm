@@ -7,19 +7,25 @@
   "closeOnSelection": true,
   "dateFormat": "YY-MMM-DD",
   "datePickerType": "DATE_PICKER",
-  "defaultDate": "2026-07-08T21:04:56.295Z",
+  "defaultDate": "{{ getSelectedQuote.data?.[0]?.final_due_date || null }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "defaultDate"
     }
   ],
   "dynamicHeight": "FIXED",
   "dynamicPropertyPathList": [
     {
       "key": "dateFormat"
+    },
+    {
+      "key": "defaultDate"
     }
   ],
   "dynamicTriggerPathList": [],
@@ -34,7 +40,7 @@
   "labelPosition": "Left",
   "labelStyle": "BOLD",
   "labelTextSize": "1rem",
-  "labelWidth": "26",
+  "labelWidth": "31",
   "leftColumn": 0,
   "maxDate": "2121-12-31T18:29:00.000Z",
   "maxDynamicHeight": 9000,

@@ -1,0 +1,57 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 98,
+  "boxShadow": "none",
+  "buttonColor": "#231f20",
+  "buttonVariant": "TERTIARY",
+  "disabledWhenInvalid": false,
+  "dynamicBindingPathList": [
+    {
+      "key": "borderRadius"
+    },
+    {
+      "key": "text"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "isDefaultClickDisabled": true,
+  "isDisabled": false,
+  "isLoading": false,
+  "isVisible": true,
+  "key": "iu27lzhy00",
+  "leftColumn": 0,
+  "minWidth": 120,
+  "mobileBottomRow": 105,
+  "mobileLeftColumn": 0,
+  "mobileRightColumn": 16,
+  "mobileTopRow": 101,
+  "needsErrorInfo": false,
+  "onClick": "{{\n  storeValue(\n    \"accQuoteMenus\",\n    !appsmith.store.accQuoteMenus\n  );\n}}",
+  "originalBottomRow": 98,
+  "originalTopRow": 94,
+  "parentColumnSpace": 17.9375,
+  "parentId": "0",
+  "parentRowSpace": 10,
+  "placement": "START",
+  "recaptchaType": "V3",
+  "renderMode": "CANVAS",
+  "resetFormOnClick": false,
+  "responsiveBehavior": "hug",
+  "rightColumn": 3,
+  "text": "{{\n  appsmith.store.accQuoteMenus\n    ? \"▲\"\n    : \"▼\"\n}}",
+  "topRow": 94,
+  "type": "BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "io2xhkpsr5",
+  "widgetName": "Button2"
+}
