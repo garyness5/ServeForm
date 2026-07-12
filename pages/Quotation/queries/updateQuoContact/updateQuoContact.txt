@@ -1,0 +1,9 @@
+update public.quo_events
+set
+  customer_id = {{ Number(appsmith.store.quo_contact_customer_id || 0) }}::bigint,
+  contact_id = {{ Number(appsmith.store.quo_contact_id || 0) }}::bigint,
+  updated_at = now()
+where id = {{ Number(appsmith.store.selectedQuoteEventId || 0) }}::bigint
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+returning id, customer_id, contact_id;

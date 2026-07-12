@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 19,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  appsmith.store.contact_form_mode === \"edit\" ? tblContacts.selectedRow.customer_id : \"\" ))(selQuoContactCustomer.options, selQuoContactCustomer.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  appsmith.store.quo_contact_mode === \"edit\"\n    ? quoPage.selectedContact().customer_id\n    : getSelectedQuote.data?.[0]?.customer_id || \"\"\n))(selQuoContactCustomer.options, selQuoContactCustomer.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

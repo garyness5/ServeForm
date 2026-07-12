@@ -40,7 +40,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  !inpQuoCustomerName.text?.trim()\n    ? showAlert(\"Customer name is required.\", \"warning\")\n    : (\n        appsmith.store.quo_customer_mode === \"edit\"\n          ? updateQuoCustomer.run()\n          : saveQuoCustomer.run()\n      )\n      .then(() => getQuoCustomers.run())\n      .then(() => storeValue(\"quo_customer_mode\", \"add\"))\n      .then(() => storeValue(\"quo_customer_id\", null))\n      .then(() => resetWidget(\"mdlQuoCustomer\", true))\n      .then(() => showAlert(\"Customer saved. Ready for next customer.\", \"success\"))\n}}",
+  "onClick": "{{ quoPage.saveCustomer(true) }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "tlvc47x8au",

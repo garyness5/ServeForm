@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 27,
   "boxShadow": "none",
-  "defaultText": " {{ appsmith.store.contact_form_mode === \"edit\" ? tblContacts.selectedRow.phone : \"\" }}",
+  "defaultText": "{{\n  appsmith.store.quo_contact_mode === \"edit\"\n    ? quoPage.selectedContact().mobile || \"\"\n    : \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

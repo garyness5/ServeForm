@@ -4,7 +4,7 @@
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 43,
-  "defaultCheckedState": "{{ appsmith.store.contact_form_mode === \"edit\" ? tblContacts.selectedRow.active !== false : true }}",
+  "defaultCheckedState": "{{\n  appsmith.store.quo_contact_mode === \"edit\"\n    ? quoPage.selectedContact().active !== false\n    : true\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

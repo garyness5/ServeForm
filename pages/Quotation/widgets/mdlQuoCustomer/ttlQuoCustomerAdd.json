@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 53,
   "shouldTruncate": false,
-  "text": "{{ appsmith.store.venue_form_mode === \"edit\" ? \"Edit Customer\" : \"Add Customer\" }}",
+  "text": "{{\n  appsmith.store.quo_customer_mode === \"edit\"\n    ? \"Edit Customer\"\n    : \"Add Customer\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,
@@ -49,5 +49,5 @@
   "type": "TEXT_WIDGET",
   "version": 1,
   "widgetId": "u2lo3ck3xm",
-  "widgetName": "titQuoCustomerAdd"
+  "widgetName": "ttlQuoCustomerAdd"
 }

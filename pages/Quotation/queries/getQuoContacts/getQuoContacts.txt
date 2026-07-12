@@ -1,0 +1,14 @@
+select
+    id,
+    customer_id,
+    contact_name,
+    title,
+    phone,
+    mobile,
+    email,
+    notes,
+    active
+from public.vw_customer_contacts
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+order by lower(contact_name);

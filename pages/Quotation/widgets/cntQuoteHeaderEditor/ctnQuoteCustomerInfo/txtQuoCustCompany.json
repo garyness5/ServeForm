@@ -41,7 +41,7 @@
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 57,
+  "rightColumn": 64,
   "shouldTruncate": false,
   "text": "{{ getSelectedQuote.data?.[0]?.company || \"\" }}",
   "textAlign": "LEFT",

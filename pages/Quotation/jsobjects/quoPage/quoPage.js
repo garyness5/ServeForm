@@ -93,6 +93,32 @@ export default {
 		return headerChanged || menusChanged || depositsChanged;
 	},
 
+	contactIsDirty() {
+		const saved =
+					appsmith.store.quo_contact_mode === "edit"
+		? this.selectedContact()
+		: {};
+
+		const text = value => String(value ?? "").trim();
+
+		if (appsmith.store.quo_contact_mode !== "edit") {
+			return Boolean(text(inpQuoContactName.text));
+		}
+
+		return (
+			text(inpQuoContactName.text) !== text(saved.contact_name) ||
+			text(inpQuoContactTitle.text) !== text(saved.title) ||
+			text(inpQuoContactPhone.text) !== text(saved.phone) ||
+			text(inpQuoContactMobile.text) !== text(saved.mobile) ||
+			text(inpQuoContactEmail.text) !== text(saved.email) ||
+			text(inpQuoContactNotes.text) !== text(saved.notes) ||
+			Number(selQuoContactCustomer.selectedOptionValue || 0) !==
+			Number(saved.customer_id || 0) ||
+			Boolean(chkQuoContactActive.isChecked) !==
+			Boolean(saved.active)
+		);
+	},
+
 	async saveAll() {
 		try {
 			const selectedQuote = getSelectedQuote.data?.[0];
@@ -238,5 +264,97 @@ export default {
 				x => Number(x.id) === Number(appsmith.store.quo_customer_id)
 			) || {}
 		);
-	}
+	},
+
+	async saveCustomer(saveAndNew = false) {
+		if (!inpQuoCustomerName.text?.trim()) {
+			showAlert("Customer name is required.", "warning");
+			return;
+		}
+
+		const result =
+					appsmith.store.quo_customer_mode === "edit"
+		? await updateQuoCustomer.run()
+		: await saveQuoCustomer.run();
+
+		const row = result?.[0] || {};
+		const customerId =
+					appsmith.store.quo_customer_mode === "edit"
+		? Number(appsmith.store.quo_customer_id || 0)
+		: Number(row.id || 0);
+
+		if (!customerId) {
+			showAlert("Customer was not saved correctly.", "error");
+			return;
+		}
+
+		await storeValue("quo_customer_id", customerId);
+		await updateQuoCustomerAssignment.run();
+
+		await getQuoCustomers.run();
+		await getSelectedQuote.run();
+
+		if (saveAndNew) {
+			await storeValue("quo_customer_mode", "add");
+			await storeValue("quo_customer_id", null);
+			await resetWidget("selQuoCustomer", true);
+			await resetWidget("mdlQuoCustomer", true);
+
+			showAlert("Customer saved. Ready for next customer.", "success");
+			return;
+		}
+
+		closeModal("mdlQuoCustomer");
+		showAlert("Customer saved.", "success");
+	},
+
+	selectedContact() {
+		return (
+			getQuoContacts.data?.find(
+				x => Number(x.id) === Number(appsmith.store.quo_contact_id)
+			) || {}
+		);
+	},
+
+	async saveContact(saveAndNew = false) {
+		if (!inpQuoContactName.text?.trim()) {
+			showAlert("Contact name is required.", "warning");
+			return;
+		}
+
+		const result = await saveQuoContact.run();
+		const row = result?.[0] || {};
+
+		const customerId = Number(row.customer_id || 0);
+		const contactId = Number(row.contact_id || 0);
+
+		if (!customerId || !contactId) {
+			showAlert("Contact saved, but no Contact ID was returned.", "error");
+			return;
+		}
+
+		await storeValue("quo_contact_customer_id", customerId);
+		await storeValue("quo_contact_id", contactId);
+
+		await updateQuoContactAssignment.run();
+
+		await getQuoCustomers.run();
+		await getQuoContacts.run();
+		await getSelectedQuote.run();
+
+		if (saveAndNew) {
+			await storeValue("quo_contact_mode", "add");
+			await storeValue("quo_contact_id", null);
+			await resetWidget("mdlQuoContact", true);
+
+			showAlert(
+				"Contact saved. Ready for next contact.",
+				"success"
+			);
+			return;
+		}
+
+		closeModal("mdlQuoContact");
+		showAlert("Contact saved.", "success");
+	},
 }

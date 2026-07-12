@@ -1,0 +1,22 @@
+select *
+from public.save_quo_contact(
+  {{
+    appsmith.store.quo_contact_mode === "edit"
+      ? Number(appsmith.store.quo_contact_id || 0)
+      : null
+  }}::bigint,
+
+  '{{ appsmith.store.current_client_id }}'::uuid,
+
+  {{
+    Number(selQuoContactCustomer.selectedOptionValue || 0) || null
+  }}::bigint,
+
+  {{ (inpQuoContactName.text || "").trim() }}::text,
+  {{ (inpQuoContactTitle.text || "").trim() }}::text,
+  {{ (inpQuoContactPhone.text || "").trim() }}::text,
+  {{ (inpQuoContactMobile.text || "").trim() }}::text,
+  {{ (inpQuoContactEmail.text || "").trim() }}::text,
+  {{ (inpQuoContactNotes.text || "").trim() }}::text,
+  {{ chkQuoContactActive.isChecked !== false }}::boolean
+);
