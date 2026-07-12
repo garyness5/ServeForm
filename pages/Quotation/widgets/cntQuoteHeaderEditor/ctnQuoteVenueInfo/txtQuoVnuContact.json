@@ -11,6 +11,9 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -40,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "shouldTruncate": false,
-  "text": "Contact",
+  "text": "{{ getSelectedQuote.data?.[0]?.venue_contact || \"\" }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 4,

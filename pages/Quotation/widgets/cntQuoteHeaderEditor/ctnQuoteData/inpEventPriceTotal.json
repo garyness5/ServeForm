@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 16,
   "boxShadow": "none",
-  "defaultText": "{{ getSelectedQuote.data?.[0]?.event_price_total || \"\" }}",
+  "defaultText": "{{\n  getSelectedQuote.data?.[0]?.pricing_mode === \"per_menu\"\n    ? getSelectedQuote.data?.[0]?.quote_total ?? \"\"\n    : getSelectedQuote.data?.[0]?.event_price_total ?? \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -18,21 +18,27 @@
     },
     {
       "key": "isDisabled"
+    },
+    {
+      "key": "isVisible"
     }
   ],
   "dynamicHeight": "FIXED",
   "dynamicPropertyPathList": [
     {
       "key": "isDisabled"
+    },
+    {
+      "key": "isVisible"
     }
   ],
   "dynamicTriggerPathList": [],
   "iconAlign": "left",
   "inputType": "TEXT",
-  "isDisabled": "{{\n  (getSelectedQuote.data?.[0]?.quote_status || \"\") !== \"Draft\" ||\n  selPricingMode.selectedOptionValue !== \"event_total\"\n}}",
+  "isDisabled": "{{\n  (getSelectedQuote.data?.[0]?.quote_status || \"\") !== \"Draft\" ||\n  selPricingMode.selectedOptionValue === \"per_menu\"\n}}",
   "isLoading": false,
   "isRequired": false,
-  "isVisible": true,
+  "isVisible": "{{\n  selPricingMode.selectedOptionValue === \"event_total\"\n}}",
   "key": "tf8p5dbja2",
   "label": "Event Price",
   "labelAlignment": "left",

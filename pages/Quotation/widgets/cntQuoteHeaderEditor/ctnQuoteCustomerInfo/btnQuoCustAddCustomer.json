@@ -44,7 +44,7 @@
   "mobileRightColumn": 36,
   "mobileTopRow": 23,
   "needsErrorInfo": false,
-  "onClick": "{{ showModal(mdlQuoCustomer.name) }}",
+  "onClick": "{{\n  storeValue(\n    \"quo_customer_mode\",\n    getSelectedQuote.data?.[0]?.customer_id ? \"edit\" : \"add\"\n  )\n    .then(() =>\n      storeValue(\n        \"quo_customer_id\",\n        getSelectedQuote.data?.[0]?.customer_id || null\n      )\n    )\n    .then(() => getQuoCustomers.run())\n    .then(() => resetWidget(\"mdlQuoCustomer\", true))\n    .then(() => showModal(\"mdlQuoCustomer\"))\n}}",
   "parentColumnSpace": 6.021484375,
   "parentId": "xe44359w11",
   "parentRowSpace": 10,

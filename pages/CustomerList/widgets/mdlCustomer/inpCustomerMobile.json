@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 30,
   "boxShadow": "none",
-  "defaultText": "{{ appsmith.store.customer_form_mode === \"edit\" ? tblCustomers.selectedRow.phone : \"\" }}",
+  "defaultText": "{{  appsmith.store.customer_form_mode === \"edit\"\n    ? tblCustomers.selectedRow.mobile\n    : \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

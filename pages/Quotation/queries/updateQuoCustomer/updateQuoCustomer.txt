@@ -1,0 +1,15 @@
+update public.customers
+set
+  customer_name = '{{ (inpQuoCustomerName.text || "").replaceAll("'", "''") }}',
+  company = nullif('{{ (inpQuoCustomerCompany.text || "").replaceAll("'", "''") }}',''),
+  address = nullif('{{ (inpQuoCustomerAddress.text || "").replaceAll("'", "''") }}',''),
+  phone = nullif('{{ (inpQuoCustomerPhone.text || "").replaceAll("'", "''") }}',''),
+  mobile = nullif('{{ (inpQuoCustomerMobile.text || "").replaceAll("'", "''") }}',''),
+  email = nullif('{{ (inpQuoCustomerEmail.text || "").replaceAll("'", "''") }}',''),
+  website = nullif('{{ (inpQuoCustomerWebsite.text || "").replaceAll("'", "''") }}',''),
+  notes = nullif('{{ (inpQuoCustomerNotes.text || "").replaceAll("'", "''") }}',''),
+  active = {{ chkQuoCustomerActive.isChecked === false ? false : true }},
+  updated_at = now()
+where id = {{ Number(appsmith.store.quo_customer_id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+returning id;

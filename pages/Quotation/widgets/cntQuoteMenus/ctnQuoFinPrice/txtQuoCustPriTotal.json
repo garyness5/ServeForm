@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "shouldTruncate": false,
-  "text": "{{\n  \"Total: \"  +\n  fmt.currency(quoPage.pricingReferenceTotal())\n}}",
+  "text": "{{\n  \"Total:  \" +\n  fmt.currency(\n    quoPage.pricingSubtotal() +\n    (quoPage.number(inpServiceCharge.text) ?? 0)\n  )\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 12,

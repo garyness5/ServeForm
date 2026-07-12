@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 10,
   "boxShadow": "none",
-  "defaultText": "{{ appsmith.store.customer_form_mode === \"edit\" ? tblQuotesForEvent.selectedRow.customer_name : \"\" }}",
+  "defaultText": "{{ appsmith.store.quo_customer_mode === \"edit\"\n    ? quoPage.selectedCustomer().customer_name || \"\"\n    : \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

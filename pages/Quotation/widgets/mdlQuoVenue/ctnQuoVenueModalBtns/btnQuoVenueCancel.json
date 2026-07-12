@@ -37,7 +37,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ closeModal(\"mdlVenue\") }}",
+  "onClick": "{{ closeModal(\"mdlQuoVenue\") }}",
   "originalBottomRow": 63,
   "originalTopRow": 59,
   "parentId": "wv33fuq40c",

@@ -15,13 +15,21 @@
     },
     {
       "key": "defaultText"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicHeight": "FIXED",
+  "dynamicPropertyPathList": [
+    {
+      "key": "isDisabled"
+    }
+  ],
   "dynamicTriggerPathList": [],
   "iconAlign": "left",
   "inputType": "TEXT",
-  "isDisabled": false,
+  "isDisabled": "{{\n  (getSelectedQuote.data?.[0]?.quote_status || \"\") !== \"Draft\"\n}}",
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,

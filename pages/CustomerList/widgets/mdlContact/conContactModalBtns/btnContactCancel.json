@@ -4,8 +4,8 @@
   "bottomRow": 6,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
-  "buttonStyle": "PRIMARY_BUTTON",
-  "buttonVariant": "PRIMARY",
+  "buttonStyle": "PRIMARY",
+  "buttonVariant": "SECONDARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
     {
@@ -17,9 +17,6 @@
   ],
   "dynamicPropertyPathList": [
     {
-      "key": "isDisabled"
-    },
-    {
       "key": "onClick"
     }
   ],
@@ -29,31 +26,31 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "",
+  "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
-  "leftColumn": 48,
+  "leftColumn": 14,
   "minWidth": 120,
   "mobileBottomRow": 22,
-  "mobileLeftColumn": 47,
-  "mobileRightColumn": 63,
+  "mobileLeftColumn": 31,
+  "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  !inpQuoCustomerName.text || !inpQuoCustomerName.text.trim()\n    ? showAlert(\"Customer name is required.\", \"warning\")\n    : (\n        appsmith.store.customer_form_mode === \"edit\"\n          ? updateCustomer.run()\n          : saveCustomer.run()\n      )\n        .then(() => getCustomers.run())\n        .then(() => closeModal(\"mdlCustomer\"))\n        .then(() => showAlert(\"Customer saved.\", \"success\"))\n}}",
+  "onClick": "{{ closeModal(\"mdlCustomerCopy\") }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
-  "parentId": "tlvc47x8au",
+  "parentId": "cfpmybya7o",
   "placement": "CENTER",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 63,
-  "text": "Save",
+  "rightColumn": 29,
+  "text": "Cancel",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "h6syrl73zq",
-  "widgetName": "btnQuoCustomerSave"
+  "widgetId": "64cqzrec61",
+  "widgetName": "btnContactCancel"
 }

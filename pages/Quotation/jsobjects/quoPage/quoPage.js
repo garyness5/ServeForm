@@ -93,81 +93,6 @@ export default {
 		return headerChanged || menusChanged || depositsChanged;
 	},
 
-	dirtyDetails() {
-		const saved = getSelectedQuote.data?.[0] || {};
-
-		return {
-			quoteStatus: saved.quote_status,
-
-			quoteReference: {
-				widget: this.text(inpQuoteReference.text),
-				saved: this.text(saved.quote_reference)
-			},
-
-			validUntil: {
-				widget: this.date(dateQuoteValidUntil.selectedDate),
-				saved: this.date(saved.valid_until)
-			},
-
-			pricingMode: {
-				widget: this.text(selPricingMode.selectedOptionValue || "per_menu"),
-				saved: this.text(saved.pricing_mode || "per_menu")
-			},
-
-			eventPriceTotal: {
-				checked:
-				(selPricingMode.selectedOptionValue || "per_menu") === "event_total",
-				widget: this.number(inpEventPriceTotal.text),
-				saved: this.number(saved.event_price_total)
-			},
-
-			serviceCharge: {
-				widget: this.number(inpServiceCharge.text),
-				saved: this.number(saved.service_charge)
-			},
-
-			finalDueDate: {
-				widget: this.date(dateFinalDueDate.selectedDate),
-				saved: this.date(saved.final_due_date)
-			},
-
-			venueInstructions: {
-				widget: this.text(inpQuoVnuInstructions.text),
-				saved: this.text(saved.venue_instructions)
-			},
-
-			customerNotes: {
-				widget: this.html(
-					rteQuoteCustomerNotes.text ||
-					rteQuoteCustomerNotes.value
-				),
-				saved: this.html(saved.customer_notes)
-			},
-
-			internalNotes: {
-				widget: this.html(
-					rteQuoteInternalNotes.text ||
-					rteQuoteInternalNotes.value
-				),
-				saved: this.html(saved.internal_notes)
-			},
-
-			terms: {
-				widget: this.html(
-					rteQuoteTerms.text ||
-					rteQuoteTerms.value
-				),
-				saved: this.html(saved.terms)
-			},
-
-			menuUpdatedRows:
-			(tblQuoteMenus.updatedRows || []).length,
-
-			depositUpdatedRows:
-			(tblQuoFinDeposits.updatedRows || []).length
-		};
-	},
-
 	async saveAll() {
 		try {
 			const selectedQuote = getSelectedQuote.data?.[0];
@@ -263,10 +188,23 @@ export default {
 	},
 
 	quotedTotal() {
-		return (
-			(this.number(inpEventPriceTotal.text) ?? 0) +
-			(this.number(inpServiceCharge.text) ?? 0)
-		);
+		const saved = getSelectedQuote.data?.[0];
+
+		// Issued and Accepted quotes use their frozen saved total.
+		if (saved && saved.quote_status !== "Draft") {
+			return this.number(saved.quote_total) ?? 0;
+		}
+
+		// Draft Per Menu uses live menu pricing.
+		if (selPricingMode.selectedOptionValue === "per_menu") {
+			return (
+				this.pricingSubtotal() +
+				(this.number(inpServiceCharge.text) ?? 0)
+			);
+		}
+
+		// Draft Per Event uses the manually entered final Event Price.
+		return this.number(inpEventPriceTotal.text) ?? 0;
 	},
 
 	currentDepositRows() {
@@ -293,4 +231,12 @@ export default {
 	balanceDue() {
 		return this.quotedTotal() - this.totalReceived();
 	},
+
+	selectedCustomer() {
+		return (
+			getQuoCustomers.data?.find(
+				x => Number(x.id) === Number(appsmith.store.quo_customer_id)
+			) || {}
+		);
+	}
 }

@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 12,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  getSelectedQuote.data?.[0]?.pricing_mode || \"per_menu\" ))(selPricingMode.options, selPricingMode.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  (getSelectedQuote.data?.[0]?.quote_status || \"\") !== \"Draft\"\n))(selPricingMode.options, selPricingMode.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

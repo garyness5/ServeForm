@@ -1,0 +1,15 @@
+select
+  id,
+  customer_name,
+  company,
+  address,
+  phone,
+  mobile,
+  email,
+  website,
+  notes,
+  active
+from public.vw_customers
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+order by lower(customer_name);

@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 53,
   "shouldTruncate": false,
-  "text": "{{ appsmith.store.venue_form_mode === \"edit\" ? \"Edit Customer\" : \"Add Customer\" }}",
+  "text": "{{ appsmith.store.customer_form_mode === \"edit\" ? \"Edit Customer\" : \"Add Customer\" }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,
