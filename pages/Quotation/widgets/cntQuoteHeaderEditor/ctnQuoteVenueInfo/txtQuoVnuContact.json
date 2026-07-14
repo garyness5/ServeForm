@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "shouldTruncate": false,
-  "text": "{{ getSelectedQuote.data?.[0]?.venue_contact || \"\" }}",
+  "text": "{{\n  \"Contact: \" +\n  (getSelectedQuote.data?.[0]?.venue_contact || \"\")\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 4,

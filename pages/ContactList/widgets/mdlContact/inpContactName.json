@@ -3,9 +3,9 @@
   "animateLoading": true,
   "autoFocus": false,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 19,
+  "bottomRow": 11,
   "boxShadow": "none",
-  "defaultText": "{{ appsmith.store.contact_form_mode === \"edit\" ? tblContacts.selectedRow.contact_name : \"\" }}",
+  "defaultText": "{{\n  appsmith.store.contact_form_mode === \"edit\"\n    ? tblContacts.selectedRow.contact_name || \"\"\n    : \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -49,7 +49,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "showStepArrows": false,
-  "topRow": 15,
+  "topRow": 7,
   "type": "INPUT_WIDGET_V2",
   "version": 2,
   "widgetId": "c7rmcvdfk4",

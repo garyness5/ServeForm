@@ -13,6 +13,9 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
@@ -29,7 +32,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "",
+  "isDisabled": "{{\n  !inpContactName.text?.trim() ||\n  saveContactMaster.isLoading\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -40,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  !selContactCustomer.selectedOptionValue\n    ? showAlert(\"Customer is required.\", \"warning\")\n    : !inpContactName.text || !inpContactName.text.trim()\n      ? showAlert(\"Contact name is required.\", \"warning\")\n      : (\n          appsmith.store.contact_form_mode === \"edit\"\n            ? updateContact.run()\n            : saveContact.run()\n        )\n          .then(() => getContacts.run())\n          .then(() => storeValue(\"contact_form_mode\", \"add\"))\n          .then(() => storeValue(\"current_contact_id\", null))\n          .then(() => resetWidget(\"mdlContact\", true))\n          .then(() => showAlert(\"Contact saved. Ready for next contact.\", \"success\"))\n}}",
+  "onClick": "{{\n  !inpContactName.text?.trim()\n    ? showAlert(\"Contact name is required.\", \"warning\")\n    : saveContactMaster.run()\n        .then(() => getContacts.run())\n        .then(() => storeValue(\"contact_form_mode\", \"add\"))\n        .then(() => storeValue(\"current_contact_id\", null))\n        .then(() => resetWidget(\"mdlContact\", true))\n        .then(() =>\n          showAlert(\n            \"Contact saved. Ready for next contact.\",\n            \"success\"\n          )\n        )\n}}",
   "originalBottomRow": 65,
   "originalTopRow": 61,
   "parentId": "o1lp1i9850",

@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 4,
+  "bottomRow": 23,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
   "buttonVariant": "SECONDARY",
@@ -14,15 +14,15 @@
       "key": "borderRadius"
     },
     {
-      "key": "iconName"
+      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
-      "key": "iconName"
+      "key": "onClick"
     },
     {
-      "key": "onClick"
+      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -31,22 +31,22 @@
     }
   ],
   "iconAlign": "left",
-  "iconName": "{{\n  Number(selQuoVenue.selectedOptionValue || 0) ||\n  Number(getSelectedQuote.data?.[0]?.venue_id || 0)\n    ? \"info-sign\"\n    : \"plus\"\n}}",
+  "iconName": "plus",
   "isDefaultClickDisabled": true,
-  "isDisabled": false,
+  "isDisabled": "{{ !radContactType.selectedOptionValue }}",
   "isLoading": false,
   "isVisible": true,
   "key": "brlx8potul",
-  "leftColumn": 57,
+  "leftColumn": 58,
   "minWidth": 120,
   "mobileBottomRow": 27,
   "mobileLeftColumn": 20,
   "mobileRightColumn": 36,
   "mobileTopRow": 23,
   "needsErrorInfo": false,
-  "onClick": "{{\n  (() => {\n    const venueId =\n      Number(selQuoVenue.selectedOptionValue || 0) ||\n      Number(getSelectedQuote.data?.[0]?.venue_id || 0);\n\n    return storeValue(\n      \"quo_venue_mode\",\n      venueId ? \"edit\" : \"add\"\n    )\n      .then(() =>\n        storeValue(\n          \"quo_venue_id\",\n          venueId || null\n        )\n      )\n      .then(() => getQuoVenues.run())\n      .then(() => resetWidget(\"mdlQuoVenue\", true))\n      .then(() => showModal(\"mdlQuoVenue\"));\n  })()\n}}",
+  "onClick": "{{\n  radContactType.selectedOptionValue === \"customer\"\n    ? navigateTo(\"CustomerList\")\n    : radContactType.selectedOptionValue === \"venue\"\n      ? navigateTo(\"VenueList\")\n      : null\n}}",
   "parentColumnSpace": 6.021484375,
-  "parentId": "i21lqbi2r0",
+  "parentId": "obujocuuy6",
   "parentRowSpace": 10,
   "placement": "CENTER",
   "recaptchaType": "V3",
@@ -56,9 +56,9 @@
   "rightColumn": 63,
   "text": "",
   "tooltip": "",
-  "topRow": 0,
+  "topRow": 19,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "9jgiuir330",
-  "widgetName": "btnQuoVnuAddVenue"
+  "widgetId": "p3t2kmo5eb",
+  "widgetName": "btnContactLinkedToAdd"
 }

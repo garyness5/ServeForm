@@ -1,0 +1,14 @@
+select
+  id,
+  venue_name,
+  address,
+  phone,
+  mobile,
+  email,
+  contact_name,
+  generic_notes,
+  active
+from public.vw_venues
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+order by lower(venue_name);

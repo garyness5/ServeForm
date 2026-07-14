@@ -1,0 +1,68 @@
+{
+  "accentColor": "{{appsmith.theme.colors.primaryColor}}",
+  "alignment": "left",
+  "animateLoading": true,
+  "bottomRow": 19,
+  "boxShadow": "none",
+  "defaultOptionValue": "{{ \"\" }}",
+  "dynamicBindingPathList": [
+    {
+      "key": "accentColor"
+    },
+    {
+      "key": "options"
+    },
+    {
+      "key": "defaultOptionValue"
+    }
+  ],
+  "dynamicHeight": "AUTO_HEIGHT",
+  "dynamicPropertyPathList": [
+    {
+      "key": "options"
+    },
+    {
+      "key": "onSelectionChange"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onSelectionChange"
+    }
+  ],
+  "flexVerticalAlignment": "start",
+  "isDisabled": false,
+  "isInline": true,
+  "isLoading": false,
+  "isRequired": false,
+  "isVisible": true,
+  "key": "6ml19bczyn",
+  "label": "Linked to ",
+  "labelAlignment": "left",
+  "labelPosition": "Left",
+  "labelStyle": "BOLD",
+  "labelTextSize": "1rem",
+  "labelWidth": "13",
+  "leftColumn": 1,
+  "maxDynamicHeight": 9000,
+  "minDynamicHeight": 4,
+  "mobileBottomRow": 21,
+  "mobileLeftColumn": 1,
+  "mobileRightColumn": 21,
+  "mobileTopRow": 15,
+  "needsErrorInfo": false,
+  "onSelectionChange": "{{ resetWidget(\"selContactLinkedTo\", true) }}",
+  "options": "{{\n  [\n    { label: \"None\", value: \"\" },\n    { label: \"Customer\", value: \"customer\" },\n    { label: \"Venue\", value: \"venue\" }\n  ]\n}}",
+  "originalBottomRow": 19,
+  "originalTopRow": 15,
+  "parentColumnSpace": 7.53125,
+  "parentId": "obujocuuy6",
+  "parentRowSpace": 10,
+  "renderMode": "CANVAS",
+  "rightColumn": 57,
+  "topRow": 15,
+  "type": "RADIO_GROUP_WIDGET",
+  "version": 1,
+  "widgetId": "hkm9oz0t0a",
+  "widgetName": "radContactType"
+}

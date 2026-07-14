@@ -1,0 +1,27 @@
+update public.quo_events qe
+set
+  venue_id = nullif(
+    {{ Number(selQuoVenue.selectedOptionValue || 0) }},
+    0
+  )::bigint,
+
+  venue_instructions = case
+    when {{ Number(selQuoVenue.selectedOptionValue || 0) }} > 0
+      then (
+        select v.generic_notes
+        from public.venues v
+        where v.id = {{ Number(selQuoVenue.selectedOptionValue || 0) }}::bigint
+          and v.client_id = qe.client_id
+          and coalesce(v.deleted, false) = false
+      )
+    else null
+  end,
+
+  updated_at = now()
+where qe.id = {{ Number(appsmith.store.selectedQuoteEventId || 0) }}::bigint
+  and qe.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(qe.deleted, false) = false
+returning
+  qe.id as quote_event_id,
+  qe.venue_id,
+  qe.venue_instructions;

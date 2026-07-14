@@ -41,7 +41,7 @@
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 64,
+  "rightColumn": 62,
   "shouldTruncate": false,
   "text": "{{ getSelectedQuote.data?.[0]?.email || \"\" }}",
   "textAlign": "LEFT",

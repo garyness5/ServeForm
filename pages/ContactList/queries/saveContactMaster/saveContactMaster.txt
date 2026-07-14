@@ -1,0 +1,28 @@
+select *
+from public.save_contact_master(
+  {{
+    appsmith.store.contact_form_mode === "edit"
+      ? Number(appsmith.store.current_contact_id || 0)
+      : null
+  }}::bigint,
+
+  '{{ appsmith.store.current_client_id }}'::uuid,
+
+  {{ inpContactName.text || "" }}::text,
+  {{ inpContactTitle.text || "" }}::text,
+  {{ inpContactPhone.text || "" }}::text,
+  {{ inpContactMobile.text || "" }}::text,
+  {{ inpContactEmail.text || "" }}::text,
+  {{ inpContactNotes.text || "" }}::text,
+  {{ chkContactActive.isChecked !== false }}::boolean,
+
+  {{
+    radContactType.selectedOptionValue
+      ? "'" + radContactType.selectedOptionValue + "'"
+      : null
+  }}::text,
+
+  {{
+    Number(selContactLinkedTo.selectedOptionValue || 0) || null
+  }}::bigint
+);

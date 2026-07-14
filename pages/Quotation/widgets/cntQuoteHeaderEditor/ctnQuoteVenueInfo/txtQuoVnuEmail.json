@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 20,
+  "bottomRow": 21,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -33,8 +33,8 @@
   "mobileRightColumn": 16,
   "mobileTopRow": 5,
   "needsErrorInfo": false,
-  "originalBottomRow": 22,
-  "originalTopRow": 18,
+  "originalBottomRow": 20,
+  "originalTopRow": 16,
   "overflow": "NONE",
   "parentColumnSpace": 6.021484375,
   "parentId": "i21lqbi2r0",
@@ -43,10 +43,10 @@
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "shouldTruncate": false,
-  "text": "{{ getSelectedQuote.data?.[0]?.venue_email || \"\" }}",
+  "text": "{{\n  \"Email: \" +\n  (getSelectedQuote.data?.[0]?.venue_email || \"\")\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 16,
+  "topRow": 17,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
