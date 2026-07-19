@@ -1,0 +1,369 @@
+Savveyra Architecture Specification
+Events, Proposals & Quotations
+Version 1.0 (Architecture Baseline)
+________________________________________
+1. Purpose
+This document defines the architecture governing the interaction between Events, Kitchen Proposals and Sales Quotations.
+It establishes ownership, responsibilities, workflows and business rules that implementation must follow.
+This document is authoritative for this section of Savveyra. Database design, Appsmith implementation and future development must conform to these principles.
+________________________________________
+2. Core Philosophy
+Savveyra separates operational food production from customer sales.
+Kitchen and Sales work together but remain independent business domains.
+Both domains operate on the same Event but own different business objects.
+The system must preserve this separation while allowing collaboration.
+________________________________________
+3. Primary Business Objects
+Customer
+Represents the customer or organisation requesting the Event.
+A Customer may have multiple Contacts.
+A Customer may participate in many Events.
+________________________________________
+Contact
+Represents an individual person.
+A Contact may belong to multiple Customers.
+A Contact may also act as the Customer.
+Customer Contact is optional.
+________________________________________
+Venue
+Represents where the Event will occur.
+A Venue may have multiple Venue Contacts.
+________________________________________
+Venue Contact
+Represents a person at the Venue.
+Venue Contact is optional.
+________________________________________
+Event
+An Event represents one operational catering job.
+The Event is the parent container for all Kitchen Proposals and Sales Quotations relating to that job.
+An Event may exist without any Proposal.
+An Event may exist without any Quotation.
+Kitchen-only Events are valid.
+________________________________________
+Proposal
+A Proposal represents one complete operational version of an Event prepared by Kitchen.
+A Proposal is not simply a menu.
+A Proposal is a complete snapshot of the Event at the moment it is created.
+Multiple Proposals may exist for the same Event.
+Each Proposal represents an independent operational option.
+________________________________________
+Quotation
+A Quotation represents the customer-facing commercial document prepared by Sales.
+A Quotation originates from a Proposal.
+Multiple Quotation revisions may exist.
+Quotation revisions preserve customer communication history.
+________________________________________
+4. Ownership Principle
+This is a fundamental architectural rule.
+Permissions control actions. Ownership controls business rules.
+Permissions never transfer ownership.
+Ownership determines:
+•	lifecycle 
+•	statuses 
+•	workflows 
+•	business rules 
+•	downstream behaviour 
+Permissions determine only:
+•	who may view 
+•	who may create 
+•	who may edit 
+•	who may approve 
+•	who may perform specific actions 
+Even an Administrator does not change ownership.
+Editing another department's object does not transfer ownership.
+________________________________________
+5. Domain Ownership
+Kitchen owns:
+•	Event operational planning 
+•	Proposals 
+•	Menus 
+•	Kitchen production information 
+Sales owns:
+•	Quotations 
+•	Customer pricing 
+•	Customer communication 
+•	Quotation revisions 
+Customer owns nothing inside the system.
+Customer receives Quotation documents only.
+________________________________________
+6. Event Architecture
+The Event is the operational container.
+The Event links together:
+•	Customer 
+•	Contact 
+•	Venue 
+•	Kitchen 
+•	Sales 
+•	Proposals 
+•	Quotations 
+The Event itself does not represent a single proposal.
+Instead, the Event contains multiple complete Proposals.
+The user decides whether a significantly different request remains the same Event or becomes a new Event.
+Savveyra does not force that decision.
+________________________________________
+7. Proposal Architecture
+A Proposal represents one complete operational solution for an Event.
+Each Proposal contains a complete snapshot including:
+•	Customer 
+•	Contact 
+•	Venue 
+•	Venue Contact 
+•	Event Date 
+•	Format 
+•	Guest Counts 
+•	Menus 
+•	Menu quantities 
+•	Kitchen costs 
+•	Deposits (where applicable) 
+•	Notes 
+•	Kitchen notes 
+•	Any other Event information required to reproduce that proposal exactly. 
+Nothing inside a Proposal is dynamically linked after it is created.
+A Proposal preserves history.
+________________________________________
+8. Proposal Lifecycle
+Proposal Statuses:
+Draft
+Sent
+Accepted
+Rejected
+________________________________________
+Draft
+Kitchen may edit freely.
+Draft is the only editable Proposal.
+________________________________________
+Sent
+Proposal has been handed to Sales.
+Proposal becomes immutable.
+No editing is permitted.
+________________________________________
+Accepted
+Sales has accepted and used the Proposal.
+Proposal remains immutable.
+________________________________________
+Rejected
+Sales has chosen not to use the Proposal.
+Proposal remains immutable.
+Rejected Proposals remain part of history.
+________________________________________
+9. Proposal Revision Philosophy
+Once a Proposal has been Sent it is never edited.
+If Sales requests changes:
+Kitchen creates a new Proposal.
+The previous Proposal remains unchanged.
+Example:
+Proposal 3
+↓
+Sales requests changes
+↓
+Kitchen duplicates Proposal 3
+↓
+Proposal 4 (Draft)
+↓
+Kitchen edits Proposal 4
+↓
+Proposal 4 becomes Sent
+This preserves complete historical accuracy.
+________________________________________
+10. Proposal Selection Behaviour
+Selecting a Proposal loads that Proposal into the Event workspace.
+The Event page reflects the selected Proposal.
+Changing Proposal changes:
+•	Customer 
+•	Contact 
+•	Venue 
+•	Event Date 
+•	Guest Counts 
+•	Menus 
+•	Notes 
+•	Header information 
+•	Kitchen information 
+The Proposal becomes the current working version displayed by the Event page.
+________________________________________
+11. Proposal Actions
+Draft Proposal
+•	Edit 
+•	Send 
+•	Duplicate 
+•	Delete Draft 
+Sent Proposal
+•	View 
+•	Duplicate 
+Accepted Proposal
+•	View 
+•	Duplicate 
+Rejected Proposal
+•	View 
+•	Duplicate 
+Duplicate creates the next Proposal number.
+Duplicate copies the complete Proposal.
+The new Proposal begins as Draft.
+________________________________________
+12. Quotation Architecture
+Quotation is independent from Proposal.
+Proposal belongs to Kitchen.
+Quotation belongs to Sales.
+A Quotation is created from a Proposal.
+Quotation revisions preserve customer communication.
+Issued Quotations remain historical records.
+________________________________________
+13. Proposal to Quotation Relationship
+Proposal
+↓
+Sales Review
+↓
+Quotation
+↓
+Quotation Revisions
+Kitchen never edits Quotations.
+Sales never edits Proposals.
+Communication occurs through creation of new Proposals.
+________________________________________
+14. Quotation Revisions
+Sales may:
+Create new Quotation
+Create Quotation Revision
+Issue Quotation
+Withdraw Quotation
+Accept customer response
+Decline customer response
+These actions belong entirely to Sales.
+Kitchen remains unaffected.
+________________________________________
+15. Snapshot Philosophy
+Snapshots are fundamental.
+Proposal is a complete snapshot.
+Quotation is a complete snapshot.
+Historical records must never change.
+History is preserved by creating new versions rather than modifying existing ones.
+________________________________________
+16. Event Change Philosophy
+Some customer requests are minor.
+Examples:
+•	Change menu 
+•	Change fish 
+•	Increase guests slightly 
+These become new Proposals.
+Some requests fundamentally change the operational job.
+Examples:
+•	Different venue 
+•	Different service style 
+•	Major guest increase 
+•	Different function 
+The user decides whether:
+•	this remains the same Event 
+or
+•	becomes a new Event. 
+Savveyra supports either approach.
+________________________________________
+17. Kitchen Workflow
+Create Event
+↓
+Create Proposal
+↓
+Edit Proposal
+↓
+Send Proposal
+↓
+Sales Response
+↓
+If changes required
+↓
+Duplicate Proposal
+↓
+Create next Proposal
+↓
+Send again
+Kitchen history remains intact.
+________________________________________
+18. Sales Workflow
+Receive Proposal
+↓
+Review
+↓
+Create Quotation
+↓
+Issue to Customer
+↓
+Customer feedback
+↓
+Create Revision if required
+↓
+Issue again
+Quotation history remains intact.
+________________________________________
+19. Customer Workflow
+Customer never interacts with Proposals.
+Customer receives Quotations only.
+Customer may:
+Accept
+Decline
+Request changes
+Requested changes are communicated back to Kitchen by Sales through creation of a new Proposal.
+________________________________________
+20. Business Rules
+1.	Proposal and Quotation are separate business objects. 
+2.	Proposal belongs to Kitchen. 
+3.	Quotation belongs to Sales. 
+4.	Proposal is a complete Event snapshot. 
+5.	Quotation is a complete customer snapshot. 
+6.	Sent Proposals are immutable. 
+7.	Issued Quotations are immutable. 
+8.	History is never rewritten. 
+9.	New versions are created instead of editing history. 
+10.	Permissions never transfer ownership. 
+11.	Ownership determines business rules. 
+12.	Event is the operational parent. 
+13.	An Event may have many Proposals. 
+14.	An Event may have many Quotations. 
+15.	An Event may exist with no Quotations. 
+16.	Kitchen may prepare multiple alternative Proposals. 
+17.	Sales may prepare multiple Quotation revisions. 
+18.	Proposal numbering is independent from Quotation numbering. 
+19.	Proposal status belongs only to Kitchen. 
+20.	Quotation status belongs only to Sales. 
+21.	Customer never sees Proposals. 
+22.	Kitchen never edits Quotations. 
+23.	Sales never edits Proposals. 
+24.	All Proposal revisions create new Proposal numbers. 
+25.	All Quotation revisions preserve customer history. 
+26.	The Event page displays the currently selected Proposal. 
+27.	Selecting another Proposal changes the displayed Event snapshot. 
+28.	The user decides whether a major operational change remains the same Event or becomes a new Event. 
+________________________________________
+21. Guiding Principle
+The architecture is based on one overriding concept:
+Kitchen and Sales collaborate through controlled handoff, not shared ownership.
+Each domain owns its own business objects.
+Each domain preserves its own history.
+Each domain follows its own workflow.
+Permissions may allow users to work across domains, but ownership, business rules and historical integrity remain permanently separated.
+________________________________________
+
+22. Future Architectural Review
+The introduction of complete Event Proposal snapshots changes the architectural contract between Events and downstream operational modules.
+Current downstream modules were originally designed assuming a single active Event definition.
+Following implementation of the Proposal architecture, all downstream modules shall be reviewed to determine whether their source should remain the Event itself or the currently selected Proposal snapshot.
+The first module requiring review is Groceries.
+Current behaviour assumes:
+Event
+    ↓
+Groceries
+The intended architecture is expected to become:
+Event
+    ↓
+Selected Proposal
+    ↓
+Groceries
+Groceries should operate from the selected Proposal snapshot rather than attempting to interpret multiple Proposals belonging to an Event.
+This review is expected to affect:
+•	Supabase tables and relationships 
+•	Database functions 
+•	Appsmith bindings and page behaviour 
+The business purpose of Groceries is not expected to change. Only the source of its operational data will be reviewed to ensure consistency with the Proposal architecture.
+This review shall be completed after the Event–Proposal–Quotation implementation has been finalised.
+
+________________________________________
+
+End of Architecture Specification – Version 1.0
+
