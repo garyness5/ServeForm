@@ -4,42 +4,34 @@
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 47,
-  "defaultCheckedState": "{{\n  appsmith.store.contact_form_mode === \"edit\"\n    ? tblContacts.selectedRow.active !== false\n    : true\n}}",
+  "defaultCheckedState": true,
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "defaultCheckedState"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
-  "dynamicPropertyPathList": [
-    {
-      "key": "defaultCheckedState"
-    }
-  ],
   "dynamicTriggerPathList": [],
   "isDisabled": false,
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,
-  "key": "7kkqxd8e6v",
+  "key": "bgo10zev07",
   "label": "Active",
   "labelPosition": "Left",
   "labelStyle": "BOLD",
   "labelTextSize": "1rem",
-  "leftColumn": 0,
+  "leftColumn": 1,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
-  "mobileBottomRow": 37,
+  "mobileBottomRow": 47,
   "mobileLeftColumn": 1,
   "mobileRightColumn": 13,
-  "mobileTopRow": 33,
+  "mobileTopRow": 43,
   "needsErrorInfo": false,
   "originalBottomRow": 47,
   "originalTopRow": 43,
@@ -52,6 +44,6 @@
   "topRow": 43,
   "type": "CHECKBOX_WIDGET",
   "version": 1,
-  "widgetId": "y44bxpefzb",
+  "widgetId": "0mkqb6mkdh",
   "widgetName": "chkContactActive"
 }

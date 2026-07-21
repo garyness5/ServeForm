@@ -43,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  !inpContactName.text?.trim()\n    ? showAlert(\"Contact name is required.\", \"warning\")\n    : saveContactMaster.run()\n        .then(() => getContacts.run())\n        .then(() => closeModal(\"mdlContact\"))\n        .then(() => showAlert(\"Contact saved.\", \"success\"))\n}}",
+  "onClick": "{{\n    contactSave.save(true)\n}}",
   "originalBottomRow": 65,
   "originalTopRow": 61,
   "parentId": "o1lp1i9850",

@@ -43,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  !inpContactName.text?.trim()\n    ? showAlert(\"Contact name is required.\", \"warning\")\n    : saveContactMaster.run()\n        .then(() => getContacts.run())\n        .then(() => storeValue(\"contact_form_mode\", \"add\"))\n        .then(() => storeValue(\"current_contact_id\", null))\n        .then(() => resetWidget(\"mdlContact\", true))\n        .then(() =>\n          showAlert(\n            \"Contact saved. Ready for next contact.\",\n            \"success\"\n          )\n        )\n}}",
+  "onClick": "{{\n    contactSave.save(false)\n}}",
   "originalBottomRow": 65,
   "originalTopRow": 61,
   "parentId": "o1lp1i9850",

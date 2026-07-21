@@ -5,7 +5,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 58,
+  "bottomRow": 70,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "cachedTableData": {},
   "canFreezeColumn": true,
@@ -47,9 +47,11 @@
     "customer_names",
     "venue_names",
     "customer_list",
-    "venue_list"
+    "venue_list",
+    "customer_ids",
+    "venue_ids"
   ],
-  "columnUpdatedAt": 1783988338048,
+  "columnUpdatedAt": 1784593110711,
   "columnWidthMap": {
     "active": 100,
     "address": 208,
@@ -60,6 +62,7 @@
     "cost_per_unit": 104,
     "customColumn1": 85,
     "customer_name": 153,
+    "customer_names": 164,
     "diet_tag_names": 181,
     "email": 224,
     "event_date": 213,
@@ -153,6 +156,12 @@
     },
     {
       "key": "primaryColumns.owner_list.computedValue"
+    },
+    {
+      "key": "primaryColumns.customer_ids.computedValue"
+    },
+    {
+      "key": "primaryColumns.venue_ids.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -161,9 +170,6 @@
     },
     {
       "key": "onRowSelected"
-    },
-    {
-      "key": "primaryColumns.active.onCheckChange"
     }
   ],
   "dynamicTriggerPathList": [
@@ -228,7 +234,7 @@
       "isVisible": true,
       "label": "Active",
       "notation": "standard",
-      "onCheckChange": "{{\n  toggleContactActive.run()\n    .then(() => getContacts.run())\n}}",
+      "onCheckChange": "",
       "originalId": "active",
       "sticky": "",
       "textColor": "",
@@ -298,6 +304,40 @@
       "label": "Type",
       "notation": "standard",
       "originalId": "contact_type",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "customer_ids": {
+      "alias": "customer_ids",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblContacts.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"customer_ids\"])) : customer_ids })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "customer_ids",
+      "index": 8,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "customer_ids",
+      "notation": "standard",
+      "originalId": "customer_ids",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
@@ -380,7 +420,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblContacts.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"email\"])) : email })()}}",
+      "computedValue": "{{(() => { const tableData = tblContacts.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow[\"email\"] || \"\" )) :  currentRow[\"email\"] || \"\"  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -604,6 +644,40 @@
       "label": "Title",
       "notation": "standard",
       "originalId": "title",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "venue_ids": {
+      "alias": "venue_ids",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblContacts.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"venue_ids\"])) : venue_ids })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "venue_ids",
+      "index": 9,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "venue_ids",
+      "notation": "standard",
+      "originalId": "venue_ids",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
