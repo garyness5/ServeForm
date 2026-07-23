@@ -1,10 +1,11 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 6,
+  "bottomRow": 32,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
-  "buttonVariant": "PRIMARY",
+  "buttonStyle": "PRIMARY",
+  "buttonVariant": "SECONDARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
     {
@@ -14,44 +15,38 @@
       "key": "borderRadius"
     }
   ],
-  "dynamicPropertyPathList": [
-    {
-      "key": "onClick"
-    }
-  ],
+  "dynamicPropertyPathList": [],
   "dynamicTriggerPathList": [
     {
       "key": "onClick"
     }
   ],
-  "iconAlign": "left",
   "isDefaultClickDisabled": true,
   "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
-  "key": "o01hoigeqy",
-  "leftColumn": 20,
+  "key": "db5p08m351",
+  "leftColumn": 45,
   "minWidth": 120,
-  "mobileBottomRow": 8,
-  "mobileLeftColumn": 6,
-  "mobileRightColumn": 22,
-  "mobileTopRow": 4,
+  "mobileBottomRow": 22,
+  "mobileLeftColumn": 31,
+  "mobileRightColumn": 47,
+  "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  getContactImpactCount.run(() => showModal(\"mdlContactDelConfirm\"))\n}}",
-  "parentColumnSpace": 10.609375,
-  "parentId": "m9kgzdtc6h",
-  "parentRowSpace": 10,
+  "onClick": "{{closeModal('')}}",
+  "originalBottomRow": 30,
+  "originalTopRow": 26,
+  "parentId": "a48cpgg5cx",
   "placement": "CENTER",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 25,
-  "text": "Delete",
-  "tooltip": "Edit selected dish",
-  "topRow": 2,
+  "rightColumn": 61,
+  "text": "Cancel",
+  "topRow": 28,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "ivutqjlxwc",
-  "widgetName": "btnDeleteContact"
+  "widgetId": "13m6obtdl1",
+  "widgetName": "btnContactDelConfirmCancel"
 }

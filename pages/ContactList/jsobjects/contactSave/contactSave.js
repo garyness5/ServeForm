@@ -71,7 +71,8 @@ export default {
 			await storeValue("current_contact_id", newContactId);
 			await storeValue("current_contact_record", newContact);
 
-			resetWidget("mdlContact", true);
+			resetWidget("mslContactCustomers", true);
+			resetWidget("mslContactVenues", true);
 			showModal("mdlContact");
 
 			showAlert(`${newContact.contact_name} created.`, "success");
@@ -80,6 +81,55 @@ export default {
 				error?.message || "Contact could not be duplicated.",
 				"error"
 			);
+		}
+	},
+
+	async deleteContact() {
+		const sourceRow = tblContacts.selectedRow;
+
+		if (!sourceRow?.id) {
+			showAlert("Select a contact to delete.", "warning");
+			return;
+		}
+
+		try {
+			const result = await deleteContact.run();
+			const deletedContact = result?.[0];
+
+			if (!deletedContact?.id) {
+				throw new Error("The Contact was not deleted.");
+			}
+
+			closeModal("mdlContactDelConfirm");
+
+			await getContacts.run();
+
+			await removeValue("current_contact_id");
+			await removeValue("current_contact_record");
+			await removeValue("contact_form_mode");
+
+			showAlert(
+				`${deletedContact.contact_name} deleted.`,
+				"success"
+			);
+		} catch (error) {
+			showAlert(
+				error?.message || "Contact could not be deleted.",
+				"error"
+			);
+		}
+	},
+
+	async toggleStatus() {
+		try {
+			await toggleContactActive.run();
+			await getContacts.run();
+		} catch (error) {
+			showAlert(
+				error?.message || "Contact status could not be updated.",
+				"error"
+			);
+			await getContacts.run();
 		}
 	}
 

@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_6cd64e9b-7d6c-4a56-a6d6-272a690b2c54",
-  "id": "ContactList_toggleContactActive",
+  "gitSyncId": "6a0a1bde3214f344228346e7_5b2946b6-9b5e-497d-a0c3-6234de88fd5f",
+  "id": "ContactList_deleteContact",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "update public.contacts\nset\n  active = {{ tblContacts.updatedRow.active }}::boolean,\n  updated_at = now()\nwhere id = {{ Number(tblContacts.updatedRow.id || 0) }}::bigint\n  and client_id = {{ appsmith.store.current_client_id }}::uuid\n  and coalesce(deleted, false) = false\nreturning\n  id,\n  contact_name,\n  active;",
+      "body": "update public.contacts\nset\n  deleted = true,\n  active = false,\n  updated_at = now()\nwhere id = {{ Number(tblContacts.selectedRow.id || 0) }}::bigint\n  and client_id = {{ appsmith.store.current_client_id }}::uuid\n  and coalesce(deleted, false) = false\nreturning\n  id,\n  contact_name;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,9 +27,9 @@
         "key": "body"
       }
     ],
-    "name": "toggleContactActive",
+    "name": "deleteContact",
     "pageId": "ContactList",
     "runBehaviour": "MANUAL",
-    "userSetOnLoad": true
+    "userSetOnLoad": false
   }
 }

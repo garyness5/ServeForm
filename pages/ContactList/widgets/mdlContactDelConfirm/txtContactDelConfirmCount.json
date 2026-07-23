@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 18,
+  "bottomRow": 23,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -13,10 +13,10 @@
       "key": "borderRadius"
     },
     {
-      "key": "isVisible"
+      "key": "text"
     },
     {
-      "key": "text"
+      "key": "isVisible"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -27,37 +27,37 @@
   ],
   "dynamicTriggerPathList": [],
   "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
-  "fontSize": "1rem",
+  "fontSize": "0.875rem",
   "fontStyle": "",
   "isLoading": false,
-  "isVisible": "{{\n  Number(appsmith.store.current_recipe_id || 0) > 0 &&\n  recWarnings.list().length > 0\n}}",
-  "key": "or4p3qeldn",
-  "leftColumn": 0,
+  "isVisible": "{{ true }}",
+  "key": "h29kmo3jn9",
+  "leftColumn": 3,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
-  "mobileBottomRow": 6,
-  "mobileLeftColumn": 1,
-  "mobileRightColumn": 17,
-  "mobileTopRow": 2,
+  "mobileBottomRow": 42,
+  "mobileLeftColumn": 4,
+  "mobileRightColumn": 20,
+  "mobileTopRow": 38,
   "needsErrorInfo": false,
-  "originalBottomRow": 16,
-  "originalTopRow": 9,
+  "originalBottomRow": 21,
+  "originalTopRow": 15,
   "overflow": "NONE",
-  "parentColumnSpace": 6.6953125,
-  "parentId": "u7p5us5t36",
+  "parentColumnSpace": 6.9375,
+  "parentId": "a48cpgg5cx",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 64,
+  "rightColumn": 25,
   "shouldTruncate": false,
-  "text": "{{ \"<b>Warnings:</b><br>\" + \"&nbsp;&nbsp;\" + recWarnings.text() }}",
+  "text": "{{\n`This will impact\n   Customers: ${getContactImpactCount.data?.[0]?.customer_count || 0}\n   Venues: ${getContactImpactCount.data?.[0]?.venue_count || 0}`\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 9,
+  "topRow": 17,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "vdg1lhyzgp",
-  "widgetName": "txtRecWarnings"
+  "widgetId": "xiysfco2b2",
+  "widgetName": "txtContactDelConfirmCount"
 }
