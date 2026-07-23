@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 53,
   "shouldTruncate": false,
-  "text": "{{ appsmith.store.contact_form_mode === \"edit\" ? \"Edit Contact\" : \"Add Contact\" }}",
+  "text": "{{\n  appsmith.store.contact_form_mode === \"edit\"\n    ? \"Edit Contact\"\n    : \"Add Contact\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,

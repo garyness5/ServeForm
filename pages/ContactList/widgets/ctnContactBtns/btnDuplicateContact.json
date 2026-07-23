@@ -37,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ showAlert(\"Duplicate Contact not built yet.\", \"info\") }}",
+  "onClick": "{{ contactSave.duplicateContact() }}",
   "parentColumnSpace": 10.609375,
   "parentId": "m9kgzdtc6h",
   "parentRowSpace": 10,

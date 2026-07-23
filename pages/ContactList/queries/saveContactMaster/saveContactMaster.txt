@@ -2,31 +2,30 @@ select *
 from public.save_contact_master(
   {{
     appsmith.store.contact_form_mode === "edit"
-      ? Number(appsmith.store.current_contact_id)
+      ? Number(appsmith.store.current_contact_id || 0)
       : null
   }}::bigint,
 
-  {{ appsmith.store.current_client_id }}::uuid,
+  '{{ appsmith.store.current_client_id }}'::uuid,
 
-  {{ inpContactName.text?.trim() || null }}::text,
-  {{ inpContactTitle.text?.trim() || null }}::text,
-  {{ inpContactPhone.text?.trim() || null }}::text,
-  {{ inpContactMobile.text?.trim() || null }}::text,
-  {{ inpContactEmail.text?.trim() || null }}::text,
-  {{ inpContactNotes.text?.trim() || null }}::text,
+  '{{ (inpContactName.text ?? "").replace(/'/g, "''") }}'::text,
+  '{{ (inpContactTitle.text ?? "").replace(/'/g, "''") }}'::text,
+  '{{ (inpContactPhone.text ?? "").replace(/'/g, "''") }}'::text,
+  '{{ (inpContactMobile.text ?? "").replace(/'/g, "''") }}'::text,
+  '{{ (inpContactEmail.text ?? "").replace(/'/g, "''") }}'::text,
+  '{{ (inpContactNotes.text ?? "").replace(/'/g, "''") }}'::text,
+
   {{ chkContactActive.isChecked !== false }}::boolean,
 
   {{
-    `{${(mslContactCustomers.selectedOptionValues || [])
-      .map(Number)
-      .filter(Boolean)
-      .join(",")}}`
-  }}::bigint[],
+    radContactType.selectedOptionValue
+      ? "'" +
+        radContactType.selectedOptionValue.replace(/'/g, "''") +
+        "'"
+      : null
+  }}::text,
 
   {{
-    `{${(mslContactVenues.selectedOptionValues || [])
-      .map(Number)
-      .filter(Boolean)
-      .join(",")}}`
-  }}::bigint[]
+    Number(selContactLinkedTo.selectedOptionValue || 0) || null
+  }}::bigint
 );
