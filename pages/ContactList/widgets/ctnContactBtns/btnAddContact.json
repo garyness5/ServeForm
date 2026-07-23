@@ -37,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{\n  storeValue(\"contact_form_mode\", \"add\")\n    .then(() => resetWidget(\"mdlContact\", true))\n    .then(() => showModal(\"mdlContact\"))\n}}",
+  "onClick": "{{\n  storeValue(\"contact_form_mode\", \"add\")\n    .then(() => storeValue(\"current_contact_id\", null))\n    .then(() => storeValue(\"current_contact_record\", null))\n    .then(() => resetWidget(\"mdlContact\", true))\n    .then(() => showModal(\"mdlContact\"))\n}}",
   "parentColumnSpace": 10.609375,
   "parentId": "m9kgzdtc6h",
   "parentRowSpace": 10,

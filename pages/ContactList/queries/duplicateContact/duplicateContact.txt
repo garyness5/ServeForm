@@ -1,0 +1,4 @@
+select public.duplicate_contact_master(
+    {{ Number(tblContacts.selectedRow.id || 0) }},
+    '{{ appsmith.store.current_client_id }}'::uuid
+) as new_contact_id;

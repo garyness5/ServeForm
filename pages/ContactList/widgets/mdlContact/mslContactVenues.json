@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 23,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  (tblContacts.selectedRow.venue_ids || []).map(String)\n))(mslContactVenues.options, mslContactVenues.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  (appsmith.store.current_contact_record?.venue_ids || [])\n    .map(String)\n))(mslContactVenues.options, mslContactVenues.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

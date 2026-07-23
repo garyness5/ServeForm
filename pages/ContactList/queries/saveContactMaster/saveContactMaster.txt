@@ -8,12 +8,13 @@ from public.save_contact_master(
 
   {{ appsmith.store.current_client_id }}::uuid,
 
-  {{ inpContactName.text?.trim() || null }}::text,
-  {{ inpContactTitle.text?.trim() || null }}::text,
-  {{ inpContactPhone.text?.trim() || null }}::text,
-  {{ inpContactMobile.text?.trim() || null }}::text,
-  {{ inpContactEmail.text?.trim() || null }}::text,
-  {{ inpContactNotes.text?.trim() || null }}::text,
+  {{ (inpContactName.text ?? "").trim() }}::text,
+  {{ (inpContactTitle.text ?? "").trim() }}::text,
+  {{ (inpContactPhone.text ?? "").trim() }}::text,
+  {{ (inpContactMobile.text ?? "").trim() }}::text,
+  {{ (inpContactEmail.text ?? "").trim() }}::text,
+  {{ (inpContactNotes.text ?? "").trim() }}::text,
+
   {{ chkContactActive.isChecked !== false }}::boolean,
 
   {{

@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 19,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  appsmith.store.contact_form_mode === \"edit\"\n    ? (tblContacts.selectedRow.customer_ids || [])\n    : []\n))(mslContactCustomers.options, mslContactCustomers.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  (appsmith.store.current_contact_record?.customer_ids || [])\n    .map(Number)\n    .filter(Boolean)\n))(mslContactCustomers.options, mslContactCustomers.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

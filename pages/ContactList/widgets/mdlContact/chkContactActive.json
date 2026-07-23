@@ -4,16 +4,24 @@
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 47,
-  "defaultCheckedState": true,
+  "defaultCheckedState": "{{\n  appsmith.store.contact_form_mode === \"edit\"\n    ? appsmith.store.current_contact_record?.active !== false\n    : true\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "defaultCheckedState"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
+  "dynamicPropertyPathList": [
+    {
+      "key": "defaultCheckedState"
+    }
+  ],
   "dynamicTriggerPathList": [],
   "isDisabled": false,
   "isLoading": false,

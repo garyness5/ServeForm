@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 5,
+  "bottomRow": 7,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -23,7 +23,7 @@
   "fontStyle": "BOLD",
   "isLoading": false,
   "isVisible": true,
-  "key": "u3472ytlyn",
+  "key": "kp7fopwkvw",
   "leftColumn": 1,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
@@ -36,18 +36,18 @@
   "originalBottomRow": 5,
   "originalTopRow": 1,
   "overflow": "NONE",
-  "parentId": "obujocuuy6",
+  "parentId": "a48cpgg5cx",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 53,
+  "rightColumn": 55,
   "shouldTruncate": false,
-  "text": "{{\n  appsmith.store.contact_form_mode === \"edit\"\n    ? \"Edit Contact\"\n    : \"Add Contact\"\n}}",
+  "text": "{{\n  \"Delete: \" + (tblContacts.selectedRow?.contact_name || \"\")\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "zsx5md41rd",
-  "widgetName": "ttlContactAdd"
+  "widgetId": "iidk0ax02p",
+  "widgetName": "titContactDelConfirmDelete"
 }

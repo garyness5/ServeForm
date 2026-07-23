@@ -1,0 +1,11 @@
+update public.contacts
+set
+  active = {{ tblContacts.updatedRow.active }}::boolean,
+  updated_at = now()
+where id = {{ Number(tblContacts.updatedRow.id || 0) }}::bigint
+  and client_id = {{ appsmith.store.current_client_id }}::uuid
+  and coalesce(deleted, false) = false
+returning
+  id,
+  contact_name,
+  active;

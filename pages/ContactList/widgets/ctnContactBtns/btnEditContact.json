@@ -37,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{\n  !tblContacts.selectedRow?.id\n    ? showAlert(\"Select a contact to edit.\", \"warning\")\n    : storeValue(\"contact_form_mode\", \"edit\")\n        .then(() => storeValue(\"current_contact_id\", tblContacts.selectedRow.id))\n        .then(() => resetWidget(\"mdlContact\", true))\n        .then(() => showModal(\"mdlContact\"))\n}}",
+  "onClick": "{{\n  !tblContacts.selectedRow?.id\n    ? showAlert(\"Select a contact to edit.\", \"warning\")\n    : storeValue(\"contact_form_mode\", \"edit\")\n        .then(() =>\n          storeValue(\"current_contact_id\", tblContacts.selectedRow.id)\n        )\n        .then(() =>\n          storeValue(\"current_contact_record\", tblContacts.selectedRow)\n        )\n        .then(() => resetWidget(\"mdlContact\", true))\n        .then(() => showModal(\"mdlContact\"))\n}}",
   "parentColumnSpace": 10.609375,
   "parentId": "m9kgzdtc6h",
   "parentRowSpace": 10,

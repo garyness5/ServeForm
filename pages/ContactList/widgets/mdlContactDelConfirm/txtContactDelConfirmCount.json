@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 5,
+  "bottomRow": 23,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -14,40 +14,50 @@
     },
     {
       "key": "text"
+    },
+    {
+      "key": "isVisible"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
+  "dynamicPropertyPathList": [
+    {
+      "key": "isVisible"
+    }
+  ],
   "dynamicTriggerPathList": [],
   "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
-  "fontSize": "1.25rem",
-  "fontStyle": "BOLD",
+  "fontSize": "0.875rem",
+  "fontStyle": "",
   "isLoading": false,
-  "isVisible": true,
-  "key": "u3472ytlyn",
-  "leftColumn": 1,
+  "isVisible": "{{ true }}",
+  "key": "h29kmo3jn9",
+  "leftColumn": 3,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
-  "mobileBottomRow": 5,
-  "mobileLeftColumn": 1,
-  "mobileRightColumn": 41,
-  "mobileTopRow": 1,
+  "mobileBottomRow": 42,
+  "mobileLeftColumn": 4,
+  "mobileRightColumn": 20,
+  "mobileTopRow": 38,
   "needsErrorInfo": false,
-  "originalBottomRow": 5,
-  "originalTopRow": 1,
+  "originalBottomRow": 21,
+  "originalTopRow": 15,
   "overflow": "NONE",
-  "parentId": "obujocuuy6",
+  "parentColumnSpace": 6.9375,
+  "parentId": "a48cpgg5cx",
+  "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 53,
+  "rightColumn": 25,
   "shouldTruncate": false,
-  "text": "{{\n  appsmith.store.contact_form_mode === \"edit\"\n    ? \"Edit Contact\"\n    : \"Add Contact\"\n}}",
+  "text": "{{\n`This will impact\n   Customers: ${getContactImpactCount.data?.[0]?.customer_count || 0}\n   Venues: ${getContactImpactCount.data?.[0]?.venue_count || 0}`\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 1,
+  "topRow": 17,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "zsx5md41rd",
-  "widgetName": "ttlContactAdd"
+  "widgetId": "xiysfco2b2",
+  "widgetName": "txtContactDelConfirmCount"
 }

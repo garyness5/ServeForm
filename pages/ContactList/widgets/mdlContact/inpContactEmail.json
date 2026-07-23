@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 35,
   "boxShadow": "none",
-  "defaultText": "{{ appsmith.store.contact_form_mode === \"edit\" ? tblContacts.selectedRow.email : \"\" }}",
+  "defaultText": "{{\n  appsmith.store.contact_form_mode === \"edit\"\n    ? appsmith.store.current_contact_record?.email ?? \"\"\n    : \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

@@ -37,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ showAlert(\"Delete Contact not built yet.\", \"info\") }}",
+  "onClick": "{{\n  getContactImpactCount.run(() => showModal(\"mdlContactDelConfirm\"))\n}}",
   "parentColumnSpace": 10.609375,
   "parentId": "m9kgzdtc6h",
   "parentRowSpace": 10,
