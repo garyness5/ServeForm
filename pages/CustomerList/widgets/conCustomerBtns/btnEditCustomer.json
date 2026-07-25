@@ -12,11 +12,17 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -26,7 +32,7 @@
   ],
   "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": false,
+  "isDisabled": "{{ !tblCustomers.selectedRow?.id }}",
   "isLoading": false,
   "isVisible": true,
   "key": "o01hoigeqy",
@@ -37,7 +43,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{\n  !tblCustomers.selectedRow?.id\n    ? showAlert(\"Select a customer to edit.\", \"warning\")\n    : storeValue(\"customer_form_mode\", \"edit\")\n        .then(() => storeValue(\"current_customer_id\", tblCustomers.selectedRow.id))\n        .then(() => resetWidget(\"mdlCustomer\", true))\n        .then(() => showModal(\"mdlCustomer\"))\n}}",
+  "onClick": "{{ customerSave.openEdit() }}",
   "parentColumnSpace": 10.609375,
   "parentId": "x5zq7t7lj0",
   "parentRowSpace": 10,
@@ -48,7 +54,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 13,
   "text": "Edit",
-  "tooltip": "Edit selected dish",
+  "tooltip": "Edit selected Customer",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,

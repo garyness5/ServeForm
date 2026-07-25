@@ -208,7 +208,7 @@
       "isVisible": true,
       "label": "Active",
       "notation": "standard",
-      "onCheckChange": "{{\n  toggleCustomerActive.run()\n    .then(() => getCustomers.run())\n}}",
+      "onCheckChange": "{{ customerSave.toggleStatus() }}",
       "originalId": "active",
       "sticky": "",
       "textColor": "",

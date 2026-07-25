@@ -1,0 +1,24 @@
+insert into public.customer_contact_links (
+    client_id,
+    customer_id,
+    contact_id,
+    active
+)
+select
+    cu.client_id,
+    cu.id,
+    x.contact_id,
+    true
+from public.customers cu
+cross join unnest(
+    {{ msCustomerContacts.selectedOptionValues.length
+        ? `{${msCustomerContacts.selectedOptionValues.map(Number).join(",")}}`
+        : "{}"
+    }}::bigint[]
+) as x(contact_id)
+join public.contacts co
+    on co.id = x.contact_id
+   and co.client_id = cu.client_id
+   and co.deleted = false
+where cu.id = {{ appsmith.store.current_customer_id }}::bigint
+  and cu.deleted = false;

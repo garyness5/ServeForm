@@ -1,0 +1,56 @@
+{
+  "animateLoading": true,
+  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "bottomRow": 6,
+  "boxShadow": "none",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonStyle": "PRIMARY_BUTTON",
+  "buttonVariant": "PRIMARY",
+  "disabledWhenInvalid": false,
+  "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
+    {
+      "key": "borderRadius"
+    }
+  ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
+  "isDefaultClickDisabled": true,
+  "isDisabled": false,
+  "isLoading": false,
+  "isVisible": true,
+  "key": "db5p08m351",
+  "leftColumn": 47,
+  "minWidth": 120,
+  "mobileBottomRow": 22,
+  "mobileLeftColumn": 47,
+  "mobileRightColumn": 63,
+  "mobileTopRow": 18,
+  "needsErrorInfo": false,
+  "onClick": "{{\n(async () => {\n\tcloseModal(\"mdlCustomerDuplicateWarning\");\n\n\tif (\n\t\tappsmith.store.customer_duplicate_entity === \"Contact\"\n\t) {\n\t\tawait customerContact.save(\n\t\t\tappsmith.store.customer_duplicate_save_and_new === true,\n\t\t\ttrue\n\t\t);\n\t\treturn;\n\t}\n\n\tawait customerSave.save(\n\t\tappsmith.store.customer_duplicate_close_after,\n\t\ttrue\n\t);\n})()\n}}",
+  "originalBottomRow": 36,
+  "originalTopRow": 32,
+  "parentId": "90xz4pfxuq",
+  "placement": "CENTER",
+  "recaptchaType": "V3",
+  "renderMode": "CANVAS",
+  "resetFormOnClick": false,
+  "responsiveBehavior": "hug",
+  "rightColumn": 63,
+  "text": "Yes",
+  "topRow": 2,
+  "type": "BUTTON_WIDGET",
+  "version": 1,
+  "widgetId": "makk5xzb3z",
+  "widgetName": "btnCustomerDuplicateWarningAdd"
+}

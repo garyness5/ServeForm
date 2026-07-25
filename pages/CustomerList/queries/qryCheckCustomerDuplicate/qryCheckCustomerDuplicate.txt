@@ -1,0 +1,12 @@
+select
+    id
+from public.customers
+where client_id = {{ appsmith.store.current_client_id }}::uuid
+  and lower(trim(customer_name)) =
+      lower(trim({{ inpCustomerName.text }}::text))
+  and coalesce(deleted, false) = false
+and id <> COALESCE(
+	{{ appsmith.store.current_customer_id }},
+	-1
+)
+limit 1;

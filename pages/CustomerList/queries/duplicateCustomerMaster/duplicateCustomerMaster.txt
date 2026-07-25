@@ -1,0 +1,5 @@
+select *
+from public.duplicate_customer_master(
+    {{ Number(tblCustomers.selectedRow.id) }}::bigint,
+    {{ appsmith.store.current_client_id }}::uuid
+);

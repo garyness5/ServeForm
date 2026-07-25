@@ -1,0 +1,2 @@
+delete from public.customer_contact_links
+where customer_id = {{ appsmith.store.current_customer_id }}::bigint;

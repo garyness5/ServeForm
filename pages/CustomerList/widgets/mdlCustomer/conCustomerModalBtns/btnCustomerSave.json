@@ -40,7 +40,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  !inpCustomerName.text || !inpCustomerName.text.trim()\n    ? showAlert(\"Customer name is required.\", \"warning\")\n    : (\n        appsmith.store.customer_form_mode === \"edit\"\n          ? updateCustomer.run()\n          : saveCustomer.run()\n      )\n        .then(() => getCustomers.run())\n        .then(() => closeModal(\"mdlCustomer\"))\n        .then(() => showAlert(\"Customer saved.\", \"success\"))\n}}",
+  "onClick": "{{ customerSave.save(true) }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "j6lwxil3t7",

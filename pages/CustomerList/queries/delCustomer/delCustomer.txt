@@ -1,0 +1,6 @@
+select *
+from public.set_customer_deleted(
+    {{ Number(appsmith.store.current_customer_id) }}::bigint,
+    {{ appsmith.store.current_client_id }}::uuid,
+    true
+);
