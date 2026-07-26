@@ -39,11 +39,11 @@ export default {
 			const result = await saveContactMaster.run();
 
 			const savedRow =
-				Array.isArray(result)
-					? result[0]
-					: Array.isArray(saveContactMaster.data)
-						? saveContactMaster.data[0]
-						: result;
+						Array.isArray(result)
+			? result[0]
+			: Array.isArray(saveContactMaster.data)
+			? saveContactMaster.data[0]
+			: result;
 
 			const contactId = Number(
 				savedRow?.contact_id ??
@@ -89,18 +89,65 @@ export default {
 		} catch (error) {
 			showAlert(
 				error?.message ||
-					"Contact could not be saved.",
+				"Contact could not be saved.",
 				"error"
 			);
 		}
 	},
 
 	resetQuickFields: async () => {
-		resetWidget("inpContactName", true);
-		resetWidget("inpContactTitle", true);
-		resetWidget("inpContactPhone", true);
-		resetWidget("inpContactMobile", true);
-		resetWidget("inpContactEmail", true);
-		resetWidget("inpContactNotes", true);
-	}
+		await storeValue("contact_form_mode", "add");
+		await storeValue("current_contact_id", null);
+		await storeValue("current_contact_record", null);
+
+		await resetWidget("inpContactName", true);
+		await resetWidget("inpContactTitle", true);
+		await resetWidget("inpContactPhone", true);
+		await resetWidget("inpContactMobile", true);
+		await resetWidget("inpContactEmail", true);
+		await resetWidget("inpContactNotes", true);
+	},
+
+	toggleAddAccordion: async () => {
+		if (appsmith.store.customerAccordion === "addContact") {
+			await storeValue("customerAccordion", "");
+			return;
+		}
+
+		await storeValue("contact_form_mode", "add");
+		await storeValue("current_contact_id", null);
+		await storeValue("current_contact_record", null);
+
+		await customerContact.resetQuickFields();
+
+		await storeValue("customerAccordion", "addContact");
+	},
+
+	getContactOptions() {
+		const selectedIds = new Set(
+			(appsmith.store.customer_contact_ids || []).map(String)
+		);
+
+		return [...(getContacts.data || [])]
+			.sort((a, b) => {
+			const aSelected = selectedIds.has(String(a.id));
+			const bSelected = selectedIds.has(String(b.id));
+
+			if (aSelected !== bSelected) {
+				return aSelected ? -1 : 1;
+			}
+
+			return String(a.contact_name || "")
+				.localeCompare(
+				String(b.contact_name || ""),
+				undefined,
+				{ sensitivity: "base" }
+			);
+		})
+			.map(contact => ({
+			label: contact.display_name || contact.contact_name,
+			value: String(contact.id)
+		}));
+	},
+
 };

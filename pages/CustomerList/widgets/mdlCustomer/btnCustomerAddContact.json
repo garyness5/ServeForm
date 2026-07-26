@@ -44,7 +44,7 @@
   "mobileRightColumn": 53,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  storeValue(\n    \"customerAccordion\",\n    appsmith.store.customerAccordion === \"addContact\" ? \"\" : \"addContact\"\n  )\n}}",
+  "onClick": "{{ customerContact.toggleAddAccordion() }}",
   "parentColumnSpace": 7.53125,
   "parentId": "ykslxlx79h",
   "parentRowSpace": 10,
