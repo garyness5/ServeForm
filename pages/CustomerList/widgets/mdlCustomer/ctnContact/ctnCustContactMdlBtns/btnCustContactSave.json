@@ -43,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ customerContact.save(true) }}",
+  "onClick": "{{ customerContact.save(false) }}",
   "originalBottomRow": 65,
   "originalTopRow": 61,
   "parentId": "nv5nq6jc59",

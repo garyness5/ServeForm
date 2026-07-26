@@ -44,7 +44,7 @@
   "mobileTopRow": 14,
   "mode": "SHOW_ALL",
   "needsErrorInfo": false,
-  "options": "{{\n  (getContacts.data || []).map(contact => ({\n    label: contact.display_name,\n    value: String(contact.id)\n  }))\n}}",
+  "options": "{{ customerContact.getContactOptions() }}",
   "parentColumnSpace": 7.53125,
   "parentId": "ykslxlx79h",
   "parentRowSpace": 10,
