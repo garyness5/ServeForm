@@ -1,32 +1,64 @@
 export default {
+	async save(closeAfter = true, bypassDuplicate = false) {
+		const contactName = (inpContactName.text || "").trim();
 
-	save(closeAfter = true) {
-		if (!inpContactName.text?.trim()) {
+		if (!contactName) {
 			showAlert("Contact name is required.", "warning");
 			return;
 		}
 
-		return saveContactMaster.run()
-			.then(() => getContacts.run())
-			.then(() => {
+		try {
+			if (!bypassDuplicate) {
+				const duplicate = await qryCheckContactDuplicate.run();
+
+				if (duplicate?.length) {
+					await storeValue(
+						"contact_duplicate_name",
+						contactName
+					);
+
+					await storeValue(
+						"contact_duplicate_close_after",
+						closeAfter
+					);
+
+					showModal("mdlContactDuplicateWarning");
+					return;
+				}
+			}
+
+			await saveContactMaster.run();
+			await getContacts.run();
+
+			closeModal("mdlContactDuplicateWarning");
+
 			if (closeAfter) {
 				closeModal("mdlContact");
+
 				showAlert(
 					"Contact saved.",
 					"success"
 				);
 
 			} else {
+				await storeValue("contact_form_mode", "add");
+				await storeValue("current_contact_id", null);
+				await storeValue("current_contact_record", null);
 
-				storeValue("contact_form_mode", "add");
-				storeValue("current_contact_id", null);
 				this.resetForm();
+
 				showAlert(
 					"Contact saved. Ready for next contact.",
 					"success"
 				);
 			}
-		});
+
+		} catch (error) {
+			showAlert(
+				error?.message || "Contact could not be saved.",
+				"error"
+			);
+		}
 	},
 
 	resetForm() {
@@ -37,8 +69,6 @@ export default {
 		resetWidget("inpContactEmail", true);
 		resetWidget("inpContactNotes", true);
 		resetWidget("chkContactActive", true);
-		resetWidget("mslContactCustomers", true);
-		resetWidget("mslContactVenues", true);
 	},
 
 	async duplicateContact() {
@@ -71,8 +101,6 @@ export default {
 			await storeValue("current_contact_id", newContactId);
 			await storeValue("current_contact_record", newContact);
 
-			resetWidget("mslContactCustomers", true);
-			resetWidget("mslContactVenues", true);
 			showModal("mdlContact");
 
 			showAlert(`${newContact.contact_name} created.`, "success");
@@ -82,6 +110,15 @@ export default {
 				"error"
 			);
 		}
+	},
+
+	async confirmDuplicate() {
+		closeModal("mdlContactDuplicateWarning");
+
+		await this.save(
+			appsmith.store.contact_duplicate_close_after !== false,
+			true
+		);
 	},
 
 	async deleteContact() {

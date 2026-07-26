@@ -29,7 +29,7 @@
     ],
     "name": "getVenueForContacts",
     "pageId": "ContactList",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }
