@@ -36,7 +36,7 @@
   "mobileRightColumn": 64,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onClick": "{{ IngForm.cancelDelete() }}",
+  "onClick": "{{ venueSave.cancelDelete() }}",
   "parentId": "xgdk3fel3q",
   "renderMode": "CANVAS",
   "responsiveBehavior": "hug",
@@ -45,5 +45,5 @@
   "type": "ICON_BUTTON_WIDGET",
   "version": 1,
   "widgetId": "6f9bzvybkx",
-  "widgetName": "icoContactDellConfirmX"
+  "widgetName": "icoVenueDellConfirmX"
 }

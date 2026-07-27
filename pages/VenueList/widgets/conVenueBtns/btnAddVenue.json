@@ -37,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ export_default_async_save_clos.openNew() }}",
+  "onClick": "{{ venueSave.openNew() }}",
   "parentColumnSpace": 10.609375,
   "parentId": "8i3nf8awq8",
   "parentRowSpace": 10,

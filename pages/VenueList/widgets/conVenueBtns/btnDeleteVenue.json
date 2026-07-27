@@ -12,11 +12,17 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -26,7 +32,7 @@
   ],
   "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": false,
+  "isDisabled": "{{ !tblVenues.selectedRow?.id || deleteVenueMaster.isLoading }}",
   "isLoading": false,
   "isVisible": true,
   "key": "o01hoigeqy",
@@ -37,7 +43,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ groActions.updateAll() }}",
+  "onClick": "{{ venueSave.openDelete() }}",
   "parentColumnSpace": 10.609375,
   "parentId": "8i3nf8awq8",
   "parentRowSpace": 10,

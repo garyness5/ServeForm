@@ -2,7 +2,7 @@
   "animateLoading": true,
   "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 12,
+  "bottomRow": 17,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -34,7 +34,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 6,
   "needsErrorInfo": false,
-  "originalBottomRow": 12,
+  "originalBottomRow": 17,
   "originalTopRow": 7,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
@@ -44,7 +44,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 59,
   "shouldTruncate": false,
-  "text": "{{\n  \"This contact will no longer be available for use. It will remain visible in red where it was already linked.\"\n}}",
+  "text": "{{\n  tblContacts.selectedRow?.contact_name\n    ? `Delete Contact \"${tblContacts.selectedRow.contact_name}\"?<br><br>The Contact will be removed from Contact lists and picklists. Existing references may continue to display the deleted Contact as a warning.`\n    : \"Delete this Contact?\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 7,

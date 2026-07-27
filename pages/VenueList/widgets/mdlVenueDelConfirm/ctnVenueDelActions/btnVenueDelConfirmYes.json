@@ -4,6 +4,7 @@
   "bottomRow": 6,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonStyle": "PRIMARY_BUTTON",
   "buttonVariant": "PRIMARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
@@ -12,11 +13,17 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -24,34 +31,32 @@
       "key": "onClick"
     }
   ],
-  "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": false,
+  "isDisabled": "{{ deleteVenueMaster.isLoading }}",
   "isLoading": false,
   "isVisible": true,
-  "key": "o01hoigeqy",
-  "leftColumn": 26,
+  "key": "db5p08m351",
+  "leftColumn": 46,
   "minWidth": 120,
-  "mobileBottomRow": 8,
-  "mobileLeftColumn": 6,
-  "mobileRightColumn": 22,
-  "mobileTopRow": 4,
+  "mobileBottomRow": 22,
+  "mobileLeftColumn": 47,
+  "mobileRightColumn": 63,
+  "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ navigateTo(\"Settings\") }}",
-  "parentColumnSpace": 10.609375,
-  "parentId": "m9kgzdtc6h",
-  "parentRowSpace": 10,
+  "onClick": "{{ venueSave.deleteVenue() }}",
+  "originalBottomRow": 39,
+  "originalTopRow": 35,
+  "parentId": "7voon3wifj",
   "placement": "CENTER",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 31,
-  "text": "Close",
-  "tooltip": "Edit selected dish",
+  "rightColumn": 62,
+  "text": "Yes",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "bhlshyynld",
-  "widgetName": "btnCloseContact"
+  "widgetId": "ik4ygvjecb",
+  "widgetName": "btnVenueDelConfirmYes"
 }
