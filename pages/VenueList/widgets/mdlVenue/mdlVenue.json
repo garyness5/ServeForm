@@ -1,14 +1,14 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 60,
+  "bottomRow": 104,
   "boxShadow": "none",
   "canEscapeKeyClose": true,
   "canOutsideClickClose": true,
   "children": [
     {
       "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-      "bottomRow": 600,
+      "bottomRow": 1040,
       "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
       "canExtend": true,
       "detachFromLayout": true,
@@ -29,7 +29,7 @@
       "leftColumn": 0,
       "maxDynamicHeight": 9000,
       "minDynamicHeight": 4,
-      "minHeight": 600,
+      "minHeight": 1120,
       "minWidth": 450,
       "mobileBottomRow": 240,
       "mobileLeftColumn": 0,
@@ -37,7 +37,7 @@
       "mobileTopRow": 0,
       "needsErrorInfo": false,
       "parentColumnSpace": 1,
-      "parentId": "e2zab3v3xy",
+      "parentId": "g4bvwngeu8",
       "parentRowSpace": 1,
       "renderMode": "CANVAS",
       "responsiveBehavior": "fill",
@@ -46,7 +46,7 @@
       "topRow": 0,
       "type": "CANVAS_WIDGET",
       "version": 1,
-      "widgetId": "sux5pme0j4",
+      "widgetId": "oe9p0y2jt4",
       "widgetName": "Canvas6CopyCopy"
     }
   ],
@@ -58,14 +58,14 @@
   ],
   "dynamicHeight": "AUTO_HEIGHT",
   "dynamicTriggerPathList": [],
-  "height": 600,
+  "height": 1040,
   "isCanvas": true,
   "isLoading": false,
   "key": "gtauilfv7z",
   "leftColumn": 32,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 10,
-  "minHeight": 600,
+  "minHeight": 1040,
   "mobileBottomRow": 28,
   "mobileLeftColumn": 32,
   "mobileRightColumn": 56,
@@ -82,7 +82,7 @@
   "topRow": 59,
   "type": "MODAL_WIDGET",
   "version": 2,
-  "widgetId": "e2zab3v3xy",
+  "widgetId": "g4bvwngeu8",
   "widgetName": "mdlVenue",
-  "width": 494
+  "width": 566
 }

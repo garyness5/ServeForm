@@ -3,8 +3,8 @@
   "alignWidget": "LEFT",
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 48,
-  "defaultCheckedState": "{{ appsmith.store.venue_form_mode === \"edit\" ? tblVenues.selectedRow.active : true }}",
+  "bottomRow": 92,
+  "defaultCheckedState": "{{\nappsmith.store.venue_form_mode === \"edit\"\n? getVenues.data.find(\n\trow => Number(row.id) === Number(appsmith.store.current_venue_id)\n)?.active ?? true\n: true\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -41,17 +41,17 @@
   "mobileRightColumn": 13,
   "mobileTopRow": 33,
   "needsErrorInfo": false,
-  "originalBottomRow": 60,
-  "originalTopRow": 56,
+  "originalBottomRow": 92,
+  "originalTopRow": 88,
   "parentColumnSpace": 7.53125,
-  "parentId": "sux5pme0j4",
+  "parentId": "oe9p0y2jt4",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
   "rightColumn": 15,
-  "topRow": 44,
+  "topRow": 88,
   "type": "CHECKBOX_WIDGET",
   "version": 1,
-  "widgetId": "mhsbzqg131",
+  "widgetId": "2sil0z0zm0",
   "widgetName": "chkVenueActive"
 }
