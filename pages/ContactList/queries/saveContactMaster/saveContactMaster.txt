@@ -18,16 +18,28 @@ from public.save_contact_master(
   {{ chkContactActive.isChecked !== false }}::boolean,
 
   {{
-    `{${(mslContactCustomers.selectedOptionValues || [])
-      .map(Number)
-      .filter(Boolean)
-      .join(",")}}`
+    `{${
+      (
+        appsmith.store.contact_form_mode === "edit"
+          ? appsmith.store.current_contact_record?.customer_ids
+          : []
+      || [])
+        .map(Number)
+        .filter(Boolean)
+        .join(",")
+    }}`
   }}::bigint[],
 
   {{
-    `{${(mslContactVenues.selectedOptionValues || [])
-      .map(Number)
-      .filter(Boolean)
-      .join(",")}}`
+    `{${
+      (
+        appsmith.store.contact_form_mode === "edit"
+          ? appsmith.store.current_contact_record?.venue_ids
+          : []
+      || [])
+        .map(Number)
+        .filter(Boolean)
+        .join(",")
+    }}`
   }}::bigint[]
 );

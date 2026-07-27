@@ -29,7 +29,7 @@
     ],
     "name": "getCustForContacts",
     "pageId": "ContactList",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }

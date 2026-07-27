@@ -10,6 +10,10 @@
         {
           "name": "closeAfter",
           "value": "{{true}}"
+        },
+        {
+          "name": "bypassDuplicate",
+          "value": "{{false}}"
         }
       ],
       "paginationType": "NONE",

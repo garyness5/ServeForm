@@ -36,14 +36,14 @@
   "mobileRightColumn": 64,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onClick": "{{ closeModal(\"mdlVenue\") }}",
-  "parentId": "sux5pme0j4",
+  "onClick": "{{ export_default_async_save_clos.close() }}",
+  "parentId": "oe9p0y2jt4",
   "renderMode": "CANVAS",
   "responsiveBehavior": "hug",
   "rightColumn": 64,
   "topRow": 0,
   "type": "ICON_BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "ayh83uke7w",
+  "widgetId": "n1lqjo2w5m",
   "widgetName": "IcoVenueX"
 }

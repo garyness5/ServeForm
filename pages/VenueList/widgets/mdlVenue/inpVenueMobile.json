@@ -3,9 +3,9 @@
   "animateLoading": true,
   "autoFocus": false,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 26,
+  "bottomRow": 76,
   "boxShadow": "none",
-  "defaultText": "{{ appsmith.store.venue_form_mode === \"edit\" ? tblVenues.selectedRow.mobile : \"\" }}",
+  "defaultText": "{{\nappsmith.store.venue_form_mode === \"edit\"\n? getVenues.data.find(\n\trow =>\n\tNumber(row.id) ===\n\tNumber(appsmith.store.current_venue_id)\n)?.mobile ?? \"\"\n: \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -41,19 +41,19 @@
   "mobileRightColumn": 21,
   "mobileTopRow": 7,
   "needsErrorInfo": false,
-  "originalBottomRow": 26,
-  "originalTopRow": 22,
+  "originalBottomRow": 76,
+  "originalTopRow": 72,
   "parentColumnSpace": 6.9375,
-  "parentId": "sux5pme0j4",
+  "parentId": "oe9p0y2jt4",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "resetOnSubmit": true,
   "responsiveBehavior": "fill",
-  "rightColumn": 63,
+  "rightColumn": 62,
   "showStepArrows": false,
-  "topRow": 22,
+  "topRow": 72,
   "type": "INPUT_WIDGET_V2",
   "version": 2,
-  "widgetId": "4yw3bq2s2g",
+  "widgetId": "af6z8z3w96",
   "widgetName": "inpVenueMobile"
 }

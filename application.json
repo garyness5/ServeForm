@@ -10,19 +10,19 @@
   "icon": "bicycle",
   "pages": [
     {
-      "id": "DishList",
-      "isDefault": false
-    },
-    {
-      "id": "Dish",
-      "isDefault": false
-    },
-    {
-      "id": "MenuList",
-      "isDefault": false
-    },
-    {
       "id": "Menu",
+      "isDefault": false
+    },
+    {
+      "id": "ContactList",
+      "isDefault": false
+    },
+    {
+      "id": "CustomerList",
+      "isDefault": false
+    },
+    {
+      "id": "VenueList",
       "isDefault": false
     },
     {
@@ -54,6 +54,18 @@
       "isDefault": false
     },
     {
+      "id": "DishList",
+      "isDefault": false
+    },
+    {
+      "id": "Dish",
+      "isDefault": false
+    },
+    {
+      "id": "MenuList",
+      "isDefault": false
+    },
+    {
       "id": "Groceries",
       "isDefault": false
     },
@@ -71,18 +83,6 @@
     },
     {
       "id": "Settings",
-      "isDefault": false
-    },
-    {
-      "id": "VenueList",
-      "isDefault": false
-    },
-    {
-      "id": "CustomerList",
-      "isDefault": false
-    },
-    {
-      "id": "ContactList",
       "isDefault": false
     }
   ],

@@ -3,7 +3,7 @@
   "animateLoading": true,
   "autoFocus": false,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 27,
+  "bottomRow": 19,
   "boxShadow": "none",
   "defaultText": "{{\n  appsmith.store.contact_form_mode === \"edit\"\n    ? (appsmith.store.current_contact_record?.phone || \"\")\n    : \"\"\n}}",
   "dynamicBindingPathList": [
@@ -52,7 +52,7 @@
   "rightColumn": 63,
   "shouldAllowAutofill": false,
   "showStepArrows": false,
-  "topRow": 23,
+  "topRow": 15,
   "type": "INPUT_WIDGET_V2",
   "version": 2,
   "widgetId": "0jv0nq3bkb",
