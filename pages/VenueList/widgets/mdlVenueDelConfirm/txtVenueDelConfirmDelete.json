@@ -2,7 +2,7 @@
   "animateLoading": true,
   "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 12,
+  "bottomRow": 22,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -12,9 +12,6 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -34,7 +31,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 6,
   "needsErrorInfo": false,
-  "originalBottomRow": 12,
+  "originalBottomRow": 22,
   "originalTopRow": 7,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
@@ -44,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 59,
   "shouldTruncate": false,
-  "text": "{{\n  \"This contact will no longer be available for use. It will remain visible in red where it was already linked.\"\n}}",
+  "text": "This Venue will be removed from the Address Book and all Venue picklists.\n\nExisting Events, Proposals, and Quotations that already reference this Venue will retain their existing Venue information and display a deleted-record warning.\n\nThis action cannot be undone.",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 7,
@@ -52,5 +49,5 @@
   "type": "TEXT_WIDGET",
   "version": 1,
   "widgetId": "swzicvs5kj",
-  "widgetName": "txtContactDelConfirmDelete"
+  "widgetName": "txtVenueDelConfirmDelete"
 }

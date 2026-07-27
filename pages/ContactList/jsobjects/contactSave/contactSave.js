@@ -12,11 +12,7 @@ export default {
 				const duplicate = await qryCheckContactDuplicate.run();
 
 				if (duplicate?.length) {
-					await storeValue(
-						"contact_duplicate_name",
-						contactName
-					);
-
+					await storeValue("contact_duplicate_name", contactName);
 					await storeValue(
 						"contact_duplicate_close_after",
 						closeAfter
@@ -35,15 +31,15 @@ export default {
 			if (closeAfter) {
 				closeModal("mdlContact");
 
-				showAlert(
-					"Contact saved.",
-					"success"
-				);
+				await removeValue("contact_form_mode");
+				await removeValue("current_contact_id");
+				await removeValue("current_contact_record");
 
+				showAlert("Contact saved.", "success");
 			} else {
 				await storeValue("contact_form_mode", "add");
-				await storeValue("current_contact_id", null);
-				await storeValue("current_contact_record", null);
+				await removeValue("current_contact_id");
+				await removeValue("current_contact_record");
 
 				this.resetForm();
 
@@ -52,7 +48,6 @@ export default {
 					"success"
 				);
 			}
-
 		} catch (error) {
 			showAlert(
 				error?.message || "Contact could not be saved.",
@@ -71,20 +66,40 @@ export default {
 		resetWidget("chkContactActive", true);
 	},
 
+	async openEdit() {
+		const sourceRow = tblContacts.selectedRow;
+
+		if (!sourceRow?.id) {
+			showAlert("Select a Contact to edit.", "warning");
+			return;
+		}
+
+		await storeValue("contact_form_mode", "edit");
+		await storeValue("current_contact_id", sourceRow.id);
+		await storeValue("current_contact_record", sourceRow);
+
+		resetWidget("mdlContact", true);
+		showModal("mdlContact");
+	},
+
 	async duplicateContact() {
 		const sourceRow = tblContacts.selectedRow;
 
 		if (!sourceRow?.id) {
-			showAlert("Select a contact to duplicate.", "warning");
+			showAlert("Select a Contact to duplicate.", "warning");
 			return;
 		}
 
 		try {
 			const result = await duplicateContact.run();
-			const newContactId = Number(result?.[0]?.new_contact_id || 0);
+			const newContactId = Number(
+				result?.[0]?.new_contact_id || 0
+			);
 
 			if (!newContactId) {
-				throw new Error("The duplicated Contact ID was not returned.");
+				throw new Error(
+					"The duplicated Contact ID was not returned."
+				);
 			}
 
 			await getContacts.run();
@@ -94,16 +109,22 @@ export default {
 			);
 
 			if (!newContact) {
-				throw new Error("The duplicated Contact could not be loaded.");
+				throw new Error(
+					"The duplicated Contact could not be loaded."
+				);
 			}
 
 			await storeValue("contact_form_mode", "edit");
 			await storeValue("current_contact_id", newContactId);
 			await storeValue("current_contact_record", newContact);
 
+			resetWidget("mdlContact", true);
 			showModal("mdlContact");
 
-			showAlert(`${newContact.contact_name} created.`, "success");
+			showAlert(
+				`${newContact.contact_name} created.`,
+				"success"
+			);
 		} catch (error) {
 			showAlert(
 				error?.message || "Contact could not be duplicated.",
@@ -121,16 +142,26 @@ export default {
 		);
 	},
 
+	openDelete() {
+		if (!tblContacts.selectedRow?.id) {
+			showAlert("Select a Contact to delete.", "warning");
+			return;
+		}
+
+		showModal("mdlContactDelConfirm");
+	},
+
 	async deleteContact() {
 		const sourceRow = tblContacts.selectedRow;
 
 		if (!sourceRow?.id) {
-			showAlert("Select a contact to delete.", "warning");
+			showAlert("No Contact is selected.", "warning");
+			closeModal("mdlContactDelConfirm");
 			return;
 		}
 
 		try {
-			const result = await deleteContact.run();
+			const result = await deleteContactMaster.run();
 			const deletedContact = result?.[0];
 
 			if (!deletedContact?.id) {
@@ -145,6 +176,8 @@ export default {
 			await removeValue("current_contact_record");
 			await removeValue("contact_form_mode");
 
+			resetWidget("tblContacts", true);
+
 			showAlert(
 				`${deletedContact.contact_name} deleted.`,
 				"success"
@@ -157,17 +190,22 @@ export default {
 		}
 	},
 
+	cancelDelete() {
+		closeModal("mdlContactDelConfirm");
+	},
+
 	async toggleStatus() {
 		try {
 			await toggleContactActive.run();
 			await getContacts.run();
 		} catch (error) {
 			showAlert(
-				error?.message || "Contact status could not be updated.",
+				error?.message ||
+				"Contact status could not be updated.",
 				"error"
 			);
+
 			await getContacts.run();
 		}
 	}
-
-}
+};

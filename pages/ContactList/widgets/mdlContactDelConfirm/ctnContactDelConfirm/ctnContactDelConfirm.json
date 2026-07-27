@@ -4,7 +4,7 @@
   "borderColor": "",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 32,
+  "bottomRow": 34,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "children": [
     {
@@ -75,18 +75,18 @@
   "mobileRightColumn": 24,
   "mobileTopRow": 21,
   "needsErrorInfo": false,
-  "originalBottomRow": 32,
-  "originalTopRow": 22,
+  "originalBottomRow": 34,
+  "originalTopRow": 24,
   "parentColumnSpace": 6.9375,
   "parentId": "a48cpgg5cx",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 64,
+  "rightColumn": 63,
   "shouldScrollContents": true,
-  "topRow": 22,
+  "topRow": 24,
   "type": "CONTAINER_WIDGET",
   "version": 1,
   "widgetId": "eypf26nxgj",
-  "widgetName": "Container1"
+  "widgetName": "ctnContactDelConfirm"
 }

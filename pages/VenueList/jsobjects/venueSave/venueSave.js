@@ -205,6 +205,95 @@ export default {
 		);
 	},
 
+	async duplicate() {
+		const sourceId = Number(
+			tblVenues.selectedRow?.id || 0
+		);
+
+		if (!sourceId) {
+			showAlert(
+				"Select a Venue to duplicate.",
+				"warning"
+			);
+			return;
+		}
+
+		try {
+			const result =
+						await duplicateVenueMaster.run();
+
+			const duplicatedVenueId = Number(
+				result?.[0]?.venue_id || 0
+			);
+
+			if (!duplicatedVenueId) {
+				throw new Error(
+					"The duplicated Venue ID was not returned."
+				);
+			}
+
+			await storeValue(
+				"current_venue_id",
+				duplicatedVenueId
+			);
+
+			await storeValue(
+				"venue_form_mode",
+				"edit"
+			);
+
+			await storeValue(
+				"venueAccordion",
+				""
+			);
+
+			await getVenues.run();
+
+			const duplicatedRow =
+						(getVenues.data || []).find(
+							row =>
+							Number(row.id) === duplicatedVenueId
+						);
+
+			await storeValue(
+				"original_venue_name",
+				duplicatedRow?.venue_name || ""
+			);
+
+			await getVenueContactLinks.run();
+
+			await storeValue(
+				"venue_contact_ids",
+				(getVenueContactLinks.data || []).map(
+					row => String(row.contact_id)
+				)
+			);
+
+			await resetWidget(
+				"mdlVenue",
+				true
+			);
+
+			await resetWidget(
+				"msVenueContacts",
+				true
+			);
+
+			showModal("mdlVenue");
+
+			showAlert(
+				"Venue duplicated.",
+				"success"
+			);
+		} catch (error) {
+			showAlert(
+				error?.message ||
+				"Venue could not be duplicated.",
+				"error"
+			);
+		}
+	},
+
 	async close() {
 		await storeValue(
 			"venueAccordion",
@@ -219,12 +308,64 @@ export default {
 	},
 
 	async closeDuplicateWarning() {
-		closeModal(
-			"mdlVenueDuplicateWarning"
+		closeModal("mdlVenueDuplicateWarning");
+
+		await removeValue("venue_duplicate_name");
+
+		showModal("mdlVenue");
+	},
+
+	async openDelete() {
+		const venueId = Number(tblVenues.selectedRow?.id || 0);
+
+		if (!venueId) {
+			showAlert("Select a Venue to delete.", "warning");
+			return;
+		}
+
+		await storeValue("current_venue_id", venueId);
+
+		showModal("mdlVenueDelConfirm");
+	},
+
+	async deleteVenue() {
+		const venueId = Number(
+			appsmith.store.current_venue_id ||
+			tblVenues.selectedRow?.id ||
+			0
 		);
 
-		await removeValue(
-			"venue_duplicate_name"
-		);
+		if (!venueId) {
+			showAlert("No Venue is selected.", "warning");
+			return;
+		}
+
+		try {
+			const result = await deleteVenueMaster.run();
+
+			if (!result?.length) {
+				throw new Error("The Venue was not deleted.");
+			}
+
+			closeModal("mdlVenueDelConfirm");
+
+			await removeValue("current_venue_id");
+			await removeValue("current_venue_record");
+			await removeValue("venue_contact_ids");
+
+			await getVenues.run();
+
+			showAlert("Venue deleted.", "success");
+		} catch (error) {
+			showAlert(
+				error?.message || "Venue could not be deleted.",
+				"error"
+			);
+		}
+	},
+
+	async cancelDelete() {
+		closeModal("mdlVenueDelConfirm");
+		await removeValue("current_venue_id");
 	}
 };

@@ -1,0 +1,5 @@
+select *
+from public.duplicate_venue_master(
+    {{ Number(tblVenues.selectedRow?.id || 0) }}::bigint,
+    {{ appsmith.store.current_client_id }}::uuid
+);

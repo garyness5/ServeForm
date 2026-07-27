@@ -6,6 +6,7 @@ select
   mobile,
   email,
   contact_name,
+  contact_names,
   generic_notes,
   active
 from public.vw_venues
@@ -26,6 +27,6 @@ where client_id = '{{ appsmith.store.current_client_id }}'::uuid
     '{{ (inpVenueSearch.text || "").trim().replaceAll("'", "''") }}' = ''
     or venue_name ilike '%' || '{{ (inpVenueSearch.text || "").trim().replaceAll("'", "''") }}' || '%'
     or coalesce(address, '') ilike '%' || '{{ (inpVenueSearch.text || "").trim().replaceAll("'", "''") }}' || '%'
-    or coalesce(contact_name, '') ilike '%' || '{{ (inpVenueSearch.text || "").trim().replaceAll("'", "''") }}' || '%'
+    or coalesce(contact_names, '') ilike '%' || '{{ (inpVenueSearch.text || "").trim().replaceAll("'", "''") }}' || '%'
   )
 order by lower(venue_name);

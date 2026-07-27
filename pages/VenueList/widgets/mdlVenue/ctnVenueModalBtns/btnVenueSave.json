@@ -13,14 +13,17 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
-      "key": "isDisabled"
+      "key": "onClick"
     },
     {
-      "key": "onClick"
+      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -29,7 +32,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "",
+  "isDisabled": "{{\n  !inpVenueName.text?.trim() ||\n  saveVenueMaster.isLoading\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -40,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ export_default_async_save_clos.save(true) }}",
+  "onClick": "{{ venueSave.save(true) }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "sx25znrcf9",

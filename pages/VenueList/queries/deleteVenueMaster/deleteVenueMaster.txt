@@ -1,0 +1,9 @@
+update public.venues
+set
+  deleted = true,
+  active = false,
+  updated_at = now()
+where id = {{ Number(tblVenues.selectedRow?.id || 0) }}::bigint
+  and client_id = {{ appsmith.store.current_client_id }}::uuid
+  and coalesce(deleted, false) = false
+returning id;

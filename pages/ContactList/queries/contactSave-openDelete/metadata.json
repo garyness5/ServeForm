@@ -1,6 +1,6 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_021be478-8566-412f-97ee-238acd14cea8",
-  "id": "ContactList_contactSave.resetForm",
+  "gitSyncId": "6a0a1bde3214f344228346e7_58bdfe7a-ffc1-47da-be92-db4dc91d6096",
+  "id": "ContactList_contactSave.openDelete",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
@@ -22,8 +22,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "contactSave.resetForm",
-    "name": "resetForm",
+    "fullyQualifiedName": "contactSave.openDelete",
+    "name": "openDelete",
     "pageId": "ContactList",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false
