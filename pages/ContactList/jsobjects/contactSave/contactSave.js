@@ -192,20 +192,6 @@ export default {
 
 	cancelDelete() {
 		closeModal("mdlContactDelConfirm");
-	},
-
-	async toggleStatus() {
-		try {
-			await toggleContactActive.run();
-			await getContacts.run();
-		} catch (error) {
-			showAlert(
-				error?.message ||
-				"Contact status could not be updated.",
-				"error"
-			);
-
-			await getContacts.run();
-		}
 	}
+
 };

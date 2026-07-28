@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "delete from public.customer_contact_links\nwhere customer_id = {{ appsmith.store.current_customer_id }}::bigint;",
+      "body": "delete from public.customer_contact_links\nwhere customer_id =\n      {{ Number(appsmith.store.current_customer_id || 0) }}::bigint\n  and client_id =\n      {{ appsmith.store.current_client_id }}::uuid;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

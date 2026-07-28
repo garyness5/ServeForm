@@ -44,7 +44,7 @@
   "mobileTopRow": 14,
   "mode": "SHOW_ALL",
   "needsErrorInfo": false,
-  "options": "{{ customerContact.getContactOptions() }}",
+  "options": "{{ jsCustomerContact.getContactOptions() }}",
   "parentColumnSpace": 7.53125,
   "parentId": "ykslxlx79h",
   "parentRowSpace": 10,

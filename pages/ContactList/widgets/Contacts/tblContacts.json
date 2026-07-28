@@ -193,7 +193,7 @@
       "isVisible": true,
       "label": "active",
       "notation": "standard",
-      "onCheckChange": "{{ contactSave.toggleStatus() }}",
+      "onCheckChange": "{{\n\ttoggleContactActive.run({\n\t\tcontact_id: currentRow.id,\n\t\tactive: currentRow.active\n\t})\n\t.then(() => getContacts.run())\n\t.catch((error) => {\n\t\tshowAlert(\n\t\t\terror?.message ||\n\t\t\t\t\"Contact status could not be updated.\",\n\t\t\t\"error\"\n\t\t);\n\n\t\treturn getContacts.run();\n\t})\n}}",
       "originalId": "active",
       "sticky": "",
       "textSize": "0.875rem",

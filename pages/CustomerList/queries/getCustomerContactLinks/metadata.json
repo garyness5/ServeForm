@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n    ccl.contact_id\nfrom public.customer_contact_links ccl\njoin public.customers cu\n    on cu.id = ccl.customer_id\n   and cu.client_id = ccl.client_id\nwhere ccl.customer_id =\n      {{ appsmith.store.current_customer_id }}::bigint\n  and ccl.active = true\norder by ccl.contact_id;",
+      "body": "select\n    ccl.contact_id\nfrom public.customer_contact_links ccl\njoin public.customers cu\n    on cu.id = ccl.customer_id\n   and cu.client_id = ccl.client_id\nwhere ccl.customer_id =\n      {{ Number(appsmith.store.current_customer_id || 0) }}::bigint\n  and ccl.client_id =\n      {{ appsmith.store.current_client_id }}::uuid\n  and ccl.active = true\norder by ccl.contact_id;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

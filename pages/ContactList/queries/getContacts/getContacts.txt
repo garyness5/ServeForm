@@ -52,13 +52,13 @@ where client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and coalesce(deleted, false) = false
 
   and (
-    '{{ selContactFilter.selectedOptionValue || "active" }}' = 'all'
+    '{{ selContactFilter.selectedOptionValue || "all" }}' = 'all'
     or (
-      '{{ selContactFilter.selectedOptionValue || "active" }}' = 'active'
+      '{{ selContactFilter.selectedOptionValue || "all" }}' = 'active'
       and active = true
     )
     or (
-      '{{ selContactFilter.selectedOptionValue || "active" }}' = 'inactive'
+      '{{ selContactFilter.selectedOptionValue || "all" }}' = 'inactive'
       and active = false
     )
   )
