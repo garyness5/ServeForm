@@ -13,13 +13,13 @@ from public.vw_venues
 where client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and coalesce(deleted, false) = false
   and (
-    '{{ selVenueFilter.selectedOptionValue || "active" }}' = 'all'
+    '{{ selVenueFilter.selectedOptionValue || "all" }}' = 'all'
     or (
-      '{{ selVenueFilter.selectedOptionValue || "active" }}' = 'active'
+      '{{ selVenueFilter.selectedOptionValue || "all" }}' = 'active'
       and active = true
     )
     or (
-      '{{ selVenueFilter.selectedOptionValue || "active" }}' = 'inactive'
+      '{{ selVenueFilter.selectedOptionValue || "all" }}' = 'inactive'
       and active = false
     )
   )

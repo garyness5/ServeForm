@@ -29,7 +29,7 @@
     ],
     "name": "getContacts",
     "pageId": "CustomerList",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }

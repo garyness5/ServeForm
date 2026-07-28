@@ -1,6 +1,0 @@
-select *
-from public.set_customer_status(
-    {{ Number(tblCustomers.updatedRow.id) }},
-    {{ appsmith.store.client_id }},
-    {{ Boolean(tblCustomers.updatedRow.active) }}
-);

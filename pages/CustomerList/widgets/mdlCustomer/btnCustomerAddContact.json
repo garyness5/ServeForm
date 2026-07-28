@@ -44,7 +44,7 @@
   "mobileRightColumn": 53,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ customerContact.toggleAddAccordion() }}",
+  "onClick": "{{ jsCustomerContact.toggleAddAccordion() }}",
   "parentColumnSpace": 7.53125,
   "parentId": "ykslxlx79h",
   "parentRowSpace": 10,

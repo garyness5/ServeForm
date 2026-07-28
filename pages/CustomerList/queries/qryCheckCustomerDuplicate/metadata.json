@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n    id\nfrom public.customers\nwhere client_id = {{ appsmith.store.current_client_id }}::uuid\n  and lower(trim(customer_name)) =\n      lower(trim({{ inpCustomerName.text }}::text))\n  and coalesce(deleted, false) = false\nand id <> COALESCE(\n\t{{ appsmith.store.current_customer_id }},\n\t-1\n)\nlimit 1;",
+      "body": "select\n    c.id\nfrom public.customers c\nwhere c.client_id = {{ appsmith.store.current_client_id }}::uuid\n  and lower(trim(c.customer_name)) =\n      lower(trim({{ (inpCustomerName.text || \"\").trim() }}::text))\n  and coalesce(c.deleted, false) = false\n  and c.id <> coalesce(\n      nullif(\n          {{ Number(appsmith.store.current_customer_id || 0) }}::bigint,\n          0\n      ),\n      -1::bigint\n  )\nlimit 1;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

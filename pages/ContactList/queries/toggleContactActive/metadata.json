@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "update public.contacts\nset\n  active = {{ tblContacts.updatedRow.active }}::boolean,\n  updated_at = now()\nwhere id = {{ Number(tblContacts.updatedRow.id || 0) }}::bigint\n  and client_id = {{ appsmith.store.current_client_id }}::uuid\n  and coalesce(deleted, false) = false\nreturning\n  id,\n  contact_name,\n  active;",
+      "body": "update public.contacts\nset\n    active = {{ this.params.active }}::boolean,\n    updated_at = now()\nwhere id = {{ Number(this.params.contact_id || 0) }}::bigint\n  and client_id = {{ appsmith.store.current_client_id }}::uuid\n  and coalesce(deleted, false) = false\nreturning\n    id,\n    contact_name,\n    active;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
