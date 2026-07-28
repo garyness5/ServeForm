@@ -1,60 +1,82 @@
-Savveyra Architecture
-Purpose
-This document defines the architectural model of Savveyra.
-It explains:
-•	how the application is organized 
-•	domain ownership 
-•	information flow 
-•	publication 
-•	propagation 
-•	shared services 
-•	system boundaries 
-•	implementation principles 
-This document describes architecture.
-It does not describe implementation progress, SQL, Appsmith pages, or development status.
-Those belong in implementation documentation.
-________________________________________
-Architectural Philosophy
-Savveyra is built around a single principle:
-Every business object has one owner.
-Ownership determines:
-•	who creates information 
-•	who changes information 
-•	who publishes information 
-•	who consumes information 
-Ownership is never shared.
-Downstream domains consume published information but never become owners of that information.
-This separation keeps business rules predictable and prevents conflicting implementations.
-________________________________________
-High-Level Architecture
-Savveyra consists of four architectural layers.
-Management
+# Savveyra Architecture
+
+## Part 1
+
+# Purpose
+
+Savveyra Architecture defines how the system is organized.
+
+It describes the permanent structural principles that govern how the product is built, how domains interact, how information flows, where responsibilities belong, and how the overall system evolves.
+
+Architecture answers:
+
+- What is the system structure?
+- How do domains relate to one another?
+- How does information move through the system?
+- Where do business responsibilities belong?
+- Where does propagation begin and end?
+- Which architectural patterns apply across multiple domains?
+- How should future development remain consistent with the existing system?
+
+Architecture defines the structural truth of the product.
+
+It does not describe:
+
+- implementation progress
+- development status
+- Appsmith pages
+- SQL procedures
+- implementation details
+
+Those belong in domain documentation.
+
+When conflicts occur, the priority is:
+
+```text
+Operational Logic
         ↓
-Composition
+Domain Rules
         ↓
-Shared Operational Domain
+Architecture
         ↓
-Output
-Each layer has one clearly defined responsibility.
-Layers communicate only through published information.
-________________________________________
-Management Layer
-The Management Layer stores reusable business reference information.
-Current Management domains include:
-•	Customers 
-•	Contacts 
-•	Venues 
-•	Client Helper Lists 
-•	Units 
-•	System Lists 
-These domains provide reference information for operational work.
-They do not participate in composition.
-They do not participate in costing.
-They do not publish operational history.
-________________________________________
-Composition Layer
-The Composition Layer creates operational work.
-Current Composition domains are:
+Implementation
+```
+
+Operational correctness always takes priority over:
+
+- database convenience
+- UI convenience
+- technical convenience
+- implementation simplicity
+
+The objective is not to build the most technically sophisticated system.
+
+The objective is to build the simplest architecture that correctly supports real operational workflow.
+
+Architecture should remain stable even as implementation evolves.
+
+Technologies, database structures and user interfaces may change.
+
+Architectural principles should remain stable unless the product itself is intentionally redesigned.
+
+---
+
+# Architectural Philosophy
+
+Savveyra is designed around real food-service operations.
+
+The system exists to help operators answer practical questions before production begins:
+
+- What does this cost?
+- What do I need to produce?
+- What do I need to buy?
+- What am I missing?
+- What changed?
+- What is the current operational truth?
+
+The connected workflow is the product.
+
+```text
 Ingredients
       ↓
 Recipes
@@ -62,70 +84,192 @@ Recipes
 Dishes
       ↓
 Menus
-Each level builds upon the published information of the previous level.
-Each level becomes more operationally meaningful.
-Composition always moves downward.
-No downstream domain modifies upstream information.
-________________________________________
-Shared Operational Layer
-The Shared Operational Layer consists of Events.
-Events combine reusable operational information into real business work.
-Events connect:
-•	Customers 
-•	Contacts 
-•	Venues 
-•	Menus 
-•	scheduling 
-•	guest planning 
-•	operational administration 
-Events represent actual operational commitments.
-Propagation ends here.
-________________________________________
-Output Layer
-Output domains consume published Event information.
-Current Output domains include:
+      ↓
 Events
    ├── Groceries
    └── Proposal
           ↓
       Quotation
-Output domains never publish information upstream.
-Output domains own their own historical records.
-Output domains may refresh from Events when appropriate.
-Output domains never alter Event history.
-________________________________________
-Domain Independence
-Each domain should remain independently understandable.
-Every domain owns:
-•	business rules 
-•	validation 
-•	publication 
-•	lifecycle 
-•	numbering 
-•	historical records 
-•	user workflow 
-Domains should communicate through published contracts rather than direct implementation knowledge.
-A downstream domain should not require knowledge of how an upstream domain is internally implemented.
-________________________________________
-Published Contracts
-Every domain publishes a defined contract.
-A published contract contains only the information required by downstream consumers.
-The contract intentionally hides internal implementation.
-Typical published information includes:
-•	identifiers 
-•	names 
-•	summaries 
-•	calculated values 
-•	operational status 
-•	published costs 
-•	published quantities 
-Downstream domains depend upon published contracts rather than internal tables.
-This separation allows implementation to evolve without changing downstream behaviour.
-________________________________________
-Information Flow
-Information moves only in one direction.
+```
+
+Each domain adds operational meaning.
+
+The architecture exists to preserve that connected meaning.
+
+Preferred design order:
+
+```text
+Operational Logic
+        ↓
+Domain Rules
+        ↓
+Architecture
+        ↓
+Supabase
+        ↓
+Appsmith
+```
+
+Operational workflow comes first.
+
+Technology exists to support the workflow.
+
+The architecture should remain:
+
+- practical
+- understandable
+- visible
+- maintainable
+
+Complexity is acceptable only when it protects genuine operational behaviour.
+
+The goal is not maximum flexibility.
+
+The goal is the simplest architecture that correctly supports the business.
+
+Savveyra provides operational truth.
+
+It does not attempt to manage every business process surrounding that truth.
+
+Users remain responsible for:
+
+- communication
+- purchasing decisions
+- inventory decisions
+- pricing decisions
+- management decisions
+
+The system provides information.
+
+Users make decisions.
+
+---
+
+# Engineering Philosophy
+
+Savveyra should become more consistent over time.
+
+Normalization is a continual architectural objective.
+
+Business patterns proven in later domains should become standards for earlier domains wherever practical.
+
+Normalization should occur layer by layer across the entire application rather than one isolated domain at a time.
+
+Key architectural principles include:
+
+- business rules belong in Supabase whenever practical
+- Appsmith should remain intentionally thin
+- Shared Services are preferred over duplicated logic
+- one business action normally maps to one Supabase function
+- weak foundations should be corrected before building additional functionality
+
+A domain is complete only when all of the following are aligned:
+
+- operational behaviour
+- Supabase foundation
+- Appsmith workflow
+- documentation
+
+---
+
+# System Structure
+
+Savveyra consists of connected operational domains.
+
+The primary operational chain is:
+
+```text
+Ingredients
+      ↓
+Recipes
+      ↓
+Dishes
+      ↓
+Menus
+      ↓
+Events
+```
+
+Events are the final planning domain.
+
+Events consume Menus.
+
+Events publish operational information to downstream output workflows.
+
+Propagation stops at Events.
+
+Two independent output workflows begin from Events:
+
+```text
+Events
+   ├── Groceries
+   └── Proposal
+          ↓
+      Quotation
+```
+
+Output domains consume published Event information.
+
+Output domains do not participate in propagation.
+
+Each output domain follows its own workflow.
+
+---
+
+# Domain Types
+
+Savveyra separates domains into four architectural groups.
+
+```text
 Management
       ↓
+Composition
+      ↓
+Shared Operational
+      ↓
+Output
+```
+
+Each architectural group has a distinct responsibility.
+
+---
+
+## Management Domains
+
+Management Domains maintain reusable business reference information.
+
+Current Management Domains include:
+
+- Customers
+- Contacts
+- Venues
+- Client Helper Lists
+- Units
+- System Lists
+
+Management Domains:
+
+- publish reference information
+- do not participate in costing
+- do not participate in composition
+- do not participate in propagation
+- support operational domains
+
+Management Domains remain intentionally lightweight.
+
+They support operational work without becoming operational workflow themselves.
+
+# Savveyra Architecture
+
+## Part 2
+
+# Composition Domains
+
+Composition Domains create operational work.
+
+They form the primary operational chain.
+
+```text
 Ingredients
       ↓
 Recipes
@@ -135,301 +279,194 @@ Dishes
 Menus
       ↓
 Events
-      ↓
-Outputs
-No downstream domain modifies upstream information.
-Feedback between departments occurs through business workflow rather than automatic data propagation.
-This keeps operational ownership clear.
-________________________________________
-Composition Architecture
-Composition domains build increasingly complex operational objects.
-Each layer consumes reusable published objects.
-Example:
-Ingredient
+```
 
-Tomatoes
-Cheese
-Basil
+Each Composition Domain:
 
-↓
+- consumes Published State from upstream
+- performs its own business logic
+- publishes richer operational information
+- becomes the authoritative source for downstream domains
 
-Recipe
+Each domain owns only its own business rules.
 
-Tomato Sauce
+No downstream domain may modify upstream information.
 
-↓
+---
 
-Dish
+# Ingredients
 
-Lasagna
+Ingredients are the operational foundation.
 
-↓
+Ingredients represent purchased products.
 
-Menu
+Ingredients own:
 
-Italian Buffet
-Each level publishes a new operational object.
-The lower-level objects remain independently reusable.
-This compositional architecture minimizes duplication while preserving operational flexibility.
-Domain Ownership
-Every business object has one authoritative owner.
-Ownership determines:
-•	creation 
-•	modification 
-•	validation 
-•	publication 
-•	lifecycle 
-•	historical responsibility 
-Ownership never changes because another domain consumes that information.
-Customer
-Owns:
-•	customer identity 
-•	customer details 
-•	customer status 
-Does not own:
-•	Events 
-•	Quotations 
-•	Proposals 
-________________________________________
-Contact
-Owns:
-•	people 
-•	contact information 
-Does not own:
-•	Customers 
-•	Venues 
-Relationships are maintained through association tables.
-________________________________________
-Venue
-Owns:
-•	venue identity 
-•	venue details 
-Does not own:
-•	Events 
-•	Proposals 
-•	Quotations 
-________________________________________
-Ingredient
-Owns:
-•	purchasing information 
-•	purchase cost 
-•	purchase unit 
-•	wastage 
-•	operational ingredient information 
-________________________________________
-Recipe
-Owns:
-•	recipe composition 
-•	recipe yield 
-•	recipe costing 
-•	manually assigned diet tags 
-Publishes reusable production outputs.
-________________________________________
-Dish
-Owns:
-•	dish composition 
-•	dish costing 
-Publishes reusable service items.
-________________________________________
-Menu
-Owns:
-•	menu composition 
-•	menu costing 
-Publishes reusable guest offerings.
-________________________________________
-Event
-Owns:
-•	operational planning 
-•	event scheduling 
-•	guest planning 
-•	current operational assignments 
-•	current operational state 
-Events are the operational authority.
-________________________________________
-Proposal
-Owns:
-•	Kitchen publication snapshots 
-Proposal never owns the Event.
-Proposal records what Kitchen intentionally published.
-________________________________________
-Quotation
-Owns:
-•	commercial presentation 
-•	selling prices 
-•	revisions 
-•	quotation numbering 
-•	customer communication 
-Quotation never owns Kitchen planning.
-________________________________________
-Published State
-Every editable domain has two states.
-Working State
-The temporary editing workspace.
-Working State:
-•	may be incomplete 
-•	may contain errors 
-•	may be abandoned 
-•	is never consumed downstream 
-________________________________________
-Published State
-Published State represents operational truth.
-Published State:
-•	passed validation 
-•	was successfully saved 
-•	is available downstream 
-•	replaces the previous Published State 
-Downstream domains always consume Published State.
-Never Working State.
-________________________________________
-Publication Pipeline
-Publication follows one consistent model.
-Working State
+- purchasing information
+- purchase units
+- unit cost
+- wastage
+- operational reference information
 
-↓
+Ingredients publish information used throughout the Composition chain.
 
-Validation
+Nothing exists upstream of Ingredients.
 
-↓
+Everything ultimately returns to Ingredients.
 
-Save
+---
 
-↓
+# Recipes
 
-Published State
+Recipes transform purchased Ingredients into reusable production outputs.
 
-↓
+Recipes may contain:
 
-Downstream Availability
-No downstream propagation occurs before successful publication.
-________________________________________
-Propagation Architecture
-Propagation exists only within the Composition chain.
-Ingredients
-      ↓
-Recipes
-      ↓
-Dishes
-      ↓
-Menus
-      ↓
+- Ingredients
+- Recipes (Sub-Recipes)
+
+Recipes own:
+
+- production yield
+- production costing
+- allergen aggregation
+- manually assigned diet tags
+- production summaries
+
+Recipes publish reusable production information.
+
+Recipes may never directly or indirectly contain themselves.
+
+---
+
+# Dishes
+
+Dishes represent prepared food intended for service.
+
+Dishes may contain:
+
+- Ingredients
+- Recipes
+
+Dishes own:
+
+- production costing
+- production summaries
+- service preparation
+
+Dishes publish reusable service items.
+
+---
+
+# Menus
+
+Menus represent reusable guest offerings.
+
+Menus may contain:
+
+- Ingredients
+- Recipes
+- Dishes
+
+Menus own:
+
+- guest offering structure
+- menu costing
+- production summaries
+
+Menus intentionally do not own guest quantities.
+
+Menus remain reusable templates.
+
+---
+
+# Events
+
+Events are the final Composition Domain.
+
+Events consume Menus.
+
+Events combine:
+
+- operational planning
+- scheduling
+- Customer
+- Customer Contact
+- Venue
+- Venue Contact
+- guest planning
+- Menu assignments
+
+Events become the current operational truth.
+
+Propagation stops at Events.
+
+---
+
+# Output Domains
+
+Output Domains consume published Event information.
+
+Current Output Domains are:
+
+```text
 Events
-Propagation ends at Events.
-Nothing propagates automatically beyond Events.
-Output domains determine their own refresh behaviour.
-________________________________________
-Refresh Architecture
-Output domains intentionally refresh rather than propagate.
-Example:
-Events
+   ├── Groceries
+   └── Proposal
+          ↓
+      Quotation
+```
+
+Output Domains:
+
+- never publish upstream
+- never participate in propagation
+- own their own lifecycle
+- own their own historical records
+
+Each Output Domain determines when it refreshes from Events.
+
+---
+
+# Ownership
+
+Every business object has exactly one authoritative owner.
+
+Ownership includes:
+
+- business rules
+- validation
+- lifecycle
+- publication
+- downstream contract
+
+Only the owning domain may modify its information.
+
+Downstream domains consume published information.
+
+Ownership never transfers because another domain uses the information.
+
+Examples:
+
+- Ingredients own ingredient information.
+- Recipes own recipe information.
+- Menus own menu information.
+- Events own Event information.
+- Proposal owns Proposal documents.
+- Quotation owns Quotation documents.
+
+---
+
+# Information Flow
+
+Information flows in one direction.
+
+```text
+Publish
 
 ↓
 
-Update All
-
-↓
-
-Groceries
-or
-Kitchen
-
-↓
-
-Publish Proposal
-
-↓
-
-Sales
-
-↓
-
-Create Quotation
-Refresh is an intentional business action.
-Automatic propagation beyond Events does not exist.
-________________________________________
-Snapshot Architecture
-Some domains intentionally preserve historical truth.
-Current snapshot domains include:
-•	Proposal 
-•	Quotation 
-Snapshots are immutable.
-Creating a new snapshot never modifies previous snapshots.
-Historical records always preserve what existed when published.
-Current operational truth and historical truth coexist.
-Neither replaces the other.
-________________________________________
-Shared Services
-Business behaviour used across multiple domains should exist once.
-Typical Shared Services include:
-•	duplicate detection 
-•	rename 
-•	replace 
-•	delete 
-•	numbering 
-•	validation 
-•	publication 
-•	normalization 
-•	impact counting 
-•	snapshot creation 
-•	status handling 
-Shared Services reduce duplicated business logic and improve consistency.
-Domain-specific behaviour should exist only where operational differences genuinely require it.
-Validation Architecture
-Validation protects operational correctness.
-Validation exists in three layers.
-User Interface
-        ↓
-Business Validation
-        ↓
-Database Integrity
-Each layer has a different responsibility.
-________________________________________
-User Interface Validation
-The user interface provides immediate feedback.
-Typical examples include:
-•	required fields 
-•	invalid formats 
-•	obvious omissions 
-•	user guidance 
-Interface validation improves usability.
-It is not responsible for protecting business integrity.
-________________________________________
-Business Validation
-Business validation protects operational rules.
-Typical examples include:
-•	duplicate prevention 
-•	circular references 
-•	ownership rules 
-•	publication rules 
-•	invalid composition 
-•	incompatible units 
-•	workflow restrictions 
-Business validation belongs primarily in Supabase.
-________________________________________
-Database Integrity
-Database integrity protects stored data.
-Typical mechanisms include:
-•	primary keys 
-•	foreign keys 
-•	constraints 
-•	transactions 
-•	indexes 
-Database integrity should never become the primary implementation of business rules.
-________________________________________
-Save Architecture
-Every editable domain follows the same Save model.
-Load Published State
-
-↓
-
-User Editing
-
-↓
-
-Validation
-
-↓
-
-Save
+Consume
 
 ↓
 
@@ -437,235 +474,454 @@ Publish
 
 ↓
 
-Refresh Views
-Save is the only action that changes Published State.
-Closing a page without saving never changes Published State.
-________________________________________
-Workspace Architecture
-Every editor operates as an isolated workspace.
-A workspace may contain:
-•	incomplete information 
-•	temporary edits 
-•	deleted rows awaiting confirmation 
-•	unsaved calculations 
-Until Save completes successfully, the workspace affects nothing outside itself.
-Multiple users therefore continue working from stable Published State rather than partially completed edits.
-________________________________________
-View Architecture
+Consume
+```
+
+Each domain consumes Published State from upstream.
+
+Each domain publishes its own Published State.
+
+Information never flows upstream.
+
+Propagation exists only within the Composition chain.
+
+Output Domains consume published information but never republish operational changes upstream.
+
+---
+
+# Published State
+
+Published State is the architectural boundary between domains.
+
+Published State is:
+
+- validated
+- internally consistent
+- authoritative
+- available for downstream consumption
+
+Unpublished work remains private to the editing workspace.
+
+Downstream domains consume only Published State.
+
+This separation prevents incomplete work from affecting downstream operations.
+
+# Savveyra Architecture
+
+## Part 3
+
+# Working State
+
+Working State represents the private editing environment of a business object.
+
+Working State:
+
+- belongs to the current editor
+- may be incomplete
+- may contain temporary calculations
+- may contain unsaved changes
+- has no effect on downstream domains
+
+Working State exists only until publication.
+
+Downstream domains never consume Working State.
+
+---
+
+# Publication
+
+Publication is the architectural transition between Working State and Published State.
+
+Publication performs:
+
+- business validation
+- calculation
+- normalization
+- summary generation
+- downstream availability
+
+Only successfully published information becomes available outside the current workspace.
+
+Publication establishes the new Current Operational Truth.
+
+---
+
+# Propagation
+
+Propagation distributes Published State through the Composition chain.
+
+Propagation exists only within:
+
+```text
+Ingredients
+      ↓
+Recipes
+      ↓
+Dishes
+      ↓
+Menus
+      ↓
+Events
+```
+
+Propagation updates:
+
+- costing
+- production summaries
+- operational calculations
+- published downstream information
+
+Propagation never extends beyond Events.
+
+Output Domains refresh independently.
+
+---
+
+# Output Architecture
+
+Output Domains intentionally operate differently from Composition Domains.
+
+Composition Domains continually publish Current Operational Truth.
+
+Output Domains create operational outputs from that truth.
+
+Current Output Domains are:
+
+- Groceries
+- Proposal
+- Quotation
+
+Each Output Domain owns its own workflow.
+
+Each Output Domain determines when published Event information should be refreshed.
+
+Output Domains intentionally remain independent of one another.
+
+---
+
+# Groceries Architecture
+
+Groceries consumes published Event information.
+
+Groceries transforms production requirements into purchasing preparation.
+
+Its workflow is intentionally separated into four stages.
+
+```text
+Events
+      ↓
+Groceries
+      ↓
+Order
+      ↓
+Print
+```
+
+Each stage has a distinct responsibility.
+
+The workflow separates:
+
+- Event selection
+- ingredient expansion
+- purchasing preparation
+- printable purchasing lists
+
+Groceries intentionally excludes:
+
+- inventory
+- purchasing
+- supplier ordering
+
+Users determine what should actually be purchased.
+
+---
+
+# Proposal Architecture
+
+Proposal belongs entirely to Kitchen.
+
+Proposal consumes published Event information.
+
+Proposal creates historical Kitchen communication.
+
+Proposal owns:
+
+- Draft Proposals
+- sent Proposals
+- Proposal history
+
+Kitchen continues to own operational planning after a Proposal has been sent.
+
+Proposal represents published operational information at one point in time.
+
+Each sent Proposal is immutable.
+
+Future operational changes require a new Draft Proposal.
+
+---
+
+# Quotation Architecture
+
+Quotation belongs entirely to Sales.
+
+Quotation consumes Proposal snapshots.
+
+Quotation owns:
+
+- Draft Quotations
+- sent Quotations
+- commercial wording
+- selling prices
+- quotation history
+
+Sales intentionally operates independently from Kitchen after receiving a Proposal.
+
+Kitchen does not participate in commercial workflow.
+
+Sales does not modify Kitchen planning.
+
+---
+
+# Snapshot Architecture
+
+Snapshots preserve historical business communication.
+
+Snapshots intentionally separate:
+
+- Current Operational Truth
+- Historical Operational Truth
+
+Current Operational Truth continues changing.
+
+Historical snapshots never change.
+
+Current snapshot-producing domains include:
+
+- Proposal
+- Quotation
+
+Each snapshot preserves exactly what existed when it was created.
+
+Snapshots are permanent business records.
+
+---
+
+# Current Operational Truth
+
+Current Operational Truth always represents the latest published operational information.
+
+It supports:
+
+- production
+- costing
+- planning
+- grocery preparation
+- future Proposal creation
+
+Current Operational Truth continually evolves.
+
+Historical snapshots remain permanently unchanged.
+
+The architecture intentionally maintains both simultaneously.
+
+# Savveyra Architecture
+
+## Part 4
+
+# Shared Services
+
+Shared Services provide reusable business behaviour across multiple domains.
+
+A Shared Service performs one business function that is common to more than one domain.
+
+Typical Shared Services include:
+
+- Duplicate
+- Rename
+- Replace
+- Delete
+- Number generation
+- Publication
+- Validation
+- Status management
+- Snapshot creation
+- Lookup services
+- Impact counting
+
+Shared Services should remain domain-independent whenever practical.
+
+Domains should call Shared Services rather than implement duplicate business logic.
+
+---
+
+# Management Architecture
+
+Management Domains provide reusable reference information to operational domains.
+
+Management information is intentionally separate from operational workflow.
+
+Management Domains include:
+
+- Customers
+- Contacts
+- Venues
+- Client Helper Lists
+- Units
+- System Lists
+
+Management Domains:
+
+- publish reusable reference information
+- do not participate in propagation
+- do not own operational workflow
+- do not own costing
+
+Operational domains consume Management information without transferring ownership.
+
+---
+
+# Address Book Architecture
+
+The Address Book consists of three coordinated domains:
+
+```text
+Customers
+     ↕
+Contacts
+     ↕
+Venues
+```
+
+Each domain owns its own master records.
+
+Relationships are maintained through linking rather than duplication.
+
+A Contact represents one real person.
+
+A Contact may be associated with:
+
+- one or more Customers
+- one or more Venues
+
+Customers, Contacts and Venues remain independent business objects.
+
+Operational domains consume these records without changing ownership.
+
+---
+
+# View Architecture
+
 Views form the presentation boundary between Supabase and Appsmith.
-Views should expose information already prepared for display.
+
+Views expose Published State.
+
+Views should contain display-ready information whenever practical.
+
 Typical view content includes:
-•	names 
-•	summaries 
-•	calculated values 
-•	counts 
-•	warnings 
-•	display labels 
-•	operational indicators 
-•	published status 
-Views intentionally hide implementation details.
-Appsmith should consume views rather than reconstruct business logic.
-________________________________________
-Function Architecture
-Business actions should be implemented as business functions.
-Examples include:
-•	Save Recipe 
-•	Save Menu 
-•	Publish Proposal 
-•	Refresh Groceries 
-•	Create Quotation 
-•	Rename Helper 
-•	Replace Helper 
-Business functions should represent complete business actions rather than individual SQL statements.
-This improves consistency, reuse and transaction safety.
-________________________________________
-Transaction Architecture
-Each business action should execute as one transaction whenever practical.
-Typical transaction responsibilities include:
-•	validation 
-•	business rules 
-•	updates 
-•	propagation 
-•	publication 
-•	logging 
-•	rollback on failure 
-Partial business updates should never become Published State.
-Either the business action succeeds completely or nothing changes.
-________________________________________
-Reuse Architecture
-Whenever identical business behaviour exists, it should be implemented once.
-Examples include:
-•	duplicate detection 
-•	rename 
-•	replace 
-•	delete 
-•	numbering 
-•	status changes 
-•	publication 
-•	normalization 
-New domains should reuse existing architectural patterns rather than introducing new implementations without operational justification.
-________________________________________
-Numbering Architecture
-User-facing numbering belongs to the owning domain.
-Examples include:
-•	Proposal Number 
-•	Quotation Number 
-Internal database identifiers remain independent of user-facing numbering.
-Business numbering should support future configuration without affecting internal relationships.
-Internal identifiers exist for data integrity.
-User-facing numbers exist for business communication.
-________________________________________
-Status Architecture
-Status belongs to the owning domain.
-Status should describe the operational lifecycle of that domain.
-Examples include:
-Event Status
-•	Draft 
-•	Ordered 
-•	Closed 
-Quotation Status
-•	Draft 
-•	Issued 
-•	Accepted 
-•	Declined 
-•	Withdrawn 
-Proposal publication does not determine Event Status.
-Quotation Status does not determine Event Status.
-Each domain manages its own lifecycle independently.
-CRUD Architecture
-Every editable domain should present a consistent operational experience.
-Standard business actions include:
-•	Create 
-•	Read 
-•	Update 
-•	Duplicate 
-•	Rename 
-•	Replace 
-•	Delete 
-•	Change Status 
-Users should encounter the same behaviour across all domains wherever practical.
-Operational differences should exist only where the business process genuinely requires them.
-________________________________________
-Lookup Architecture
-Lookup objects provide reusable reference information.
-Examples include:
-•	Categories 
-•	Suppliers 
-•	Packaging 
-•	Client Helper Lists 
-•	Units 
-Lookup objects should follow one consistent interaction model.
-Preferred actions are:
-•	+ — Create 
-•	i — View / Edit 
-The interface determines whether the object already exists and opens the appropriate workflow.
-Users should not have to learn different lookup behaviour for different domains.
-________________________________________
-Component Architecture
-Composition domains use a common component model.
-Component rows represent published child objects rather than embedded copies.
-Typical component information includes:
-•	Item 
-•	Item Type 
-•	Quantity 
-•	Unit 
-•	Status 
-•	Line Cost 
-Component tables intentionally remain simple.
-Complex business behaviour belongs to the owning domain rather than individual component rows.
-________________________________________
-Reference Architecture
-References connect business objects.
-References always point to Published objects.
-Relationships should remain stable even as Published State changes.
-Historical snapshots intentionally replace live references where historical accuracy is required.
-Examples:
-•	Recipe Components reference Ingredients. 
-•	Menu Components reference Recipes or Dishes. 
-•	Events reference Menus. 
-•	Proposal stores snapshots. 
-•	Quotation references Proposal snapshots. 
-________________________________________
-Historical Architecture
-Savveyra preserves both current and historical operational truth.
-Current operational truth supports planning.
-Historical operational truth supports:
-•	customer communication 
-•	auditing 
-•	comparison 
-•	legal reference 
-•	operational history 
-Historical information should never be rewritten to match current information.
-Historical records describe what actually existed at that point in time.
-________________________________________
-Kitchen–Sales Boundary
-Kitchen and Sales are architecturally independent.
-Kitchen owns:
-•	production planning 
-•	costing 
-•	menus 
-•	events 
-•	Proposal publication 
-Sales owns:
-•	quotations 
-•	selling prices 
-•	revisions 
-•	customer communication 
-Proposal is the only architectural connection.
-Kitchen never depends upon Sales.
-Sales never depends upon unpublished Kitchen work.
-Communication outside Proposal occurs through normal business processes rather than automatic system integration.
-________________________________________
-Refresh Boundaries
-Not every downstream change occurs automatically.
-The architecture intentionally distinguishes between:
-Propagation
-Automatic movement of Published information through the Composition chain.
-and
-Refresh
-Intentional rebuilding of downstream operational information.
-Examples include:
-•	Update All (Groceries) 
-•	Publish Proposal 
-•	Create Proposal Revision 
-•	Create Quotation 
-Refresh is always an explicit business action.
-________________________________________
-Extensibility
-Future domains should fit the existing architecture.
-New domains should:
-•	define one owner 
-•	publish one downstream contract 
-•	reuse Shared Services 
-•	follow the Save model 
-•	follow the Published State model 
-•	define clear lifecycle ownership 
-Architecture should become more consistent as the product grows.
-New functionality should strengthen existing architectural patterns rather than introduce competing ones.
-________________________________________
-Architectural Principles
-Every architectural decision should strengthen:
-•	clear ownership 
-•	operational correctness 
-•	predictable behaviour 
-•	normalization 
-•	reuse 
-•	maintainability 
-•	stable published contracts 
-•	historical accuracy 
-•	simple user workflows 
-Implementation details may change over time.
-These architectural principles should remain stable.
-________________________________________
-Architectural Objective
-Savveyra is designed as a connected operational planning platform.
-Its architecture deliberately separates:
-•	ownership 
-•	publication 
-•	propagation 
-•	refresh 
-•	historical preservation 
-•	commercial workflow 
-This separation allows each domain to evolve independently while remaining part of one coherent operational workflow.
-The architecture exists to support real operational practice rather than technical convenience.
+
+- display names
+- calculated values
+- summaries
+- counts
+- status indicators
+- warnings
+- derived display information
+
+Views represent the published contract consumed by Appsmith.
+
+Changes to view structure should preserve compatibility whenever practical.
+
+When structural changes are required, the preferred approach is to recreate the view rather than alter the published contract unpredictably.
+
+---
+
+# Appsmith Architecture
+
+Appsmith provides the presentation layer.
+
+Primary responsibilities include:
+
+- navigation
+- page layout
+- forms
+- tables
+- editing
+- confirmations
+- warnings
+- user interaction
+
+Appsmith should remain intentionally thin.
+
+Business behaviour belongs primarily within Supabase.
+
+Appsmith should consume Published State rather than recreate business logic.
+
+---
+
+# Supabase Architecture
+
+Supabase is the operational engine.
+
+Supabase owns:
+
+- business rules
+- validation
+- publication
+- propagation
+- calculations
+- snapshot creation
+- numbering
+- lifecycle management
+- shared services
+- data integrity
+
+Operational behaviour should exist once within Supabase whenever practical.
+
+This architecture minimizes duplicated business logic across user interfaces.
+
+---
+
+# Architectural Evolution
+
+Savveyra is expected to evolve while preserving architectural consistency.
+
+Future development should:
+
+- strengthen normalization
+- reduce duplication
+- improve Shared Services
+- simplify domain interaction
+- improve maintainability
+- preserve operational correctness
+
+Architectural improvements should strengthen existing patterns rather than introduce competing approaches.
+
+When stronger architectural patterns emerge, earlier implementations should gradually adopt them.
+
+---
+
+# Architectural Stability
+
+The architecture should remain stable even as implementation changes.
+
+Changes to:
+
+- SQL
+- Appsmith
+- technologies
+- infrastructure
+
+should not require changes to the architectural model unless the operational product itself changes.
+
+Stable architecture allows implementation to evolve without redefining the product.
+
+---
+
+# Guiding Principle
+
+Every architectural decision should strengthen the connected operational workflow.
+
+The architecture exists to support real operational practice, maintain clear ownership, preserve historical accuracy and provide a stable foundation for long-term development.
+
+Operational correctness always takes priority over implementation convenience.
 

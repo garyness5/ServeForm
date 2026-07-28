@@ -1,66 +1,111 @@
-Kitchen ↔ Sales Workflow
-Purpose
+# Kitchen ↔ Sales Workflow
+
+## Part 1
+
+# Purpose
+
 This document defines the operational workflow between Kitchen and Sales.
+
 It describes how the two departments work together while remaining operationally independent.
-It explains:
-•	responsibilities 
-•	workflow sequence 
-•	Proposal publication 
-•	Sales handoff 
-•	change requests 
-•	parallel operation 
-•	operational communication 
-This document describes business workflow.
-It does not define architecture or detailed business rules.
-Those are defined in:
-•	Events, Proposal & Quotation Architecture 
-•	Proposal & Quotation Operational Specification 
-________________________________________
-Workflow Philosophy
-Kitchen and Sales perform different jobs.
-Kitchen plans and produces food.
+
+It defines:
+
+- responsibilities
+- workflow sequence
+- Proposal creation
+- Proposal publication
+- Sales handoff
+- operational change requests
+- parallel operation
+- business communication
+
+This document defines operational workflow.
+
+It does not define:
+
+- architecture
+- implementation
+- SQL
+- Appsmith
+- user interface behaviour
+
+Those belong in the Architecture and Operational Specification documents.
+
+---
+
+# Workflow Philosophy
+
+Kitchen and Sales perform different business functions.
+
+Kitchen plans operational delivery.
+
 Sales communicates with customers.
+
 The workflow intentionally separates these responsibilities.
-Neither department should depend upon the internal work of the other.
-Coordination occurs only through published Proposals and normal business communication.
-________________________________________
-Department Responsibilities
-Kitchen
+
+Neither department depends upon the internal work of the other.
+
+Coordination occurs only through Proposal documents and normal business communication.
+
+---
+
+# Department Responsibilities
+
+## Kitchen
+
 Kitchen is responsible for:
-•	operational planning 
-•	costing 
-•	Recipes 
-•	Dishes 
-•	Menus 
-•	Event planning 
-•	production requirements 
-•	Proposal publication 
+
+- operational planning
+- costing
+- Ingredients
+- Recipes
+- Dishes
+- Menus
+- Event planning
+- production requirements
+- Proposal creation
+
 Kitchen owns operational accuracy.
-________________________________________
-Sales
+
+---
+
+## Sales
+
 Sales is responsible for:
-•	customer communication 
-•	commercial pricing 
-•	quotation preparation 
-•	negotiation 
-•	quotation revisions 
-•	customer acceptance 
+
+- customer communication
+- commercial pricing
+- Quotation preparation
+- negotiation
+- customer follow-up
+
 Sales owns commercial communication.
-________________________________________
-Shared Responsibility
-Both departments share the same Event.
+
+---
+
+# Shared Responsibility
+
+Kitchen and Sales work from the same Event.
+
 The Event represents the business activity.
+
 Neither department owns the Event exclusively.
-Depending on permissions, either department may update shared Event information such as:
-•	Customer 
-•	Contact 
-•	Venue 
-•	Event Date 
-•	operational notes 
-Operational ownership and commercial ownership remain separate even when both departments work on the same Event.
-________________________________________
-High-Level Workflow
-The normal workflow is:
+
+According to permissions, either department may update shared Event information such as:
+
+- Customer
+- Contact
+- Venue
+- Event Date
+- Event Notes
+
+Operational ownership and commercial ownership remain separate.
+
+---
+
+# High-Level Workflow
+
+```text
 Kitchen Planning
 
 ↓
@@ -69,7 +114,15 @@ Save Event
 
 ↓
 
-Publish Proposal
+Create Proposal
+
+↓
+
+Save Proposal
+
+↓
+
+Send Proposal
 
 ↓
 
@@ -81,304 +134,823 @@ Create Quotation
 
 ↓
 
-Customer Discussion
+Save Quotation
 
 ↓
 
-Customer Decision
-Kitchen and Sales continue working independently after Proposal publication.
-________________________________________
-Kitchen Workflow
+Send Quotation
+
+↓
+
+Customer Discussion
+```
+
+Kitchen and Sales continue working independently throughout the process.
+
+---
+
+# Kitchen Workflow
+
 Kitchen begins by creating or updating an Event.
+
 Kitchen determines:
-•	Menus 
-•	guest counts 
-•	production requirements 
-•	costing 
-•	operational planning 
-Kitchen may continue refining the Event until satisfied that the operational information is ready for Sales.
-At that point, Kitchen publishes a Proposal.
-________________________________________
-Proposal Publication
-Publishing a Proposal communicates Kitchen's current operational solution.
-Publishing does not mean:
-•	production has begun 
-•	the customer has approved 
-•	Sales must use the Proposal immediately 
-Publishing simply makes a Proposal available to Sales.
-Kitchen may publish additional Proposals whenever operational changes need to be communicated.
-________________________________________
-Sales Workflow
-Sales reviews available Proposals.
-Sales chooses the Proposal that best represents the operational information required for customer communication.
-Sales creates a Quotation from that Proposal.
-Sales then performs all commercial work independently from Kitchen.
-________________________________________
-Customer Communication
-Sales communicates directly with the customer.
-Typical activities include:
-•	presenting pricing 
-•	discussing options 
-•	negotiating 
-•	answering commercial questions 
-•	revising quotations 
-Kitchen is not involved in routine commercial communication.
-Operational questions may still be referred back to Kitchen when required.
-________________________________________
-Customer Requests Changes
-Customer discussions frequently generate change requests.
-Typical requests include:
-•	different guest counts 
-•	menu changes 
-•	additional dishes 
-•	removed items 
-•	different Event dates 
-•	venue changes 
-These requests belong to operational planning.
-Sales communicates the requested changes to Kitchen through normal business processes.
-The request itself does not modify the Event.
-Kitchen Receives Change Requests
-Kitchen evaluates requested operational changes.
-Kitchen determines:
-•	operational feasibility 
-•	production impact 
-•	costing impact 
-•	scheduling impact 
+
+- Menus
+- guest quantities
+- production requirements
+- operational costing
+- production planning
+
+Kitchen may continue refining the Event until the operational information is ready for Sales.
+
+Kitchen then creates a Proposal.
+
+---
+
+# Creating a Proposal
+
+Proposal is created from the current saved Event.
+
+The new Proposal begins as a Draft Proposal.
+
 Kitchen may:
-•	accept the requested changes 
-•	partially accept them 
-•	reject them 
-The decision remains an operational decision.
-Sales communicates with the customer.
-Kitchen determines operational capability.
-________________________________________
-Updating the Event
-If Kitchen accepts operational changes, Kitchen updates the Event.
+
+- edit the Proposal
+- save repeatedly
+- generate PDFs
+- continue working later
+
+The Proposal remains editable until it is sent.
+
+---
+
+# Sending a Proposal
+
+Sending communicates Kitchen's current operational solution.
+
+Sending does not mean:
+
+- production has begun
+- the customer has accepted
+- Sales must immediately use the Proposal
+- Kitchen planning has finished
+
+Sending simply publishes the Proposal for Sales.
+
+---
+
+# Kitchen After Sending
+
+Kitchen continues working normally after sending a Proposal.
+
+Kitchen may:
+
+- update the Event
+- change Menus
+- adjust Recipes
+- change guest quantities
+- continue operational planning
+
+Previously sent Proposal documents remain unchanged.
+
+If Kitchen wishes to communicate updated operational information, it creates another Proposal.
+
+# Kitchen ↔ Sales Workflow
+
+## Part 2
+
+# Sales Workflow
+
+Sales reviews available sent Proposals.
+
+Sales selects the Proposal that best represents the operational information required for customer communication.
+
+Sales then creates a Draft Quotation from that Proposal.
+
+The Draft Quotation becomes the Sales working document.
+
+---
+
+# Working with a Draft Quotation
+
+Sales may:
+
+- edit commercial wording
+- adjust selling prices
+- add commercial notes
+- generate PDFs
+- save repeatedly
+- continue editing later
+
+The Draft Quotation remains editable until it is sent.
+
+---
+
+# Sending a Quotation
+
+Sending a Quotation communicates Sales' commercial offer to the customer.
+
+Sending does not:
+
+- modify the Event
+- modify the Proposal
+- notify Kitchen
+- lock operational planning
+- begin production
+
+Sending publishes only the commercial document.
+
+---
+
+# Customer Communication
+
+Sales communicates directly with the customer.
+
+Typical activities include:
+
+- presenting pricing
+- discussing menu options
+- explaining inclusions
+- negotiating commercial terms
+- answering customer questions
+- sending updated Quotations
+
+Kitchen is not involved in routine commercial communication.
+
+Operational questions may be referred to Kitchen when necessary.
+
+---
+
+# Customer Requests Changes
+
+Customer discussions frequently generate requests for change.
+
+Typical requests include:
+
+- different guest quantities
+- Menu changes
+- additional items
+- removed items
+- different Event dates
+- Venue changes
+
+These requests affect operational planning.
+
+Sales communicates the requested changes to Kitchen through normal business processes.
+
+The request itself does not modify the Event.
+
+---
+
+# Kitchen Reviews the Request
+
+Kitchen evaluates every operational request.
+
+Kitchen determines:
+
+- operational feasibility
+- production impact
+- costing impact
+- scheduling impact
+
+Kitchen may:
+
+- accept the request
+- partially accept the request
+- decline the request
+
+Operational feasibility always remains a Kitchen decision.
+
+---
+
+# Updating the Event
+
+If Kitchen accepts the requested changes, Kitchen updates the Event.
+
 Typical updates include:
-•	Menu changes 
-•	guest count changes 
-•	Recipe adjustments 
-•	scheduling changes 
-•	Customer changes 
-•	Contact changes 
-•	Venue changes 
-Saving the Event updates the current Published operational truth.
-Existing Proposals remain unchanged.
-Existing Quotations remain unchanged.
-________________________________________
-Publishing a Revised Proposal
-When updated operational information should be communicated to Sales, Kitchen publishes another Proposal.
-The revised Proposal becomes a new historical snapshot.
-Previous Proposals remain available.
-Kitchen does not replace or edit earlier Proposals.
-Sales decides whether the revised Proposal should become the basis for future customer communication.
-________________________________________
-Sales After a Revised Proposal
-Receiving a revised Proposal does not automatically change Sales' work.
+
+- Menu changes
+- guest quantity changes
+- Recipe adjustments
+- scheduling changes
+- Customer changes
+- Contact changes
+- Venue changes
+
+Saving the Event updates the current operational truth.
+
+Existing Proposal and Quotation documents remain unchanged.
+
+---
+
+# Creating Another Proposal
+
+If Kitchen wishes to communicate the updated operational information, Kitchen creates another Proposal.
+
+The new Proposal:
+
+- begins as a Draft Proposal
+- receives a new Proposal Number
+- receives its own lifecycle
+- remains independent of previous Proposals
+
+Kitchen edits the new Draft as required.
+
+When ready, Kitchen sends the new Proposal.
+
+Earlier Proposal documents remain unchanged.
+
+---
+
+# Sales After Receiving Another Proposal
+
+Receiving another Proposal does not automatically change Sales' work.
+
 Sales may decide to:
-•	continue using the current Quotation 
-•	create a revised Quotation 
-•	prepare an alternative Quotation 
-•	withdraw an earlier Quotation 
-•	discuss the revised Proposal with the customer 
-These are commercial decisions owned by Sales.
-________________________________________
-Parallel Operation
-Kitchen and Sales intentionally work in parallel.
-Example:
+
+- continue using the current Quotation
+- create a new Quotation from the new Proposal
+- prepare alternative Quotations
+- discuss the new Proposal with the customer
+
+These decisions belong entirely to Sales.
+
+---
+
+# Parallel Operation
+
+Kitchen and Sales intentionally operate in parallel.
+
+```text
 Kitchen
 
 Proposal 1
         │
-        ├────► Sales prepares Quotation
+        ├────► Sales creates Quotation
         │
 continues planning
         │
 Proposal 2
         │
         └────► Sales decides whether to use it
+```
+
 Neither department blocks the other.
-The only formal synchronization point is Proposal publication.
-________________________________________
-Event Progress
+
+The only formal synchronization point is the sending of a Proposal.
+
+---
+
+# Event Progress
+
 The Event continues to evolve independently of customer communication.
-Operational changes may continue until production requires them to stop.
+
+Operational changes may continue until production requires planning to stop.
+
 Typical ongoing changes include:
-•	production refinements 
-•	Menu substitutions 
-•	Recipe improvements 
-•	scheduling adjustments 
-•	staffing considerations 
-Kitchen continues working from the current Published Event.
-Sales continues working from the selected Proposal.
-________________________________________
-Customer Acceptance
+
+- production refinements
+- Menu substitutions
+- Recipe improvements
+- scheduling adjustments
+- Customer changes
+- Contact changes
+- Venue changes
+
+Kitchen always works from the current saved Event.
+
+Sales always works from the Proposal it has selected.
+
+# Kitchen ↔ Sales Workflow
+
+## Part 3
+
+# Customer Acceptance
+
 Customer acceptance belongs entirely to Sales.
-Acceptance means the customer has agreed to the commercial proposal presented by Sales.
+
+Acceptance means the customer has agreed to the commercial offer presented by Sales.
+
 Acceptance does not:
-•	lock the Event 
-•	prevent Kitchen planning 
-•	prevent future Proposal publication 
-•	automatically begin production 
-Operational workflow continues according to the Event lifecycle.
-________________________________________
-Administrative Changes After Acceptance
+
+- lock the Event
+- prevent Kitchen planning
+- prevent another Proposal from being created
+- prevent another Quotation from being created
+- automatically begin production
+
+Operational planning continues according to the Event lifecycle.
+
+---
+
+# Administrative Changes
+
 Administrative changes may still occur after customer acceptance.
+
 Examples include:
-•	corrected customer details 
-•	revised contact information 
-•	spelling corrections 
-•	quotation formatting improvements 
-Commercial revisions follow Quotation rules.
-Operational revisions follow Event and Proposal rules.
-Each department remains responsible for its own information.
-________________________________________
-Event Completion
+
+- corrected Customer information
+- updated Contact information
+- corrected Venue information
+- spelling corrections
+- formatting improvements
+
+Administrative changes affect only the document being edited.
+
+Previously sent documents remain unchanged.
+
+---
+
+# Event Completion
+
 Kitchen completes operational work according to the Event lifecycle.
+
 Sales completes commercial work according to the Quotation lifecycle.
+
 These lifecycles remain independent.
+
 For example:
-•	a customer may accept a Quotation before Kitchen production begins 
-•	Kitchen may complete production while Sales is still finalizing administrative paperwork 
-The workflow intentionally avoids forcing one department's progress to determine the other's.
-________________________________________
-Communication Principles
-Communication between Kitchen and Sales should always be explicit.
-Operational changes are communicated by publishing a new Proposal.
-Commercial decisions are communicated through normal business processes.
-The system intentionally avoids hidden synchronization or automatic assumptions about departmental intent.
-Each department always knows which version of the operational plan it is working from.
-Operational Independence
-The workflow deliberately allows Kitchen and Sales to operate independently.
-Kitchen focuses on operational delivery.
-Sales focuses on customer communication.
+
+- a customer may accept a Quotation before Kitchen production begins
+- Kitchen may complete production while Sales finishes administrative work
+
+Neither department's progress determines the other's workflow.
+
+---
+
+# Operational Communication
+
+Communication between Kitchen and Sales is always intentional.
+
+Operational changes are communicated by creating and sending another Proposal.
+
+Commercial discussions occur directly between Sales and the customer.
+
+The system intentionally avoids hidden synchronization.
+
+Each department always knows which document it is working from.
+
+---
+
+# Operational Independence
+
+Kitchen and Sales intentionally operate independently.
+
+Kitchen focuses on:
+
+- operational planning
+- production
+- costing
+- delivery
+
+Sales focuses on:
+
+- customer communication
+- commercial presentation
+- pricing
+- negotiation
+
 Neither department waits for the other unless new operational information must be exchanged.
-This independence improves:
-•	responsiveness 
-•	accountability 
-•	operational flexibility 
-•	historical traceability 
-________________________________________
-Event as the Shared Workspace
+
+---
+
+# Event as the Shared Workspace
+
 The Event remains the shared operational workspace throughout its lifecycle.
+
 Kitchen and Sales may both contribute information according to permissions.
-Examples include:
-Kitchen:
-•	Menu planning 
-•	guest planning 
-•	production planning 
-•	operational notes 
-Sales:
-•	Customer 
-•	Contact 
-•	Venue 
-•	scheduling coordination 
-•	customer-facing notes where appropriate 
+
+Typical Kitchen information includes:
+
+- Menu planning
+- guest planning
+- production planning
+- operational notes
+
+Typical Sales information includes:
+
+- Customer
+- Contact
+- Venue
+- scheduling coordination
+
 The Event always represents the current operational truth.
-Proposal and Quotation represent historical publications derived from that truth.
-________________________________________
-Current Truth vs Historical Truth
-The workflow intentionally distinguishes between two equally important concepts.
-Current Operational Truth
-Represented by the current Published Event.
+
+Proposal and Quotation represent historical business documents created from that truth.
+
+---
+
+# Current Operational Truth
+
+Current operational truth is represented by the current saved Event.
+
 This information continues to evolve as planning progresses.
-________________________________________
-Historical Operational Truth
-Represented by:
-•	Proposal snapshots 
-•	Quotation revisions 
-Historical records preserve exactly what existed at the moment they were created.
-Neither replaces the other.
-________________________________________
-Multiple Proposal Workflow
-An Event may generate multiple Proposals during its lifecycle.
+
+Saving the Event updates the current operational truth.
+
+---
+
+# Historical Business Documents
+
+Historical business documents are represented by:
+
+- sent Proposals
+- sent Quotations
+
+Each document permanently preserves the information that existed when it was sent.
+
+Historical documents never change.
+
+Current operational truth and historical business documents intentionally coexist.
+
+---
+
+# Multiple Proposal Workflow
+
+An Event may produce any number of Proposal documents.
+
 Example:
+
+```text
 Event
 
 ↓
 
-Proposal 1
+Proposal A
 
 ↓
 
-Proposal 2
+Proposal B
 
 ↓
 
-Proposal 3
-Each Proposal captures a different Published State of the Event.
-Older Proposals remain available for comparison and reference.
-Kitchen never edits an existing Proposal.
-________________________________________
-Multiple Quotation Workflow
-Sales may create multiple Quotations during customer negotiations.
+Proposal C
+```
+
+Each Proposal:
+
+- has its own Proposal Number
+- begins as a Draft
+- is sent independently
+- remains permanently available
+
+Proposal documents never replace one another.
+
+---
+
+# Multiple Quotation Workflow
+
+Sales may create multiple Quotations during customer discussions.
+
 Example:
-Proposal 2
+
+```text
+Proposal A
 
 ├── Quotation A
 ├── Quotation B
 └── Quotation C
-Each Quotation represents a separate commercial communication.
-Sales determines which Quotation best supports customer discussions.
-Kitchen remains unaware of these commercial decisions unless communication occurs outside the system.
-________________________________________
-Proposal Selection
-Publishing a new Proposal does not invalidate previous Proposals.
-Sales chooses which Proposal to use.
+```
+
+Each Quotation:
+
+- has its own Quotation Number
+- begins as a Draft
+- is sent independently
+- remains permanently available
+
+Quotation documents never replace one another.
+
+---
+
+# Proposal Selection
+
+Creating another Proposal does not invalidate previous Proposals.
+
+Sales chooses which Proposal to use when creating a new Quotation.
+
 This allows Sales to:
-•	continue existing negotiations 
-•	compare operational revisions 
-•	prepare alternative commercial options 
-•	delay adopting operational changes until appropriate 
-Proposal publication provides additional operational information rather than forcing commercial action.
-________________________________________
-Operational Decision Points
+
+- continue existing negotiations
+- compare operational alternatives
+- prepare different commercial offers
+- adopt updated operational information when appropriate
+
+Creating another Proposal provides additional operational information without forcing commercial action.
+
+---
+
+# Operational Decision Points
+
 Kitchen decisions include:
-•	production feasibility 
-•	costing 
-•	Menu composition 
-•	Recipe composition 
-•	operational scheduling 
-•	Event readiness 
+
+- production feasibility
+- costing
+- Menu composition
+- Recipe composition
+- operational scheduling
+- Event readiness
+
 Sales decisions include:
-•	customer pricing 
-•	commercial presentation 
-•	quotation timing 
-•	quotation revisions 
-•	negotiation strategy 
-Each department owns its own decision-making process.
-________________________________________
-Communication Principles
-Communication between departments should always be intentional.
+
+- customer pricing
+- commercial presentation
+- Quotation timing
+- negotiation strategy
+
+Each department owns its own decisions.
+
+---
+
+# Communication Principles
+
+Communication between departments is always deliberate.
+
 Typical communication includes:
-•	Kitchen publishes a new Proposal. 
-•	Sales requests operational changes. 
-•	Kitchen confirms operational feasibility. 
-•	Sales informs the customer. 
-•	Kitchen publishes revised operational information if required. 
+
+- Kitchen sends a Proposal.
+- Sales requests operational changes.
+- Kitchen evaluates operational feasibility.
+- Kitchen creates another Proposal if required.
+- Sales creates another Quotation if required.
+
 The workflow intentionally avoids hidden assumptions.
+
 Users should always know:
-•	who initiated the change 
-•	why it occurred 
-•	which Proposal is being used 
-•	which Quotation is current 
-________________________________________
-Workflow Objectives
-The Kitchen ↔ Sales workflow is designed to:
-•	maintain clear departmental ownership 
-•	preserve historical accuracy 
-•	support parallel work 
-•	avoid accidental data coupling 
-•	simplify customer communication 
-•	simplify operational planning 
-•	provide an auditable business history 
-Operational planning and commercial communication remain connected through deliberate publication rather than continuous synchronization.
-________________________________________
-Workflow Summary
-Kitchen owns operational planning.
-Sales owns commercial communication.
-The Event remains the current operational truth.
-Proposal communicates Kitchen's published operational solution.
-Quotation communicates Sales' commercial offer.
-The workflow intentionally separates operational planning from commercial activity while allowing both departments to work together efficiently through clearly defined business actions and historical snapshots.
+
+- who initiated the change
+- why the change occurred
+- which Proposal was used
+- which Quotation was sent
+
+# Kitchen ↔ Sales Workflow
+
+## Part 4
+
+# Document Ownership
+
+Every document has a single owner.
+
+Ownership defines who is responsible for creating, maintaining and publishing that document.
+
+| Document | Owner |
+|----------|-------|
+| Event | Kitchen and Sales (shared) |
+| Proposal | Kitchen |
+| Quotation | Sales |
+
+Ownership never transfers between departments.
+
+---
+
+# Event Ownership
+
+The Event is the only shared operational workspace.
+
+Both Kitchen and Sales may update Event information according to user permissions.
+
+Shared Event information includes:
+
+- Customer
+- Contact
+- Venue
+- Event Date
+- Event Notes
+
+Kitchen remains responsible for operational planning.
+
+Sales remains responsible for commercial communication.
+
+---
+
+# Proposal Ownership
+
+Proposal belongs exclusively to Kitchen.
+
+Kitchen controls:
+
+- creation
+- editing
+- saving
+- sending
+- publication
+
+Sales cannot modify Proposal content.
+
+Sales consumes Proposal information exactly as published.
+
+---
+
+# Quotation Ownership
+
+Quotation belongs exclusively to Sales.
+
+Sales controls:
+
+- creation
+- editing
+- saving
+- sending
+- customer communication
+
+Kitchen cannot modify Quotation content.
+
+Kitchen receives no automatic updates from Quotation activity.
+
+---
+
+# Information Flow
+
+Business information always flows in one direction.
+
+```text
+Kitchen
+
+↓
+
+Event
+
+↓
+
+Proposal
+
+↓
+
+Sales
+
+↓
+
+Quotation
+
+↓
+
+Customer
+```
+
+Information never flows in reverse through the system.
+
+---
+
+# Operational Requests
+
+Operational requests originate outside the system workflow.
+
+Typical examples include:
+
+- customer requests
+- production concerns
+- scheduling conflicts
+- pricing discussions
+
+The receiving department evaluates the request before making any system changes.
+
+No request automatically updates business documents.
+
+---
+
+# Kitchen Response
+
+Kitchen evaluates operational requests against:
+
+- production capacity
+- ingredient availability
+- staffing
+- scheduling
+- costing
+
+Kitchen may:
+
+- approve the request
+- modify the request
+- decline the request
+
+Only approved operational changes become part of the Event.
+
+---
+
+# Sales Response
+
+Sales evaluates commercial requests against:
+
+- customer expectations
+- pricing strategy
+- profitability
+- commercial policy
+
+Sales may:
+
+- prepare another Quotation
+- continue negotiations
+- request another Proposal
+- close the opportunity
+
+Commercial decisions remain entirely within the Sales workflow.
+
+---
+
+# Workflow Independence
+
+Kitchen planning does not stop while Sales negotiates.
+
+Sales negotiations do not stop while Kitchen continues planning.
+
+Both departments continue working independently.
+
+Communication occurs only when new information must be exchanged.
+
+---
+
+# Proposal Publication
+
+Sending a Proposal communicates Kitchen's current operational solution.
+
+Proposal publication provides Sales with a stable operational reference.
+
+Proposal publication does not:
+
+- freeze the Event
+- stop Kitchen planning
+- create a Quotation
+- notify the customer
+
+Proposal publication simply makes the Proposal available for Sales.
+
+---
+
+# Quotation Publication
+
+Sending a Quotation communicates Sales' commercial offer.
+
+Quotation publication does not:
+
+- change the Event
+- change the Proposal
+- change Kitchen planning
+- begin production
+
+Quotation publication simply communicates the commercial offer to the customer.
+
+---
+
+# Parallel Business Processes
+
+Kitchen and Sales intentionally perform different business processes.
+
+Kitchen process:
+
+```text
+Plan
+
+↓
+
+Save Event
+
+↓
+
+Create Proposal
+
+↓
+
+Send Proposal
+
+↓
+
+Continue Planning
+```
+
+Sales process:
+
+```text
+Receive Proposal
+
+↓
+
+Create Quotation
+
+↓
+
+Send Quotation
+
+↓
+
+Continue Customer Communication
+```
+
+The two processes remain independent while sharing common business information through Proposal documents.
+
+---
+
+# Workflow Objectives
+
+The Kitchen ↔ Sales workflow is designed to provide:
+
+- clear ownership
+- predictable responsibilities
+- independent department workflows
+- permanent historical documents
+- controlled business communication
+- traceable operational decisions
+- consistent customer communication
+
+Each department performs its own responsibilities without interfering with the responsibilities of the other.
 

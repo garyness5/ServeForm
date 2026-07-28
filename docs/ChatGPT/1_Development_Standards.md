@@ -1,46 +1,48 @@
-Savveyra Development Standards
-Purpose
+# Savveyra Development Standards
 
-This document defines the standards used to develop, normalize, implement, document, review and maintain Savveyra.
+## Part 1
 
-It applies to every domain within the application.
+# Purpose
 
-This document defines the development methodology, not the product itself.
+This document defines the standards used to develop, document, normalize, implement, review and maintain Savveyra.
+
+It establishes how development decisions are made and how the product evolves over time.
+
+This document defines the development methodology.
+
+It does not define product behaviour.
 
 Product behaviour belongs in:
 
-Canonical Specifications
-Architecture
-Domain Rules
-Domain Workflow documents
+- Canonical Specifications
+- Architecture
+- Domain Rules
+- Domain Workflow documents
 
 Implementation belongs in:
 
-Supabase
-Appsmith
-Shared Services
-Foundation SQL
+- Foundation SQL
+- Shared Services
+- Supabase
+- Appsmith
 
-This document defines how development decisions are made and how the project evolves over time.
+---
 
-Core Development Philosophy
+# Development Hierarchy
 
-Operational logic always comes first.
+Development follows one consistent hierarchy.
 
-Development follows this hierarchy:
-
+```text
 Operational Logic
         ↓
 Canonical Specifications
         ↓
-Domain Rules
-        ↓
 Architecture
         ↓
+Domain Rules
+        ↓
 Implementation
-    ├── Shared Services
-    ├── Supabase
-    └── Appsmith
+```
 
 Operational workflow determines the product.
 
@@ -54,308 +56,400 @@ Technology exists to support operations.
 
 Operations never exist to support technology.
 
-Whenever implementation reveals a better operational model, the documentation should be updated so the stronger model becomes the new project standard.
+---
 
-Normalization is expected throughout the life of the project.
-
-Product Philosophy
+# Product Philosophy
 
 Savveyra is an operational planning platform for food-service businesses.
 
 The connected operational workflow is the product.
 
-Every implementation decision should strengthen that workflow rather than create isolated functionality.
+Every implementation decision should strengthen that workflow.
 
 The application exists to answer practical operational questions before production begins.
 
 Typical questions include:
 
-What does this cost?
-What changed?
-What must be produced?
-What ingredients are required?
-What must be purchased?
-Which Proposal reflects the current customer agreement?
-What is the current operational truth?
+- What does this cost?
+- What changed?
+- What must be produced?
+- What ingredients are required?
+- What must be purchased?
+- Which Proposal was sent?
+- Which Quotation was created?
+- What is the current operational truth?
 
 Savveyra provides operational truth.
 
 Users make business decisions.
 
-Operational Before Technical
+---
 
-Whenever a design decision is required, always determine first:
+# Operational Before Technical
 
-What is the correct operational workflow?
+Every design decision begins with one question.
 
-Only afterwards determine:
+**What is the correct operational workflow?**
 
-How should that workflow be implemented?
+Only after that question has been answered should implementation be considered.
 
 Operational correctness always has priority over technical convenience.
 
 The preferred implementation is the simplest implementation that correctly supports real food-service operations.
 
-Foundation First
+---
+
+# Foundation First
 
 Whenever implementation exposes weaknesses in:
 
-business logic
-architecture
-ownership
-propagation
-shared services
-earlier domains
-published contracts
-documentation
+- operational logic
+- documentation
+- architecture
+- ownership
+- publication
+- propagation
+- shared services
+- domain contracts
+- normalization
 
-correct the foundation before continuing whenever practical.
+the foundation should be corrected before additional functionality is built whenever practical.
 
-Never knowingly build additional functionality on a weak foundation.
+New functionality should never knowingly be built upon weak foundations.
 
-Normalization exists to strengthen earlier implementation rather than simply add new functionality.
+---
 
-Domain Ownership
+# Normalization
+
+Normalization is a continuous process.
+
+Earlier implementation should adopt stronger operational patterns whenever they are discovered.
+
+Normalization may improve:
+
+- documentation
+- naming
+- ownership
+- shared services
+- publication
+- validation
+- workflows
+- implementation consistency
+
+The objective is one coherent application rather than independently evolving domains.
+
+---
+
+# Domain Ownership
 
 Every domain owns one operational responsibility.
 
 Each domain owns:
 
-business rules
-validation
-lifecycle
-publication
-downstream contract
+- business rules
+- lifecycle
+- validation
+- publication
+- downstream contract
 
 Domains communicate only through published information.
 
-Domains should never manipulate another domain's internal implementation.
+Domains never manipulate another domain's internal implementation.
 
-Every domain exposes a stable operational interface while remaining internally independent.
+Each domain exposes a stable operational interface while remaining internally independent.
 
-Published State Philosophy
+---
+
+# Working State and Published State
 
 Every editable domain operates using two distinct states.
 
-Working State
+## Working State
 
-Represents the current editing session.
+Working State represents the current editing session.
 
 Working State may contain:
 
-incomplete information
-temporary calculations
-warnings
-experimental changes
+- incomplete information
+- temporary calculations
+- warnings
+- experimental changes
 
 Working State affects only the current workspace.
 
-Nothing in Working State propagates downstream.
+Nothing in Working State becomes available outside the editor.
 
-Published State
+---
+
+## Published State
 
 Published State represents the last successfully saved business object.
 
 Only Published State:
 
-propagates
-participates in costing
-participates in production planning
-becomes available to downstream domains
-becomes available to Output domains
+- propagates
+- participates in costing
+- participates in production planning
+- becomes available downstream
+- becomes available to Output domains
 
-Published State remains unchanged until Save succeeds.
+Published State remains unchanged until Save completes successfully.
 
-Save Standard
+---
+
+# Save Standard
 
 Save represents one complete business action.
 
 A successful Save should normally:
 
-Validate.
-Apply business rules.
-Write domain data.
-Update calculations.
-Publish downstream information.
-Refresh affected views.
-Return the updated Published State.
+- validate
+- apply business rules
+- write business data
+- perform calculations
+- publish information
+- refresh affected views
+- return the updated Published State
 
 Either the complete Save succeeds or nothing changes.
 
-Partial business saves should not occur.
+Partial business saves are not permitted.
 
-Workspace Standard
+---
 
-Editable domains should follow one consistent editing model.
+# Workspace Standard
 
+Every editable domain follows one consistent editing model.
+
+```text
 Open
-   ↓
-Edit Freely
-   ↓
-Save
-   ↓
-Refresh
 
-Users should be able to experiment safely without affecting operational planning until Save succeeds.
+↓
+
+Edit
+
+↓
+
+Save
+
+↓
+
+Refresh
+```
+
+Users may experiment freely without affecting operational planning.
 
 Closing without saving discards only the Working State.
 
 Published State remains unchanged.
 
-One Business Action = One Supabase Function
+---
 
-A user-facing business action should normally correspond to one Supabase function.
+# One Business Action
 
-Preferred pattern:
+One user-facing business action should normally correspond to one business function.
 
+Preferred workflow:
+
+```text
 User Action
-      ↓
-Supabase Function
-      ↓
+
+↓
+
+Business Function
+
+↓
+
 Validation
-      ↓
+
+↓
+
 Business Rules
-      ↓
+
+↓
+
 Calculations
-      ↓
+
+↓
+
 Publication
-      ↓
+
+↓
+
 Result
+```
 
-Avoid workflows requiring multiple Appsmith queries that reconstruct business behaviour.
+Business behaviour should not be reconstructed through multiple client-side actions.
 
-Business logic belongs in Supabase whenever practical.
+Business actions should execute as complete business transactions.
 
-Supabase Responsibilities
+# Savveyra Development Standards
+
+## Part 2
+
+# Supabase Responsibilities
 
 Supabase is the operational authority.
 
-Before implementing any business logic in Appsmith, first determine whether it belongs in Supabase.
+Whenever practical, Supabase owns:
 
-Whenever practical, Supabase should own:
-
-business rules
-validation
-lifecycle management
-numbering
-duplicate behaviour
-rename behaviour
-replace behaviour
-delete behaviour
-propagation
-publication
-snapshot creation
-financial calculations
-shared calculations
-shared services
-business integrity
-data integrity
+- business rules
+- validation
+- lifecycle management
+- numbering
+- publication
+- propagation
+- snapshot creation
+- calculations
+- shared services
+- business integrity
+- data integrity
 
 Business integrity must never depend upon Appsmith.
 
-Appsmith Responsibilities
+---
+
+# Appsmith Responsibilities
 
 Appsmith owns presentation and user interaction.
 
 Typical responsibilities include:
 
-page layout
-navigation
-tables
-forms
-modals
-buttons
-confirmations
-warnings
-visible state
-temporary editing state
-refresh behaviour
+- page layout
+- navigation
+- tables
+- forms
+- modals
+- buttons
+- confirmations
+- warnings
+- temporary editing state
+- refreshing published information
 
 Appsmith should remain intentionally thin.
 
-Business rules should not be duplicated in Appsmith when Supabase can enforce them.
+Business rules should not be duplicated when they can be enforced by Supabase.
 
-Thin Appsmith Standard
+---
 
-As the application matures, Appsmith should primarily:
+# Thin Client Standard
 
-load published views
-display information
-collect user input
-present warnings
-present confirmations
-call Supabase functions
-refresh data
+As Savveyra matures, Appsmith should primarily:
+
+- load published views
+- display information
+- collect user input
+- present warnings
+- present confirmations
+- call business functions
+- refresh displayed information
 
 Business behaviour should continue moving into Supabase whenever practical.
 
 Views should expose display-ready information.
 
-Appsmith should rarely reconstruct business logic.
+---
 
-Shared Services Standard
+# Shared Services
 
 Business behaviour reused across multiple domains should exist once.
 
 Typical Shared Services include:
 
-duplicate
-rename
-replace
-delete
-numbering
-validation
-publication
-normalization
-status handling
-lookup services
-impact counting
-snapshot creation
+- duplicate
+- rename
+- replace
+- delete
+- numbering
+- publication
+- validation
+- normalization
+- status handling
+- lookup services
+- impact counting
+- snapshot creation
 
 Shared Services should remain independent of individual domains.
 
-Future domains should reuse Shared Services rather than creating their own implementations.
+Future domains should reuse Shared Services instead of implementing their own versions.
 
-Validation Standard
+---
 
-Validation exists to protect operational correctness.
+# Validation
 
-Validation should normally occur in three layers.
+Validation protects operational correctness.
 
+Validation normally exists in three layers.
+
+```text
 User Interface
 
-Provides immediate feedback.
+↓
 
-Examples include:
+Business Validation
 
-required fields
-formatting
-obvious omissions
-Domain Validation
+↓
 
-Protects business rules.
+Database Integrity
+```
 
-Examples include:
+Each layer has a different responsibility.
 
-duplicate prevention
-circular references
-ownership rules
-invalid composition
-publication rules
-Database Validation
+---
 
-Protects data integrity.
+## User Interface Validation
 
-Examples include:
+User Interface validation provides immediate feedback.
 
-foreign keys
-constraints
-transactions
-indexes
+Typical examples include:
 
-Business validation should occur before database constraints whenever practical.
+- required fields
+- formatting
+- obvious omissions
+- user guidance
 
-View Strategy
+Interface validation improves usability.
+
+It does not protect business integrity.
+
+---
+
+## Business Validation
+
+Business Validation protects operational rules.
+
+Typical examples include:
+
+- duplicate prevention
+- ownership rules
+- publication rules
+- circular references
+- invalid composition
+- incompatible units
+
+Business Validation belongs primarily within Supabase.
+
+---
+
+## Database Integrity
+
+Database Integrity protects stored information.
+
+Typical mechanisms include:
+
+- primary keys
+- foreign keys
+- constraints
+- indexes
+- transactions
+
+Database Integrity protects the data.
+
+It should not become the primary implementation of business rules.
+
+---
+
+# View Strategy
 
 Views represent the presentation boundary between Supabase and Appsmith.
 
@@ -363,336 +457,485 @@ Views should expose display-ready information.
 
 Typical view content includes:
 
-display labels
-summaries
-counts
-warnings
-operational indicators
-calculated values
-derived display fields
-current published information
+- display labels
+- summaries
+- counts
+- warnings
+- operational indicators
+- calculated values
+- derived display fields
+- current Published State
 
-Appsmith should display published information rather than reconstruct calculations.
+Appsmith should display published information rather than reconstruct business logic.
 
 Views form part of the published contract between Supabase and Appsmith.
 
-Shared Data / Page-Specific UI Standard
+---
+
+# Shared Business Model
 
 Supabase maintains one shared business model.
 
-Appsmith may legitimately present that information differently where workflow requires it.
-
-Examples include:
-
-Customer modal
-Contact modal
-Venue modal
+Appsmith may present that information differently where workflow requires it.
 
 Business rules remain shared.
 
 Presentation may vary.
 
-One business object may have multiple user interfaces.
+One business object may legitimately have multiple user interfaces.
 
-Lookup Object Standard
+---
+
+# Lookup Objects
 
 Reusable lookup objects should follow one consistent interaction model.
 
-Preferred controls:
+Preferred controls are:
 
-+
+- **+** — Add
+- **i** — View / Edit
 
-means
-
-Add
-
-and
-
-i
-
-means
-
-View / Edit
-
-The same control should determine its behaviour from context rather than requiring separate Add and Edit controls.
+The control determines its behaviour from context rather than requiring separate Add and Edit actions.
 
 Future lookup domains should adopt the same interaction model whenever practical.
 
-CRUD Standard
+---
 
-Every domain should expose a consistent operational CRUD experience.
+# CRUD Standard
 
-Typical operations include:
+Every editable domain should provide a consistent operational experience.
 
-Create
-Read
-Update
-Duplicate
-Rename
-Replace
-Delete
-Status Change
+Standard business actions include:
 
-Where identical behaviour exists, CRUD should call Shared Services rather than implement domain-specific logic.
+- Create
+- Read
+- Update
+- Duplicate
+- Rename
+- Replace
+- Delete
+- Change Status
 
-Users should experience consistent behaviour regardless of domain.
+Where identical behaviour exists, domains should call Shared Services rather than implement domain-specific logic.
 
-Foundation SQL Standard
+Users should experience consistent behaviour throughout the application.
+
+# Savveyra Development Standards
+
+## Part 3
+
+# Foundation SQL Standard
 
 Each domain maintains one current Foundation SQL file.
 
 Example:
 
-SQL/Customer/
-    Customer_Foundation.sql
+```text
+SQL/
+└── Customer/
+    └── Customer_Foundation.sql
+```
 
 Foundation SQL represents the rebuildable definition of the current domain.
 
 Foundation SQL should contain:
 
-tables
-constraints
-indexes
-functions
-views
-shared services where appropriate
-comments
-optional smoke tests
+- tables
+- constraints
+- indexes
+- views
+- business functions
+- shared services where appropriate
+- comments
+- optional smoke tests
 
 Foundation SQL filenames are never versioned.
 
-Git maintains implementation history.
+Version history belongs to Git.
 
-Documentation Standard
+---
+
+# Documentation Standard
 
 Savveyra documentation exists in three categories.
 
-1. Permanent Foundation Documents
+## Permanent Foundation Documents
 
-These define the product itself.
+Foundation Documents define the product itself.
 
 They change only when the product changes.
 
-Current foundation documents include:
+Current Foundation Documents include:
 
-Development Standards
-Canonical Specifications
-Architecture
-Domain Rules
-Events / Proposal / Quotation Architecture
-Kitchen ↔ Sales Workflow
+- Development Standards
+- Canonical Specifications
+- Architecture
+- Domain Rules
+- Events, Proposal & Quotation Architecture
+- Kitchen ↔ Sales Workflow
 
-These documents define the product and should remain implementation-independent.
+These documents define the product.
 
-2. Domain Documents
+They remain implementation-independent.
+
+---
+
+## Domain Documents
 
 Each domain maintains its own implementation documentation.
 
 Typical structure:
 
-SQL/Customer/
-    Customer_Foundation.sql
-    Customer_Workflow.md
-    Customer_Changelog.md
-Foundation SQL
+```text
+SQL/
+└── Customer/
+    ├── Customer_Foundation.sql
+    ├── Customer_Workflow.md
+    └── Customer_Changelog.md
+```
+
+### Foundation SQL
 
 The rebuildable SQL implementation for the domain.
 
-Workflow
+### Workflow
 
-Current operational behaviour.
+The current operational behaviour of the domain.
 
-Changelog
+### Changelog
 
 Meaningful implementation history affecting that domain.
 
-3. Temporary Development Documents
+---
+
+## Temporary Development Documents
 
 Temporary documents exist only to continue development.
 
 Typical examples include:
 
-Handoff
-Start of Chat
+- Start of Chat
+- Handoff
 
-The Handoff records the current implementation state.
+Temporary documents never redefine the product.
 
-The Start of Chat introduces the documentation package and directs development to the Handoff.
+Implementation status belongs only in the Handoff.
 
-Temporary documents must never redefine the product.
+---
 
-Markdown Standard
+# Markdown Standard
 
 Markdown is the authoritative editable documentation format.
 
-DOCX and PDF exist only for:
+Other formats such as DOCX and PDF exist only for:
 
-printing
-distribution
-customer release
-legacy compatibility
+- printing
+- distribution
+- customer release
+- legacy compatibility
 
 Markdown remains the editable master copy.
 
-Git Standard
+---
+
+# Git Standard
 
 No important implementation should exist only in:
 
-chat history
-the live database
-Appsmith cloud
+- chat history
+- the live database
+- Appsmith Cloud
 
 At each milestone:
 
-update Foundation SQL
-update documentation
-commit Appsmith
-commit Git
-synchronize local copies
+- update Foundation SQL
+- update documentation
+- commit Appsmith
+- commit Git
+- synchronize local copies
 
 Git becomes the permanent implementation history.
 
-Start of Chat Standard
+---
 
-The Start of Chat is a cover page for the next development session.
+# Start of Chat Standard
+
+The Start of Chat serves as the cover page for the next development session.
 
 It should:
 
-identify the documentation package
-explain the purpose of each document
-specify the reading order
-direct the reader to the Handoff
+- identify the documentation package
+- explain the purpose of each document
+- specify the reading order
+- direct the reader to the Handoff
 
 It should not contain implementation details.
 
 Implementation status belongs only in the Handoff.
 
-Handoff Standard
+---
+
+# Handoff Standard
 
 The Handoff records only the current implementation state.
 
 It should contain:
 
-current milestone
-current implementation status
-work completed during the previous chat
-verified decisions
-current blocker, if any
-known issues
-assumptions requiring validation
-files modified
-immediate next implementation step
-recommended resume order
+- current milestone
+- current implementation status
+- completed work
+- verified decisions
+- current blocker, if any
+- known issues
+- assumptions requiring validation
+- modified files
+- immediate next implementation step
+- recommended resume order
 
 The Handoff should allow development to continue immediately without reconstructing previous discussions.
 
-Fresh-Eye Review
+---
+
+# Fresh-Eye Review
 
 Fresh-eye reviews should occur:
 
-before beginning a new domain
-before major implementation stages
-after significant architectural changes
-after extended development sessions
-whenever implementation becomes assumption-driven
-whenever implementation exposes conflicting assumptions
+- before beginning a new domain
+- before major implementation stages
+- after significant architectural changes
+- after extended development sessions
+- whenever implementation becomes assumption-driven
+- whenever conflicting assumptions are discovered
 
-Typical questions include:
+Typical review questions include:
 
-Does implementation still match operational workflow?
-Do Canonical Specifications still describe the product?
-Does Architecture still reflect the preferred model?
-Are business rules duplicated?
-Should logic move into Supabase?
-Can Shared Services replace duplicated implementation?
-Are naming conventions still consistent?
-Has a stronger operational pattern emerged?
-Are we about to build on a weak foundation?
+- Does implementation still match operational workflow?
+- Do the Canonical Specifications still define the product?
+- Does the Architecture still represent the preferred model?
+- Are business rules duplicated?
+- Should logic move into Shared Services?
+- Should logic move into Supabase?
+- Can duplicated implementation be normalized?
+- Are naming conventions still consistent?
+- Has a stronger operational pattern emerged?
+- Are we building on a weak foundation?
 
-Fresh-eye reviews exist to improve the product rather than validate previous work.
+Fresh-eye reviews exist to improve the product rather than validate previous implementation.
 
-Normalization Philosophy
+---
 
-Savveyra is intentionally being normalized domain by domain.
+# Normalization Philosophy
 
-Normalization should strengthen consistency across the entire application.
+Savveyra is intentionally normalized throughout its development.
 
-Typical normalization order:
+Normalization strengthens consistency across the application.
 
-Documentation
-Shared Services
-Naming
-CRUD
-Lookup Objects
-Editors
-Component Tables
-Publication
-Propagation
-Output Workflows
-Cross-domain Review
+Typical normalization areas include:
+
+- documentation
+- shared services
+- naming
+- CRUD behaviour
+- lookup objects
+- editors
+- component tables
+- publication
+- propagation
+- output workflows
+- cross-domain consistency
 
 Whenever a stronger operational pattern is discovered, earlier domains should gradually adopt it.
 
-Scope Discipline
+# Savveyra Development Standards
 
-Savveyra intentionally remains focused.
+## Part 4
+
+# Scope Discipline
+
+Savveyra intentionally remains focused on operational planning.
 
 It is not intended to become:
 
-Accounting
-ERP
-CRM
-Inventory Management
-Purchase Order Management
-Payroll
-Warehouse Management
-Supplier Ordering
-Point of Sale
-Human Resources
-Production Scheduling
-Internal Messaging
+- Accounting
+- ERP
+- CRM
+- Inventory Management
+- Purchase Order Management
+- Supplier Ordering
+- Warehouse Management
+- Payroll
+- Human Resources
+- Production Scheduling
+- Point of Sale
+- Internal Messaging
 
 Savveyra provides operational truth.
 
 Users remain responsible for business decisions.
 
-Design Principles
+---
+
+# Design Principles
 
 Every development decision should strengthen:
 
-operational correctness
-simplicity
-visibility
-predictability
-maintainability
-normalization
-reuse
-clear ownership
-stable published contracts
+- operational correctness
+- simplicity
+- visibility
+- predictability
+- maintainability
+- normalization
+- reuse
+- clear ownership
+- stable published contracts
+- historical accuracy
 
-Never simplify the user's workflow merely to simplify the software.
+Software should be simplified around the user's operational workflow.
 
-Instead:
-
-Simplify the software around the user's real workflow.
+The user's workflow should never be simplified merely to make implementation easier.
 
 Operational correctness always takes priority over technical convenience.
 
-Completion Standard
+---
+
+# Consistency Standard
+
+Similar operational behaviour should always produce similar implementation.
+
+Users should not need to learn different workflows for equivalent business actions.
+
+Consistency should exist across:
+
+- editors
+- lookup objects
+- CRUD operations
+- numbering
+- publication
+- validation
+- status handling
+- navigation
+- confirmations
+- warnings
+
+Consistency improves usability, reduces training and simplifies maintenance.
+
+---
+
+# Ownership Standard
+
+Every business object has one authoritative owner.
+
+Only the owning domain may:
+
+- create
+- modify
+- validate
+- publish
+- define lifecycle
+- define business rules
+
+Downstream domains consume published information.
+
+Ownership never transfers because another domain uses that information.
+
+---
+
+# Historical Integrity
+
+Current operational information and historical information are equally important.
+
+Current information supports:
+
+- planning
+- costing
+- production
+- purchasing preparation
+
+Historical information supports:
+
+- customer communication
+- auditing
+- comparison
+- legal reference
+- operational history
+
+Historical information must never be rewritten to match current operational information.
+
+---
+
+# Simplicity Standard
+
+Savveyra should remain as simple as operational correctness allows.
+
+Complexity should exist only when it provides genuine operational value.
+
+Where multiple correct solutions exist, the preferred solution is the one that:
+
+- is easiest to understand
+- is easiest to maintain
+- strengthens normalization
+- reduces duplication
+- improves consistency
+
+---
+
+# Long-Term Maintainability
+
+Implementation decisions should support long-term maintenance.
+
+Whenever practical:
+
+- reuse existing Shared Services
+- reuse existing architectural patterns
+- reuse existing workflows
+- avoid duplicated business logic
+- strengthen documentation
+
+Maintainability should improve continuously as the application evolves.
+
+---
+
+# Documentation Synchronization
+
+Documentation should evolve with the product.
+
+When operational behaviour changes:
+
+1. Update Foundation Documents.
+2. Update Domain Documentation.
+3. Update Foundation SQL where required.
+4. Update implementation.
+5. Update the Handoff.
+
+Documentation should accurately describe the current product at every development milestone.
+
+---
+
+# Completion Standard
 
 A development stage is complete only when:
 
-operational behaviour is correct
-Supabase implementation is correct
-Appsmith implementation is correct
-user workflow has been validated
-documentation has been synchronized
-Foundation SQL has been updated
-Git has been updated
-local copies have been synchronized
-known issues have been documented
-the next Handoff has been prepared
+- operational behaviour is correct
+- documentation reflects the product
+- architecture remains consistent
+- Foundation SQL has been updated
+- Supabase implementation is correct
+- Appsmith implementation is correct
+- user workflow has been validated
+- Git has been updated
+- local copies have been synchronized
+- known issues have been documented
+- the next Handoff has been prepared
 
 Implementation alone does not complete a development stage.
 
-The objective is continuous development on a stable, fully documented foundation.
+---
+
+# Guiding Principle
+
+Every development decision should strengthen the connected operational workflow.
+
+The objective is continuous development on a stable, normalized and fully documented foundation.
+
+The documentation, architecture and implementation should evolve together while remaining consistent with the operational model.
+

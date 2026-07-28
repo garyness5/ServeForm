@@ -4,648 +4,949 @@
 
 This document defines the complete operational behaviour of the Proposal and Quotation domains within Savveyra.
 
-It specifies ownership, workflow, business rules and responsibilities between Kitchen and Sales.
+It defines:
+
+ownership
+lifecycle
+business rules
+workflow
+document behaviour
+Kitchen and Sales responsibilities
+historical preservation
 
 This document defines operational behaviour only.
 
-Database implementation, Appsmith implementation and PDF implementation are documented elsewhere.
+Database implementation, Appsmith implementation, SQL, PDF generation and email implementation are documented elsewhere.
 
----
-
-# Scope
+Scope
 
 This specification covers:
 
-- Proposal
-- Proposal Revisions
-- Proposal publication
-- Proposal ownership
-- Quotation
-- Quote Revisions
-- Customer presentation
-- PDF generation
-- Sales workflow
-- historical preservation
+Proposal
+Quotation
+document lifecycle
+ownership
+workflow
+snapshots
+customer information
+commercial information
+document numbering
+historical preservation
+operational boundaries
 
 This specification does not cover:
 
-- CRM
-- accounting
-- invoicing
-- payment processing
-- taxation
-- email marketing
-- customer relationship management
-- sales forecasting
-- opportunity management
-- inventory
-- production planning
+CRM
+accounting
+invoicing
+payment processing
+taxation
+inventory
+purchasing
+production planning
+marketing
+customer relationship management
 
 These belong to separate systems.
 
----
+Operational Philosophy
 
-# Domain Philosophy
+Kitchen and Sales perform different operational responsibilities.
 
-Kitchen and Sales are intentionally independent.
+Kitchen determines:
 
-Kitchen exists to determine **what will be produced**.
+what will be produced
+how it will be produced
+operational planning
+production costing
 
-Quotation exists to determine **how that production is presented commercially**.
+Sales determines:
 
-Neither subsystem should control the other.
+how that production is presented commercially
+customer pricing
+commercial wording
+customer communication
 
-Kitchen never edits commercial information.
+Neither department owns the other's information.
 
-Quotation never edits production information.
+Both departments remain operationally independent while working from the same Event.
 
-Both domains preserve their own history independently.
+Operational Boundary
 
----
+The Event is the shared operational workspace.
 
-# Operational Boundary
+Proposal is Kitchen's published document.
 
-Kitchen ends when a Proposal Revision is explicitly published.
+Quotation is Sales' commercial document.
 
-Quotation begins when that Proposal Revision is received.
+Information flows only in one direction.
 
-The only information transferred between the domains is the published Proposal Revision.
+Kitchen
+      ↓
+Proposal
+      ↓
+Sales
+      ↓
+Quotation
 
-Nothing else crosses the boundary.
+Kitchen never edits Quotation.
 
-Kitchen does not read Quote data.
+Sales never edits Proposal.
 
-Quotation does not read Kitchen working data.
+Neither department edits the other's historical documents.
 
----
+Domain Ownership
+Event owns
+operational planning
+customer assignment
+contact assignment
+venue assignment
+venue contact assignment
+menu assignments
+guest quantities
+scheduling
+operational administration
 
-# Domain Ownership
+Events represent the current operational truth.
 
-## Kitchen owns
+Proposal owns
+Kitchen document
+operational snapshot
+document lifecycle
+document numbering
+sent history
 
-- Events
-- Menus
-- Dishes
-- Recipes
-- Ingredients
-- guest quantities
-- production quantities
-- Extras
-- Proposal Parents
-- Proposal Revisions
+Proposal belongs entirely to Kitchen.
 
-Kitchen decides:
+Quotation owns
+Sales document
+commercial presentation
+selling prices
+customer wording
+commercial notes
+Terms and Conditions
+document lifecycle
+document numbering
+sent history
 
-- menu composition
-- production requirements
-- operational notes
-- Proposal revisions
+Quotation belongs entirely to Sales.
 
----
+Event Relationship
 
-## Quotation owns
+Events remain the operational centre of Savveyra.
 
-- Quote Parents
-- Quote Revisions
-- selling prices
-- customer wording
-- commercial comments
-- quotation notes
-- terms and conditions
-- PDF template selection
-- quotation layout
+Proposal and Quotation never replace the Event.
 
-Quotation decides only customer-facing information.
+The Event continues evolving throughout its operational life.
+
+Proposal and Quotation simply record what was communicated at particular points in time.
+
+Proposal Purpose
+
+Proposal is Kitchen's operational offer to Sales.
+
+It communicates:
+
+what Kitchen intends to produce
+current menus
+guest quantities
+operational notes intended for Sales
+operational costing information required by Sales
+
+Proposal is not a quotation.
+
+Proposal is not customer communication.
+
+Proposal is an internal Kitchen-to-Sales document.
+
+Quotation Purpose
+
+Quotation is Sales' customer-facing document.
+
+Quotation communicates:
+
+what the customer will receive
+commercial pricing
+customer wording
+Terms and Conditions
+customer notes
+presentation
+
+Quotation is never operational planning.
 
 Quotation never changes Kitchen information.
 
----
+Shared Event Information
 
-# Proposal Philosophy
+Both Proposal and Quotation originate from the current saved Event.
 
-A Proposal is Kitchen's published recommendation for servicing an Event.
+Typical shared information includes:
 
-It represents exactly what Kitchen wishes Sales to offer the customer.
+Event Name
+Customer
+Contact
+Venue
+Venue Contact
+Event Date
+Event Time
+Format
+Menu assignments
+Guest quantities
 
-A Proposal is not a quotation.
+After a document is created, it owns its own snapshot of that information.
 
-It contains operational information prepared by Kitchen.
+Future Event changes never modify existing documents.
 
-Once published, that Proposal Revision becomes immutable.
+Current Operational Truth
 
----
+The Event always represents the current operational truth.
 
-# Proposal Parent
+Kitchen continues updating the Event whenever operational changes occur.
 
-A Proposal Parent represents the Proposal for an Event.
+Saving the Event updates the current operational truth.
 
-It owns the Proposal revision history.
+Existing Proposal and Quotation documents remain unchanged.
 
-The Proposal Parent remains constant throughout the Event.
+Historical Operational Truth
 
-New revisions are added beneath the same Proposal Parent.
+Proposal and Quotation preserve historical operational truth.
 
----
+Historical documents permanently represent exactly what existed when they were created.
 
-# Proposal Revision
+Historical information is never reconstructed from current Event data.
 
-Each Proposal Revision represents one published version of Kitchen's proposal.
+Historical documents always reproduce their own saved information.
 
-A Proposal Revision is an immutable snapshot.
+Proposal Lifecycle
 
-Typical Proposal information includes:
+Every Proposal follows one lifecycle.
 
-- Event
-- Customer
-- Contact
-- Venue
-- Venue Contact
-- Event Date
-- Menus
-- Guest quantities
-- Kitchen notes intended for Sales
+Unsaved
 
-Once published, the Proposal Revision never changes.
+↓
 
-If Kitchen changes anything, a new Proposal Revision is created.
+Draft
 
-Existing Proposal Revisions remain unchanged.
+↓
 
----
+Sent
 
-# Publishing
+Draft Proposals remain editable.
 
-Kitchen explicitly publishes a Proposal Revision.
+Sent Proposals become permanent historical records.
 
-Publishing creates the boundary between Kitchen and Sales.
+Quotation Lifecycle
 
-Nothing is transferred before publication.
+Every Quotation follows the same lifecycle.
 
-Only published Proposal Revisions are available to Quotation.
+Unsaved
 
-Kitchen continues operating independently after publication.
+↓
 
----
+Draft
 
-# Proposal Independence
+↓
 
-Kitchen may continue revising an Event after publishing a Proposal.
+Sent
 
-Those changes affect only future Proposal Revisions.
+Draft Quotations remain editable.
 
-Existing Proposal Revisions remain unchanged.
+Sent Quotations become permanent historical records.
 
-Existing Quotes remain unchanged.
+Working State
 
-Kitchen never updates existing Quotes automatically.
+Proposal and Quotation both use a Working State.
 
----
+Working State may contain:
 
-# Quotation Philosophy
+incomplete edits
+temporary calculations
+wording changes
+unsaved pricing
+temporary notes
 
-Quotation transforms a published Proposal into a professional customer quotation.
+Working State belongs only to the current editing session.
 
-Quotation is not another Proposal.
+Working State never affects historical documents.
 
-Quotation is the customer-facing presentation of one Proposal Revision.
+Save
 
-Quotation allows commercial adjustments while preserving complete historical integrity.
+Save creates or updates the current Draft.
 
-Everything within Quotation exists to produce an accurate customer quotation.
+Save does not send the document.
 
----
+Save does not create historical records.
 
-# Quote Parent
+Save simply updates the current Draft.
 
-A Quote Parent represents one quotation.
+A Draft may be saved any number of times.
 
-It owns the Quote revision history.
+Send
 
-Alternative quotations for the same Event each have their own Quote Parent.
+Send represents publication of the document.
 
-Each Quote Parent remains independent.
+Sending:
 
----
+permanently records the document
+creates historical truth
+prevents further editing
+changes Draft to Sent
 
-# Quote Revision
+Once sent, the document becomes read-only.
 
-A Quote Revision represents one version of a quotation.
+It is never edited again.
 
-Draft revisions may be edited.
+Immutable Documents
 
-Historical revisions become read-only.
+Sent documents are immutable.
 
-Historical revisions are never overwritten.
+They may always be:
 
-Corrections are made by creating another revision.
+viewed
+printed
+exported
+regenerated
 
-Every Quote Revision permanently records the Proposal Revision from which it was created.
+They may never be:
 
-That relationship never changes.
+edited
+overwritten
+renamed
+deleted
 
----
+Their purpose is permanent historical preservation.
 
-# Customer Information
+Creating a Proposal
 
-Customer information originates from the published Proposal Revision.
+A Proposal is always created from one Event.
 
-When a Quote is created, the Customer information becomes part of that Quote Revision.
-
-Historical Quote Revisions preserve the Customer information that existed when the revision was created.
-
-Later changes to the Address Book never modify historical Quote Revisions.
-
----
-
-# Contact Information
-
-Contact information follows the same rules.
-
-The Quote stores the Contact information associated with that revision.
-
-Changes to Contact master records affect future work only.
-
-Historical Quote Revisions remain unchanged.
-
----
-
-# Venue Information
-
-Venue information is copied from the Proposal Revision into the Quote Revision.
-
-Historical Quote Revisions preserve the Venue information used at that time.
-
-Future changes to Venue records do not modify previously saved Quote Revisions.
-
----
-
-# Selling Prices
-
-Kitchen costing and customer selling prices are intentionally independent.
-
-Kitchen calculates production cost.
-
-Quotation determines customer selling price.
-
-Changing selling prices never changes:
-
-- Kitchen costs
-- production costs
-- Menu costing
-- Recipe costing
-- Ingredient costing
-
-Commercial pricing belongs entirely to the Quote.
-
----
-
-# Kitchen Extras
-
-Kitchen Extras exist only for production.
-
-Extras represent additional food prepared beyond the quoted guest quantity.
-
-Extras are never:
-
-- customer guests
-- billable quantities
-- quotation quantities
-
-Quotation always prices guest quantities.
-
-Production Extras remain a Kitchen-only concept.
-
----
-
-# Customer Presentation
-
-Quotation may improve customer presentation without affecting Kitchen.
-
-Examples include:
-
-- clearer menu wording
-- simplified descriptions
-- customer comments
-- commercial notes
-- Terms and Conditions
-- layout changes
-
-These changes belong exclusively to the Quote.
-
-Kitchen data remains unchanged.
-
----
-
-# Information That Cannot Change
-
-Quotation must never modify:
-
-- Proposal Revision
-- Menu composition
-- Dish composition
-- Recipes
-- Ingredients
-- Kitchen notes
-- production quantities
-- Proposal history
-
-If Kitchen changes any operational information, it must create another Proposal Revision.
-
-Quotation decides whether to create another Quote Revision from that Proposal.
-
----
-
-# Working Copy
-
-A Quote is edited as a working copy.
-
-Changes remain local until Save.
-
-Unsaved edits never affect:
-
-- Proposal
-- historical Quote Revisions
-- generated PDFs
-
-The working copy exists only within the current editing session.
-
----
-
-# Dirty State
-
-A Quote becomes dirty whenever the working copy differs from the last saved revision.
-
-Examples include:
-
-- selling price changes
-- wording edits
-- comments
-- Terms and Conditions
-- template changes
-
-Dirty state disappears immediately after Save.
-
----
-
-# Saving
-
-Save commits the current working copy.
-
-If the Quote is still a Draft, Save updates that Draft.
-
-If the current revision is already Final, Save creates a new Draft revision.
-
-Historical revisions are never modified.
-
----
-
-# Save & New
-
-Save & New:
-
-- saves the current Quote
-- creates a new Quote from the current Proposal Revision
-- opens the new Quote immediately
-
-The previously saved Quote remains unchanged.
-
----
-
-# Duplicate
-
-Duplicate creates a completely new Quote Parent.
-
-The duplicated Quote:
-
-- begins as Draft
-- receives its own Quote history
-- becomes completely independent
-
-Future revisions never affect the original Quote.
-
----
-
-# Delete
-
-Only Draft revisions may be deleted.
-
-Historical Quote Revisions remain permanent.
-
-If deleting the only Draft removes every revision beneath a Quote Parent, that Quote Parent may also be removed.
-
----
-
-# Navigation
-
-Leaving a dirty Quote displays the standard Savveyra confirmation:
-
-- Save
-- Discard
-- Cancel
-
-This behaviour is consistent throughout the application.
-
----
-
-# Quote Numbering
-
-Each Quote Parent owns one Quote Number.
-
-Every revision beneath that Quote shares the same Quote Number.
-
-Only the Revision Number changes.
-
-Example:
-
-Quote 00125 Revision 1
-
-Quote 00125 Revision 2
-
-Quote 00125 Revision 3
-
-Revision numbers are never reused.
-
----
-
-# Traceability
-
-Every Quote Revision permanently stores:
-
-- originating Proposal Parent
-- originating Proposal Revision
-
-This relationship is immutable.
-
-Savveyra must always be able to answer:
-
-- Which Proposal produced this Quote?
-- Which revision did the customer receive?
-- What exactly did that quotation contain?
-
-These answers always come from saved Quote Revisions.
-
----
-
-# Creating Quotes
-
-A Quote is always created from one published Proposal Revision.
-
-The Proposal Revision becomes the permanent source for that Quote Revision.
-
-Creating a Quote copies the Proposal information required for customer presentation.
-
-Once created, the Quote becomes independent of future Proposal changes.
-
----
-
-# Multiple Quotes
+Each Proposal belongs to exactly one Event.
 
 An Event may have:
 
-- no Quotes
-- one Quote
-- multiple Quotes
+no Proposals
+one Proposal
+many Proposals
 
-Multiple Quotes allow alternative commercial proposals for the same Event.
+Each Proposal is an independent document.
+
+No Proposal replaces another Proposal.
+
+Creating a Quotation
+
+A Quotation is always created from one Proposal.
+
+Each Quotation belongs to exactly one Proposal.
+
+A Proposal may produce:
+
+no Quotations
+one Quotation
+many Quotations
+
+Each Quotation is an independent document.
+
+Add
+
+Selecting Add Proposal creates a new empty Proposal workspace.
+
+The Proposal is associated with the selected Event.
+
+No Proposal Number exists until the first successful Save.
+
+The Proposal begins in an Unsaved state.
+
+The user builds the Proposal before saving.
+
+The same behaviour applies to Quotation.
+
+Save Behaviour
+
+The first successful Save creates:
+
+a Proposal Number
+Draft status
+the initial saved document
+
+Subsequent Saves continue updating the same Draft.
+
+Saving never creates another Proposal.
+
+Saving never creates another Quotation.
+
+Saving simply updates the current Draft.
+
+Sending a Proposal
+
+Sending a Proposal changes:
+
+Draft
+
+↓
+
+Sent
+
+The Proposal Number remains unchanged.
+
+Only the document status changes.
+
+After Send:
+
+the Proposal becomes read-only
+Sales may create Quotations from it
+Kitchen may no longer edit it
+Sending a Quotation
+
+Sending a Quotation changes:
+
+Draft
+
+↓
+
+Sent
+
+The Quotation Number remains unchanged.
+
+After Send:
+
+the Quotation becomes read-only
+the customer document becomes permanent
+the Quotation becomes historical
+Editing Draft Documents
+
+Draft documents remain fully editable.
+
+Typical edits include:
+
+wording
+menus
+notes
+customer information
+pricing
+Terms and Conditions
+presentation
+
+There is no limit to the number of Saves before Send.
+
+Editing Sent Documents
+
+Sent documents cannot be edited.
+
+If the user opens a Sent Proposal or Quotation and makes changes, those changes occur only in the current workspace.
+
+The original Sent document remains unchanged.
+
+Saving Changes to a Sent Document
+
+If changes are saved while viewing a Sent document:
+
+A completely new Draft document is created automatically.
+
+The original Sent document remains unchanged.
+
+Example:
+
+P-00015
+
+↓
+
+User edits
+
+↓
+
+Save
+
+↓
+
+DP-00016
+
+The same behaviour applies to Quotations.
+
+Example:
+
+Q-00027
+
+↓
+
+User edits
+
+↓
+
+Save
+
+↓
+
+DQ-00028
+
+The new Draft becomes the active document.
+
+The original Sent document remains historical.
+
+Duplicate
+
+Duplicate creates a completely new Draft document.
+
+Duplicate copies:
+
+header information
+menus
+notes
+commercial information
+Terms and Conditions
+
+Duplicate creates:
+
+new document number
+new lifecycle
+new history
+
+Future changes never affect the original document.
+
+Delete
+
+Only Draft documents may be deleted.
+
+Deleting a Draft removes only that Draft.
+
+Sent documents are never deleted.
+
+Historical documents remain permanently available.
+
+Clear
+
+Clear affects only the current workspace.
+
+Clear never changes:
+
+saved Drafts
+Sent documents
+Event information
+historical records
+Close
+
+Closing a document with unsaved changes displays the standard confirmation:
+
+Save
+Discard
+Cancel
+
+This behaviour is identical throughout Savveyra.
+
+Document Numbering
+
+Proposal numbering belongs to Proposal.
+
+Quotation numbering belongs to Quotation.
+
+Database identifiers remain independent.
+
+User-facing numbers are configured through Settings.
+
+Draft Prefix
+
+Draft documents display a Draft prefix.
+
+Example:
+
+DP-00015
+
+or
+
+DQ-00008
+
+The document remains editable.
+
+Sent Prefix
+
+After Send, only the prefix changes.
+
+Example:
+
+DP-00015
+
+↓
+
+P-00015
+
+or
+
+DQ-00008
+
+↓
+
+Q-00008
+
+The numeric portion never changes.
+
+Number Assignment
+
+Numbers are assigned on the first successful Save.
+
+Numbers are never reused.
+
+Deleted Draft numbers remain retired.
+
+Historical numbering remains continuous.
+
+Document Independence
+
+Every Proposal is independent.
+
+Every Quotation is independent.
+
+There is no parent document.
+
+There are no revision numbers.
+
+Every document owns:
+
+its own number
+its own lifecycle
+its own history
+
+Historical relationships exist only through references to their originating Event or Proposal.
+
+Event Relationship
+
+An Event may continue changing after a Proposal or Quotation has been created.
+
+Typical changes include:
+
+menus
+guest quantities
+scheduling
+customer information
+venue information
+
+These changes affect only the current Event.
+
+Existing documents remain unchanged.
+
+Current Documents
+
+The latest Draft always represents the current working document.
+
+Sent documents represent historical communication.
+
+Both forms of information are equally important.
+
+Current Drafts support ongoing work.
+
+Sent documents support historical reference.
+
+Historical Preservation
+
+Every Sent Proposal permanently preserves:
+
+Event information
+menu information
+customer information
+notes
+operational content
+
+Every Sent Quotation permanently preserves:
+
+commercial wording
+selling prices
+customer information
+Terms and Conditions
+presentation information
+
+Historical documents are never rebuilt from current master data.
+
+They always display exactly what was saved.
+
+Proposal Snapshot
+
+A Proposal captures the saved operational state of the Event at the moment the Proposal is first saved.
+
+The Proposal stores its own copy of:
+
+Event information
+Customer
+Contact
+Venue
+Venue Contact
+Event Date
+Event Time
+Format
+selected Menus
+guest quantities
+Proposal notes
+
+Future Event changes never modify an existing Proposal.
+
+Quotation Snapshot
+
+A Quotation captures the saved state of the Proposal from which it was created.
+
+The Quotation stores its own copy of:
+
+Proposal information
+Customer
+Contact
+Venue
+Venue Contact
+Menu information
+guest quantities
+commercial wording
+selling prices
+Terms and Conditions
+
+Future Proposal changes never modify an existing Quotation.
+
+Customer Information
+
+Customer information is copied from the Event into the Proposal.
+
+When a Quotation is created, Customer information is copied from the Proposal into the Quotation.
+
+Each document owns its own Customer snapshot.
+
+Changing the Address Book never changes existing documents.
+
+Contact Information
+
+Contact information follows the same behaviour.
+
+Each document stores its own Contact information.
+
+Later Contact changes affect future work only.
+
+Historical documents remain unchanged.
+
+Venue Information
+
+Venue information follows the same behaviour.
+
+Each document stores its own Venue information.
+
+Later Venue changes never modify existing documents.
+
+Venue Contact
+
+Venue Contact behaves identically.
+
+Each document permanently stores the Venue Contact used when it was created.
+
+Address Information
+
+Address information follows the same snapshot behaviour.
+
+Every saved document preserves:
+
+Customer address
+Venue address
+telephone numbers
+email addresses
+
+Future Address Book edits affect only future documents.
+
+Historical documents remain unchanged.
+
+Kitchen Information
+
+Kitchen owns:
+
+menu composition
+production information
+costing
+guest quantities
+operational notes
+
+Sales never edits Kitchen information.
+
+If Kitchen information changes, Kitchen creates another Proposal.
+
+Existing Proposals remain unchanged.
+
+Existing Quotations remain unchanged.
+
+Commercial Information
+
+Sales owns:
+
+selling prices
+commercial wording
+quotation notes
+customer comments
+payment information
+Terms and Conditions
+
+Kitchen never edits commercial information.
+
+Selling Prices
+
+Kitchen production costing and customer selling prices are intentionally independent.
+
+Kitchen determines production cost.
+
+Sales determines customer price.
+
+Changing selling prices never changes:
+
+Ingredient costs
+Recipe costs
+Dish costs
+Menu costs
+Event costs
+
+Commercial pricing belongs entirely to the Quotation.
+
+Guest Quantities
+
+Guest quantities originate from the Event.
+
+Proposal stores the guest quantities that existed when it was created.
+
+Quotation stores the guest quantities received from the Proposal.
+
+Historical documents always preserve those quantities.
+
+Production Extras
+
+Kitchen production Extras belong only to Kitchen.
+
+Extras represent additional production required for operational reasons.
 
 Examples include:
 
-- Premium Package
-- Economy Package
-- Customer Revision
-- Seasonal Promotion
+production buffer
+damaged plates
+unexpected guests
+staff meals
 
-Each Quote maintains its own independent revision history.
+Production Extras never become quotation quantities.
 
----
+Sales prices actual guest quantities only.
 
-# New Proposal Revisions
+Menus
 
-Kitchen may publish another Proposal Revision at any time.
+Proposal stores the Menu information intended for Sales.
 
-Existing Quotes are never updated automatically.
+Quotation presents that Menu information to the customer.
 
-When a newer Proposal becomes available, Quotation simply informs the user.
+Quotation may improve presentation.
 
-The user decides whether to:
+Quotation never changes Kitchen Menu definitions.
 
-- continue using the current Quote
-- create a new Quote
-- create a new Quote Revision based on the newer Proposal
+Menu Descriptions
 
-No automatic replacement occurs.
+Kitchen owns Menu definitions.
 
----
+Quotation may use customer-friendly wording when presenting those Menus.
 
-# Proposal Selection
+Changing customer wording never changes the Menu itself.
 
-When creating a new Quote, the newest Proposal Revision should be selected by default.
+Proposal Notes
 
-The user may intentionally select an earlier Proposal Revision.
+Proposal Notes are operational communication from Kitchen to Sales.
 
-Older Proposal Revisions remain valid sources for new Quotes.
+Proposal Notes belong to Proposal.
 
-Savveyra never assumes the newest Proposal is always the correct Proposal.
+Quotation may use that information while preparing customer communication.
 
----
+Proposal Notes never change after the Proposal has been saved.
 
-# Proposal and Quote Independence
+Customer Notes
 
-Proposal Revisions and Quote Revisions maintain completely independent revision histories.
+Customer Notes belong entirely to Quotation.
 
-Creating a Proposal Revision never creates a Quote Revision.
+Customer Notes are not operational planning.
 
-Creating a Quote Revision never creates a Proposal Revision.
+Kitchen never edits Customer Notes.
 
-Kitchen and Sales remain operationally independent throughout the Event lifecycle.
+Terms and Conditions
 
----
+Terms and Conditions belong entirely to Quotation.
 
-# Historical Integrity
+Default Terms and Conditions may be supplied from Settings.
 
-Historical information must always be reproducible.
+Users may modify them for individual Quotations.
 
-Savveyra must preserve:
+Changing Terms and Conditions never affects Proposal information.
 
-- the Proposal used
-- the Quote produced
-- the customer information
-- the commercial pricing
-- the wording
-- the template used
+Document Templates
 
-Historical Quote Revisions must always reproduce exactly what the customer received.
+Templates determine presentation only.
 
-Historical information is never reconstructed from current master data.
+Templates never contain business rules.
 
----
+Templates never calculate prices.
 
-# PDF Generation
+Templates never modify Proposal or Quotation information.
 
-The final product of the Quotation domain is a PDF.
+Multiple templates may present the same document differently while representing identical business information.
 
-PDF generation always uses:
+Company Branding
 
-- one saved Quote Revision
-- one selected PDF template
+Company branding belongs to Settings.
 
-PDF generation never reads directly from Appsmith widgets.
+Typical branding includes:
 
-The generated PDF always represents the saved Quote Revision.
+company name
+logo
+address
+telephone
+email
+website
 
----
+Branding is copied into each document when required.
 
-# Unsaved Changes
+Historical documents preserve the branding that existed when they were created.
 
-If unsaved changes exist before generating a PDF, Savveyra requires the user to:
+Default Values
 
-- Save
-- Discard
-- Cancel
+Settings may provide defaults for:
 
-A PDF must never be generated from unsaved data.
+introductory wording
+Terms and Conditions
+default template
+standard comments
 
-This guarantees that every generated quotation can be reproduced later.
+Users may modify these values within individual Drafts.
 
----
+Historical documents preserve the values that were saved.
 
-# PDF Templates
+Currency
 
-Templates control presentation only.
+Stored monetary values represent business information.
 
-Templates never contain business logic.
+Currency formatting is presentation.
 
-Templates never calculate pricing.
+Changing currency presentation never changes stored prices.
 
-Templates never modify Quote data.
+Dates
 
-Multiple templates may present the same Quote differently while representing identical business information.
+Dates are stored independently from presentation.
 
----
+Regional formatting belongs to the document template.
 
-# Template Selection
+Historical documents preserve the stored dates regardless of future formatting changes.
 
-Template selection belongs to the Quote Revision.
+Language
 
-Changing the template changes only presentation.
+Future language support belongs to individual documents.
 
-The business information remains identical.
+Changing application language never changes historical documents.
 
-The selected template becomes part of the saved Quote Revision.
+Each saved document preserves the language used when it was created.
 
----
+PDF Generation
 
-# Printing
+The final output of both Proposal and Quotation is a PDF.
 
-Savveyra generates a PDF.
+PDF generation always uses the saved document.
 
-Printing occurs from the user's PDF viewer.
+PDF generation never reads directly from the editing workspace.
 
-Savveyra does not print directly from Appsmith.
+Every generated PDF must always be reproducible from its saved document.
 
-The normal workflow is:
+Generating a PDF
 
-Save Quote
+PDF generation follows one consistent workflow.
+
+Save
 
 ↓
 
@@ -659,88 +960,594 @@ Open PDF
 
 Print or Export
 
----
+The generated PDF always represents the current saved document.
 
-# Export
+Unsaved Changes
 
-Export produces the generated PDF.
+If unsaved changes exist when generating a PDF, the user is prompted to:
+
+Save
+Discard
+Cancel
+
+A PDF is never generated from unsaved information.
+
+This guarantees that every PDF can always be reproduced later.
+
+Printing
+
+Printing is performed from the user's PDF viewer.
+
+Savveyra generates the PDF.
+
+Savveyra does not print directly.
+
+Export
+
+Export creates another copy of the saved PDF.
 
 Export never:
 
-- modifies Quote history
-- creates another Quote Revision
-- changes Proposal information
+changes the document
+creates another document
+changes document status
+modifies historical records
 
-Export simply produces another copy of the saved quotation.
+Export is a presentation function only.
 
----
+Customer Document
 
-# Customer Document
+Customer-facing documents include only customer information.
 
-The customer receives only customer-facing information.
+Typical information includes:
+
+Customer
+Contact
+Venue
+Event
+Menus
+Guest Quantities
+Selling Prices
+Customer Notes
+Terms and Conditions
+
+Customer documents never display:
+
+Kitchen costs
+production costs
+Recipes
+Ingredients
+internal notes
+database identifiers
+Proposal Layout
+
+Proposal is an internal Kitchen-to-Sales document.
+
+Typical sections include:
+
+Header
+Event Summary
+Customer Information
+Menu Summary
+Operational Notes
+Totals
+
+The visual layout may change without changing operational behaviour.
+
+Quotation Layout
+
+Quotation is a customer-facing document.
+
+Typical sections include:
+
+Header
+Customer Information
+Event Summary
+Menu Presentation
+Commercial Totals
+Customer Notes
+Terms and Conditions
+
+The visual layout may change without changing operational behaviour.
+
+Header Information
+
+The document header provides immediate context.
+
+Typical information includes:
+
+Document Number
+Document Status
+Document Date
+Event Name
+Customer
+Venue
+
+The user should always know which document is open.
+
+Menu Presentation
+
+Quotation presents Menu information to the customer.
+
+Presentation may include:
+
+improved wording
+grouped menu sections
+simplified descriptions
+
+Presentation changes never modify Kitchen Menu definitions.
+
+Commercial Totals
+
+Quotation displays customer-facing totals.
+
+Commercial totals belong entirely to Sales.
+
+Kitchen production costing remains independent.
+
+Action Buttons
+
+Typical actions include:
+
+Save
+Save & New
+Duplicate
+Send
+Generate PDF
+Export PDF
+Close
+
+The same operational behaviour should be used throughout Savveyra.
+
+Current Status
+
+The current document status should always be visible.
+
+Possible statuses are:
+
+Unsaved
+Draft
+Sent
+
+The current state should never be ambiguous.
+
+Refresh
+
+Refreshing the page reloads the current saved Draft.
+
+Unsaved changes are discarded unless first saved.
+
+This behaviour matches every other editable domain.
+
+Proposal Updates
+
+Creating another Proposal never modifies existing Proposals.
+
+Sales may continue working from any existing Proposal.
+
+Kitchen simply creates another Proposal whenever updated operational information needs to be communicated.
+
+Multiple Proposals
+
+An Event may contain multiple Proposals.
+
+Example:
+
+Event
+
+↓
+
+DP-00015
+
+↓
+
+P-00015
+
+↓
+
+DP-00016
+
+↓
+
+P-00016
+
+↓
+
+DP-00017
+
+Each Proposal is a separate document.
+
+Each preserves its own history.
+
+Multiple Quotations
+
+A Proposal may produce multiple Quotations.
 
 Examples include:
 
-- Customer
-- Contact
-- Venue
-- Event
-- Menus
-- Guest quantities
-- Selling prices
-- Customer comments
-- Terms and Conditions
+Standard
+Premium
+Economy
 
-The customer never sees:
+Each Quotation is completely independent.
 
-- Kitchen costing
-- production costs
-- Recipes
-- Ingredients
-- internal notes
-- database identifiers
-- revision history
-- dirty state
+Each has its own document number.
 
----
+Each has its own Draft and Sent lifecycle.
 
-# Quote Workflow
+Proposal Selection
 
-The normal operational workflow is:
+When creating a new Quotation, the newest Sent Proposal is selected by default.
 
-Kitchen publishes Proposal
+The user may choose any Sent Proposal.
 
-↓
+Older Proposals remain valid.
 
-Quotation receives Proposal
+Creating a Quotation never changes the selected Proposal.
 
-↓
+Historical Documents
 
-Create Quote
+Historical documents are always available for:
 
-↓
+viewing
+printing
+exporting
+comparison
+auditing
 
-Review imported information
+Historical documents are never edited.
 
-↓
+Traceability
 
-Enter selling prices
+Savveyra must always be able to answer:
 
-↓
+Which Event produced this Proposal?
+Which Proposal produced this Quotation?
+What exactly was sent?
+When was it sent?
 
-Adjust wording
+These answers come from saved historical documents.
 
-↓
+Operational Independence
 
-Add customer comments
+Kitchen continues planning independently.
 
-↓
+Sales continues customer communication independently.
 
-Review Terms & Conditions
+Neither department blocks the other.
 
-↓
+Coordination occurs only through creating and sending Proposal documents.
+
+Customer Communication
+
+Sales owns all customer communication.
+
+Typical activities include:
+
+presenting the Quotation
+discussing pricing
+explaining menu options
+negotiating commercial terms
+answering customer questions
+
+Kitchen participates only when operational clarification is required.
+
+Operational Change Requests
+
+Customers frequently request operational changes.
+
+Examples include:
+
+guest quantity changes
+Menu changes
+additional items
+removed items
+Event date changes
+Venue changes
+
+These requests belong to operational planning.
+
+Sales communicates the requested changes to Kitchen through normal business processes.
+
+The request itself does not change the Event.
+
+Kitchen Response
+
+Kitchen evaluates every requested operational change.
+
+Kitchen determines:
+
+operational feasibility
+production impact
+costing impact
+scheduling impact
+
+Kitchen may:
+
+accept the request
+partially accept the request
+reject the request
+
+Operational decisions belong entirely to Kitchen.
+
+Updating the Event
+
+When Kitchen accepts a change, the Event is updated.
+
+Typical updates include:
+
+Menu changes
+guest quantity changes
+scheduling changes
+Customer changes
+Contact changes
+Venue changes
+
+Saving the Event updates the current operational truth.
+
+Previously saved Proposals remain unchanged.
+
+Previously saved Quotations remain unchanged.
+
+Creating Another Proposal
+
+When Kitchen wishes to communicate updated operational information, another Proposal is created.
+
+The new Proposal becomes an independent Draft.
+
+The previous Proposal remains unchanged.
+
+Kitchen decides when operational information is ready to send.
+
+Sales After Receiving Another Proposal
+
+Receiving another Proposal never changes Sales work automatically.
+
+Sales may:
+
+continue using the current Quotation
+create a new Quotation
+compare Proposals
+prepare alternative Quotations
+send another Quotation
+
+These are commercial decisions owned entirely by Sales.
+
+Parallel Operation
+
+Kitchen and Sales intentionally work independently.
+
+Example:
+
+Kitchen
+
+Proposal A
+      │
+      ├────► Sales prepares Quotation
+      │
+continues planning
+      │
+Proposal B
+      │
+      └────► Sales decides whether to use it
+
+Neither department blocks the other.
+
+Customer Acceptance
+
+Customer acceptance belongs entirely to Sales.
+
+Acceptance records the customer's commercial decision.
+
+Acceptance does not:
+
+lock the Event
+stop Kitchen planning
+prevent another Proposal
+prevent another Quotation
+
+Kitchen continues following the Event lifecycle.
+
+Administrative Changes
+
+Administrative changes may occur after a document has been sent.
+
+Examples include:
+
+corrected spelling
+corrected telephone number
+corrected email address
+updated company branding
+
+These changes are made by creating another Draft document.
+
+Previously Sent documents remain unchanged.
+
+Event Completion
+
+Kitchen completes operational work according to the Event lifecycle.
+
+Sales completes commercial work according to the Quotation lifecycle.
+
+These lifecycles remain independent.
+
+Current Operational Truth
+
+The current Event always represents today's operational planning.
+
+It continues changing until operational work is complete.
+
+Historical Operational Truth
+
+Every Sent Proposal permanently records:
+
+what Kitchen communicated
+when it was communicated
+who received it
+
+Every Sent Quotation permanently records:
+
+what Sales communicated
+when it was communicated
+exactly what the customer received
+
+Neither historical record is ever modified.
+
+Current vs Historical Information
+
+Current information supports:
+
+planning
+costing
+scheduling
+production
+
+Historical information supports:
+
+auditing
+comparison
+customer reference
+legal reference
+
+Both are equally important.
+
+User Confidence
+
+Users should always understand:
+
+which document is open
+whether it is Draft or Sent
+whether changes have been saved
+whether another Proposal exists
+whether another Quotation exists
+
+The current document state should never be uncertain.
+
+Consistency
+
+Proposal and Quotation follow the same operational behaviour as every other editable Savveyra domain.
+
+Consistent behaviour includes:
 
 Save
+Duplicate
+Delete
+Close confirmation
+Working State
+Published history
+
+Users should never learn different behaviour because they entered Proposal or Quotation.
+
+Design Principles
+
+Proposal and Quotation are designed around:
+
+operational correctness
+simplicity
+visibility
+predictability
+historical accuracy
+clear ownership
+
+The user always controls significant business actions.
+
+Savveyra never performs hidden commercial or operational decisions.
+
+Explicit User Actions
+
+The following actions always require user confirmation:
+
+Save
+Send
+Duplicate
+Delete Draft
+Generate PDF
+Export PDF
+
+Savveyra never performs these actions automatically.
+
+Maintainability
+
+Business rules should remain centralized.
+
+Operational behaviour should remain separate from presentation.
+
+Templates control presentation only.
+
+Settings provide defaults only.
+
+Business ownership never overlaps.
+
+Single Source of Truth
+
+Every piece of information has one owner.
+
+Examples:
+
+Event owns operational planning.
+
+Proposal owns Kitchen communication.
+
+Quotation owns customer communication.
+
+Settings own default values.
+
+Address Book owns reusable Customer, Contact and Venue records.
+
+Templates own presentation.
+
+Ownership never transfers because another document uses the information.
+
+Operational Boundary
+
+Savveyra's responsibility ends when the customer document has been successfully produced.
+
+Activities beyond this point belong to other systems.
+
+Examples include:
+
+CRM
+invoicing
+accounting
+payment collection
+marketing
+customer follow-up
+
+These systems may integrate with Savveyra but remain outside the Proposal and Quotation domains.
+
+Operational Summary
+
+The operational workflow is:
+
+Create Event
+
+↓
+
+Save Event
+
+↓
+
+Create Proposal
+
+↓
+
+Save Proposal
+
+↓
+
+Send Proposal
+
+↓
+
+Create Quotation
+
+↓
+
+Save Quotation
+
+↓
+
+Send Quotation
 
 ↓
 
@@ -750,734 +1557,8 @@ Generate PDF
 
 Print or Export
 
-This is the complete operational workflow of the Quotation domain.
+Proposal communicates Kitchen's operational solution.
 
----
+Quotation communicates Sales' commercial offer.
 
-# User Interface Behaviour
-
-The Quotation page is the final working page before producing a customer quotation.
-
-It should encourage reviewing, refining and producing the finished document rather than feeling like a data-entry form.
-
-The interface should remain consistent with every other Savveyra domain.
-
----
-
-# Page Layout
-
-A typical Quote page consists of:
-
-- Header
-- Proposal Summary
-- Quote Details
-- Menu Section
-- Comments
-- Terms & Conditions
-- Totals
-- Action Buttons
-
-The exact visual layout may evolve without changing the operational behaviour.
-
----
-
-# Header
-
-The Header provides immediate context.
-
-Typical information includes:
-
-- Quote Number
-- Revision Number
-- Quote Date
-- Customer
-- Contact
-- Venue
-- Venue Contact
-- Event
-- Event Date
-
-The user should immediately know which quotation is being edited.
-
----
-
-# Proposal Summary
-
-The Proposal Summary displays the information received from Kitchen.
-
-Its purpose is reference only.
-
-Editing a Quote never edits the Proposal Summary.
-
-Proposal information remains visually distinguishable from Quote-owned information.
-
----
-
-# Quote Details
-
-Quote Details contain commercial information owned by the Quote.
-
-Typical fields include:
-
-- selling prices
-- customer wording
-- quotation comments
-- quote date
-- optional commercial information
-
-Changes affect only the Quote Revision.
-
-Kitchen information remains unchanged.
-
----
-
-# Menu Section
-
-The Menu section is the primary focus of the quotation.
-
-It presents the menus exactly as the customer will receive them.
-
-Quotation may improve wording or presentation.
-
-Kitchen Menu definitions remain unchanged.
-
----
-
-# Comments
-
-Comments provide customer-specific information.
-
-Examples include:
-
-- special requests
-- optional services
-- delivery information
-- presentation notes
-
-Comments belong entirely to the Quote.
-
----
-
-# Terms & Conditions
-
-Terms & Conditions are customer-facing information.
-
-They belong exclusively to the Quote.
-
-Changing Terms & Conditions never changes Proposal data.
-
-Default Terms & Conditions may be supplied from Settings.
-
----
-
-# Totals
-
-Totals shown within the Quote are commercial totals.
-
-Kitchen production costing remains independent.
-
-Quotation determines what the customer sees.
-
----
-
-# Action Buttons
-
-Typical Quote actions include:
-
-- Save
-- Save & New
-- Duplicate
-- Generate PDF
-- Export PDF
-- Close
-
-Additional actions should only be introduced when genuine operational requirements arise.
-
----
-
-# Revision Awareness
-
-The current Quote Revision should always be visible.
-
-The user should never need to search to determine:
-
-- Quote Number
-- Revision Number
-- Draft or Final status
-
-The current editing state should always be obvious.
-
----
-
-# Proposal Awareness
-
-The originating Proposal Revision should also be visible.
-
-The user should always know which Proposal Revision is being quoted.
-
-This provides immediate historical context.
-
----
-
-# Historical Revisions
-
-Historical Quote Revisions remain available for viewing.
-
-Historical revisions are read-only.
-
-Historical revisions may always be regenerated into PDFs.
-
-Historical revisions are never edited.
-
----
-
-# Draft Revisions
-
-Draft revisions remain editable.
-
-Draft status should be visually distinguishable from Final revisions.
-
-Users should always understand whether they are editing a Draft or viewing history.
-
----
-
-# Refresh Behaviour
-
-Refreshing the page reloads the most recently saved Quote Revision.
-
-Unsaved changes are discarded unless first saved.
-
-This behaviour matches the remainder of Savveyra.
-
----
-
-# Proposal Updates
-
-If Kitchen publishes another Proposal Revision while a Quote is open, Quotation simply informs the user.
-
-The current Quote continues unchanged.
-
-The user decides whether another Quote Revision should be created later.
-
-No interruption occurs.
-
----
-
-# Accepted Quotations
-
-Normally only one Quote represents the customer's accepted quotation for an Event.
-
-Changing the accepted Quote never deletes previous Quotes.
-
-Historical records remain available.
-
-Acceptance records the customer's commercial decision.
-
-It does not alter Proposal history.
-
----
-
-# Consistency
-
-Quotation should behave exactly like every other Savveyra page.
-
-Examples include:
-
-- Save behaviour
-- Dirty-state handling
-- Duplicate
-- Revision philosophy
-- Close confirmation
-
-Users should never learn different behaviour simply because they entered the Quotation module.
-
----
-
-# Design Principles
-
-The Quotation page should always allow the user to understand:
-
-- which Proposal is being quoted
-- which Quote is open
-- which Revision is being viewed
-- whether changes have been saved
-- whether the quotation is ready for PDF generation
-
-There should never be uncertainty about the current state of the quotation.
-
----
-
-# Settings Integration
-
-Quotation may obtain default values from the Settings module.
-
-Typical configurable defaults include:
-
-- company name
-- company logo
-- quotation numbering
-- default PDF template
-- default Terms & Conditions
-- default introductory wording
-
-These values provide starting points only.
-
-Once a Quote Revision is saved, the values used become part of that Quote Revision.
-
----
-
-# Company Branding
-
-Company branding belongs to Settings.
-
-Typical branding includes:
-
-- company name
-- logo
-- address
-- telephone
-- email
-- website
-
-Templates determine how branding is displayed.
-
-Changing company branding affects future Quotes.
-
-Historical Quote Revisions preserve the branding that was saved with that revision.
-
----
-
-# Quote Numbering
-
-Quote numbering is generated using the Settings configuration.
-
-Each Quote Parent receives one permanent Quote Number.
-
-Every revision beneath that Quote Parent shares the same Quote Number.
-
-Only the Revision Number changes.
-
-Quote numbers are never reused.
-
----
-
-# Default Values
-
-Settings may provide defaults for:
-
-- Terms & Conditions
-- introductory wording
-- default template
-- standard comments
-
-Users may modify these values for individual Quotes.
-
-Changes affect only the current Quote Revision.
-
----
-
-# Language
-
-The architecture supports future multi-language capability.
-
-Language belongs to the Quote Revision.
-
-Historical Quote Revisions preserve the language used when they were created.
-
-Changing the application's default language does not modify historical Quotes.
-
----
-
-# Currency
-
-Monetary values stored within a Quote represent business data.
-
-Currency formatting is presentation.
-
-Templates determine how monetary values are displayed.
-
-Changing presentation never changes stored selling prices.
-
----
-
-# Date Formatting
-
-Dates are stored independently of presentation.
-
-Templates determine how dates appear to customers.
-
-Regional formatting should remain a presentation concern.
-
----
-
-# Future Attachments
-
-Future versions may support customer-facing attachments.
-
-Examples include:
-
-- sample menus
-- venue layouts
-- photographs
-- promotional material
-
-Attachments are optional additions.
-
-They do not change the operational behaviour of the Quote.
-
----
-
-# Future Templates
-
-Additional quotation templates may be introduced at any time.
-
-New templates extend presentation only.
-
-Existing Quote Revisions remain valid regardless of future templates.
-
-Historical quotations continue to reproduce correctly.
-
----
-
-# Future Expansion
-
-Future enhancements should extend the existing architecture rather than replacing it.
-
-Examples include:
-
-- richer layouts
-- additional branding
-- optional customer sections
-- localization
-- multiple currencies
-
-These enhancements should not require redesigning the Proposal or Quote architecture.
-
----
-
-# Module Relationships
-
-## Events
-
-Events remain the operational centre of Savveyra.
-
-Quotation supports Events through published Proposals.
-
-Quotation never becomes an Event management module.
-
----
-
-## Menus
-
-Kitchen owns Menu definitions.
-
-Quotation presents Menus to the customer.
-
-Quotation never edits Menu composition.
-
----
-
-## Recipes
-
-Recipes belong entirely to Kitchen.
-
-Recipe information never appears within the customer quotation.
-
----
-
-## Ingredients
-
-Ingredients belong entirely to Kitchen.
-
-Ingredient information is never required by the Quotation domain.
-
----
-
-## Groceries
-
-Groceries is an operational purchasing module.
-
-Quotation has no dependency on Groceries.
-
-Changes within Groceries never affect existing Quotes.
-
----
-
-## Inventory
-
-Inventory, if implemented, remains independent.
-
-Inventory affects production.
-
-Quotation affects customer communication.
-
-Neither owns the other's data.
-
----
-
-# Architectural Independence
-
-Each Savveyra module has one clear responsibility.
-
-Kitchen prepares operational information.
-
-Proposal publishes operational intent.
-
-Quotation prepares customer communication.
-
-Templates control presentation.
-
-The PDF engine produces the finished customer document.
-
-No module should assume responsibilities belonging to another.
-
----
-
-# Design Principles
-
-The Quotation domain is intentionally simple.
-
-Whenever multiple implementations satisfy the same business requirement, the simpler implementation should be preferred.
-
-Complexity should only be introduced when it provides genuine operational value.
-
----
-
-# Explicit User Control
-
-Commercial decisions always belong to the user.
-
-Savveyra provides information, consistency and historical preservation.
-
-Savveyra never makes commercial decisions automatically.
-
-Examples include:
-
-- selecting a Proposal Revision
-- creating a Quote
-- creating a Quote Revision
-- generating a PDF
-- selecting a template
-- accepting a quotation
-
-All significant business actions require explicit user action.
-
----
-
-# Predictable Behaviour
-
-The same user action should always produce the same result.
-
-Generating a PDF from the same saved Quote Revision using the same template should always produce the same document.
-
-Business behaviour should never depend upon hidden state.
-
----
-
-# No Hidden Automation
-
-Quotation avoids hidden automation.
-
-Examples:
-
-Kitchen publishes another Proposal Revision.
-
-↓
-
-Quotation notifies the user.
-
-↓
-
-The user decides what to do.
-
-Savveyra never silently:
-
-- replaces Proposal information
-- updates existing Quotes
-- creates Quote Revisions
-- changes selling prices
-- regenerates customer documents
-
----
-
-# Historical Accuracy
-
-Historical accuracy takes precedence over convenience.
-
-Savveyra must always preserve the ability to reproduce:
-
-- the originating Proposal
-- the Quote Revision
-- customer information
-- commercial pricing
-- wording
-- selected template
-
-Historical information must never silently change because master data later changed.
-
----
-
-# Separation of Responsibilities
-
-Every layer has one clear responsibility.
-
-Kitchen:
-
-- operational planning
-- production
-- Proposal creation
-
-Quotation:
-
-- customer presentation
-- commercial pricing
-- quotation history
-
-Templates:
-
-- presentation
-
-PDF Engine:
-
-- document generation
-
-Settings:
-
-- defaults
-
-Address Book:
-
-- master Customer
-- Contact
-- Venue records
-
-Responsibilities should never overlap.
-
----
-
-# Single Source of Truth
-
-Every piece of information has one owner.
-
-Examples:
-
-Proposal information belongs to the Proposal Revision.
-
-Commercial information belongs to the Quote Revision.
-
-Customer master information belongs to the Address Book.
-
-Presentation belongs to the PDF Template.
-
-Defaults belong to Settings.
-
-Information should never have competing owners.
-
----
-
-# User Confidence
-
-The interface should always allow the user to understand:
-
-- which Proposal Revision is open
-- which Quote Revision is open
-- whether changes are saved
-- whether the document is Draft or Final
-- whether a newer Proposal exists
-- when the quotation is ready for PDF generation
-
-The user should never be uncertain about the state of their quotation.
-
----
-
-# Maintainability
-
-Business rules should remain centralized.
-
-Operational behaviour should be documented once.
-
-Presentation should remain separate from business logic.
-
-Future development should extend the architecture rather than replace it.
-
----
-
-# Operational Boundary
-
-Savveyra's responsibility ends when the customer quotation has been successfully produced.
-
-Activities beyond that belong to other systems.
-
-Examples include:
-
-- CRM
-- email campaigns
-- negotiations
-- accounting
-- invoicing
-- payment collection
-- customer follow-up
-- revenue reporting
-
-These systems may integrate with Savveyra but remain outside the Quotation domain.
-
----
-
-# Final Operational Summary
-
-The complete operational flow is:
-
-Kitchen prepares the Event
-
-↓
-
-Kitchen creates Proposal Revisions
-
-↓
-
-Kitchen explicitly publishes a Proposal Revision
-
-↓
-
-Quotation receives the Proposal Revision
-
-↓
-
-User creates a Quote
-
-↓
-
-User enters commercial information
-
-↓
-
-User saves the Quote Revision
-
-↓
-
-Savveyra generates a PDF from the saved Quote Revision
-
-↓
-
-User prints or exports the finished quotation
-
-This completes the operational responsibility of the Proposal and Quotation domains.
-
----
-
-# Final Architectural Statement
-
-Proposal and Quotation intentionally separate operational planning from customer communication.
-
-Kitchen determines **what will be produced**.
-
-Quotation determines **how it will be presented commercially**.
-
-Proposal Revisions preserve Kitchen history.
-
-Quote Revisions preserve Sales history.
-
-Both histories remain independent while maintaining complete traceability between them.
-
-This separation is fundamental to Savveyra and should remain unchanged unless future business requirements clearly demonstrate the need for a different operational model.
-
+Kitchen and Sales remain operationally independent while sharing the same Event.

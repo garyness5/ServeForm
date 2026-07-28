@@ -1,490 +1,582 @@
-Savveyra Development Handoff
-Purpose
-This document allows development to continue immediately in a new ChatGPT conversation.
-It contains only the current implementation state.
-It is temporary.
-Everything here should be assumed to be replaced by the next development handoff.
-Permanent product knowledge belongs in the supporting documentation.
-________________________________________
-Current Project State
-The project is currently in the normalization phase.
-The objective is not to add new functionality.
-The objective is to normalize the entire application so every domain follows the same architecture, ownership model and implementation standards before continuing feature development.
-This normalization now begins with documentation.
-The documentation rewritten during this chat establishes the new project foundation.
-Future implementation should follow these documents rather than older discussions.
-________________________________________
-Documentation Status
-The following documents have been completely rewritten during this chat.
-Completed:
-•	Development Standards 
-•	Canonical Specifications 
-•	Architecture 
-•	Domain Rules 
-•	Events, Proposal & Quotation Architecture 
-•	Kitchen ↔ Sales Workflow 
-These documents should now be considered the authoritative project documentation.
-The remaining major document is:
-•	Proposal & Quotation Operational Specification 
-It should be rewritten next.
-The previous version should not be patched.
-It should be rewritten from the beginning using the architectural decisions established during this chat.
-No Addendum document is required.
-________________________________________
-Most Important Architectural Decisions
-The following decisions are now considered settled.
-Do not redesign these without strong operational justification.
-Published State
-Every editable domain has:
-•	Working State 
-•	Published State 
-Only Published State is available downstream.
-Unsaved work never propagates.
-Save publishes.
-________________________________________
-Propagation Boundary
-Propagation exists only through:
-Ingredients
-↓
-Recipes
-↓
-Dishes
-↓
-Menus
-↓
+
+# Savveyra Development Handoff
+
+## Purpose
+
+This document is the developer bootstrap for continuing Savveyra.
+
+It should allow a new ChatGPT session with no project history to resume productive implementation within approximately 30 minutes.
+
+This document intentionally contains implementation state rather than permanent product specifications.
+
+Permanent product behaviour belongs in the Foundation Documents.
+
+---
+
+# Default Development Mode
+
+Unless the user explicitly requests an architectural review, assume the product architecture is settled.
+
+Development should focus on implementation, normalization, testing and completion.
+
+Challenge implementation decisions when they conflict with operational workflow, maintainability or the established architecture.
+
+Do not reopen settled architectural decisions unless new business requirements genuinely require it.
+
+When multiple technically valid solutions exist, prefer the one most consistent with the existing architecture rather than introducing a new pattern.
+
+---
+
+# Source of Truth
+
+When documentation, SQL and implementation disagree, the priority is:
+
+1. Foundation Documents define the product behaviour.
+2. Foundation SQL defines the intended implementation.
+3. Live implementation should be brought into alignment with the above.
+
+If a conflict appears, correct the implementation rather than redefining the documented architecture unless the user explicitly changes the product specification.
+
+---
+
+# Current Milestone
+
+The project has completed its first major normalization phase.
+
+The product direction is now considered stable enough to continue implementation without further architectural redesign.
+
+Current focus is transitioning from architectural normalization back into implementation.
+
+The immediate implementation target is:
+
+```text
+Address Book
+        ↓
 Events
-Propagation ends at Events.
-Nothing propagates automatically beyond Events.
-________________________________________
-Refresh Boundary
-Output domains refresh intentionally.
-Examples:
-•	Update All (Groceries) 
-•	Publish Proposal 
-•	Create Quotation 
-Refresh is always an explicit business action.
-There is no automatic downstream synchronization beyond Events.
-________________________________________
+        ↓
 Proposal
-Proposal is:
-•	a business object 
-•	a Kitchen publication 
-•	an immutable snapshot 
-Proposal is not:
-•	a report 
-•	a live Event 
-•	owned by Sales 
-Kitchen publishes Proposals.
-Sales consumes Proposals.
-________________________________________
+        ↓
 Quotation
+```
+
+before continuing through the remaining application.
+
+---
+
+# Completed During This Chat
+
+The permanent documentation set has been rewritten and normalized.
+
+Completed documents:
+
+- Development Standards
+- Canonical Specifications
+- Architecture
+- Domain Rules
+
+These four documents now replace the previous versions and are considered authoritative.
+
+The earlier documentation should not be used except as historical reference.
+
+The previous Proposal/Quotation revision model has been completely replaced.
+
+---
+
+# Settled Architecture (Treat As Law)
+
+The following should not be reconsidered unless the product itself changes.
+
+## Overall Workflow
+
+```text
+Ingredients
+      ↓
+Recipes
+      ↓
+Dishes
+      ↓
+Menus
+      ↓
+Events
+   ├── Groceries
+   └── Proposal
+          ↓
+      Quotation
+```
+
+Propagation ends at Events.
+
+Proposal and Quotation are Output Domains.
+
+---
+
+## Working State vs Published State
+
+Unsaved edits belong only to the editor.
+
+Only Published State is consumed downstream.
+
+---
+
+## Proposal
+
+Proposal belongs entirely to Kitchen.
+
+Kitchen owns Proposal.
+
+Proposal communicates Kitchen planning to Sales.
+
+Proposal is never a commercial document.
+
+---
+
+## Quotation
+
 Quotation belongs entirely to Sales.
-Quotation consumes Proposal snapshots.
-Quotation never consumes live Kitchen planning.
-Kitchen changes never update existing Quotations.
-________________________________________
-Kitchen / Sales Separation
-Kitchen owns:
-•	operational planning 
-•	costing 
-•	production 
-Sales owns:
-•	commercial communication 
-•	customer pricing 
-•	quotations 
-Proposal is the only formal system boundary.
-Kitchen and Sales intentionally operate independently.
-Current Implementation State
-This handoff assumes the existing Supabase/Appsmith application is available.
-Development is continuing from the current implementation.
-This is not a greenfield project.
-The objective is to normalize and strengthen the existing application while preserving working functionality.
-________________________________________
-Current Development Phase
-The project has moved beyond architecture exploration.
-The overall architecture is now considered stable.
-Current work should focus on implementing that architecture consistently across all domains.
-Avoid introducing domain-specific exceptions unless there is clear operational justification.
-________________________________________
-Documentation Authority
-When implementation questions arise, use the following precedence:
-1.	Handoff (current development state) 
-2.	Development Standards 
-3.	Architecture 
-4.	Domain Rules 
-5.	Canonical Specifications 
-6.	Domain-specific documents 
-Older chats should not be treated as authoritative if they conflict with these documents.
-________________________________________
-Current Normalization Status
-The project has completed normalization of its architectural documentation.
-The following documents are now considered complete and authoritative:
-•	Development Standards 
-•	Canonical Specifications 
-•	Architecture 
-•	Domain Rules 
-•	Events, Proposal & Quotation Architecture 
-•	Kitchen ↔ Sales Workflow 
-The remaining document to rewrite is:
-•	Proposal & Quotation Operational Specification 
-After that, implementation should continue using the rewritten documentation as the reference.
-________________________________________
-Architecture Status
-The following architectural concepts are now considered settled.
-Do not redesign unless a genuine operational problem is discovered.
-Published State
-Every editable domain has:
-•	Working State 
-•	Published State 
-Users edit Working State.
-Only Published State is visible downstream.
-Save publishes.
-Unsaved changes never propagate.
-________________________________________
-Ownership
-Each domain owns its own data.
-Domains publish information.
+
+Quotation communicates with customers.
+
+Kitchen and Sales intentionally remain operationally independent.
+
+---
+
+## Snapshot Model
+
+The previous revision model is obsolete.
+
+Current model:
+
+Draft Proposal
+
+↓
+
+Sent Proposal (new immutable historical document)
+
+↓
+
+Later changes
+
+↓
+
+New Draft Proposal
+
+↓
+
+New Sent Proposal
+
+Exactly the same model applies to Quotation.
+
+Every sent Proposal and every sent Quotation is:
+
+- independently numbered
+- immutable
+- permanent
+
+Sending creates a new historical document.
+
+Sending never mutates an existing document.
+
+---
+
+## Propagation
+
+Automatic propagation exists only through:
+
+Ingredients
+
+↓
+
+Recipes
+
+↓
+
+Dishes
+
+↓
+
+Menus
+
+↓
+
+Events
+
+Propagation never extends beyond Events.
+
+Output Domains determine their own refresh behaviour.
+
+---
+
+## Ownership
+
+Every domain owns exactly one business responsibility.
+
+Only the owning domain defines:
+
+- lifecycle
+- validation
+- publication
+- downstream contract
+
 Downstream domains consume published information.
-Downstream domains never edit upstream ownership.
-________________________________________
-Propagation
-Automatic propagation exists only through the operational chain:
-Ingredient
-↓
-Recipe
-↓
-Dish
-↓
-Menu
-↓
-Event
-Propagation stops at Event.
-Everything beyond Event refreshes only through explicit business actions.
-________________________________________
-Snapshot Philosophy
-Snapshots are immutable.
-Current live data remains editable.
-Historical publications never change.
-This applies to:
-•	Proposal 
-•	Quotation revisions 
-•	future historical documents 
-________________________________________
-Current Technology Stack
-Application:
-•	Appsmith 
-Database:
-•	Supabase 
-•	PostgreSQL 
-Source Control:
-•	Git 
-•	GitHub 
-The application already contains substantial production logic.
-Normalizing existing code is preferred over rewriting working functionality.
-________________________________________
-Database Contracts
-The following contracts must be preserved unless there is strong justification.
-View Contracts
-Treat vw_ views as interface contracts.
-Prefer adding new columns to the end.
-If structure must change:
-•	Drop and recreate the view. 
-•	Do not casually reorder existing columns. 
-Many Appsmith pages depend on the existing column order.
-________________________________________
-Shared Procedures
-Prefer shared database procedures.
-Examples include:
-•	Save 
-•	Duplicate 
-•	Rename 
-•	Replace 
-•	Delete 
-•	propagation logic 
-Avoid creating domain-specific copies of common logic.
-________________________________________
-Thin Client Principle
-Business logic belongs in Supabase whenever practical.
+
+Ownership never transfers.
+
+---
+
+# Address Book Status
+
+Address Book normalization is **not yet finalized**.
+
+A separate Address Book Addendum will accompany this documentation.
+
+That addendum becomes the authority for:
+
+- CustomerList
+- ContactList
+- VenueList
+
+including:
+
+- interactions between those three pages
+- ownership of shared Address Book behaviour
+- linking rules
+- editing rules
+
+However:
+
+Events and Quotation should continue to follow the behaviour described in the current Foundation Documents unless the Addendum explicitly states otherwise.
+
+The Addendum changes Address Book internals, not the operational use of Address Book records within Events or Quotation.
+
+---
+
+# Current Supabase State
+
+Overall architecture is stable.
+
+General direction:
+
+- move business rules into Supabase
+- keep Appsmith intentionally thin
+- reuse Shared Services
+- continue domain normalization
+
+Views represent the published contract consumed by Appsmith.
+
+Business logic should not migrate into Appsmith unless absolutely necessary.
+
+---
+
+# Current Appsmith State
+
 Appsmith should primarily:
-•	collect input 
-•	display output 
-•	call shared procedures 
-•	manage user interaction 
-Avoid moving business rules into JavaScript unless there is a clear UI requirement.
-________________________________________
-Existing Code Philosophy
-The codebase already contains significant working functionality.
-Before replacing existing logic:
-•	understand why it exists 
-•	verify whether it already satisfies the new architecture 
-•	normalize where possible rather than rewrite by default 
-Working code should not be replaced simply because it could be written differently.
-Immediate Development Priorities
-The documentation normalization completed during this chat establishes the architectural baseline.
-Development should now return to implementation.
-The next major task is to rewrite:
-Proposal & Quotation Operational Specification
-This document should be written from scratch using the newly established architecture.
-Do not attempt to merge it with previous versions.
-Once complete, implementation can continue using the normalized documentation.
-________________________________________
-Areas Intentionally Deferred
-The following areas are intentionally incomplete.
-Do not attempt to solve them unless they become the current implementation task.
-•	PDF generation 
-•	Email delivery 
-•	Proposal document formatting 
-•	Quotation document formatting 
-•	Advanced reporting 
-•	Inventory management 
-•	Purchasing 
-•	Packaging optimisation 
-•	Accounting integration 
-•	CRM expansion beyond current Customer, Contact and Venue scope 
-•	Permission refinement 
-•	Multi-language support 
-These are future features.
-Avoid introducing architecture now for problems that do not yet exist.
-________________________________________
-Known Architectural Rules
-The following rules repeatedly emerged during development and should be considered implementation constraints.
-Operational Correctness First
-Business workflow is the primary requirement.
-Implementation should adapt to the workflow.
-Do not simplify operational behaviour simply because implementation becomes easier.
-________________________________________
-Normalize Before Expanding
-When working inside a domain:
-•	remove duplication 
-•	strengthen ownership 
-•	improve consistency 
-•	simplify future implementation 
-Avoid creating exceptions for a single page or domain.
-________________________________________
-Shared Before Local
-If functionality already exists elsewhere:
-•	extend the shared implementation 
-•	avoid copying code 
-Examples include:
-•	save logic 
-•	duplicate 
-•	replace 
-•	delete 
-•	validation 
-•	propagation 
-________________________________________
-Published Data Only
-Downstream domains must always consume Published State.
-Never consume another domain's Working State.
-This rule should not be bypassed for convenience.
-________________________________________
-Snapshots Are Immutable
-Once published:
-•	Proposal 
-•	historical Quotation revisions 
-•	future historical documents 
-must never silently change because upstream information changes.
-Historical accuracy always has priority over convenience.
-________________________________________
-Implementation Risks
-The most likely mistakes when continuing development are:
-Reintroducing automatic propagation
-Propagation intentionally ends at Events.
-Everything beyond Events refreshes through explicit business actions.
-________________________________________
-Blurring ownership
-Each domain owns its own data.
-Downstream domains consume published information but do not own it.
-________________________________________
-Treating Proposal as a report
-Proposal is an immutable business object.
-It is not a printable view of the current Event.
-________________________________________
-Treating Quotation as part of Kitchen
-Quotation belongs entirely to Sales.
-Kitchen has no visibility into Sales activity beyond publishing Proposals.
-________________________________________
-Moving business rules into Appsmith
-Business rules should remain in Supabase whenever practical.
-Appsmith should remain a thin client.
-________________________________________
-Creating special-case logic
-If a problem appears unique to one page, first determine whether it is actually a shared architectural problem.
-Prefer improving shared behaviour over adding page-specific exceptions.
-________________________________________
-Verification Before Implementing
-Before making significant changes, verify that the proposed solution:
-•	follows the Development Standards 
-•	preserves ownership 
-•	preserves Published State behaviour 
-•	preserves snapshot behaviour 
-•	avoids unnecessary duplication 
-•	keeps business logic primarily in Supabase 
-•	does not introduce new architectural exceptions 
-•	aligns with the normalized documentation rather than older discussions 
-If the answer to any of these is "no," reconsider the implementation before proceeding.
-Current Implementation Mindset
-The application already contains significant working functionality.
-The objective is not to replace working code because a different implementation is possible.
-The objective is to move the application toward a consistent architecture while preserving operational behaviour.
-Before replacing existing code, determine whether it can be normalized instead.
-________________________________________
-Existing Excel Workbook
-The original Excel/VBA workbook remains the primary operational reference.
-Its purpose is to explain business behaviour, not implementation.
-When reviewing Excel:
-•	extract operational rules 
-•	ignore Excel-specific technical limitations 
-•	avoid copying VBA architecture into the new application 
-The new implementation should achieve the same operational outcome using cleaner architecture.
-________________________________________
-Current Design Principles
-The following principles have consistently produced the best implementation decisions.
-Consistency
-Users should experience the same behaviour across every domain.
-Equivalent actions should work the same way everywhere.
-________________________________________
-Predictability
-The system should behave consistently.
-Users should not need to remember special cases.
-________________________________________
-Ownership
-Every piece of data should have a single owner.
-Published information flows downstream.
-Ownership never flows downstream.
-________________________________________
-Simplicity
-Simple workflows are preferred.
-Avoid introducing configuration or options unless they provide clear operational value.
-________________________________________
-Reusability
-Whenever a solution can reasonably become shared infrastructure, prefer that approach over a domain-specific implementation.
-________________________________________
-Naming Conventions
-Continue following the established naming conventions throughout the project.
-Examples include:
-Database
-•	*_items 
-•	*_components 
-•	vw_* 
-•	shared procedures where possible 
-Application
-•	consistent page naming 
-•	consistent action naming 
-•	consistent modal behaviour 
-•	consistent button behaviour 
-Do not introduce alternative naming patterns within new domains.
-________________________________________
-Implementation Expectations
-When implementing new functionality:
-•	use complete shared procedures 
-•	avoid duplicated SQL 
-•	avoid duplicated JavaScript 
-•	avoid page-specific business logic 
-•	document significant architectural decisions when they establish a new project-wide pattern 
-Small implementation details generally do not require documentation updates.
-Architecture changes do.
-________________________________________
-Reading Order
-This handoff should be read first.
-Only consult additional documentation when needed.
-Suggested order:
-1.	Handoff 
-2.	Development Standards 
-3.	Architecture 
-4.	Domain Rules 
-5.	Domain-specific document relevant to the current task 
-The Canonical Specifications document should primarily be used when clarification is needed regarding overall product direction rather than implementation.
-________________________________________
-Ready to Continue
-After reading this handoff, the next ChatGPT should be able to:
-•	understand the current project direction 
-•	understand the architectural boundaries 
-•	understand the implementation philosophy 
-•	understand the project owner's preferred working style 
-•	identify the next documentation task 
-•	continue implementation without reviewing previous conversations 
-This handoff intentionally contains only the information needed to resume development from the current point. It should be replaced by a new handoff after the next significant development session.
-Current Development Checkpoint
-Last Completed Work
-The architectural documentation has been fully normalized and rewritten.
-The following documents are now considered authoritative:
-•	Development Standards 
-•	Canonical Specifications 
-•	Architecture 
-•	Domain Rules 
-•	Events, Proposal & Quotation Architecture 
-•	Kitchen ↔ Sales Workflow 
-These replace previous versions and should be used as the reference for future implementation.
-________________________________________
-Current Task
-The next documentation task is:
-Proposal & Quotation Operational Specification
-It should be rewritten from the beginning using the normalized architecture established during this session.
-Do not patch or extend the previous version.
-Once completed, implementation should resume.
-________________________________________
-Current Implementation Status
-The application already contains substantial functionality.
-Current effort is focused on normalizing the existing implementation rather than adding major new functionality.
-Continue improving consistency across domains instead of redesigning working areas unnecessarily.
-________________________________________
-Settled Decisions
-The following decisions should be treated as complete unless genuine operational problems are discovered.
-•	Working State and Published State architecture. 
-•	Save publishes. 
-•	Unsaved changes never propagate. 
-•	Propagation ends at Events. 
-•	Proposal is an immutable Kitchen publication. 
-•	Quotation belongs entirely to Sales. 
-•	Kitchen and Sales remain operationally independent. 
-•	Business logic belongs primarily in Supabase. 
-•	Appsmith remains a thin client. 
-•	Shared solutions are preferred over domain-specific implementations. 
-These decisions should not be revisited during normal implementation.
-________________________________________
-Known Temporary Areas
-Some areas remain intentionally incomplete.
-Examples include:
-•	Proposal & Quotation Operational Specification documentation. 
-•	PDF generation. 
-•	Email delivery. 
-•	Inventory management. 
-•	Purchasing. 
-•	Advanced reporting. 
-•	Permission refinement. 
-These are deferred by design.
-Do not build supporting architecture until they become active development tasks.
-________________________________________
-Known Technical Debt
-Some implementation may still reflect earlier architecture.
-When encountered:
-•	normalize it where practical 
-•	avoid introducing additional technical debt 
-•	prefer moving toward shared procedures and consistent ownership 
-Do not rewrite working functionality solely for stylistic reasons.
-________________________________________
-Before Changing Existing Code
-Always determine:
-•	Is this already working correctly? 
-•	Can it be normalized instead of replaced? 
-•	Does the change strengthen consistency? 
-•	Does it preserve ownership? 
-•	Does it preserve Published State? 
-•	Does it align with the normalized documentation? 
-If the answer to any of these is No, reconsider the implementation before proceeding.
-________________________________________
-Resume Point
-Development should continue from the current implementation using the rewritten documentation as the authoritative reference.
-There is no need to reconstruct previous conversations unless investigating historical decisions that are not covered by the documentation.
-The next ChatGPT should be able to begin productive implementation immediately after reading this Handoff and, where necessary, the supporting documents.
-________________________________________
 
-Working With the Project Owner
-•	The project owner is not a programmer. Provide complete SQL, Appsmith code, or procedures rather than partial snippets or abstract guidance. 
-•	The project owner has deep operational knowledge of hospitality and catering workflows. Treat business logic as authoritative and challenge technical assumptions before changing operational behavior. 
-•	Prefer complete replacements over patches, shared solutions over one-off fixes, and normalization over exceptions. 
-•	Keep explanations concise. Focus on what changes, where it changes, and why it matters. 
-•	Constructive disagreement is encouraged. If a proposed solution is weak, explain why and propose a better alternative. 
-•	The goal is a clean, maintainable architecture rather than the fastest implementation.
+- display Published State
+- collect user input
+- present warnings
+- present confirmations
+- call Supabase business functions
+- refresh display
 
+Avoid implementing business rules inside Appsmith where Supabase can own them.
+
+---
+
+# Contracts That Must Not Be Broken
+
+## vw_ Views
+
+Treat view column order as an interface contract.
+
+Whenever practical:
+
+- append new columns
+- avoid reordering existing columns
+
+If structural changes are required:
+
+drop and recreate the view rather than relying on CREATE OR REPLACE VIEW that changes column order.
+
+---
+
+## Published State
+
+Downstream domains consume Published State only.
+
+Never allow downstream calculations to consume editor Working State.
+
+---
+
+## Shared Services
+
+Operations such as:
+
+- Rename
+- Replace
+- Duplicate
+- Delete
+
+should continue moving toward shared implementation.
+
+Avoid duplicating business logic.
+
+---
+
+## Operational Ownership
+
+Kitchen owns:
+
+- Ingredients
+- Recipes
+- Dishes
+- Menus
+- Events
+- Proposal
+
+Sales owns:
+
+- Quotation
+
+This separation is intentional.
+
+---
+
+# Current Technical Debt
+
+Mostly implementation debt rather than architectural debt.
+
+Remaining work includes:
+
+- continue Shared Service normalization
+- continue SQL normalization
+- continue Appsmith simplification
+- continue moving business logic into Supabase
+
+Architecture should no longer be redesigned while completing these tasks.
+
+---
+
+# Current Blockers
+
+No architectural blocker currently exists.
+
+Implementation may continue.
+
+Only known pending clarification:
+
+Address Book Addendum.
+
+---
+
+# Current Assumptions Requiring Validation
+
+Only validate assumptions when implementation reaches them.
+
+Current examples include:
+
+- final Address Book page interaction details
+- Address Book internal normalization after Addendum
+- future PDF generation mechanics
+- future email generation mechanics
+
+Do not redesign settled architecture while validating implementation details.
+
+---
+
+# Immediate Next Task
+
+Wait for the Address Book Addendum.
+
+Then:
+
+normalize
+
+- CustomerList
+- ContactList
+- VenueList
+
+using:
+
+- Foundation Documents
+- Address Book Addendum
+
+After Address Book normalization:
+
+continue implementation beginning with Events.
+
+---
+
+# Reading Order
+
+A new ChatGPT should read only:
+
+1. Handoff
+2. Address Book Addendum (when available)
+3. Development Standards
+4. Canonical Specifications
+5. Architecture
+6. Domain Rules
+
+Then begin implementation.
+
+There should be no need to reconstruct earlier conversations.
+
+---
+
+# Areas Intentionally Deferred
+
+These are known future work.
+
+Do not redesign them now.
+
+- PDF generation
+- Email generation
+- Print engine implementation
+- Supplier ordering
+- Inventory
+- Purchase Orders
+- Accounting
+- CRM
+- ERP integration
+- Production scheduling
+
+The architecture already assumes these boundaries.
+
+---
+
+# What Not To Redesign
+
+Do not redesign:
+
+- Proposal lifecycle
+- Quotation lifecycle
+- Output Domain independence
+- Working State / Published State
+- propagation ending at Events
+- ownership model
+- snapshot model
+- Shared Service direction
+- thin Appsmith philosophy
+- Supabase-first business logic
+
+These are considered settled.
+
+---
+
+# Common Mistakes Future ChatGPT Is Likely To Make
+
+Avoid these assumptions.
+
+- Proposal is **not** converted into Quotation.
+- Proposal is **not** edited after sending.
+- Sent documents are **never** edited.
+- Proposal revisions do **not** exist.
+- Quotation revisions do **not** exist.
+- Kitchen never sees Sales workflow.
+- Sales never edits Kitchen planning.
+- Events are shared operational objects.
+- Propagation never extends beyond Events.
+- Groceries, Proposal and Quotation are independent Output Domains.
+- Appsmith is not the business engine.
+- Business logic belongs in Supabase whenever practical.
+
+---
+
+# User Working Style
+
+The user brings the operational and kitchen expertise.
+
+Expect the user to challenge technical decisions if they weaken real operational workflow.
+
+The user prefers collaboration rather than agreement.
+
+Push back when implementation weakens:
+
+- operational correctness
+- normalization
+- consistency
+- maintainability
+
+The user values constructive disagreement over reassurance.
+
+---
+
+# User Strengths
+
+- Strong operational understanding of commercial kitchens.
+- Excellent workflow analysis.
+- Detects inconsistencies across domains quickly.
+- Thinks in complete end-to-end business processes rather than isolated screens.
+- Very strong at normalization once patterns become visible.
+- Willing to revisit earlier work to strengthen the foundation.
+
+---
+
+# User Weaknesses
+
+- Not a programmer.
+- May not recognize implementation constraints without explanation.
+- Prefers exact code or SQL rather than abstract discussion.
+- Can unintentionally continue refining architecture beyond the point where implementation should resume.
+
+Help by translating operational requirements into technical implementation while resisting unnecessary redesign.
+
+---
+
+# Preferred Working Style
+
+The user prefers:
+
+- exact SQL
+- exact Appsmith changes
+- exact procedure names
+- complete code rather than fragments
+- concise explanations
+- implementation first, discussion second
+
+When the user says:
+
+- "OK"
+- "I agree"
+- "Let's continue"
+
+continue immediately to the next implementation step.
+
+Do not restate previous reasoning.
+
+When implementation appears to conflict with operational logic:
+
+challenge it.
+
+The user expects technical pushback when appropriate.
+
+The objective is finding the best solution, not agreeing quickly.
+
+---
+
+# Final Reminder
+
+Do not treat this project as a greenfield design exercise.
+
+The architecture has already been normalized.
+
+Continue building on the established foundation.
+
+Improve implementation.
+
+Avoid reopening settled architectural decisions unless the user explicitly changes the product itself.
+
+------------
+
+# Known Implementation Issues
+
+The current implementation still contains remnants of the previous Proposal/Quotation architecture.
+
+Known examples include:
+
+- QuotationList still references legacy tables/views in places.
+- Some Proposal/Quotation SQL and Appsmith components still assume the previous revision-based workflow.
+- Proposal and Quotation implementation should be reviewed against the new Foundation Documents before further feature development.
+
+Treat the Foundation Documents as authoritative.
+If implementation conflicts with the documented architecture, update the implementation rather than changing the documentation.
