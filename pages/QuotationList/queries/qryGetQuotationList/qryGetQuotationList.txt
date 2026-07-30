@@ -1,0 +1,4 @@
+select *
+from public.vw_quo_event_list
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+order by lower(event_name);
