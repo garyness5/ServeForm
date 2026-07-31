@@ -14,18 +14,6 @@
       "isDefault": false
     },
     {
-      "id": "ContactList",
-      "isDefault": false
-    },
-    {
-      "id": "CustomerList",
-      "isDefault": false
-    },
-    {
-      "id": "VenueList",
-      "isDefault": false
-    },
-    {
       "id": "EventList",
       "isDefault": false
     },
@@ -63,6 +51,18 @@
     },
     {
       "id": "MenuList",
+      "isDefault": false
+    },
+    {
+      "id": "ContactList",
+      "isDefault": false
+    },
+    {
+      "id": "CustomerList",
+      "isDefault": false
+    },
+    {
+      "id": "VenueList",
       "isDefault": false
     },
     {
