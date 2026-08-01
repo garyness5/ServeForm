@@ -1,0 +1,34 @@
+select
+    id,
+    event_id,
+    proposal_no,
+    proposal_status,
+    proposal_title,
+    event_name,
+    event_ref,
+    event_date,
+    total_guests,
+    sent_at,
+    created_at,
+    updated_at,
+    active,
+    closed_at,
+    was_issued,
+    is_editable,
+    is_closed,
+    concat(
+			'Proposal ',
+			proposal_no,
+			' — ',
+			proposal_status
+		) as proposal_label
+from public.vw_prop_items
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and event_id = {{ Number(appsmith.store.current_event_id || 0) }}
+order by
+    case
+        when proposal_status = 'Ordered' then 0
+        else 1
+    end,
+    coalesce(sent_at, created_at) desc,
+    id desc;

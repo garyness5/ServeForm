@@ -5,9 +5,9 @@
   "bottomRow": 4,
   "boxShadow": "none",
   "closeOnSelection": true,
-  "dateFormat": "YY-MM-DD | HH:mm",
+  "dateFormat": "YY-MMM-DD | HH:mm",
   "datePickerType": "DATE_PICKER",
-  "defaultDate": "{{\n  getEvtItemById.data?.[0]?.event_datetime\n    ? moment(getEvtItemById.data[0].event_datetime, \"YYYY-MM-DD HH:mm:ss\").format(\"YYYY-MM-DDTHH:mm:ss\")\n    : \"\"\n}}",
+  "defaultDate": "{{\n  getEvtItemById.data?.[0]?.event_datetime\n    ? moment(getEvtItemById.data[0].event_datetime)\n        .format(\"YYYY-MM-DDTHH:mm:ss\")\n    : \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
