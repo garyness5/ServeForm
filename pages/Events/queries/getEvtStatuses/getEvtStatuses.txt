@@ -1,0 +1,7 @@
+select
+    status_value as value,
+    display_label as label
+from public.system_status_options
+where domain_code = 'event'
+  and active = true
+order by sort_order;

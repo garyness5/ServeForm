@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "shouldTruncate": false,
-  "text": "{{ \"<b>Diet Tags:</b> \" + (evtCompTable.componentDietTagSummary() || \"None\") }}",
+  "text": "{{\n  \"<b>Diet Tags:</b> \" +\n  (jsProposalComponents.dietTagSummary() || \"None\")\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 5,

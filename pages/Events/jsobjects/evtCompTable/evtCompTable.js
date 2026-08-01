@@ -67,8 +67,8 @@ export default {
 
 	normalizeRows(rows) {
 		const realRows = (rows || [])
-			.filter(r => this.hasContent(r))
-			.map((r, index) => this.prepareRow(r, index + 1));
+		.filter(r => this.hasContent(r))
+		.map((r, index) => this.prepareRow(r, index + 1));
 
 		const targetCount = Math.max(this.minRows, realRows.length + 1);
 
@@ -93,13 +93,13 @@ export default {
 			const contentRows = rows.filter(r => this.hasContent(r));
 
 			const contentEventIds = contentRows
-				.map(r => Number(r.event_id || 0))
-				.filter(id => id > 0);
+			.map(r => Number(r.event_id || 0))
+			.filter(id => id > 0);
 
 			if (currentEventId > 0) {
 				const belongsToCurrentEvent =
-					contentEventIds.length === 0 ||
-					contentEventIds.every(id => id === currentEventId);
+							contentEventIds.length === 0 ||
+							contentEventIds.every(id => id === currentEventId);
 
 				if (belongsToCurrentEvent) {
 					return rows.map((r, index) => ({
@@ -135,12 +135,12 @@ export default {
 
 		return rows.map((row, index) => {
 			const update = updates.find(u =>
-				u.index === index ||
-				u.rowIndex === index ||
-				u.draft_row_id === row.draft_row_id ||
-				u.allFields?.draft_row_id === row.draft_row_id ||
-				u.updatedFields?.draft_row_id === row.draft_row_id
-			);
+																	u.index === index ||
+																	u.rowIndex === index ||
+																	u.draft_row_id === row.draft_row_id ||
+																	u.allFields?.draft_row_id === row.draft_row_id ||
+																	u.updatedFields?.draft_row_id === row.draft_row_id
+																 );
 
 			if (!update) return row;
 
@@ -163,20 +163,20 @@ export default {
 		await this.syncFromTable();
 
 		const rows = this.getRows().map(r =>
-			r.draft_row_id === row.draft_row_id
-				? { ...r, ...patch }
-				: r
-		);
+																		r.draft_row_id === row.draft_row_id
+																		? { ...r, ...patch }
+																		: r
+																	 );
 
 		return await this.setRows(rows);
 	},
 
 	categoryOptions() {
 		const categories = (getEvtComponentItems.data || [])
-			.map(i => ({
-				label: i.category_name || "Uncategorized",
-				value: i.category_name || "Uncategorized"
-			}));
+		.map(i => ({
+			label: i.category_name || "Uncategorized",
+			value: i.category_name || "Uncategorized"
+		}));
 
 		return [...new Map(categories.map(x => [x.value, x])).values()]
 			.sort((a, b) => String(a.label).localeCompare(String(b.label)));
@@ -190,9 +190,9 @@ export default {
 			.filter(i => !used.includes(Number(i.id)))
 			.sort((a, b) => String(a.name).localeCompare(String(b.name)))
 			.map(i => ({
-				label: i.name,
-				value: i.name
-			}));
+			label: i.name,
+			value: i.name
+		}));
 	},
 
 	menuId(row) {
@@ -227,8 +227,8 @@ export default {
 		const freshRow = this.getRows().find(r => r.draft_row_id === row.draft_row_id) || row;
 
 		const item = (getEvtComponentItems.data || []).find(i =>
-			i.name === freshRow.menu_name
-		);
+																												i.name === freshRow.menu_name
+																											 );
 
 		if (!item) return;
 
@@ -252,8 +252,8 @@ export default {
 		await this.syncFromTable();
 
 		const remaining = this.getRows().filter(r =>
-			r.draft_row_id !== row.draft_row_id
-		);
+																						r.draft_row_id !== row.draft_row_id
+																					 );
 
 		return await this.setRows(remaining);
 	},
@@ -264,38 +264,51 @@ export default {
 		return this.normalizeRows(rows)
 			.filter(r => this.hasContent(r))
 			.map((r, index) => {
-				const item = (getEvtComponentItems.data || []).find(i =>
-					i.name === r.menu_name
-				);
+			const item = (getEvtComponentItems.data || []).find(i =>
+																													i.name === r.menu_name
+																												 );
 
-				return {
-					event_id: Number(appsmith.store.current_event_id || 0),
-					line_no: index + 1,
-					menu_id: Number(r.menu_id || item?.id || 0) || null,
-					guests: r.guests === "" || r.guests == null ? null : Number(r.guests),
-					extra_guests: r.extra_guests === "" || r.extra_guests == null ? 0 : Number(r.extra_guests),
-					active: r.active === false ? false : true
-				};
-			});
+			return {
+				event_id: Number(appsmith.store.current_event_id || 0),
+				line_no: index + 1,
+				menu_id: Number(r.menu_id || item?.id || 0) || null,
+				guests: r.guests === "" || r.guests == null ? null : Number(r.guests),
+				extra_guests: r.extra_guests === "" || r.extra_guests == null ? 0 : Number(r.extra_guests),
+				active: r.active === false ? false : true
+			};
+		});
 	},
 
 	lineCost(row) {
+		if (!row || row.active === false) return null;
+
+		if (row.source_type === "proposal") {
+			const snapshotCost = Number(
+				row.line_cost ?? row.kitchen_cost
+			);
+
+			return Number.isFinite(snapshotCost)
+				? Math.round(snapshotCost * 100) / 100
+			: null;
+		}
+
 		if (
-			!row ||
-			row.active === false ||
 			!row.menu_name ||
 			row.guests === "" ||
 			row.guests == null
 		) return null;
 
 		const item = (getEvtComponentItems.data || []).find(i =>
-			Number(i.id) === Number(row.menu_id) ||
-			i.name === row.menu_name
-		);
+																												Number(i.id) === Number(row.menu_id) ||
+																												i.name === row.menu_name
+																											 );
 
 		if (!item) return null;
 
-		const menuCost = Number(item.cost_per_unit ?? item.total_cost ?? 0);
+		const menuCost = Number(
+			item.cost_per_unit ?? item.total_cost ?? 0
+		);
+
 		const guests = Number(row.guests || 0);
 		const extra = Number(row.extra_guests || 0);
 
@@ -351,13 +364,13 @@ export default {
 			.map(x => x.trim())
 			.filter(x => x);
 	},
-	
+
 	componentAllergenSummary() {
 		const rows = this.mergeUpdatedRows();
 
 		const items = rows
-			.filter(r => r.active !== false)
-			.flatMap(r => this.uniqueTextList(r.allergen_names));
+		.filter(r => r.active !== false)
+		.flatMap(r => this.uniqueTextList(r.allergen_names));
 
 		return [...new Set(items)].sort().join(", ");
 	},
@@ -366,8 +379,8 @@ export default {
 		const rows = this.mergeUpdatedRows();
 
 		const items = rows
-			.filter(r => r.active !== false)
-			.flatMap(r => this.uniqueTextList(r.diet_tag_names));
+		.filter(r => r.active !== false)
+		.flatMap(r => this.uniqueTextList(r.diet_tag_names));
 
 		return [...new Set(items)].sort().join(", ");
 	},

@@ -5,7 +5,7 @@
   "borderRadius": "0.375rem",
   "bottomRow": 22,
   "boxShadow": "none",
-  "defaultText": "{{ getEvtItemById.data?.[0]?.total_guests_manual ?? \"\" }}",
+  "defaultText": "{{ jsProposalData.header().total_guests_manual ?? \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

@@ -4,7 +4,7 @@
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 30,
-  "defaultCheckedState": "{{\n  Number(appsmith.store.current_event_id || 0) === 0\n    ? true\n    : getEvtItemById.data?.[0]\n      ? Boolean(getEvtItemById.data[0].active)\n      : true\n}}",
+  "defaultCheckedState": "{{\nNumber(appsmith.store.current_event_id || 0) === 0\n? true\n: jsProposalData.eventControl().active\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

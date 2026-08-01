@@ -10,19 +10,14 @@ select
     total_guests,
     sent_at,
     created_at,
-    updated_at,
     active,
     closed_at,
     was_issued,
     is_editable,
     is_closed,
-    concat(
-			'Proposal ',
-			proposal_no,
-			' — ',
-			proposal_status
-		) as proposal_label
-from public.vw_prop_items
+    proposal_sequence_number,
+    proposal_number
+from public.vw_prop_selector
 where client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and event_id = {{ Number(appsmith.store.current_event_id || 0) }}
 order by

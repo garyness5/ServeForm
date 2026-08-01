@@ -7,7 +7,7 @@
   "closeOnSelection": true,
   "dateFormat": "YY-MMM-DD | HH:mm",
   "datePickerType": "DATE_PICKER",
-  "defaultDate": "{{\n  getEvtItemById.data?.[0]?.event_datetime\n    ? moment(getEvtItemById.data[0].event_datetime)\n        .format(\"YYYY-MM-DDTHH:mm:ss\")\n    : \"\"\n}}",
+  "defaultDate": "{{\njsProposalData.header().event_datetime\n? moment(jsProposalData.header().event_datetime)\n.format(\"YYYY-MM-DDTHH:mm:ss\")\n: jsProposalData.header().event_date\n? moment(jsProposalData.header().event_date)\n.format(\"YYYY-MM-DDTHH:mm:ss\")\n: \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

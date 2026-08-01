@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 16,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \nNumber(appsmith.store.current_event_id || 0) === 0\n  ? \"Draft\"\n  : getEvtItemById.data?.[0]?.status || \"Draft\"\n))(selEvtStatus.options, selEvtStatus.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n((options, serverSideFiltering) =>\n Number(appsmith.store.current_event_id || 0) === 0\n ? \"Draft\"\n : jsProposalData.eventControl().status\n)(selEvtStatus.options, selEvtStatus.serverSideFiltering)\n))(selEvtStatus.options, selEvtStatus.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -13,10 +13,10 @@
       "key": "borderRadius"
     },
     {
-      "key": "sourceData"
+      "key": "defaultOptionValue"
     },
     {
-      "key": "defaultOptionValue"
+      "key": "sourceData"
     }
   ],
   "dynamicHeight": "FIXED",
@@ -59,7 +59,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 50,
   "serverSideFiltering": false,
-  "sourceData": "{{\n[\n  { label: \"Draft\", value: \"Draft\" },\n  { label: \"Sent\", value: \"Sent\" },\n  { label: \"Accepted\", value: \"Accepted\" },\n  { label: \"Ordered\", value: \"Ordered\" },\n  { label: \"Closed\", value: \"Closed\" },\n  { label: \"Cancelled\", value: \"Cancelled\" }\n]\n}}",
+  "sourceData": "{{ getEvtStatuses.data ?? [] }}",
   "topRow": 12,
   "type": "SELECT_WIDGET",
   "version": 1,
