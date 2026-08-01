@@ -1,0 +1,26 @@
+select
+    id,
+    proposal_id,
+    client_id,
+    event_id,
+    event_component_id,
+    menu_id,
+    line_no,
+    menu_name,
+    guests,
+    extra_guests,
+    production_guests,
+    kitchen_cost,
+    allergen_names,
+    diet_tag_names,
+    notes,
+    active,
+    component_status,
+    created_at,
+    updated_at
+from public.vw_prop_menus
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and proposal_id = {{ Number(appsmith.store.current_proposal_id || 0) }}
+order by
+    line_no,
+    id;
