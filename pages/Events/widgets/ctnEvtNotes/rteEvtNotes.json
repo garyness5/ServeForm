@@ -13,14 +13,22 @@
     },
     {
       "key": "defaultText"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicHeight": "FIXED",
+  "dynamicPropertyPathList": [
+    {
+      "key": "isDisabled"
+    }
+  ],
   "dynamicTriggerPathList": [],
   "flexVerticalAlignment": "start",
   "inputType": "html",
   "isDefaultClickDisabled": true,
-  "isDisabled": false,
+  "isDisabled": "{{ jsProposalData.isProposalLocked() }}",
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,

@@ -6,6 +6,11 @@
     "pageId": "Events",
     "pluginId": "js-plugin",
     "pluginType": "JS",
-    "variables": []
+    "variables": [
+      {
+        "name": "minRows",
+        "value": "10"
+      }
+    ]
   }
 }

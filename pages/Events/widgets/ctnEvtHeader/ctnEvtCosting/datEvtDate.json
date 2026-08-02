@@ -17,6 +17,9 @@
     },
     {
       "key": "defaultDate"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicHeight": "FIXED",
@@ -26,11 +29,14 @@
     },
     {
       "key": "dateFormat"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [],
   "firstDayOfWeek": 0,
-  "isDisabled": false,
+  "isDisabled": "{{ jsProposalData.isProposalLocked() }}",
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,

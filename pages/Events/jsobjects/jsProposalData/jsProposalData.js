@@ -22,7 +22,67 @@ export default {
 		return getEvtItemById.data?.[0] ?? {};
 	},
 
+	proposalMode() {
+		if (!this.hasSelectedProposal()) {
+			return "event";
+		}
+
+		return this.proposal().proposal_status === "Draft"
+			? "proposal_draft"
+		: "proposal_locked";
+	},
+
+	isEventMode() {
+		return this.proposalMode() === "event";
+	},
+
+	isProposalDraft() {
+		return this.proposalMode() === "proposal_draft";
+	},
+
+	isProposalLocked() {
+		return this.proposalMode() === "proposal_locked";
+	},
+
+	canEditDisplayedDocument() {
+		return (
+			this.isEventMode() ||
+			this.isProposalDraft()
+		);
+	},
+
 	header() {
+		if (this.isProposalDraft()) {
+			const workspace =
+						jsProposalWorkspaces.get();
+
+			if (workspace?.header) {
+				const r = workspace.header;
+
+				return {
+					name: r.event_name ?? "",
+					event_ref: r.event_ref ?? "",
+					event_date:
+					r.event_datetime ?? null,
+					event_datetime:
+					r.event_datetime ?? null,
+					event_time: null,
+					format: r.event_format ?? "",
+					total_guests_manual:
+					r.total_guests ?? "",
+
+					customer_id: null,
+					contact_id: null,
+					venue_id: null,
+					venue_contact_id: null,
+
+					notes: r.event_notes ?? "",
+					venue_notes: "",
+					general_notes: ""
+				};
+			}
+		}
+
 		if (this.hasSelectedProposal()) {
 			const r = this.proposal();
 
@@ -84,7 +144,7 @@ export default {
 			id: r.id ?? null,
 			status: r.proposal_status ?? null,
 			active: r.active === false ? false : true,
-			editable: r.is_editable === true,
+			editable: this.isProposalDraft(),
 			closed: r.is_closed === true,
 			reference:
 			r.proposal_number ||

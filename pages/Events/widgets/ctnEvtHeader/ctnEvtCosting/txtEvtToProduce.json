@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 60,
   "shouldTruncate": false,
-  "text": "{{ \"<b>To Produce:</b>  \" + jsProposalComponents.toProduce() }}",
+  "text": "{{\n\"<b>To Produce:</b> \" +\n(\tjsProposalComponents.toProduce() > 0\n ? fmt.number(jsProposalComponents.toProduce())\n : \"\"\n)\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 22,
