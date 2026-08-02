@@ -17,16 +17,22 @@
     },
     {
       "key": "defaultOptionValue"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicHeight": "FIXED",
   "dynamicPropertyPathList": [
     {
       "key": "sourceData"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [],
-  "isDisabled": false,
+  "isDisabled": "{{ jsProposalData.isProposalLocked() }}",
   "isFilterable": true,
   "isLoading": false,
   "isRequired": false,
@@ -52,7 +58,7 @@
   "parentColumnSpace": 6.021484375,
   "parentId": "o4uwuew4ll",
   "parentRowSpace": 10,
-  "placeholderText": "Select option",
+  "placeholderText": "Select format",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
   "rightColumn": 56,

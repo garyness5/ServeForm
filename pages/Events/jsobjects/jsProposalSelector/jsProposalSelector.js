@@ -14,6 +14,10 @@ export default {
 
 		try {
 			await qryGetSelectedProposalMenus.run();
+
+			if (jsProposalData.isProposalDraft()) {
+				await jsProposalWorkspaces.initializeCurrentDraft();
+			}
 		} catch (error) {
 			await qryGetSelectedProposalMenus.clear();
 
@@ -57,9 +61,19 @@ export default {
 
 	async selectProposal(row) {
 		if (!row?.id) {
-			showAlert("Select a Proposal.", "warning");
+			showAlert(
+				"Select a Proposal.",
+				"warning"
+			);
 			return null;
 		}
+
+		/*
+   * Preserve the currently displayed Draft
+   * before changing Proposal identity.
+   */
+		await jsProposalWorkspaces
+			.captureCurrentDraft();
 
 		await storeValue(
 			"current_proposal_id",

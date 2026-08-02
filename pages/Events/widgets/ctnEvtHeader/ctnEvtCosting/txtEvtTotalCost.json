@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 60,
   "shouldTruncate": false,
-  "text": "{{ \"<b>Total Cost:</b>  \" + fmt.currency(jsProposalComponents.totalCost()) }}",
+  "text": "{{\n\"<b>Kitchen Cost:</b> \" +\n(\tjsProposalComponents.totalCost() > 0\n\t? fmt.currency(jsProposalComponents.totalCost())\n\t: \"\"\n)\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 26,

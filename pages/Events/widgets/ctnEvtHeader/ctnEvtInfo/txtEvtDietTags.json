@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "shouldTruncate": false,
-  "text": "{{\n  \"<b>Diet Tags:</b> \" +\n  (jsProposalComponents.dietTagSummary() || \"None\")\n}}",
+  "text": "{{\n\"<b>Diet Tags:</b> \" +\n(jsProposalComponents.dietTagSummary() || \"\")\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 5,
