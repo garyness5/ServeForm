@@ -22,9 +22,16 @@
   "dynamicPropertyPathList": [
     {
       "key": "isDisabled"
+    },
+    {
+      "key": "onTextChange"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onTextChange"
+    }
+  ],
   "flexVerticalAlignment": "start",
   "inputType": "html",
   "isDefaultClickDisabled": true,
@@ -48,6 +55,7 @@
   "mobileRightColumn": 27,
   "mobileTopRow": 3,
   "needsErrorInfo": false,
+  "onTextChange": "{{ jsProposalWorkspaces.captureCurrentHeader() }}",
   "parentColumnSpace": 19.5,
   "parentId": "gf6nzqvv26",
   "parentRowSpace": 10,

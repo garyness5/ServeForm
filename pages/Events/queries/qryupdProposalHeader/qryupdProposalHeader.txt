@@ -1,5 +1,0 @@
-select *
-from public.update_proposal_header_json(
-  {{ Number(appsmith.store.current_proposal_id || 0) }},
-  '{{ JSON.stringify(jsProposalSave.headerSnapshotFromPage()).replaceAll("'", "''") }}'::jsonb
-);

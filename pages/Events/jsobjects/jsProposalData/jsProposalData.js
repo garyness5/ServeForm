@@ -59,15 +59,43 @@ export default {
 			if (workspace?.header) {
 				const r = workspace.header;
 
+				const eventDate =
+							r.event_date
+				? moment
+				.utc(r.event_date)
+				.format("YYYY-MM-DD")
+				: null;
+
+				const eventTime =
+							r.event_time
+				? String(r.event_time)
+				.slice(0, 8)
+				: null;
+
+				const eventDateTime =
+							eventDate
+				? `${eventDate}T${eventTime || "00:00:00"}`
+				: null;
+
 				return {
-					name: r.event_name ?? "",
-					event_ref: r.event_ref ?? "",
+					name:
+					r.event_name ?? "",
+
+					event_ref:
+					r.event_ref ?? "",
+
 					event_date:
-					r.event_datetime ?? null,
+					eventDate,
+
+					event_time:
+					eventTime,
+
 					event_datetime:
-					r.event_datetime ?? null,
-					event_time: null,
-					format: r.event_format ?? "",
+					eventDateTime,
+
+					format:
+					r.event_format ?? "",
+
 					total_guests_manual:
 					r.total_guests ?? "",
 
@@ -76,7 +104,9 @@ export default {
 					venue_id: null,
 					venue_contact_id: null,
 
-					notes: r.event_notes ?? "",
+					notes:
+					r.event_notes ?? "",
+
 					venue_notes: "",
 					general_notes: ""
 				};

@@ -24,9 +24,16 @@
   "dynamicPropertyPathList": [
     {
       "key": "isDisabled"
+    },
+    {
+      "key": "onTextChanged"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onTextChanged"
+    }
+  ],
   "iconAlign": "left",
   "inputType": "TEXT",
   "isDisabled": "{{ jsProposalData.isProposalLocked() }}",
@@ -49,6 +56,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 1,
   "needsErrorInfo": false,
+  "onTextChanged": "{{ jsProposalWorkspaces.captureCurrentHeader() }}",
   "parentColumnSpace": 6.6953125,
   "parentId": "de2lqw9wp0",
   "parentRowSpace": 10,

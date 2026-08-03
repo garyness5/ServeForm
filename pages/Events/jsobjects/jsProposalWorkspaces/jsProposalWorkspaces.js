@@ -57,17 +57,37 @@ export default {
 
 	headerFromQuery() {
 		const row =
-					qryGetSelectedProposal.data?.[0] || {};
+					qryGetSelectedProposal.data?.[0] ||
+					{};
 
 		return {
-			event_name: row.event_name ?? "",
-			event_ref: row.event_ref ?? "",
+			proposal_id: Number(
+				row.id ||
+				this.currentProposalId() ||
+				0
+			),
+
+			event_name:
+			row.event_name ?? "",
+
+			event_ref:
+			row.event_ref ?? "",
+
+			event_date:
+			row.event_date ?? null,
+
+			event_time:
+			row.event_time ?? null,
+
 			event_datetime:
 			row.event_datetime ?? null,
+
 			event_format:
 			row.event_format ?? "",
+
 			total_guests:
 			row.total_guests ?? null,
+
 			event_notes:
 			row.event_notes ?? ""
 		};
@@ -152,24 +172,198 @@ export default {
 		});
 	},
 
+	deepCopy(value) {
+		return JSON.parse(
+			JSON.stringify(value)
+		);
+	},
+
+	normalizeHeader(header) {
+		const source = header || {};
+
+		const dateValue =
+					source.event_date ||
+					source.event_datetime ||
+					null;
+
+		const timeValue =
+					source.event_time ||
+					source.event_datetime ||
+					null;
+
+		return {
+			event_name:
+			String(
+				source.event_name || ""
+			).trim() || null,
+
+			event_ref:
+			String(
+				source.event_ref || ""
+			).trim() || null,
+
+			event_date:
+			dateValue
+			? moment.utc(dateValue)
+			.format("YYYY-MM-DD")
+			: null,
+
+			event_time:
+			timeValue
+			? moment.utc(timeValue)
+			.format("HH:mm:ss")
+			: null,
+
+			event_format:
+			source.event_format || null,
+
+			total_guests:
+			source.total_guests === "" ||
+			source.total_guests === null ||
+			source.total_guests === undefined
+			? null
+			: Number(
+				source.total_guests
+			),
+
+			event_notes:
+			String(
+				source.event_notes || ""
+			).trim() || null
+		};
+	},
+
+	normalizeComponents(rows) {
+		return (rows || [])
+			.filter(row =>
+							Number(row?.menu_id || 0) > 0 ||
+							String(
+			row?.menu_name || ""
+		).trim()
+						 )
+			.map((row, index) => ({
+			line_no: index + 1,
+
+			menu_id:
+			Number(
+				row.menu_id || 0
+			) || null,
+
+			guests:
+			row.guests === "" ||
+			row.guests === null ||
+			row.guests === undefined
+			? null
+			: Number(row.guests),
+
+			extra_guests:
+			row.extra_guests === "" ||
+			row.extra_guests === null ||
+			row.extra_guests === undefined
+			? 0
+			: Number(
+				row.extra_guests
+			),
+
+			notes:
+			String(
+				row.notes || ""
+			).trim() || null,
+
+			active:
+			row.active === false
+			? false
+			: true
+		}));
+	},
+
+	async captureCurrentHeader() {
+		if (!jsProposalData.isProposalDraft()) {
+			return null;
+		}
+
+		const proposalId =
+					this.currentProposalId();
+
+		const workspace =
+					this.get(proposalId);
+
+		if (!workspace) {
+			return null;
+		}
+
+		return await this.set(
+			proposalId,
+			{
+				...workspace,
+
+				header:
+				jsProposalSave
+				.headerSnapshotFromPage()
+			}
+		);
+	},
+
 	isDirty(
 		proposalId = this.currentProposalId()
 	) {
-		const workspace = this.get(proposalId);
+		const workspace =
+					this.get(proposalId);
 
-		if (!workspace) return false;
+		if (!workspace) {
+			return false;
+		}
+
+		const isCurrentProposal =
+					Number(proposalId) ===
+					this.currentProposalId();
+
+		/*
+	 * Locked Proposals cannot have valid unsaved edits.
+	 */
+		if (
+			isCurrentProposal &&
+			!jsProposalData.isProposalDraft()
+		) {
+			return false;
+		}
+
+		const currentHeader =
+					this.normalizeHeader(
+						workspace.header
+					);
+
+		const savedHeader =
+					this.normalizeHeader(
+						workspace.saved_header
+					);
+
+		/*
+	 * For the displayed Draft, include edits still held
+	 * inside tblEvtComponents.updatedRows.
+	 */
+		const currentRows =
+					isCurrentProposal &&
+					jsProposalData.isProposalDraft()
+		? jsProposalComponents
+		.mergeUpdatedRows()
+		: workspace.components;
+
+		const currentComponents =
+					this.normalizeComponents(
+						currentRows
+					);
+
+		const savedComponents =
+					this.normalizeComponents(
+						workspace.saved_components
+					);
 
 		return (
-			JSON.stringify(workspace.header || {}) !==
-			JSON.stringify(
-				workspace.saved_header || {}
-			) ||
-			JSON.stringify(
-				workspace.components || []
-			) !==
-			JSON.stringify(
-				workspace.saved_components || []
-			)
+			JSON.stringify(currentHeader) !==
+			JSON.stringify(savedHeader) ||
+			JSON.stringify(currentComponents) !==
+			JSON.stringify(savedComponents)
 		);
 	},
 
@@ -186,25 +380,26 @@ export default {
 		const workspace =
 					this.get(proposalId);
 
-		if (!workspace) return null;
+		if (!workspace) {
+			return null;
+		}
 
-		return await this.set(proposalId, {
-			...workspace,
+		return await this.set(
+			proposalId,
+			{
+				...workspace,
 
-			saved_header:
-			JSON.parse(
-				JSON.stringify(
+				saved_header:
+				this.deepCopy(
 					workspace.header || {}
-				)
-			),
+				),
 
-			saved_components:
-			JSON.parse(
-				JSON.stringify(
+				saved_components:
+				this.deepCopy(
 					workspace.components || []
 				)
-			)
-		});
+			}
+		);
 	},
 
 	async discard(proposalId) {

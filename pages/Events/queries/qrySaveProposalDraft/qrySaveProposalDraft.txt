@@ -3,7 +3,6 @@ from public.save_proposal_draft(
 	{{
 	Number(
 		appsmith.store.proposal_save_request?.proposal_id ||
-		appsmith.store.current_proposal_id ||
 		0
 	)
 	}},
@@ -11,14 +10,14 @@ from public.save_proposal_draft(
 	'{{
 	JSON.stringify(
 		appsmith.store.proposal_save_request?.header ||
-		jsProposalSave.headerSnapshotFromPage()
+		{}
 	).replaceAll("'", "''")
 	}}'::jsonb,
 
 	'{{
 	JSON.stringify(
 		appsmith.store.proposal_save_request?.menus ||
-		jsProposalSave.currentMenuPayload()
+		[]
 	).replaceAll("'", "''")
 	}}'::jsonb
 );

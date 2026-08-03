@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n    id,\n    proposal_id,\n    client_id,\n    event_id,\n    event_component_id,\n    menu_id,\n    line_no,\n    menu_name,\n    guests,\n    extra_guests,\n    production_guests,\n    kitchen_cost,\n    allergen_names,\n    diet_tag_names,\n    notes,\n    active,\n    component_status,\n    created_at,\n    updated_at\nfrom public.vw_prop_menus\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and proposal_id = {{ Number(appsmith.store.current_proposal_id || 0) }}\norder by\n    line_no,\n    id;",
+      "body": "select\n    id,\n    proposal_id,\n    client_id,\n    event_id,\n    event_component_id,\n    menu_id,\n    line_no,\n\n    menu_name,\n    current_menu_name,\n    menu_renamed,\n    display_menu_name,\n\n    category_id,\n    category_name,\n    current_category_id,\n    current_category_name,\n\n    guests,\n    extra_guests,\n    production_guests,\n\n    kitchen_cost,\n\n    allergen_names,\n    diet_tag_names,\n    notes,\n\n    active,\n    current_menu_active,\n    current_menu_deleted,\n    component_status,\n\n    created_at,\n    updated_at\n\nfrom public.vw_prop_menus\n\nwhere client_id =\n    '{{ appsmith.store.current_client_id }}'::uuid\n\n  and proposal_id =\n    {{ Number(appsmith.store.current_proposal_id || 0) }}\n\norder by\n    line_no,\n    id;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -29,7 +29,7 @@
     ],
     "name": "qryGetSelectedProposalMenus",
     "pageId": "Events",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }

@@ -12,34 +12,60 @@ export default {
 	},
 
 	headerSnapshotFromPage() {
+		const selectedDate =
+			datEvtDate.selectedDate || null;
+
 		return {
 			proposal_id: Number(
 				appsmith.store.current_proposal_id || 0
 			),
 
-			event_name: this.textClean(inpEvtName.text),
-			event_ref: this.textClean(inpEvtRef.text),
+			event_name:
+				this.textClean(inpEvtName.text),
 
-			event_datetime: datEvtDate.selectedDate
-			? moment(datEvtDate.selectedDate)
-			.format("YYYY-MM-DD HH:mm:ss")
-			: null,
+			event_ref:
+				this.textClean(inpEvtRef.text),
+
+			event_date:
+				selectedDate
+					? moment
+						.utc(selectedDate)
+						.format("YYYY-MM-DD")
+					: null,
+
+			event_time:
+				selectedDate
+					? moment
+						.utc(selectedDate)
+						.format("HH:mm:ss")
+					: null,
+
+			event_datetime:
+				selectedDate
+					? moment
+						.utc(selectedDate)
+						.format(
+							"YYYY-MM-DD HH:mm:ss"
+						)
+					: null,
 
 			event_format:
-			selEvtFormat.selectedOptionValue || null,
+				selEvtFormat.selectedOptionValue ||
+				null,
 
 			total_guests:
-			inpTotalGuests.text !== "" &&
-			inpTotalGuests.text !== null &&
-			inpTotalGuests.text !== undefined
-			? Number(inpTotalGuests.text)
-			: null,
+				inpTotalGuests.text === "" ||
+				inpTotalGuests.text === null ||
+				inpTotalGuests.text === undefined
+					? null
+					: Number(inpTotalGuests.text),
 
-			event_notes: this.textClean(
-				rteEvtNotes.text ||
-				rteEvtNotes.value ||
-				""
-			)
+			event_notes:
+				this.textClean(
+					rteEvtNotes.text ||
+					rteEvtNotes.value ||
+					""
+				)
 		};
 	},
 
@@ -58,81 +84,127 @@ export default {
 	menuPayload(rows) {
 		return (rows || [])
 			.filter(row =>
-							row.menu_id ||
-							String(row.menu_name || "").trim()
-						 )
-			.map(row => {
-			const item = jsProposalComponents.currentMenu(row);
+				Number(row.menu_id || 0) > 0 ||
+				String(row.menu_name || "").trim()
+			)
+			.map((row, index) => {
+				const derived =
+					jsProposalComponents
+						.refreshDerivedFields(row);
 
-			const guests =
-						row.guests === "" ||
-						row.guests == null
-			? null
-			: Number(row.guests);
+				return {
+					line_no: index + 1,
 
-			const extra =
-						row.extra_guests === "" ||
-						row.extra_guests == null
-			? 0
-			: Number(row.extra_guests);
+					menu_id:
+						Number(
+							derived.menu_id || 0
+						) || null,
 
-			const menuCost = Number(
-				item?.cost_per_unit ??
-				item?.total_cost ??
-				row.menu_cost ??
-				0
-			);
+					category_id:
+						Number(
+							derived.category_id || 0
+						) || null,
 
-			const kitchenCost =
-						row.active === false ||
-						guests == null
-			? null
-			: Math.round(
-				(guests + extra) *
-				menuCost *
-				100
-			) / 100;
+					category_name:
+						this.textClean(
+							derived.category_name
+						),
 
-			return {
-				event_component_id:
-				row.event_component_id ?? null,
+					menu_name:
+						this.textClean(
+							derived.current_menu_name ||
+							derived.menu_name
+						),
 
-				menu_id:
-				row.menu_id ?? null,
+					guests:
+						derived.guests == null
+							? null
+							: Number(
+								derived.guests
+							),
 
-				menu_name:
-				row.menu_name ?? null,
+					extra_guests:
+						derived.extra_guests == null
+							? 0
+							: Number(
+								derived.extra_guests
+							),
 
-				guests,
-				extra_guests: extra,
-				kitchen_cost: kitchenCost,
+					kitchen_cost:
+						derived.line_cost == null
+							? null
+							: Number(
+								derived.line_cost
+							),
 
-				allergen_names:
-				row.allergen_names ?? null,
+					allergen_names:
+						this.textClean(
+							derived.allergen_names
+						),
 
-				diet_tag_names:
-				row.diet_tag_names ?? null,
+					diet_tag_names:
+						this.textClean(
+							derived.diet_tag_names
+						),
 
-				notes:
-				row.notes ?? null,
+					notes:
+						this.textClean(
+							derived.notes
+						),
 
-				active:
-				row.active === false
-				? false
-				: true
-			};
-		});
+					active:
+						derived.active === false
+							? false
+							: true
+				};
+			});
 	},
 
-	currentMenuPayload() {
-		return this.menuPayload(
-			jsProposalComponents.mergeUpdatedRows()
+	buildRequest(
+		proposalId,
+		header,
+		components
+	) {
+		return {
+			proposal_id:
+				Number(proposalId || 0),
+
+			header:
+				header || {},
+
+			menus:
+				this.menuPayload(
+					components || []
+				)
+		};
+	},
+
+	async runSaveRequest(request) {
+		await storeValue(
+			"proposal_save_request",
+			request
 		);
+
+		try {
+			const result =
+				await qrySaveProposalDraft.run();
+
+			return Number(
+				result?.[0]?.proposal_id || 0
+			) > 0;
+		} finally {
+			await removeValue(
+				"proposal_save_request"
+			);
+		}
 	},
 
 	async saveWorkspace(proposalId) {
+		const id =
+			Number(proposalId || 0);
+
 		const workspace =
-					jsProposalWorkspaces.get(proposalId);
+			jsProposalWorkspaces.get(id);
 
 		if (!workspace) {
 			return true;
@@ -144,41 +216,30 @@ export default {
 			).trim()
 		) {
 			showAlert(
-				`Draft ${proposalId} needs an Event Name.`,
+				`Draft ${id} needs an Event Name.`,
 				"warning"
 			);
+
 			return false;
 		}
 
-		await storeValue(
-			"proposal_save_request",
-			{
-				proposal_id: Number(proposalId),
-				header: workspace.header,
-				menus: this.menuPayload(
-					workspace.components || []
-				)
-			}
-		);
-
-		try {
-			const result =
-						await qrySaveProposalDraft.run();
-
-			if (!result?.[0]?.proposal_id) {
-				return false;
-			}
-
-			await jsProposalWorkspaces.discard(
-				proposalId
+		const request =
+			this.buildRequest(
+				id,
+				workspace.header,
+				workspace.components
 			);
 
-			return true;
-		} finally {
-			await removeValue(
-				"proposal_save_request"
-			);
+		const saved =
+			await this.runSaveRequest(request);
+
+		if (!saved) {
+			return false;
 		}
+
+		await jsProposalWorkspaces.discard(id);
+
+		return true;
 	},
 
 	async saveAllDirty() {
@@ -186,17 +247,21 @@ export default {
 			.captureCurrentDraft();
 
 		const ids =
-					jsProposalWorkspaces.dirtyProposalIds();
+			jsProposalWorkspaces
+				.dirtyProposalIds();
 
 		for (const proposalId of ids) {
 			const saved =
-						await this.saveWorkspace(proposalId);
+				await this.saveWorkspace(
+					proposalId
+				);
 
 			if (!saved) {
 				showAlert(
 					`Draft ${proposalId} could not be saved.`,
 					"error"
 				);
+
 				return false;
 			}
 		}
@@ -204,26 +269,7 @@ export default {
 		return true;
 	},
 
-	async saveDraft() {
-		const message = this.requiredMessage();
-
-		if (message) {
-			showAlert(message, "warning");
-			return false;
-		}
-
-		await jsProposalWorkspaces.captureCurrentDraft();
-
-		const result = await qrySaveProposalDraft.run();
-
-		if (!result?.[0]?.proposal_id) {
-			showAlert(
-				"Proposal Draft was not saved.",
-				"error"
-			);
-			return false;
-		}
-
+	async refreshCurrentDraft(proposalId) {
 		await Promise.all([
 			qryGetSelectedProposal.run(),
 			qryGetSelectedProposalMenus.run(),
@@ -231,10 +277,11 @@ export default {
 		]);
 
 		await jsProposalWorkspaces.discard(
-			Number(appsmith.store.current_proposal_id || 0)
+			proposalId
 		);
 
-		await jsProposalWorkspaces.initializeCurrentDraft();
+		await jsProposalWorkspaces
+			.initializeCurrentDraft();
 
 		await Promise.all([
 			resetWidget("inpEvtName", true),
@@ -244,6 +291,51 @@ export default {
 			resetWidget("selEvtFormat", true),
 			resetWidget("rteEvtNotes", true)
 		]);
+	},
+
+	async saveDraft() {
+		const message =
+			this.requiredMessage();
+
+		if (message) {
+			showAlert(
+				message,
+				"warning"
+			);
+
+			return false;
+		}
+
+		await jsProposalWorkspaces
+			.captureCurrentDraft();
+
+		const proposalId = Number(
+			appsmith.store.current_proposal_id || 0
+		);
+
+		const request =
+			this.buildRequest(
+				proposalId,
+				this.headerSnapshotFromPage(),
+				jsProposalComponents
+					.effectiveRows()
+			);
+
+		const saved =
+			await this.runSaveRequest(request);
+
+		if (!saved) {
+			showAlert(
+				"Proposal Draft was not saved.",
+				"error"
+			);
+
+			return false;
+		}
+
+		await this.refreshCurrentDraft(
+			proposalId
+		);
 
 		showAlert(
 			"Proposal Draft saved.",

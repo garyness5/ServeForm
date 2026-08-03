@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_proposal_draft(\n\t{{\n\tNumber(\n\t\tappsmith.store.proposal_save_request?.proposal_id ||\n\t\tappsmith.store.current_proposal_id ||\n\t\t0\n\t)\n\t}},\n\n\t'{{\n\tJSON.stringify(\n\t\tappsmith.store.proposal_save_request?.header ||\n\t\tjsProposalSave.headerSnapshotFromPage()\n\t).replaceAll(\"'\", \"''\")\n\t}}'::jsonb,\n\n\t'{{\n\tJSON.stringify(\n\t\tappsmith.store.proposal_save_request?.menus ||\n\t\tjsProposalSave.currentMenuPayload()\n\t).replaceAll(\"'\", \"''\")\n\t}}'::jsonb\n);",
+      "body": "select *\nfrom public.save_proposal_draft(\n\t{{\n\tNumber(\n\t\tappsmith.store.proposal_save_request?.proposal_id ||\n\t\t0\n\t)\n\t}},\n\n\t'{{\n\tJSON.stringify(\n\t\tappsmith.store.proposal_save_request?.header ||\n\t\t{}\n\t).replaceAll(\"'\", \"''\")\n\t}}'::jsonb,\n\n\t'{{\n\tJSON.stringify(\n\t\tappsmith.store.proposal_save_request?.menus ||\n\t\t[]\n\t).replaceAll(\"'\", \"''\")\n\t}}'::jsonb\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

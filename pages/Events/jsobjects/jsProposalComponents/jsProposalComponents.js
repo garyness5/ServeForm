@@ -22,18 +22,37 @@ export default {
 		);
 	},
 
+	numberOrNull(value) {
+		if (
+			value === null ||
+			value === undefined ||
+			value === ""
+		) {
+			return null;
+		}
+
+		const number = Number(value);
+
+		return Number.isFinite(number)
+			? number
+		: null;
+	},
+
 	blankRow(lineNo) {
 		return {
 			draft_row_id: this.makeDraftId(),
 			source_type: "proposal",
 
 			id: null,
+
 			proposal_id: Number(
 				appsmith.store.current_proposal_id || 0
 			),
+
 			event_id: Number(
 				appsmith.store.current_event_id || 0
 			),
+
 			event_component_id: null,
 
 			line_no: lineNo,
@@ -41,8 +60,15 @@ export default {
 			category_id: null,
 			category_name: null,
 
+			current_category_id: null,
+			current_category_name: null,
+
 			menu_id: null,
 			menu_name: null,
+
+			current_menu_name: null,
+			display_menu_name: null,
+			menu_renamed: false,
 
 			guests: null,
 			extra_guests: null,
@@ -50,12 +76,17 @@ export default {
 
 			menu_cost: null,
 			line_cost: null,
+			kitchen_cost: null,
 
 			allergen_names: null,
 			diet_tag_names: null,
 			notes: null,
 
 			active: true,
+
+			current_menu_active: null,
+			current_menu_deleted: null,
+
 			component_status: "Active"
 		};
 	},
@@ -66,49 +97,71 @@ export default {
 			(
 				row.id ||
 				row.menu_id ||
-				row.menu_name ||
+				String(row.menu_name || "").trim() ||
 				row.category_id ||
-				row.category_name ||
-				row.guests !== null &&
-				row.guests !== undefined &&
-				row.guests !== "" ||
-				row.extra_guests !== null &&
-				row.extra_guests !== undefined &&
-				row.extra_guests !== ""
+				String(row.category_name || "").trim() ||
+				(
+					row.guests !== null &&
+					row.guests !== undefined &&
+					row.guests !== ""
+				) ||
+				(
+					row.extra_guests !== null &&
+					row.extra_guests !== undefined &&
+					row.extra_guests !== ""
+				)
 			)
 		);
 	},
 
 	currentMenu(row) {
-		return (getEvtComponentItems.data || []).find(item =>
-																									Number(item.id) === Number(row?.menu_id || 0) ||
-																									item.name === row?.menu_name
-																								 );
+		const menuId = Number(row?.menu_id || 0);
+
+		const menuName = String(
+			row?.current_menu_name ||
+			row?.menu_name ||
+			""
+		).trim();
+
+		return (
+			getEvtComponentItems.data || []
+		).find(item =>
+					 (
+			menuId > 0 &&
+			Number(item.id) === menuId
+		) ||
+					 (
+			menuId === 0 &&
+			String(item.name || "").trim() ===
+			menuName
+		)
+					);
 	},
 
 	prepareRow(row, lineNo) {
-		const item = this.currentMenu(row);
+		const source = row || {};
 
 		const guests =
-					row?.guests === "" ||
-					row?.guests === null ||
-					row?.guests === undefined
-		? null
-		: Number(row.guests);
+					this.numberOrNull(source.guests);
 
 		const extras =
-					row?.extra_guests === "" ||
-					row?.extra_guests === null ||
-					row?.extra_guests === undefined
-		? null
-		: Number(row.extra_guests);
+					this.numberOrNull(source.extra_guests);
+
+		const lineCost =
+					Object.prototype.hasOwnProperty.call(
+						source,
+						"line_cost"
+					)
+		? source.line_cost
+		: null;
 
 		return {
 			...this.blankRow(lineNo),
-			...row,
+			...source,
 
 			draft_row_id:
-			row?.draft_row_id || this.makeDraftId(),
+			source.draft_row_id ||
+			this.makeDraftId(),
 
 			source_type: "proposal",
 
@@ -123,19 +176,37 @@ export default {
 			line_no: lineNo,
 
 			category_id:
-			row?.category_id ??
-			item?.category_id ??
-			null,
+			source.category_id ?? null,
 
 			category_name:
-			row?.category_name ??
-			item?.category_name ??
+			source.category_name ?? null,
+
+			current_category_id:
+			source.current_category_id ?? null,
+
+			current_category_name:
+			source.current_category_name ?? null,
+
+			menu_id:
+			source.menu_id ?? null,
+
+			menu_name:
+			source.menu_name ?? null,
+
+			current_menu_name:
+			source.current_menu_name ?? null,
+
+			display_menu_name:
+			source.display_menu_name ??
+			source.current_menu_name ??
+			source.menu_name ??
 			null,
 
-			menu_id: row?.menu_id ?? null,
-			menu_name: row?.menu_name ?? null,
+			menu_renamed:
+			source.menu_renamed === true,
 
 			guests,
+
 			extra_guests: extras,
 
 			production_guests:
@@ -144,37 +215,58 @@ export default {
 			: guests + Number(extras || 0),
 
 			menu_cost:
-			item?.cost_per_unit ??
-			item?.total_cost ??
-			row?.menu_cost ??
-			null,
+			this.numberOrNull(source.menu_cost),
 
-			line_cost: row?.line_cost ?? null,
+			line_cost:
+			lineCost === null ||
+			lineCost === undefined ||
+			lineCost === ""
+			? null
+			: Number(lineCost),
+
+			kitchen_cost:
+			source.kitchen_cost === null ||
+			source.kitchen_cost === undefined ||
+			source.kitchen_cost === ""
+			? null
+			: Number(source.kitchen_cost),
 
 			allergen_names:
-			item?.allergen_names ??
-			row?.allergen_names ??
-			null,
+			source.allergen_names ?? null,
 
 			diet_tag_names:
-			item?.diet_tag_names ??
-			row?.diet_tag_names ??
-			null,
+			source.diet_tag_names ?? null,
 
-			notes: row?.notes ?? null,
+			notes:
+			source.notes ?? null,
 
-			active: row?.active === false ? false : true,
+			active:
+			source.active === false
+			? false
+			: true,
+
+			current_menu_active:
+			source.current_menu_active ?? null,
+
+			current_menu_deleted:
+			source.current_menu_deleted ?? null,
 
 			component_status:
-			row?.component_status || "Active"
+			source.component_status ||
+			"Active"
 		};
 	},
 
 	normalizeRows(rows) {
 		const realRows = (rows || [])
-		.filter(row => this.hasContent(row))
+		.filter(row =>
+						this.hasContent(row)
+					 )
 		.map((row, index) =>
-				 this.prepareRow(row, index + 1)
+				 this.prepareRow(
+			row,
+			index + 1
+		)
 				);
 
 		const targetCount = Math.max(
@@ -182,9 +274,14 @@ export default {
 			realRows.length + 1
 		);
 
-		while (realRows.length < targetCount) {
+		while (
+			realRows.length <
+			targetCount
+		) {
 			realRows.push(
-				this.blankRow(realRows.length + 1)
+				this.blankRow(
+					realRows.length + 1
+				)
 			);
 		}
 
@@ -192,36 +289,77 @@ export default {
 	},
 
 	queryRows() {
-		return (qryGetSelectedProposalMenus.data || [])
-			.map((row, index) => {
-			const item = this.currentMenu(row);
-
-			return {
+		return (
+			qryGetSelectedProposalMenus.data || []
+		).map((row, index) =>
+					this.prepareRow(
+			{
 				...row,
 
 				draft_row_id:
 				`proposal_${row.proposal_id}_${row.id}`,
 
-				source_type: "proposal",
-
-				line_no:
-				row.line_no ?? index + 1,
+				source_type:
+				"proposal",
 
 				category_id:
-				item?.category_id ?? null,
+				row.category_id ?? null,
 
 				category_name:
-				item?.category_name ?? null,
+				row.category_name ?? null,
+
+				current_category_id:
+				row.current_category_id ??
+				null,
+
+				current_category_name:
+				row.current_category_name ??
+				null,
+
+				menu_id:
+				row.menu_id ?? null,
+
+				menu_name:
+				row.menu_name ?? null,
+
+				current_menu_name:
+				row.current_menu_name ??
+				null,
+
+				display_menu_name:
+				row.display_menu_name ??
+				row.current_menu_name ??
+				row.menu_name ??
+				null,
+
+				menu_renamed:
+				row.menu_renamed === true,
 
 				menu_cost: null,
-				line_cost: row.kitchen_cost,
+
+				line_cost:
+				row.kitchen_cost ?? null,
+
+				kitchen_cost:
+				row.kitchen_cost ?? null,
+
+				current_menu_active:
+				row.current_menu_active ??
+				null,
+
+				current_menu_deleted:
+				row.current_menu_deleted ??
+				null,
 
 				active:
 				row.active === false
 				? false
 				: true
-			};
-		});
+			},
+			row.line_no ??
+			index + 1
+		)
+				 );
 	},
 
 	draftRows() {
@@ -230,7 +368,9 @@ export default {
 
 		if (
 			workspace &&
-			Array.isArray(workspace.components)
+			Array.isArray(
+				workspace.components
+			)
 		) {
 			return workspace.components;
 		}
@@ -253,38 +393,45 @@ export default {
 	},
 
 	mergeUpdatedRows() {
-		const rows = this.draftRows();
+		const rows =
+					this.draftRows();
+
 		const updates =
-					tblEvtComponents.updatedRows || [];
+					tblEvtComponents.updatedRows ||
+					[];
 
 		if (!updates.length) {
 			return rows;
 		}
 
-		return rows.map((row, index) => {
-			const update = updates.find(item =>
-																	item.index === index ||
-																	item.rowIndex === index ||
-																	item.draft_row_id === row.draft_row_id ||
-																	item.allFields?.draft_row_id ===
-																	row.draft_row_id ||
-																	item.updatedFields?.draft_row_id ===
-																	row.draft_row_id
-																 );
+		return rows.map(
+			(row, index) => {
+				const update =
+							updates.find(item =>
+													 item.index === index ||
+													 item.rowIndex === index ||
+													 item.draft_row_id ===
+													 row.draft_row_id ||
+													 item.allFields?.draft_row_id ===
+													 row.draft_row_id ||
+													 item.updatedFields?.draft_row_id ===
+													 row.draft_row_id
+													);
 
-			if (!update) {
-				return row;
+				if (!update) {
+					return row;
+				}
+
+				return this.prepareRow(
+					{
+						...row,
+						...(update.allFields || {}),
+						...(update.updatedFields || {})
+					},
+					index + 1
+				);
 			}
-
-			return this.prepareRow(
-				{
-					...row,
-					...(update.allFields || {}),
-					...(update.updatedFields || {})
-				},
-				index + 1
-			);
-		});
+		);
 	},
 
 	effectiveRows() {
@@ -300,11 +447,18 @@ export default {
 			return null;
 		}
 
-		await jsProposalWorkspaces
-			.setCurrentComponents(rows);
+		const normalized =
+					this.normalizeRows(rows);
 
-		return jsProposalWorkspaces
-			.get()?.components || [];
+		await jsProposalWorkspaces
+			.setCurrentComponents(
+			normalized
+		);
+
+		return (
+			jsProposalWorkspaces.get()
+			?.components || []
+		);
 	},
 
 	async syncFromTable() {
@@ -321,34 +475,96 @@ export default {
 			return null;
 		}
 
-		await this.syncFromTable();
+		const mergedRows =
+					this.mergeUpdatedRows();
 
-		const rows = this.draftRows().map(item =>
-																			item.draft_row_id === row.draft_row_id
-																			? { ...item, ...patch }
-																			: item
-																		 );
+		const rows = mergedRows.map(
+			(item, index) =>
+			item.draft_row_id ===
+			row.draft_row_id
+			? this.prepareRow(
+				{
+					...item,
+					...patch
+				},
+				index + 1
+			)
+			: this.prepareRow(
+				item,
+				index + 1
+			)
+		);
 
-		return await this.setDraftRows(rows);
+		return await this.setDraftRows(
+			rows
+		);
 	},
 
 	categoryOptions() {
-		return evtCompTable.categoryOptions();
+		const categories = (
+			getEvtComponentItems.data || []
+		)
+		.filter(item =>
+						item.active !== false &&
+						item.deleted !== true
+					 )
+		.map(item => ({
+			label:
+			item.category_name ||
+			"Uncategorized",
+
+			value:
+			item.category_name ||
+			"Uncategorized"
+		}));
+
+		return [
+			...new Map(
+				categories.map(item => [
+					item.value,
+					item
+				])
+			).values()
+		].sort((a, b) =>
+					 String(a.label).localeCompare(
+			String(b.label)
+		)
+					);
 	},
 
 	menuOptions(row) {
-		const usedIds = this.draftRows()
+		const rows = this.isDraftMode()
+		? this.draftRows()
+		: this.rows();
+
+		const usedIds = rows
 		.filter(item =>
 						item.draft_row_id !== row?.draft_row_id
 					 )
-		.map(item => Number(item.menu_id || 0))
+		.map(item => {
+			const resolvedMenu = this.currentMenu(item);
+
+			return Number(
+				item.menu_id ||
+				resolvedMenu?.id ||
+				0
+			);
+		})
 		.filter(Boolean);
+
+		const categoryName = String(
+			row?.category_name || ""
+		).trim();
 
 		return (getEvtComponentItems.data || [])
 			.filter(item =>
-							!row?.category_name ||
-							row.category_name === "Uncategorized" ||
-							item.category_name === row.category_name
+							item.active !== false &&
+							item.deleted !== true
+						 )
+			.filter(item =>
+							!categoryName ||
+							categoryName === "Uncategorized" ||
+							item.category_name === categoryName
 						 )
 			.filter(item =>
 							!usedIds.includes(Number(item.id))
@@ -364,167 +580,642 @@ export default {
 		}));
 	},
 
-	async onCategoryChange(row) {
-		return await this.patchRow(row, {
-			category_name: row.category_name || null,
-			category_id: null,
+	refreshDerivedFields(row) {
+		const base = {
+			...row,
 
-			menu_id: null,
-			menu_name: null,
+			guests:
+			this.numberOrNull(
+				row?.guests
+			),
 
-			menu_cost: null,
-			line_cost: null,
+			extra_guests:
+			this.numberOrNull(
+				row?.extra_guests
+			)
+		};
 
-			allergen_names: null,
-			diet_tag_names: null
-		});
-	},
+		const selectedMenuName =
+					String(
+						base.current_menu_name ||
+						base.menu_name ||
+						""
+					).trim();
 
-	async onMenuChange(row) {
-		if (!this.isDraftMode()) {
-			return null;
+		if (
+			!base.menu_id &&
+			!selectedMenuName
+		) {
+			return {
+				...base,
+
+				menu_id: null,
+				menu_name: null,
+
+				current_menu_name: null,
+				display_menu_name: null,
+				menu_renamed: false,
+
+				menu_cost: null,
+				line_cost: null,
+				kitchen_cost: null,
+
+				production_guests:
+				null,
+
+				allergen_names: null,
+				diet_tag_names: null,
+
+				current_menu_active:
+				null,
+
+				current_menu_deleted:
+				null,
+
+				component_status:
+				base.active === false
+				? "Inactive"
+				: "Active"
+			};
 		}
-
-		await this.syncFromTable();
-
-		const freshRow =
-					this.draftRows().find(item =>
-																item.draft_row_id === row.draft_row_id
-															 ) || row;
 
 		const item = (
 			getEvtComponentItems.data || []
 		).find(menu =>
-					 menu.name === freshRow.menu_name
+					 Number(menu.id || 0) ===
+					 Number(
+			base.menu_id || 0
+		) ||
+					 (
+			!base.menu_id &&
+			String(
+				menu.name || ""
+			).trim() ===
+			selectedMenuName
+		)
+					);
+
+		if (!item) {
+			const productionGuests =
+						base.guests == null
+			? null
+			: (
+				base.guests +
+				Number(
+					base.extra_guests ||
+					0
+				)
+			);
+
+			return {
+				...base,
+
+				current_menu_name:
+				base.current_menu_name ??
+				null,
+
+				display_menu_name:
+				base.display_menu_name ||
+				base.menu_name ||
+				null,
+
+				menu_cost: null,
+				line_cost: null,
+				kitchen_cost: null,
+
+				production_guests:
+				productionGuests,
+
+				current_menu_active:
+				null,
+
+				current_menu_deleted:
+				true,
+
+				component_status:
+				"Source Deleted"
+			};
+		}
+
+		const menuCost =
+					this.numberOrNull(
+						item.cost_per_unit ??
+						item.total_cost
+					);
+
+		const productionGuests =
+					base.guests == null
+		? null
+		: (
+			base.guests +
+			Number(
+				base.extra_guests ||
+				0
+			)
+		);
+
+		const sourceDeleted =
+					item.deleted === true;
+
+		const sourceInactive =
+					item.active === false;
+
+		const rowInactive =
+					base.active === false;
+
+		const unavailable =
+					sourceDeleted ||
+					sourceInactive ||
+					rowInactive;
+
+		const calculatedCost =
+					unavailable ||
+					productionGuests == null ||
+					menuCost == null
+		? null
+		: Math.round(
+			productionGuests *
+			menuCost *
+			100
+		) / 100;
+
+		return {
+			...base,
+
+			menu_id: item.id,
+
+			menu_name: item.name,
+
+			current_menu_name:
+			item.name,
+
+			display_menu_name:
+			item.name,
+
+			menu_renamed: false,
+
+			category_id:
+			item.category_id ?? null,
+
+			category_name:
+			item.category_name ?? null,
+
+			current_category_id:
+			item.category_id ?? null,
+
+			current_category_name:
+			item.category_name ?? null,
+
+			menu_cost: menuCost,
+
+			production_guests:
+			productionGuests,
+
+			line_cost:
+			calculatedCost,
+
+			kitchen_cost:
+			calculatedCost,
+
+			allergen_names:
+			item.allergen_names ??
+			item.derived_allergens ??
+			null,
+
+			diet_tag_names:
+			item.diet_tag_names ??
+			item.derived_diet_tags ??
+			null,
+
+			current_menu_active:
+			sourceInactive
+			? false
+			: true,
+
+			current_menu_deleted:
+			sourceDeleted,
+
+			component_status:
+			sourceDeleted
+			? "Source Deleted"
+			: sourceInactive
+			? "Source Inactive"
+			: rowInactive
+			? "Inactive"
+			: "Active"
+		};
+	},
+
+	async onCategoryChange(row) {
+		if (
+			!this.isDraftMode() ||
+			!row?.draft_row_id
+		) {
+			return null;
+		}
+
+		const mergedRows =
+					this.mergeUpdatedRows();
+
+		const freshRow =
+					mergedRows.find(item =>
+													item.draft_row_id ===
+													row.draft_row_id
+												 ) || row;
+
+		const categoryName =
+					String(
+						freshRow.category_name ||
+						""
+					).trim() || null;
+
+		const category = (
+			getEvtComponentItems.data ||
+			[]
+		).find(item =>
+					 (
+			item.category_name ||
+			"Uncategorized"
+		) ===
+					 (
+			categoryName ||
+			"Uncategorized"
+		)
+					);
+
+		return await this.patchRow(
+			freshRow,
+			{
+				category_id:
+				category?.category_id ??
+				null,
+
+				category_name:
+				categoryName,
+
+				current_category_id:
+				category?.category_id ??
+				null,
+
+				current_category_name:
+				categoryName,
+
+				menu_id: null,
+				menu_name: null,
+
+				current_menu_name: null,
+				display_menu_name: null,
+				menu_renamed: false,
+
+				menu_cost: null,
+				line_cost: null,
+				kitchen_cost: null,
+
+				allergen_names: null,
+				diet_tag_names: null,
+
+				current_menu_active:
+				null,
+
+				current_menu_deleted:
+				null,
+
+				component_status:
+				freshRow.active ===
+				false
+				? "Inactive"
+				: "Active"
+			}
+		);
+	},
+
+	async onMenuChange(row) {
+		if (
+			!this.isDraftMode() ||
+			!row?.draft_row_id
+		) {
+			return null;
+		}
+
+		const mergedRows =
+					this.mergeUpdatedRows();
+
+		const freshRow =
+					mergedRows.find(item =>
+													item.draft_row_id ===
+													row.draft_row_id
+												 ) || row;
+
+		const selectedName =
+					String(
+						freshRow.menu_name || ""
+					).trim();
+
+		const duplicateExists =
+					mergedRows.some(item =>
+													item.draft_row_id !== freshRow.draft_row_id &&
+													(
+						Number(item.menu_id || 0) > 0
+						? Number(item.menu_id) ===
+						Number(
+							(
+								getEvtComponentItems.data || []
+							).find(menu =>
+										 String(menu.name || "").trim() ===
+										 selectedName
+										)?.id || 0
+						)
+						: String(item.menu_name || "").trim() ===
+						selectedName
+					)
+												 );
+
+		if (duplicateExists) {
+			showAlert(
+				"This Menu is already in the Proposal.",
+				"warning"
+			);
+
+			return await this.patchRow(freshRow, {
+				menu_id: null,
+				menu_name: null,
+				current_menu_name: null,
+				display_menu_name: null,
+				menu_renamed: false,
+				menu_cost: null,
+				line_cost: null,
+				kitchen_cost: null,
+				allergen_names: null,
+				diet_tag_names: null,
+				current_menu_active: null,
+				current_menu_deleted: null
+			});
+		}
+
+		if (!selectedName) {
+			return await this.patchRow(
+				freshRow,
+				this.refreshDerivedFields({
+					...freshRow,
+
+					menu_id: null,
+					menu_name: null,
+
+					current_menu_name:
+					null,
+
+					display_menu_name:
+					null,
+
+					menu_renamed:
+					false
+				})
+			);
+		}
+
+		const item = (
+			getEvtComponentItems.data ||
+			[]
+		).find(menu =>
+					 menu.active !== false &&
+					 menu.deleted !== true &&
+					 String(
+			menu.name || ""
+		).trim() ===
+					 selectedName
 					);
 
 		if (!item) {
 			return null;
 		}
 
-		return await this.patchRow(freshRow, {
-			category_id: item.category_id || null,
-			category_name:
-			item.category_name || null,
+		const selectedRow = {
+			...freshRow,
 
-			menu_id: item.id,
-			menu_name: item.name,
+			menu_id:
+			item.id,
 
-			menu_cost:
-			item.cost_per_unit ??
-			item.total_cost ??
+			menu_name:
+			item.name,
+
+			current_menu_name:
+			item.name,
+
+			display_menu_name:
+			item.name,
+
+			menu_renamed:
+			false,
+
+			category_id:
+			item.category_id ??
 			null,
 
-			allergen_names:
-			item.allergen_names || null,
+			category_name:
+			item.category_name ??
+			null,
 
-			diet_tag_names:
-			item.diet_tag_names || null,
+			current_category_id:
+			item.category_id ??
+			null,
 
-			line_cost: null,
-			active: true,
-			component_status: "Active"
-		});
+			current_category_name:
+			item.category_name ??
+			null,
+
+			current_menu_active:
+			true,
+
+			current_menu_deleted:
+			false,
+
+			active:
+			freshRow.active === false
+			? false
+			: true
+		};
+
+		return await this.patchRow(
+			freshRow,
+			this.refreshDerivedFields(
+				selectedRow
+			)
+		);
 	},
 
-	async deleteRow(row) {
-		if (!this.isDraftMode()) {
-			return null;
-		}
-
-		await this.syncFromTable();
-
-		const remaining = this.draftRows()
-		.filter(item =>
-						item.draft_row_id !== row.draft_row_id
-					 );
-
-		return await this.setDraftRows(remaining);
-	},
-
-	lineCost(row) {
-		if (!row || row.active === false) {
-			return null;
-		}
-
-		if (this.isLockedMode()) {
-			const storedCost = Number(
-				row.line_cost ?? row.kitchen_cost
-			);
-
-			return Number.isFinite(storedCost)
-				? Math.round(storedCost * 100) / 100
-			: null;
-		}
-
+	async onQuantityChange(row) {
 		if (
-			!row.menu_name ||
-			row.guests === "" ||
-			row.guests === null ||
-			row.guests === undefined
+			!this.isDraftMode() ||
+			!row?.draft_row_id
 		) {
 			return null;
 		}
 
-		const item = this.currentMenu(row);
+		const mergedRows =
+					this.mergeUpdatedRows();
 
-		if (!item) {
+		const rows = mergedRows.map(
+			(item, index) => {
+				if (
+					item.draft_row_id !==
+					row.draft_row_id
+				) {
+					return this.prepareRow(
+						item,
+						index + 1
+					);
+				}
+
+				const submittedRow = {
+					...item,
+					...row
+				};
+
+				return this.prepareRow(
+					this.refreshDerivedFields(
+						submittedRow
+					),
+					index + 1
+				);
+			}
+		);
+
+		return await this.setDraftRows(
+			rows
+		);
+	},
+
+	async onActiveChange(row) {
+		if (
+			!this.isDraftMode() ||
+			!row?.draft_row_id
+		) {
 			return null;
 		}
 
-		const menuCost = Number(
-			item.cost_per_unit ??
-			item.total_cost ??
-			0
+		/*
+	 * Checkbox onChange fires before Appsmith finishes
+	 * updating tblEvtComponents.updatedRows.
+	 */
+		await new Promise(resolve =>
+											setTimeout(resolve, 0)
+										 );
+
+		const mergedRows =
+					this.mergeUpdatedRows();
+
+		const rows = mergedRows.map(
+			(item, index) =>
+			this.prepareRow(
+				this.refreshDerivedFields(item),
+				index + 1
+			)
 		);
 
-		const production =
-					Number(row.guests || 0) +
-					Number(row.extra_guests || 0);
+		return await this.setDraftRows(rows);
+	},
 
-		const cost = production * menuCost;
+	async deleteRow(row) {
+		if (
+			!this.isDraftMode() ||
+			!row?.draft_row_id
+		) {
+			return null;
+		}
 
-		return Math.round(cost * 100) / 100;
+		const mergedRows =
+					this.mergeUpdatedRows();
+
+		const remaining =
+					mergedRows.filter(item =>
+														item.draft_row_id !==
+														row.draft_row_id
+													 );
+
+		return await this.setDraftRows(
+			remaining
+		);
+	},
+
+	lineCost(row) {
+		if (!row?.menu_id) {
+			return null;
+		}
+
+		if (this.isLockedMode()) {
+			const storedCost =
+						this.numberOrNull(
+							row.line_cost ??
+							row.kitchen_cost
+						);
+
+			return storedCost == null
+				? null
+			: Math.round(
+				storedCost * 100
+			) / 100;
+		}
+
+		return this.refreshDerivedFields(
+			row
+		).line_cost;
 	},
 
 	totalGuests() {
-		return this.effectiveRows().reduce(
-			(sum, row) => {
-				if (row.active === false) {
-					return sum;
-				}
+		return this.effectiveRows()
+			.reduce((sum, row) => {
+			if (
+				row.active === false
+			) {
+				return sum;
+			}
 
-				return sum + Number(row.guests || 0);
-			},
-			0
-		);
+			return (
+				sum +
+				Number(
+					row.guests || 0
+				)
+			);
+		}, 0);
 	},
 
 	toProduce() {
-		return this.effectiveRows().reduce(
-			(sum, row) => {
-				if (row.active === false) {
-					return sum;
-				}
+		return this.effectiveRows()
+			.reduce((sum, row) => {
+			if (
+				row.active === false
+			) {
+				return sum;
+			}
 
-				return (
-					sum +
-					Number(row.guests || 0) +
-					Number(row.extra_guests || 0)
-				);
-			},
-			0
-		);
+			return (
+				sum +
+				Number(
+					row.guests || 0
+				) +
+				Number(
+					row.extra_guests ||
+					0
+				)
+			);
+		}, 0);
 	},
 
 	totalCost() {
-		const total = this.effectiveRows().reduce(
-			(sum, row) =>
-			sum + Number(this.lineCost(row) || 0),
+		const total =
+					this.effectiveRows()
+		.reduce((sum, row) =>
+						sum +
+						Number(
+			this.lineCost(row) ||
 			0
-		);
+		),
+						0
+					 );
 
-		return Math.round(total * 100) / 100;
+		return Math.round(
+			total * 100
+		) / 100;
 	},
 
 	uniqueTextList(value) {
@@ -534,34 +1225,46 @@ export default {
 
 		return String(value)
 			.split(",")
-			.map(item => item.trim())
+			.map(item =>
+					 item.trim()
+					)
 			.filter(Boolean);
 	},
 
 	allergenSummary() {
-		const values = this.effectiveRows()
-		.filter(row => row.active !== false)
+		const values =
+					this.effectiveRows()
+		.filter(row =>
+						row.active !== false
+					 )
 		.flatMap(row =>
 						 this.uniqueTextList(
 			row.allergen_names
 		)
 						);
 
-		return [...new Set(values)]
+		return [
+			...new Set(values)
+		]
 			.sort()
 			.join(", ");
 	},
 
 	dietTagSummary() {
-		const values = this.effectiveRows()
-		.filter(row => row.active !== false)
+		const values =
+					this.effectiveRows()
+		.filter(row =>
+						row.active !== false
+					 )
 		.flatMap(row =>
 						 this.uniqueTextList(
 			row.diet_tag_names
 		)
 						);
 
-		return [...new Set(values)]
+		return [
+			...new Set(values)
+		]
 			.sort()
 			.join(", ");
 	}
