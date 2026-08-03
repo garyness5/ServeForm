@@ -1,5 +1,0 @@
-Run in Powershell
-
-docker desktop restart
-docker info - to make sure it is running properly
-
