@@ -52,63 +52,71 @@ export default {
 	},
 
 	header() {
+		const toIdArray = (arrayValue, singleValue) => {
+			if (Array.isArray(arrayValue)) {
+				return arrayValue
+					.map(Number)
+					.filter(Boolean);
+			}
+
+			const singleId = Number(singleValue || 0);
+
+			return singleId > 0
+				? [singleId]
+			: [];
+		};
+
 		if (this.isProposalDraft()) {
-			const workspace =
-						jsProposalWorkspaces.get();
+			const workspace = jsProposalWorkspaces.get();
 
 			if (workspace?.header) {
 				const r = workspace.header;
 
-				const eventDate =
-							r.event_date
-				? moment
-				.utc(r.event_date)
+				const eventDate = r.event_date
+				? moment.utc(r.event_date)
 				.format("YYYY-MM-DD")
 				: null;
 
-				const eventTime =
-							r.event_time
-				? String(r.event_time)
-				.slice(0, 8)
+				const eventTime = r.event_time
+				? String(r.event_time).slice(0, 8)
 				: null;
 
-				const eventDateTime =
-							eventDate
+				const eventDateTime = eventDate
 				? `${eventDate}T${eventTime || "00:00:00"}`
 				: null;
 
 				return {
-					name:
-					r.event_name ?? "",
+					name: r.event_name ?? "",
+					event_ref: r.event_ref ?? "",
+					event_date: eventDate,
+					event_time: eventTime,
+					event_datetime: eventDateTime,
+					format: r.event_format ?? "",
+					total_guests_manual: r.total_guests ?? "",
 
-					event_ref:
-					r.event_ref ?? "",
+					customer_id:
+					r.customer_id ?? null,
 
-					event_date:
-					eventDate,
+					contact_ids:
+					toIdArray(
+						r.contact_ids,
+						r.contact_id
+					),
 
-					event_time:
-					eventTime,
+					venue_id:
+					r.venue_id ?? null,
 
-					event_datetime:
-					eventDateTime,
+					venue_contact_ids:
+					toIdArray(
+						r.venue_contact_ids,
+						r.venue_contact_id
+					),
 
-					format:
-					r.event_format ?? "",
+					proposal_customer_notes:
+					r.proposal_customer_notes ?? "",
 
-					total_guests_manual:
-					r.total_guests ?? "",
-
-					customer_id: null,
-					contact_id: null,
-					venue_id: null,
-					venue_contact_id: null,
-
-					notes:
-					r.event_notes ?? "",
-
-					venue_notes: "",
-					general_notes: ""
+					proposal_internal_notes:
+					r.proposal_internal_notes ?? ""
 				};
 			}
 		}
@@ -125,14 +133,29 @@ export default {
 				format: r.event_format ?? "",
 				total_guests_manual: r.total_guests ?? "",
 
-				customer_id: r.customer_id ?? null,
-				contact_id: r.contact_id ?? null,
-				venue_id: r.venue_id ?? null,
-				venue_contact_id: r.venue_contact_id ?? null,
+				customer_id:
+				r.customer_id ?? null,
 
-				notes: r.event_notes ?? "",
-				venue_notes: r.venue_notes ?? "",
-				general_notes: r.general_notes ?? ""
+				contact_ids:
+				toIdArray(
+					r.contact_ids,
+					r.contact_id
+				),
+
+				venue_id:
+				r.venue_id ?? null,
+
+				venue_contact_ids:
+				toIdArray(
+					r.venue_contact_ids,
+					r.venue_contact_id
+				),
+
+				proposal_customer_notes:
+				r.proposal_customer_notes ?? "",
+
+				proposal_internal_notes:
+				r.proposal_internal_notes ?? ""
 			};
 		}
 
@@ -145,16 +168,36 @@ export default {
 			event_datetime: r.event_datetime ?? null,
 			event_time: r.event_time ?? null,
 			format: r.format ?? "",
-			total_guests_manual: r.total_guests_manual ?? "",
+			total_guests_manual:
+			r.total_guests_manual ?? "",
 
-			customer_id: r.customer_id ?? null,
-			contact_id: r.contact_id ?? null,
-			venue_id: r.venue_id ?? null,
-			venue_contact_id: r.venue_contact_id ?? null,
+			customer_id:
+			r.customer_id ?? null,
 
-			notes: r.notes ?? "",
-			venue_notes: r.venue_notes ?? "",
-			general_notes: r.general_notes ?? ""
+			contact_ids:
+			toIdArray(
+				r.contact_ids,
+				r.contact_id
+			),
+
+			venue_id:
+			r.venue_id ?? null,
+
+			venue_contact_ids:
+			toIdArray(
+				r.venue_contact_ids,
+				r.venue_contact_id
+			),
+
+			proposal_customer_notes:
+			r.proposal_customer_notes ??
+			r.event_notes ??
+			"",
+
+			proposal_internal_notes:
+			r.proposal_internal_notes ??
+			r.notes ??
+			""
 		};
 	},
 

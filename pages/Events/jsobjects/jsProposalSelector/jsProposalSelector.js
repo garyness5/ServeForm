@@ -16,7 +16,8 @@ export default {
 			await qryGetSelectedProposalMenus.run();
 
 			if (jsProposalData.isProposalDraft()) {
-				await jsProposalWorkspaces.initializeCurrentDraft();
+				await jsProposalWorkspaces
+					.initializeCurrentDraft();
 			}
 		} catch (error) {
 			await qryGetSelectedProposalMenus.clear();
@@ -28,12 +29,22 @@ export default {
 		}
 
 		await Promise.all([
+			qryGetEvtContacts.run(),
+			qryGetEvtVenueContacts.run()
+		]);
+
+		await Promise.all([
 			resetWidget("inpEvtName", true),
 			resetWidget("datEvtDate", true),
 			resetWidget("inpTotalGuests", true),
 			resetWidget("inpEvtRef", true),
 			resetWidget("selEvtFormat", true),
-			resetWidget("rteEvtNotes", true)
+			resetWidget("selEvtCustomer", true),
+			resetWidget("msEvtContacts", true),
+			resetWidget("selEvtVenue", true),
+			resetWidget("msEvtVenueContacts", true),
+			resetWidget("rteEvtCustomerNotes", true),
+			resetWidget("rteEvtInternalNotes", true)
 		]);
 
 		return qryGetSelectedProposal.data?.[0] ?? null;

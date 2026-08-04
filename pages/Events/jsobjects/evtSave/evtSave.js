@@ -22,10 +22,6 @@ export default {
 			return "You need an Event name before you can save.";
 		}
 
-		if (!selEvtCustomer.selectedOptionValue) {
-			return "You need a Customer before you can save this Event.";
-		}
-
 		return null;
 	},
 
@@ -47,33 +43,97 @@ export default {
 	},
 
 	headerSnapshotFromPage() {
+		const customerContactIds =
+					(msEvtContacts.selectedOptionValues || [])
+		.map(Number)
+		.filter(Boolean);
+
+		const venueContactIds =
+					(msEvtVenueContacts.selectedOptionValues || [])
+		.map(Number)
+		.filter(Boolean);
+
 		return {
-			name: this.textClean(inpEvtName.text),
+			name:
+			this.textClean(inpEvtName.text),
 
-			event_date: datEvtDate.selectedDate
-				? moment(datEvtDate.selectedDate).format("YYYY-MM-DD")
-				: null,
+			event_date:
+			datEvtDate.selectedDate
+			? moment(datEvtDate.selectedDate)
+			.format("YYYY-MM-DD")
+			: null,
 
-			event_datetime: datEvtDate.selectedDate
-				? moment(datEvtDate.selectedDate).format("YYYY-MM-DD HH:mm:ss")
-				: null,
+			event_datetime:
+			datEvtDate.selectedDate
+			? moment(datEvtDate.selectedDate)
+			.format("YYYY-MM-DD HH:mm:ss")
+			: null,
 
-			customer_id: selEvtCustomer.selectedOptionValue ? Number(selEvtCustomer.selectedOptionValue) : null,
-			contact_id: selEvtContact.selectedOptionValue ? Number(selEvtContact.selectedOptionValue) : null,
-			venue_id: selEvtVenue.selectedOptionValue ? Number(selEvtVenue.selectedOptionValue) : null,
-			event_ref: this.textClean(inpEvtRef.text),
-			total_guests_manual: inpTotalGuests.text ? Number(inpTotalGuests.text) : null,
-			status: selEvtStatus.selectedOptionValue || "Draft",
-			format: selEvtFormat.selectedOptionValue || null,
-			active: chkEvtActive.isChecked === false ? false : true,
-			notes: typeof rteEvtNotes !== "undefined" ? this.textClean(rteEvtNotes.text || rteEvtNotes.value || "") : null
+			customer_id:
+			Number(
+				selEvtCustomer.selectedOptionValue || 0
+			) || null,
+
+			/*
+		 * Temporary compatibility for evt_items.
+		 * Proposal saves use the full arrays.
+		 */
+			contact_id:
+			customerContactIds[0] || null,
+
+			contact_ids:
+			customerContactIds,
+
+			venue_id:
+			Number(
+				selEvtVenue.selectedOptionValue || 0
+			) || null,
+
+			venue_contact_id:
+			venueContactIds[0] || null,
+
+			venue_contact_ids:
+			venueContactIds,
+
+			event_ref:
+			this.textClean(inpEvtRef.text),
+
+			total_guests_manual:
+			inpTotalGuests.text === "" ||
+			inpTotalGuests.text === null ||
+			inpTotalGuests.text === undefined
+			? null
+			: Number(inpTotalGuests.text),
+
+			status:
+			selEvtStatus.selectedOptionValue ||
+			"Draft",
+
+			format:
+			selEvtFormat.selectedOptionValue ||
+			null,
+
+			active:
+			chkEvtActive.isChecked === false
+			? false
+			: true,
+
+			/*
+		 * Temporary compatibility for evt_items.notes.
+		 */
+			notes:
+			this.textClean(
+				rteEvtInternalNotes.text ||
+				rteEvtInternalNotes.value ||
+				""
+			)
 		};
 	},
 
 	headerSnapshotFromSaved() {
 		const r = Array.isArray(getEvtItemById.data)
-			? getEvtItemById.data[0]
-			: getEvtItemById.data;
+		? getEvtItemById.data[0]
+		: getEvtItemById.data;
 
 		if (!r) {
 			return {
@@ -95,11 +155,11 @@ export default {
 		return {
 			name: this.textClean(r.name),
 			event_date: r.event_date
-				? moment(r.event_date).format("YYYY-MM-DD")
-				: null,
+			? moment(r.event_date).format("YYYY-MM-DD")
+			: null,
 			event_datetime: r.event_datetime
-				? moment(r.event_datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
-				: null,
+			? moment(r.event_datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
+			: null,
 			customer_id: r.customer_id ? Number(r.customer_id) : null,
 			contact_id: r.contact_id ? Number(r.contact_id) : null,
 			venue_id: r.venue_id ? Number(r.venue_id) : null,
@@ -165,12 +225,12 @@ export default {
 		const newHeader = this.headerSnapshotFromPage();
 
 		const oldEligible =
-			oldHeader.status === "Ordered" &&
-			oldHeader.active === true;
+					oldHeader.status === "Ordered" &&
+					oldHeader.active === true;
 
 		const newEligible =
-			newHeader.status === "Ordered" &&
-			newHeader.active === true;
+					newHeader.status === "Ordered" &&
+					newHeader.active === true;
 
 		if (
 			isExisting &&
@@ -181,7 +241,7 @@ export default {
 			await checkEvtGroceriesManualImpact.run();
 
 			const hasManual =
-				checkEvtGroceriesManualImpact.data?.[0]?.has_manual_values === true;
+						checkEvtGroceriesManualImpact.data?.[0]?.has_manual_values === true;
 
 			if (hasManual) {
 				await storeValue("pendingEventAction", "groceries_removal_save");
@@ -232,16 +292,18 @@ export default {
 		await this.safeReset("inpEvtName");
 		await this.safeReset("datEvtDate");
 		await this.safeReset("selEvtCustomer");
-		await this.safeReset("selEvtContact");
+		await this.safeReset("msEvtContacts");
+		await this.safeReset("msEvtVenueContacts");
 		await this.safeReset("selEvtVenue");
 		await this.safeReset("chkEvtActive");
 		await this.safeReset("selEvtStatus");
 		await this.safeReset("selEvtFormat");
 		await this.safeReset("msEvtDietTags");
-		await this.safeReset("rteEvtNotes");
-		
+		await this.safeReset("rteEvtCustomerNotes");
+		await this.safeReset("rteEvtInternalNotes");
+
 		await getEvtItemById.clear();
-		await getEvtContacts.clear();
+		await qryGetEvtContacts.clear();
 
 		showAlert("Saved. Ready for new event.", "success");
 		return true;
@@ -353,7 +415,7 @@ export default {
 		showModal("mdlEvtDelete");
 		return true;
 	},
-	
+
 	async cancelGroceriesRemovalSave() {
 		closeModal("mdlEvtRemoveFromGroceries");
 		await removeValue("pendingEventAction");
@@ -375,8 +437,8 @@ export default {
 
 		showAlert(
 			keepManual
-				? "Event saved. Quantities kept. Print cleared."
-				: "Event saved. Quantities deleted. Print cleared.",
+			? "Event saved. Quantities kept. Print cleared."
+			: "Event saved. Quantities deleted. Print cleared.",
 			"success"
 		);
 

@@ -26,9 +26,6 @@
     },
     {
       "key": "dateFormat"
-    },
-    {
-      "key": "onDateSelected"
     }
   ],
   "dynamicTriggerPathList": [

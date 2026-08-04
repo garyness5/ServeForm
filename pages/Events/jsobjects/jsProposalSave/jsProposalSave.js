@@ -13,7 +13,7 @@ export default {
 
 	headerSnapshotFromPage() {
 		const selectedDate =
-			datEvtDate.selectedDate || null;
+					datEvtDate.selectedDate || null;
 
 		return {
 			proposal_id: Number(
@@ -21,51 +21,82 @@ export default {
 			),
 
 			event_name:
-				this.textClean(inpEvtName.text),
+			this.textClean(inpEvtName.text),
 
 			event_ref:
-				this.textClean(inpEvtRef.text),
+			this.textClean(inpEvtRef.text),
 
 			event_date:
-				selectedDate
-					? moment
-						.utc(selectedDate)
-						.format("YYYY-MM-DD")
-					: null,
+			selectedDate
+			? moment
+			.utc(selectedDate)
+			.format("YYYY-MM-DD")
+			: null,
 
 			event_time:
-				selectedDate
-					? moment
-						.utc(selectedDate)
-						.format("HH:mm:ss")
-					: null,
+			selectedDate
+			? moment
+			.utc(selectedDate)
+			.format("HH:mm:ss")
+			: null,
 
 			event_datetime:
-				selectedDate
-					? moment
-						.utc(selectedDate)
-						.format(
-							"YYYY-MM-DD HH:mm:ss"
-						)
-					: null,
+			selectedDate
+			? moment
+			.utc(selectedDate)
+			.format(
+				"YYYY-MM-DD HH:mm:ss"
+			)
+			: null,
 
 			event_format:
-				selEvtFormat.selectedOptionValue ||
-				null,
+			selEvtFormat.selectedOptionValue ||
+			null,
 
 			total_guests:
-				inpTotalGuests.text === "" ||
-				inpTotalGuests.text === null ||
-				inpTotalGuests.text === undefined
-					? null
-					: Number(inpTotalGuests.text),
+			inpTotalGuests.text === "" ||
+			inpTotalGuests.text === null ||
+			inpTotalGuests.text === undefined
+			? null
+			: Number(inpTotalGuests.text),
 
-			event_notes:
-				this.textClean(
-					rteEvtNotes.text ||
-					rteEvtNotes.value ||
-					""
-				)
+			customer_id:
+			Number(
+				selEvtCustomer.selectedOptionValue || 0
+			) || null,
+
+			contact_ids:
+			(
+				msEvtContacts.selectedOptionValues || []
+			)
+			.map(Number)
+			.filter(Boolean),
+
+			venue_id:
+			Number(
+				selEvtVenue.selectedOptionValue || 0
+			) || null,
+
+			venue_contact_ids:
+			(
+				msEvtVenueContacts.selectedOptionValues || []
+			)
+			.map(Number)
+			.filter(Boolean),
+
+			proposal_customer_notes:
+			this.textClean(
+				rteEvtCustomerNotes.text ||
+				rteEvtCustomerNotes.value ||
+				""
+			),
+
+			proposal_internal_notes:
+			this.textClean(
+				rteEvtInternalNotes.text ||
+				rteEvtInternalNotes.value ||
+				""
+			)
 		};
 	},
 
@@ -84,80 +115,80 @@ export default {
 	menuPayload(rows) {
 		return (rows || [])
 			.filter(row =>
-				Number(row.menu_id || 0) > 0 ||
-				String(row.menu_name || "").trim()
-			)
+							Number(row.menu_id || 0) > 0 ||
+							String(row.menu_name || "").trim()
+						 )
 			.map((row, index) => {
-				const derived =
-					jsProposalComponents
-						.refreshDerivedFields(row);
+			const derived =
+						jsProposalComponents
+			.refreshDerivedFields(row);
 
-				return {
-					line_no: index + 1,
+			return {
+				line_no: index + 1,
 
-					menu_id:
-						Number(
-							derived.menu_id || 0
-						) || null,
+				menu_id:
+				Number(
+					derived.menu_id || 0
+				) || null,
 
-					category_id:
-						Number(
-							derived.category_id || 0
-						) || null,
+				category_id:
+				Number(
+					derived.category_id || 0
+				) || null,
 
-					category_name:
-						this.textClean(
-							derived.category_name
-						),
+				category_name:
+				this.textClean(
+					derived.category_name
+				),
 
-					menu_name:
-						this.textClean(
-							derived.current_menu_name ||
-							derived.menu_name
-						),
+				menu_name:
+				this.textClean(
+					derived.current_menu_name ||
+					derived.menu_name
+				),
 
-					guests:
-						derived.guests == null
-							? null
-							: Number(
-								derived.guests
-							),
+				guests:
+				derived.guests == null
+				? null
+				: Number(
+					derived.guests
+				),
 
-					extra_guests:
-						derived.extra_guests == null
-							? 0
-							: Number(
-								derived.extra_guests
-							),
+				extra_guests:
+				derived.extra_guests == null
+				? 0
+				: Number(
+					derived.extra_guests
+				),
 
-					kitchen_cost:
-						derived.line_cost == null
-							? null
-							: Number(
-								derived.line_cost
-							),
+				kitchen_cost:
+				derived.line_cost == null
+				? null
+				: Number(
+					derived.line_cost
+				),
 
-					allergen_names:
-						this.textClean(
-							derived.allergen_names
-						),
+				allergen_names:
+				this.textClean(
+					derived.allergen_names
+				),
 
-					diet_tag_names:
-						this.textClean(
-							derived.diet_tag_names
-						),
+				diet_tag_names:
+				this.textClean(
+					derived.diet_tag_names
+				),
 
-					notes:
-						this.textClean(
-							derived.notes
-						),
+				notes:
+				this.textClean(
+					derived.notes
+				),
 
-					active:
-						derived.active === false
-							? false
-							: true
-				};
-			});
+				active:
+				derived.active === false
+				? false
+				: true
+			};
+		});
 	},
 
 	buildRequest(
@@ -167,15 +198,15 @@ export default {
 	) {
 		return {
 			proposal_id:
-				Number(proposalId || 0),
+			Number(proposalId || 0),
 
 			header:
-				header || {},
+			header || {},
 
 			menus:
-				this.menuPayload(
-					components || []
-				)
+			this.menuPayload(
+				components || []
+			)
 		};
 	},
 
@@ -187,7 +218,7 @@ export default {
 
 		try {
 			const result =
-				await qrySaveProposalDraft.run();
+						await qrySaveProposalDraft.run();
 
 			return Number(
 				result?.[0]?.proposal_id || 0
@@ -201,10 +232,10 @@ export default {
 
 	async saveWorkspace(proposalId) {
 		const id =
-			Number(proposalId || 0);
+					Number(proposalId || 0);
 
 		const workspace =
-			jsProposalWorkspaces.get(id);
+					jsProposalWorkspaces.get(id);
 
 		if (!workspace) {
 			return true;
@@ -224,14 +255,14 @@ export default {
 		}
 
 		const request =
-			this.buildRequest(
-				id,
-				workspace.header,
-				workspace.components
-			);
+					this.buildRequest(
+						id,
+						workspace.header,
+						workspace.components
+					);
 
 		const saved =
-			await this.runSaveRequest(request);
+					await this.runSaveRequest(request);
 
 		if (!saved) {
 			return false;
@@ -247,14 +278,14 @@ export default {
 			.captureCurrentDraft();
 
 		const ids =
-			jsProposalWorkspaces
-				.dirtyProposalIds();
+					jsProposalWorkspaces
+		.dirtyProposalIds();
 
 		for (const proposalId of ids) {
 			const saved =
-				await this.saveWorkspace(
-					proposalId
-				);
+						await this.saveWorkspace(
+							proposalId
+						);
 
 			if (!saved) {
 				showAlert(
@@ -273,7 +304,9 @@ export default {
 		await Promise.all([
 			qryGetSelectedProposal.run(),
 			qryGetSelectedProposalMenus.run(),
-			qryGetProposalsForEvent.run()
+			qryGetProposalsForEvent.run(),
+			qryGetEvtContacts.run(),
+			qryGetEvtVenueContacts.run()
 		]);
 
 		await jsProposalWorkspaces.discard(
@@ -289,13 +322,18 @@ export default {
 			resetWidget("inpEvtRef", true),
 			resetWidget("inpTotalGuests", true),
 			resetWidget("selEvtFormat", true),
-			resetWidget("rteEvtNotes", true)
+			resetWidget("selEvtCustomer", true),
+			resetWidget("msEvtContacts", true),
+			resetWidget("selEvtVenue", true),
+			resetWidget("msEvtVenueContacts", true),
+			resetWidget("rteEvtCustomerNotes", true),
+			resetWidget("rteEvtInternalNotes", true)
 		]);
 	},
 
 	async saveDraft() {
 		const message =
-			this.requiredMessage();
+					this.requiredMessage();
 
 		if (message) {
 			showAlert(
@@ -314,15 +352,15 @@ export default {
 		);
 
 		const request =
-			this.buildRequest(
-				proposalId,
-				this.headerSnapshotFromPage(),
-				jsProposalComponents
-					.effectiveRows()
-			);
+					this.buildRequest(
+						proposalId,
+						this.headerSnapshotFromPage(),
+						jsProposalComponents
+						.effectiveRows()
+					);
 
 		const saved =
-			await this.runSaveRequest(request);
+					await this.runSaveRequest(request);
 
 		if (!saved) {
 			showAlert(

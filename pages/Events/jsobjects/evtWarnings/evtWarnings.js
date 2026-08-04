@@ -1,14 +1,35 @@
 export default {
 	rows() {
 		return (getEvtComponents.data || []).filter(r =>
-			r.menu_id ||
-			r.guests != null ||
-			r.extra_percent != null
-		);
+																								r.menu_id ||
+																								r.guests != null ||
+																								r.extra_percent != null
+																							 );
 	},
 
 	list() {
 		const warnings = [];
+
+		const header = jsProposalData.header();
+
+		if (!header.customer_id) {
+			warnings.push("No Customer selected.");
+		}
+
+		if (!(header.contact_ids || []).length) {
+			warnings.push("No Customer Contact selected.");
+		}
+
+		if (!header.venue_id) {
+			warnings.push("No Venue selected.");
+		}
+
+		if (
+			header.venue_id &&
+			!(header.venue_contact_ids || []).length
+		) {
+			warnings.push("No Venue Contact selected.");
+		}
 
 		this.rows().forEach((r, i) => {
 			const line = r.line_no || i + 1;

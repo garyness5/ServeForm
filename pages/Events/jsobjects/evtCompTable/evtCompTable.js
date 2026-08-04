@@ -172,7 +172,7 @@ export default {
 	},
 
 	categoryOptions() {
-		const categories = (getEvtComponentItems.data || [])
+		const categories = (qryGetEvtComponentItems.data || [])
 		.map(i => ({
 			label: i.category_name || "Uncategorized",
 			value: i.category_name || "Uncategorized"
@@ -185,7 +185,7 @@ export default {
 	menuOptions(row) {
 		const used = this.usedMenuIds(row);
 
-		return (getEvtComponentItems.data || [])
+		return (qryGetEvtComponentItems.data || [])
 			.filter(i => !row?.category_name || row.category_name === "Uncategorized" || i.category_name === row.category_name)
 			.filter(i => !used.includes(Number(i.id)))
 			.sort((a, b) => String(a.name).localeCompare(String(b.name)))
@@ -226,7 +226,7 @@ export default {
 
 		const freshRow = this.getRows().find(r => r.draft_row_id === row.draft_row_id) || row;
 
-		const item = (getEvtComponentItems.data || []).find(i =>
+		const item = (qryGetEvtComponentItems.data || []).find(i =>
 																												i.name === freshRow.menu_name
 																											 );
 
@@ -264,7 +264,7 @@ export default {
 		return this.normalizeRows(rows)
 			.filter(r => this.hasContent(r))
 			.map((r, index) => {
-			const item = (getEvtComponentItems.data || []).find(i =>
+			const item = (qryGetEvtComponentItems.data || []).find(i =>
 																													i.name === r.menu_name
 																												 );
 
@@ -298,7 +298,7 @@ export default {
 			row.guests == null
 		) return null;
 
-		const item = (getEvtComponentItems.data || []).find(i =>
+		const item = (qryGetEvtComponentItems.data || []).find(i =>
 																												Number(i.id) === Number(row.menu_id) ||
 																												i.name === row.menu_name
 																											 );

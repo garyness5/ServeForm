@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 22,
+  "bottomRow": 16,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
   "buttonVariant": "SECONDARY",
@@ -59,7 +59,7 @@
   "rightColumn": 64,
   "text": "",
   "tooltip": "{{\nselEvtCustomer.selectedOptionValue\n  ? \"View / Edit Customer\"\n  : \"Add Customer\"\n}}",
-  "topRow": 18,
+  "topRow": 12,
   "type": "BUTTON_WIDGET",
   "version": 1,
   "widgetId": "8kn9f7x6lq",

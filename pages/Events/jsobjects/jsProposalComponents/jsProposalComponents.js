@@ -124,7 +124,7 @@ export default {
 		).trim();
 
 		return (
-			getEvtComponentItems.data || []
+			qryGetEvtComponentItems.data || []
 		).find(item =>
 					 (
 			menuId > 0 &&
@@ -502,7 +502,7 @@ export default {
 
 	categoryOptions() {
 		const categories = (
-			getEvtComponentItems.data || []
+			qryGetEvtComponentItems.data || []
 		)
 		.filter(item =>
 						item.active !== false &&
@@ -556,7 +556,7 @@ export default {
 			row?.category_name || ""
 		).trim();
 
-		return (getEvtComponentItems.data || [])
+		return (qryGetEvtComponentItems.data || [])
 			.filter(item =>
 							item.active !== false &&
 							item.deleted !== true
@@ -640,7 +640,7 @@ export default {
 		}
 
 		const item = (
-			getEvtComponentItems.data || []
+			qryGetEvtComponentItems.data || []
 		).find(menu =>
 					 Number(menu.id || 0) ===
 					 Number(
@@ -830,7 +830,7 @@ export default {
 					).trim() || null;
 
 		const category = (
-			getEvtComponentItems.data ||
+			qryGetEvtComponentItems.data ||
 			[]
 		).find(item =>
 					 (
@@ -919,7 +919,7 @@ export default {
 						? Number(item.menu_id) ===
 						Number(
 							(
-								getEvtComponentItems.data || []
+								qryGetEvtComponentItems.data || []
 							).find(menu =>
 										 String(menu.name || "").trim() ===
 										 selectedName
@@ -974,7 +974,7 @@ export default {
 		}
 
 		const item = (
-			getEvtComponentItems.data ||
+			qryGetEvtComponentItems.data ||
 			[]
 		).find(menu =>
 					 menu.active !== false &&

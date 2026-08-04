@@ -57,8 +57,21 @@ export default {
 
 	headerFromQuery() {
 		const row =
-					qryGetSelectedProposal.data?.[0] ||
-					{};
+					qryGetSelectedProposal.data?.[0] || {};
+
+		const toIdArray = (arrayValue, singleValue) => {
+			if (Array.isArray(arrayValue)) {
+				return arrayValue
+					.map(Number)
+					.filter(Boolean);
+			}
+
+			const singleId = Number(singleValue || 0);
+
+			return singleId > 0
+				? [singleId]
+			: [];
+		};
 
 		return {
 			proposal_id: Number(
@@ -88,8 +101,31 @@ export default {
 			total_guests:
 			row.total_guests ?? null,
 
-			event_notes:
-			row.event_notes ?? ""
+			customer_id:
+			row.customer_id ?? null,
+
+			contact_ids:
+			toIdArray(
+				row.contact_ids,
+				row.contact_id
+			),
+
+			venue_id:
+			row.venue_id ?? null,
+
+			venue_contact_ids:
+			toIdArray(
+				row.venue_contact_ids,
+				row.venue_contact_id
+			),
+
+			proposal_customer_notes:
+			row.proposal_customer_notes ?? "",
+
+			proposal_internal_notes:
+			row.proposal_internal_notes ??
+			row.event_notes ??
+			""
 		};
 	},
 
@@ -108,7 +144,57 @@ export default {
 		const existing = this.get(proposalId);
 
 		if (existing) {
-			return existing;
+			const queryHeader = this.headerFromQuery();
+
+			const existingHeader = {
+				...queryHeader,
+				...(existing.header || {})
+			};
+
+			/*
+		 * Add newly introduced fields to older cached workspaces
+		 * without overwriting legitimate unsaved edits.
+		 */
+			if (
+				existing.header?.proposal_customer_notes ===
+				undefined
+			) {
+				existingHeader.proposal_customer_notes =
+					queryHeader.proposal_customer_notes;
+			}
+
+			if (
+				existing.header?.proposal_internal_notes ===
+				undefined
+			) {
+				existingHeader.proposal_internal_notes =
+					queryHeader.proposal_internal_notes;
+			}
+
+			if (
+				existing.header?.contact_ids === undefined
+			) {
+				existingHeader.contact_ids =
+					queryHeader.contact_ids;
+			}
+
+			if (
+				existing.header?.venue_contact_ids ===
+				undefined
+			) {
+				existingHeader.venue_contact_ids =
+					queryHeader.venue_contact_ids;
+			}
+
+			return await this.set(proposalId, {
+				...existing,
+				header: existingHeader,
+
+				saved_header: {
+					...queryHeader,
+					...(existing.saved_header || {})
+				}
+			});
 		}
 
 		const header = this.headerFromQuery();
@@ -125,7 +211,6 @@ export default {
 			JSON.parse(JSON.stringify(components))
 		});
 	},
-
 	async captureCurrentDraft() {
 		if (!this.isCurrentLoadedDraft()) {
 			return null;
@@ -191,6 +276,12 @@ export default {
 					source.event_datetime ||
 					null;
 
+		const normalizeIds = value =>
+		[...(Array.isArray(value) ? value : [])]
+		.map(Number)
+		.filter(Boolean)
+		.sort((a, b) => a - b);
+
 		return {
 			event_name:
 			String(
@@ -222,13 +313,30 @@ export default {
 			source.total_guests === null ||
 			source.total_guests === undefined
 			? null
-			: Number(
-				source.total_guests
+			: Number(source.total_guests),
+
+			customer_id:
+			Number(source.customer_id || 0) || null,
+
+			contact_ids:
+			normalizeIds(source.contact_ids),
+
+			venue_id:
+			Number(source.venue_id || 0) || null,
+
+			venue_contact_ids:
+			normalizeIds(
+				source.venue_contact_ids
 			),
 
-			event_notes:
+			proposal_customer_notes:
 			String(
-				source.event_notes || ""
+				source.proposal_customer_notes || ""
+			).trim() || null,
+
+			proposal_internal_notes:
+			String(
+				source.proposal_internal_notes || ""
 			).trim() || null
 		};
 	},
