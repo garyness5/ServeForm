@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 12,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( '{{}}'))(selEvtCustomer.options, selEvtCustomer.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  jsProposalData.header().customer_id || \"\" ))(selEvtCustomer.options, selEvtCustomer.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -13,10 +13,10 @@
       "key": "borderRadius"
     },
     {
-      "key": "sourceData"
+      "key": "defaultOptionValue"
     },
     {
-      "key": "defaultOptionValue"
+      "key": "sourceData"
     }
   ],
   "dynamicHeight": "FIXED",
@@ -54,7 +54,7 @@
   "mobileRightColumn": 16,
   "mobileTopRow": 14,
   "needsErrorInfo": false,
-  "onOptionChange": "{{\n\tresetWidget(\"msEvtContacts\", true)\n\t\t.then(() => qryGetEvtContacts.run())\n}}",
+  "onOptionChange": "{{\nresetWidget(\"msEvtContacts\", true)\n.then(() => qryGetEvtContacts.run())\n}}",
   "optionLabel": "label",
   "optionValue": "value",
   "parentColumnSpace": 6.021484375,
@@ -63,7 +63,7 @@
   "placeholderText": "Select option",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 57,
+  "rightColumn": 58,
   "serverSideFiltering": false,
   "sourceData": "{{ qryGetEvtCustomers.data || [] }}",
   "topRow": 8,

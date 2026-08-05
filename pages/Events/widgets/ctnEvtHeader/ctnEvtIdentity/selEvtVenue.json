@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 20,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  getEvtItemById.data?.[0]?.venue_id || \"\" ))(selEvtVenue.options, selEvtVenue.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  jsProposalData.header().venue_id || \"\" ))(selEvtVenue.options, selEvtVenue.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -63,7 +63,7 @@
   "placeholderText": "Select option",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 57,
+  "rightColumn": 58,
   "serverSideFiltering": false,
   "sourceData": "{{ qryGetEvtVenues.data || [] }}",
   "topRow": 16,

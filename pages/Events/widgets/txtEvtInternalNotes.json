@@ -3,7 +3,7 @@
   "backgroundColor": "",
   "borderColor": "",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 152,
+  "bottomRow": 149,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -32,8 +32,8 @@
   "mobileRightColumn": 19,
   "mobileTopRow": 15,
   "needsErrorInfo": false,
-  "originalBottomRow": 154,
-  "originalTopRow": 150,
+  "originalBottomRow": 149,
+  "originalTopRow": 145,
   "overflow": "NONE",
   "parentColumnSpace": 17.9375,
   "parentId": "0",
@@ -45,7 +45,7 @@
   "text": "Internal Notes",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 148,
+  "topRow": 145,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

@@ -60,7 +60,7 @@
   "customIsLoading": false,
   "customIsLoadingValue": "",
   "defaultPageSize": 0,
-  "defaultSelectedRowIndex": "{{ 0 }}",
+  "defaultSelectedRowIndex": "{{\n\tMath.max(\n\t\t0,\n\t\t(qryGetProposalsForEvent.data || [])\n\t\t\t.findIndex(\n\t\t\t\trow =>\n\t\t\t\t\tNumber(row.id) ===\n\t\t\t\t\tNumber(\n\t\t\t\t\t\tappsmith.store.current_proposal_id || 0\n\t\t\t\t\t)\n\t\t\t)\n\t)\n}}",
   "defaultSelectedRowIndices": [
     0
   ],

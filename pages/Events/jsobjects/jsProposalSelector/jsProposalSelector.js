@@ -50,10 +50,11 @@ export default {
 		return qryGetSelectedProposal.data?.[0] ?? null;
 	},
 
-	async initialize() {
+	async initialize(usePriority = false) {
 		await qryGetProposalsForEvent.run();
 
-		const rows = qryGetProposalsForEvent.data ?? [];
+		const rows =
+					qryGetProposalsForEvent.data || [];
 
 		if (rows.length === 0) {
 			await removeValue("current_proposal_id");
@@ -62,14 +63,28 @@ export default {
 			return null;
 		}
 
+		const currentId = Number(
+			appsmith.store.current_proposal_id || 0
+		);
+
+		const currentStillExists =
+					rows.some(
+						row => Number(row.id) === currentId
+					);
+
+		const proposalId =
+					usePriority || !currentStillExists
+		? Number(rows[0].id)
+		: currentId;
+
 		await storeValue(
 			"current_proposal_id",
-			Number(rows[0].id)
+			proposalId
 		);
 
 		return await this.loadSelectedProposal();
 	},
-
+	
 	async selectProposal(row) {
 		if (!row?.id) {
 			showAlert(

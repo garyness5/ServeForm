@@ -15,7 +15,7 @@ export default {
 			qryGetEvtVenueContacts.run()
 		]);
 
-		await jsProposalSelector.initialize();
+		await jsProposalSelector.initialize(true);
 
 		await storeValue("accEvtCustomerNotes", false);
 		await storeValue("accEvtInternalNotes", false);

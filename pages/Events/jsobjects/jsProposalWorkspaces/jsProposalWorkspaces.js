@@ -143,74 +143,67 @@ export default {
 		const proposalId = this.currentProposalId();
 		const existing = this.get(proposalId);
 
-		if (existing) {
-			const queryHeader = this.headerFromQuery();
+		const queryHeader = this.headerFromQuery();
+		const queryComponents = this.componentsFromQuery();
 
-			const existingHeader = {
-				...queryHeader,
-				...(existing.header || {})
-			};
-
-			/*
-		 * Add newly introduced fields to older cached workspaces
-		 * without overwriting legitimate unsaved edits.
-		 */
-			if (
-				existing.header?.proposal_customer_notes ===
-				undefined
-			) {
-				existingHeader.proposal_customer_notes =
-					queryHeader.proposal_customer_notes;
-			}
-
-			if (
-				existing.header?.proposal_internal_notes ===
-				undefined
-			) {
-				existingHeader.proposal_internal_notes =
-					queryHeader.proposal_internal_notes;
-			}
-
-			if (
-				existing.header?.contact_ids === undefined
-			) {
-				existingHeader.contact_ids =
-					queryHeader.contact_ids;
-			}
-
-			if (
-				existing.header?.venue_contact_ids ===
-				undefined
-			) {
-				existingHeader.venue_contact_ids =
-					queryHeader.venue_contact_ids;
-			}
-
+		/*
+	 * No cached workspace: build directly from Supabase.
+	 */
+		if (!existing) {
 			return await this.set(proposalId, {
-				...existing,
-				header: existingHeader,
+				header: queryHeader,
+				components: queryComponents,
 
-				saved_header: {
-					...queryHeader,
-					...(existing.saved_header || {})
-				}
+				saved_header:
+				this.deepCopy(queryHeader),
+
+				saved_components:
+				this.deepCopy(queryComponents),
+
+				saved_updated_at:
+				qryGetSelectedProposal.data?.[0]?.updated_at ||
+				null
 			});
 		}
 
-		const header = this.headerFromQuery();
-		const components = this.componentsFromQuery();
+		const queryUpdatedAt =
+					qryGetSelectedProposal.data?.[0]?.updated_at ||
+					null;
 
-		return await this.set(proposalId, {
-			header,
-			components,
+		const workspaceUpdatedAt =
+					existing.saved_updated_at || null;
 
-			saved_header:
-			JSON.parse(JSON.stringify(header)),
+		/*
+	 * Supabase has a newer saved version.
+	 * Rebuild the workspace so stale cached header values
+	 * cannot override the saved Proposal.
+	 */
+		if (
+			queryUpdatedAt &&
+			queryUpdatedAt !== workspaceUpdatedAt
+		) {
+			return await this.set(proposalId, {
+				header: queryHeader,
+				components: queryComponents,
 
-			saved_components:
-			JSON.parse(JSON.stringify(components))
-		});
+				saved_header:
+				this.deepCopy(queryHeader),
+
+				saved_components:
+				this.deepCopy(queryComponents),
+
+				saved_updated_at:
+				queryUpdatedAt
+			});
+		}
+
+		/*
+	 * Existing workspace belongs to the current saved version.
+	 * Preserve any legitimate unsaved changes.
+	 */
+		return existing;
 	},
+
 	async captureCurrentDraft() {
 		if (!this.isCurrentLoadedDraft()) {
 			return null;
@@ -505,7 +498,11 @@ export default {
 				saved_components:
 				this.deepCopy(
 					workspace.components || []
-				)
+				),
+
+				saved_updated_at:
+				qryGetSelectedProposal.data?.[0]?.updated_at ||
+				null
 			}
 		);
 	},
