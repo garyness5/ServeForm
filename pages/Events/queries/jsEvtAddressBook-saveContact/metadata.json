@@ -1,6 +1,6 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_9d07f4c3-2db2-430c-8fbf-1419ddd79236",
-  "id": "Events_jsEvtAddressBook.currentWorkspace",
+  "gitSyncId": "6a0a1bde3214f344228346e7_fa3954d9-38cd-43d4-8268-a8a5fff04ab7",
+  "id": "Events_jsEvtAddressBook.saveContact",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
@@ -22,8 +22,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "jsEvtAddressBook.currentWorkspace",
-    "name": "currentWorkspace",
+    "fullyQualifiedName": "jsEvtAddressBook.saveContact",
+    "name": "saveContact",
     "pageId": "Events",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

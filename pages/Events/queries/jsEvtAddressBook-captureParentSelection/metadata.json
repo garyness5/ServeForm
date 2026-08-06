@@ -1,12 +1,16 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_f53ca5ee-ab31-4c91-a421-fcd34fada3a4",
-  "id": "Events_jsEvtAddressBook.clearContactQuickAdd",
+  "gitSyncId": "6a0a1bde3214f344228346e7_57311f88-5884-4733-b792-fdc13490b927",
+  "id": "Events_jsEvtAddressBook.captureParentSelection",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
     "actionConfiguration": {
       "encodeParamsToggle": true,
-      "jsArguments": [],
+      "jsArguments": [
+        {
+          "name": "context"
+        }
+      ],
       "paginationType": "NONE",
       "timeoutInMillisecond": 10000
     },
@@ -22,8 +26,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "jsEvtAddressBook.clearContactQuickAdd",
-    "name": "clearContactQuickAdd",
+    "fullyQualifiedName": "jsEvtAddressBook.captureParentSelection",
+    "name": "captureParentSelection",
     "pageId": "Events",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

@@ -1,0 +1,58 @@
+update public.customer_contact_links
+set active = true
+where client_id =
+      {{ appsmith.store.current_client_id }}::uuid
+  and customer_id =
+      {{ Number(this.params.customer_id || 0) }}::bigint
+  and contact_id = any (
+      {{
+          `{${(
+              this.params.contact_ids || []
+          )
+          .map(Number)
+          .filter(Boolean)
+          .join(",")}}`
+      }}::bigint[]
+  );
+
+insert into public.customer_contact_links
+(
+    client_id,
+    customer_id,
+    contact_id,
+    active
+)
+select
+    cu.client_id,
+    cu.id,
+    selected.contact_id,
+    true
+from public.customers cu
+cross join unnest(
+    {{
+        `{${(
+            this.params.contact_ids || []
+        )
+        .map(Number)
+        .filter(Boolean)
+        .join(",")}}`
+    }}::bigint[]
+) as selected(contact_id)
+join public.contacts co
+  on co.id = selected.contact_id
+ and co.client_id = cu.client_id
+ and coalesce(co.deleted, false) = false
+where cu.id =
+      {{ Number(this.params.customer_id || 0) }}::bigint
+  and cu.client_id =
+      {{ appsmith.store.current_client_id }}::uuid
+  and coalesce(cu.deleted, false) = false
+  and not exists (
+      select 1
+      from public.customer_contact_links existing
+      where existing.client_id = cu.client_id
+        and existing.customer_id = cu.id
+        and existing.contact_id = selected.contact_id
+  );
+
+select true as linked;

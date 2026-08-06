@@ -1,7 +1,8 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 51,
+  "bottomRow": 25,
+  "bottomRowBeforeCollapse": 25,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
   "buttonVariant": "TERTIARY",
@@ -15,6 +16,9 @@
     },
     {
       "key": "buttonColor"
+    },
+    {
+      "key": "isVisible"
     }
   ],
   "dynamicPropertyPathList": [
@@ -23,6 +27,9 @@
     },
     {
       "key": "iconName"
+    },
+    {
+      "key": "isVisible"
     }
   ],
   "dynamicTriggerPathList": [
@@ -34,7 +41,7 @@
   "isDefaultClickDisabled": true,
   "isDisabled": false,
   "isLoading": false,
-  "isVisible": true,
+  "isVisible": "{{\nappsmith.store.evt_contact_modal_mode === \"info\" &&\njsProposalData.canEditDisplayedDocument()\n}}",
   "key": "iu27lzhy00",
   "leftColumn": 0,
   "minWidth": 120,
@@ -43,9 +50,9 @@
   "mobileRightColumn": 16,
   "mobileTopRow": 15,
   "needsErrorInfo": false,
-  "onClick": "{{\njsEvtAddressBook.toggleContactAdd()\n}}",
-  "originalBottomRow": 54,
-  "originalTopRow": 50,
+  "onClick": "{{ jsEvtAddressBook.toggleContactAdd() }}",
+  "originalBottomRow": 21,
+  "originalTopRow": 21,
   "parentColumnSpace": 17.9375,
   "parentId": "ump0dn2ent",
   "parentRowSpace": 10,
@@ -56,7 +63,8 @@
   "responsiveBehavior": "hug",
   "rightColumn": 6,
   "text": "{{\nappsmith.store.evt_contact_add_open\n? \"▲\"\n: \"▼\"\n}}",
-  "topRow": 47,
+  "topRow": 21,
+  "topRowBeforeCollapse": 21,
   "type": "BUTTON_WIDGET",
   "version": 1,
   "widgetId": "gxj0tlmbku",

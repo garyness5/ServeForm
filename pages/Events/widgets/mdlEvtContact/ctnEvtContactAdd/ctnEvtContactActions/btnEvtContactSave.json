@@ -1,5 +1,5 @@
 {
-  "animateLoading": true,
+  "animateLoading": "{{ qrySaveEvtContact.isLoading }}",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 6,
   "boxShadow": "none",
@@ -13,6 +13,12 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
+    },
+    {
+      "key": "animateLoading"
     }
   ],
   "dynamicPropertyPathList": [
@@ -21,6 +27,9 @@
     },
     {
       "key": "onClick"
+    },
+    {
+      "key": "animateLoading"
     }
   ],
   "dynamicTriggerPathList": [
@@ -29,7 +38,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "",
+  "isDisabled": "{{\n\tqrySaveEvtContact.isLoading ||\n\t!(inpEvtContactName.text || \"\").trim()\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -40,7 +49,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsCustomer.save(true) }}",
+  "onClick": "{{ jsEvtAddressBook.saveContact() }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "h6j432pay7",

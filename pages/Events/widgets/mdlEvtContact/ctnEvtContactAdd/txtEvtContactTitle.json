@@ -47,7 +47,7 @@
   "parentId": "xx9que9ig5",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 57,
+  "rightColumn": 53,
   "shouldTruncate": false,
   "text": "{{ jsEvtAddressBook.contactModalTitle() }}",
   "textAlign": "LEFT",

@@ -125,6 +125,32 @@ export default {
 		};
 	},
 
+	async refreshContactOptions(context) {
+		if (context === "venue") {
+			await qryGetEvtVenueContacts.run();
+			return qryGetEvtVenueContacts.data || [];
+		}
+
+		await qryGetEvtContacts.run();
+		return qryGetEvtContacts.data || [];
+	},
+
+	async resetContactSelection(context) {
+		if (context === "venue") {
+			await resetWidget(
+				"msEvtVenueContacts",
+				true
+			);
+		} else {
+			await resetWidget(
+				"msEvtContacts",
+				true
+			);
+		}
+
+		return await this.refreshContactOptions(context);
+	},
+
 	async saveCustomer() {
 		const customerName =
 					String(
@@ -326,15 +352,6 @@ export default {
 	},
 
 	async openContactModal(context) {
-		if (!jsProposalData.canEditDisplayedDocument()) {
-			showAlert(
-				"Only a Draft Proposal can be changed.",
-				"warning"
-			);
-
-			return;
-		}
-
 		const isCustomer =
 					context === "customer";
 
@@ -347,6 +364,25 @@ export default {
 			msEvtVenueContacts.selectedOptionValues || []
 		);
 
+		const hasSelectedContacts =
+					selectedIds.length > 0;
+
+		/*
+	 * Locked Proposals may view existing Contact details,
+	 * but they may not open Add mode.
+	 */
+		if (
+			!jsProposalData.canEditDisplayedDocument() &&
+			!hasSelectedContacts
+		) {
+			showAlert(
+				"Only a Draft Proposal can add a Contact.",
+				"warning"
+			);
+
+			return;
+		}
+
 		await storeValue(
 			"evt_contact_context",
 			isCustomer ? "customer" : "venue"
@@ -354,14 +390,16 @@ export default {
 
 		await storeValue(
 			"evt_contact_modal_mode",
-			selectedIds.length > 0
+			hasSelectedContacts
 			? "info"
 			: "add"
 		);
 
 		await storeValue(
 			"evt_contact_add_open",
-			selectedIds.length === 0
+			hasSelectedContacts
+			? false
+			: true
 		);
 
 		await this.clearContactQuickAdd();
@@ -461,7 +499,7 @@ export default {
 		: msEvtContacts.selectedOptionValues;
 
 		return (values || [])
-			.map(Number)
+			.map(String)
 			.filter(Boolean);
 	},
 
@@ -470,10 +508,10 @@ export default {
 					appsmith.store.evt_contact_context;
 
 		const selectedIds =
-					new Set(
-						this.selectedContactIds()
-						.map(String)
-					);
+					this.selectedContactIds();
+
+		const selectedSet =
+					new Set(selectedIds);
 
 		const rows =
 					context === "venue"
@@ -482,17 +520,95 @@ export default {
 
 		return rows
 			.filter(row =>
-							selectedIds.has(String(row.id))
+							selectedSet.has(
+			String(row.value ?? row.id ?? "")
+		)
 						 )
 			.sort((a, b) => {
-			const ids =
-						this.selectedContactIds();
+			const aId =
+						String(a.value ?? a.id ?? "");
+
+			const bId =
+						String(b.value ?? b.id ?? "");
 
 			return (
-				ids.indexOf(Number(a.id)) -
-				ids.indexOf(Number(b.id))
+				selectedIds.indexOf(aId) -
+				selectedIds.indexOf(bId)
 			);
 		});
+	},
+
+	async captureContactSelection(context) {
+		await new Promise(resolve =>
+											setTimeout(resolve, 50)
+										 );
+
+		const {
+			proposalId,
+			workspace
+		} = await this.currentWorkspace();
+
+		const isVenue =
+					context === "venue";
+
+		const values =
+					isVenue
+		? msEvtVenueContacts.selectedOptionValues
+		: msEvtContacts.selectedOptionValues;
+
+		const selectedIds =
+					(values || [])
+		.map(Number)
+		.filter(Boolean);
+
+		const parentId = Number(
+			isVenue
+			? selEvtVenue.selectedOptionValue
+			: selEvtCustomer.selectedOptionValue
+		) || 0;
+
+		await jsProposalWorkspaces.set(
+			proposalId,
+			{
+				...workspace,
+
+				header: {
+					...(workspace.header || {}),
+
+					[isVenue
+					? "venue_contact_ids"
+					: "contact_ids"]:
+					selectedIds
+				}
+			}
+		);
+
+		/*
+	 * Selecting a Contact permanently adds or restores
+	 * the Address Book relationship.
+	 *
+	 * Removing it from this Proposal does not unlink it.
+	 */
+		if (
+			parentId > 0 &&
+			selectedIds.length > 0
+		) {
+			if (isVenue) {
+				await qryLinkEvtVenueContacts.run({
+					venue_id: parentId,
+					contact_ids: selectedIds
+				});
+			} else {
+				await qryLinkEvtCustomerContacts.run({
+					customer_id: parentId,
+					contact_ids: selectedIds
+				});
+			}
+
+			await this.refreshContactOptions(context);
+		}
+
+		return selectedIds;
 	},
 
 	contactDisplayValue(value) {
@@ -500,5 +616,206 @@ export default {
 					String(value ?? "").trim();
 
 		return text || "—";
+	},
+
+	async captureParentSelection(context) {
+		await new Promise(resolve =>
+											setTimeout(resolve, 50)
+										 );
+
+		const {
+			proposalId,
+			workspace
+		} = await this.currentWorkspace();
+
+		const isVenue =
+					context === "venue";
+
+		const selectedId = Number(
+			isVenue
+			? selEvtVenue.selectedOptionValue
+			: selEvtCustomer.selectedOptionValue
+		) || null;
+
+		await jsProposalWorkspaces.set(
+			proposalId,
+			{
+				...workspace,
+
+				header: {
+					...(workspace.header || {}),
+
+					[isVenue
+					? "venue_id"
+					: "customer_id"]:
+					selectedId,
+
+					[isVenue
+					? "venue_contact_ids"
+					: "contact_ids"]:
+					[]
+				}
+			}
+		);
+
+		await this.resetContactSelection(context);
+
+		return selectedId;
+	},
+
+	async saveContact() {
+		const contactName =
+					String(
+						inpEvtContactName.text || ""
+					).trim();
+
+		if (!contactName) {
+			showAlert(
+				"Contact Name is required.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		if (!jsProposalData.canEditDisplayedDocument()) {
+			showAlert(
+				"Only a Draft Proposal can add a Contact.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		const context =
+					appsmith.store.evt_contact_context;
+
+		const isVenue =
+					context === "venue";
+
+		const parentId = Number(
+			isVenue
+			? selEvtVenue.selectedOptionValue
+			: selEvtCustomer.selectedOptionValue
+		) || 0;
+
+		if (!parentId) {
+			showAlert(
+				isVenue
+				? "Select a Venue before adding a Venue Contact."
+				: "Select a Customer before adding a Customer Contact.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		try {
+			const duplicate =
+						await qryCheckEvtContactDuplicate.run();
+
+			if (duplicate?.length) {
+				showAlert(
+					`Contact "${contactName}" already exists. Select the existing Contact from the list.`,
+					"warning"
+				);
+
+				return false;
+			}
+
+			const result =
+						await qrySaveEvtContact.run();
+
+			const contactId = Number(
+				result?.[0]?.contact_id ??
+				result?.[0]?.id ??
+				0
+			);
+
+			if (!contactId) {
+				throw new Error(
+					"Contact was saved, but its ID was not returned."
+				);
+			}
+
+			const {
+				proposalId,
+				workspace
+			} = await this.currentWorkspace();
+
+			const currentIds = (
+				isVenue
+				? msEvtVenueContacts.selectedOptionValues
+				: msEvtContacts.selectedOptionValues
+			)
+			.map(Number)
+			.filter(Boolean);
+
+			const selectedIds = [
+				...new Set([
+					...currentIds,
+					contactId
+				])
+			];
+
+			await jsProposalWorkspaces.set(
+				proposalId,
+				{
+					...workspace,
+
+					header: {
+						...(workspace.header || {}),
+
+						[isVenue
+						? "venue_contact_ids"
+						: "contact_ids"]:
+						selectedIds
+					}
+				}
+			);
+
+			if (isVenue) {
+				await qryGetEvtVenueContacts.run();
+
+				await resetWidget(
+					"msEvtVenueContacts",
+					true
+				);
+			} else {
+				await qryGetEvtContacts.run();
+
+				await resetWidget(
+					"msEvtContacts",
+					true
+				);
+			}
+
+			await storeValue(
+				"evt_contact_modal_mode",
+				"info"
+			);
+
+			await storeValue(
+				"evt_contact_add_open",
+				false
+			);
+
+			await this.clearContactQuickAdd();
+
+			showAlert(
+				`${contactName} added.`,
+				"success"
+			);
+
+			return true;
+		} catch (error) {
+			showAlert(
+				error?.message ||
+				"Contact could not be added.",
+				"error"
+			);
+
+			return false;
+		}
 	},
 };

@@ -1,0 +1,58 @@
+update public.venue_contact_links
+set active = true
+where client_id =
+      {{ appsmith.store.current_client_id }}::uuid
+  and venue_id =
+      {{ Number(this.params.venue_id || 0) }}::bigint
+  and contact_id = any (
+      {{
+          `{${(
+              this.params.contact_ids || []
+          )
+          .map(Number)
+          .filter(Boolean)
+          .join(",")}}`
+      }}::bigint[]
+  );
+
+insert into public.venue_contact_links
+(
+    client_id,
+    venue_id,
+    contact_id,
+    active
+)
+select
+    v.client_id,
+    v.id,
+    selected.contact_id,
+    true
+from public.venues v
+cross join unnest(
+    {{
+        `{${(
+            this.params.contact_ids || []
+        )
+        .map(Number)
+        .filter(Boolean)
+        .join(",")}}`
+    }}::bigint[]
+) as selected(contact_id)
+join public.contacts co
+  on co.id = selected.contact_id
+ and co.client_id = v.client_id
+ and coalesce(co.deleted, false) = false
+where v.id =
+      {{ Number(this.params.venue_id || 0) }}::bigint
+  and v.client_id =
+      {{ appsmith.store.current_client_id }}::uuid
+  and coalesce(v.deleted, false) = false
+  and not exists (
+      select 1
+      from public.venue_contact_links existing
+      where existing.client_id = v.client_id
+        and existing.venue_id = v.id
+        and existing.contact_id = selected.contact_id
+  );
+
+select true as linked;

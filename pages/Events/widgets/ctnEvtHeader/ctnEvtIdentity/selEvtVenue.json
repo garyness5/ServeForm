@@ -54,7 +54,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 15,
   "needsErrorInfo": false,
-  "onOptionChange": "{{\nresetWidget(\"msEvtVenueContacts\", true)\n.then(() => qryGetEvtVenueContacts.run())\n}}",
+  "onOptionChange": "{{\njsEvtAddressBook.captureParentSelection(\n\t\"venue\"\n)\n}}",
   "optionLabel": "label",
   "optionValue": "value",
   "parentColumnSpace": 6.021484375,

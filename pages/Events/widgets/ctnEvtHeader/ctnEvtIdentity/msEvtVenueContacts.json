@@ -26,11 +26,17 @@
     },
     {
       "key": "onOptionChange"
+    },
+    {
+      "key": "onDropdownOpen"
     }
   ],
   "dynamicTriggerPathList": [
     {
       "key": "onOptionChange"
+    },
+    {
+      "key": "onDropdownOpen"
     }
   ],
   "isDisabled": false,
@@ -54,7 +60,8 @@
   "mobileRightColumn": 18,
   "mobileTopRow": 20,
   "needsErrorInfo": false,
-  "onOptionChange": "{{ jsProposalWorkspaces.captureCurrentHeader() }}",
+  "onDropdownOpen": "{{ qryGetEvtVenueContacts.run() }}",
+  "onOptionChange": "{{\njsEvtAddressBook.captureContactSelection(\n\t\"venue\"\n)\n}}",
   "optionLabel": "label",
   "optionValue": "value",
   "originalBottomRow": 165,
