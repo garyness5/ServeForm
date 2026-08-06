@@ -17,6 +17,9 @@
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
+    },
+    {
+      "key": "iconName"
     }
   ],
   "dynamicTriggerPathList": [
@@ -24,6 +27,8 @@
       "key": "onClick"
     }
   ],
+  "iconAlign": "left",
+  "iconName": "person",
   "isDefaultClickDisabled": true,
   "isDisabled": false,
   "isLoading": false,

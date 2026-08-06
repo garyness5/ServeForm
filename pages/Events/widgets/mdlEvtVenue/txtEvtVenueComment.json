@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 16,
+  "bottomRow": 43,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -11,53 +11,42 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "text"
-    },
-    {
-      "key": "isVisible"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
-  "dynamicPropertyPathList": [
-    {
-      "key": "isVisible"
-    }
-  ],
   "dynamicTriggerPathList": [],
   "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
-  "fontSize": "1rem",
-  "fontStyle": "",
+  "fontSize": "0.875rem",
+  "fontStyle": "BOLD",
   "isLoading": false,
-  "isVisible": "{{\nNumber(appsmith.store.current_event_id || 0) > 0 &&\nevtWarnings.list().length > 0\n}}",
-  "key": "or4p3qeldn",
-  "leftColumn": 0,
+  "isVisible": true,
+  "key": "3svcqxx594",
+  "leftColumn": 12,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
-  "mobileBottomRow": 6,
+  "mobileBottomRow": 42,
   "mobileLeftColumn": 1,
   "mobileRightColumn": 17,
-  "mobileTopRow": 2,
+  "mobileTopRow": 38,
   "needsErrorInfo": false,
-  "originalBottomRow": 16,
-  "originalTopRow": 9,
+  "originalBottomRow": 43,
+  "originalTopRow": 38,
   "overflow": "NONE",
-  "parentColumnSpace": 6.6953125,
-  "parentId": "2deaexreop",
+  "parentColumnSpace": 8.65625,
+  "parentId": "7cg8lbnrmb",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 64,
+  "rightColumn": 62,
   "shouldTruncate": false,
-  "text": "{{ \"<b>Warnings:</b><br>\" + \"&nbsp;&nbsp;\" + evtWarnings.text() }}",
+  "text": "* Additional Venue details can be completed later from the Address Book.",
   "textAlign": "LEFT",
-  "textColor": "#231F20",
-  "topRow": 9,
+  "textColor": "#71717a",
+  "topRow": 38,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "w70lg5fsrv",
-  "widgetName": "txtEvtWarnings"
+  "widgetId": "7cwllkjlfo",
+  "widgetName": "txtEvtVenueComment"
 }

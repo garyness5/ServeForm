@@ -1,7 +1,9 @@
 {
   "animateLoading": true,
+  "backgroundColor": "",
+  "borderColor": "",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 16,
+  "bottomRow": 51,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -11,53 +13,43 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "text"
-    },
-    {
-      "key": "isVisible"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
-  "dynamicPropertyPathList": [
-    {
-      "key": "isVisible"
-    }
-  ],
+  "dynamicPropertyPathList": [],
   "dynamicTriggerPathList": [],
   "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
   "fontSize": "1rem",
-  "fontStyle": "",
+  "fontStyle": "BOLD",
   "isLoading": false,
-  "isVisible": "{{\nNumber(appsmith.store.current_event_id || 0) > 0 &&\nevtWarnings.list().length > 0\n}}",
-  "key": "or4p3qeldn",
-  "leftColumn": 0,
+  "isVisible": false,
+  "key": "l2aqhe34n6",
+  "leftColumn": 6,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
-  "mobileBottomRow": 6,
-  "mobileLeftColumn": 1,
-  "mobileRightColumn": 17,
-  "mobileTopRow": 2,
+  "mobileBottomRow": 19,
+  "mobileLeftColumn": 3,
+  "mobileRightColumn": 19,
+  "mobileTopRow": 15,
   "needsErrorInfo": false,
-  "originalBottomRow": 16,
-  "originalTopRow": 9,
+  "originalBottomRow": 54,
+  "originalTopRow": 50,
   "overflow": "NONE",
-  "parentColumnSpace": 6.6953125,
-  "parentId": "2deaexreop",
+  "parentColumnSpace": 17.9375,
+  "parentId": "ump0dn2ent",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 64,
+  "rightColumn": 45,
   "shouldTruncate": false,
-  "text": "{{ \"<b>Warnings:</b><br>\" + \"&nbsp;&nbsp;\" + evtWarnings.text() }}",
+  "text": "Add Contact",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 9,
+  "topRow": 47,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "w70lg5fsrv",
-  "widgetName": "txtEvtWarnings"
+  "widgetId": "906bcspr7k",
+  "widgetName": "txtEvtContactAdd"
 }

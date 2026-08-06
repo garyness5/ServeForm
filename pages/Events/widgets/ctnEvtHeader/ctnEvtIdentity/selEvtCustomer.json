@@ -44,7 +44,7 @@
   "labelStyle": "BOLD",
   "labelText": "Customer",
   "labelTextSize": "1rem",
-  "labelWidth": "13",
+  "labelWidth": "14",
   "leftColumn": 0,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,

@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 16,
+  "bottomRow": 4,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -13,10 +13,10 @@
       "key": "borderRadius"
     },
     {
-      "key": "text"
+      "key": "isVisible"
     },
     {
-      "key": "isVisible"
+      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -27,37 +27,35 @@
   ],
   "dynamicTriggerPathList": [],
   "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
-  "fontSize": "1rem",
-  "fontStyle": "",
+  "fontSize": "1.25rem",
+  "fontStyle": "BOLD",
   "isLoading": false,
-  "isVisible": "{{\nNumber(appsmith.store.current_event_id || 0) > 0 &&\nevtWarnings.list().length > 0\n}}",
-  "key": "or4p3qeldn",
+  "isVisible": "{{\nappsmith.store.evt_contact_add_open === true\n}}",
+  "key": "u3472ytlyn",
   "leftColumn": 0,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
-  "mobileBottomRow": 6,
+  "mobileBottomRow": 5,
   "mobileLeftColumn": 1,
-  "mobileRightColumn": 17,
-  "mobileTopRow": 2,
+  "mobileRightColumn": 41,
+  "mobileTopRow": 1,
   "needsErrorInfo": false,
-  "originalBottomRow": 16,
-  "originalTopRow": 9,
+  "originalBottomRow": 5,
+  "originalTopRow": 1,
   "overflow": "NONE",
-  "parentColumnSpace": 6.6953125,
-  "parentId": "2deaexreop",
-  "parentRowSpace": 10,
+  "parentId": "xx9que9ig5",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 64,
+  "rightColumn": 57,
   "shouldTruncate": false,
-  "text": "{{ \"<b>Warnings:</b><br>\" + \"&nbsp;&nbsp;\" + evtWarnings.text() }}",
+  "text": "{{ jsEvtAddressBook.contactModalTitle() }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 9,
+  "topRow": 0,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "w70lg5fsrv",
-  "widgetName": "txtEvtWarnings"
+  "widgetId": "fq6pfrn53e",
+  "widgetName": "txtEvtContactTitle"
 }
