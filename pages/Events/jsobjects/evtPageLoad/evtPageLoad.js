@@ -7,7 +7,6 @@ export default {
 
 		await Promise.all([
 			qryGetEvtCategories.run(),
-			qryGetEvtDietTags.run(),
 			qryGetEvtComponentItems.run(),
 			qryGetEvtCustomers.run(),
 			qryGetEvtContacts.run(),

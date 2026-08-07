@@ -1085,6 +1085,15 @@ export default {
 		);
 	},
 
+	lineCostDisplay(row) {
+		const value =
+					this.lineCost(row);
+
+		return value == null
+			? ""
+		: fmt.currency(value);
+	},
+
 	async onActiveChange(row) {
 		if (
 			!this.isDraftMode() ||
@@ -1229,43 +1238,5 @@ export default {
 					 item.trim()
 					)
 			.filter(Boolean);
-	},
-
-	allergenSummary() {
-		const values =
-					this.effectiveRows()
-		.filter(row =>
-						row.active !== false
-					 )
-		.flatMap(row =>
-						 this.uniqueTextList(
-			row.allergen_names
-		)
-						);
-
-		return [
-			...new Set(values)
-		]
-			.sort()
-			.join(", ");
-	},
-
-	dietTagSummary() {
-		const values =
-					this.effectiveRows()
-		.filter(row =>
-						row.active !== false
-					 )
-		.flatMap(row =>
-						 this.uniqueTextList(
-			row.diet_tag_names
-		)
-						);
-
-		return [
-			...new Set(values)
-		]
-			.sort()
-			.join(", ");
 	}
 };

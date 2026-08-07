@@ -1,10 +1,12 @@
 export default {
 	rows() {
-		return (getEvtComponents.data || []).filter(r =>
-																								r.menu_id ||
-																								r.guests != null ||
-																								r.extra_percent != null
-																							 );
+		return jsProposalComponents
+			.effectiveRows()
+			.filter(r =>
+							r.menu_id ||
+							r.guests != null ||
+							r.extra_guests != null
+						 );
 	},
 
 	list() {

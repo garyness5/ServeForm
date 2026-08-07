@@ -1,5 +1,0 @@
-select
-  0 as recipe_count,
-  0 as dish_count,
-  0 as menu_count,
-  0 as event_count;
