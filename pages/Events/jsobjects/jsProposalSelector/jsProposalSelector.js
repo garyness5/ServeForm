@@ -18,6 +18,9 @@ export default {
 			if (jsProposalData.isProposalDraft()) {
 				await jsProposalWorkspaces
 					.initializeCurrentDraft();
+			} else {
+				await jsProposalWorkspaces
+					.initializeCurrentHeader();
 			}
 		} catch (error) {
 			await qryGetSelectedProposalMenus.clear();
@@ -84,7 +87,7 @@ export default {
 
 		return await this.loadSelectedProposal();
 	},
-	
+
 	async selectProposal(row) {
 		if (!row?.id) {
 			showAlert(
@@ -95,9 +98,9 @@ export default {
 		}
 
 		/*
-   * Preserve the currently displayed Draft
-   * before changing Proposal identity.
-   */
+		 * Preserve the currently displayed Draft
+		 * before changing Proposal identity.
+		 */
 		await jsProposalWorkspaces
 			.captureCurrentDraft();
 

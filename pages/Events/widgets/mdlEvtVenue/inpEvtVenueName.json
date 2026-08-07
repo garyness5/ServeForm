@@ -31,7 +31,7 @@
   "labelPosition": "Left",
   "labelStyle": "BOLD",
   "labelTextSize": "1rem",
-  "labelWidth": "12",
+  "labelWidth": "10",
   "leftColumn": 1,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,

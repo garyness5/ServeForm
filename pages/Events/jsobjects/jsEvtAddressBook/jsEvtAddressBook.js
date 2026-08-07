@@ -85,15 +85,6 @@ export default {
 	},
 
 	async openVenueAdd() {
-		if (!jsProposalData.canEditDisplayedDocument()) {
-			showAlert(
-				"Only a Draft Proposal can be changed.",
-				"warning"
-			);
-
-			return;
-		}
-
 		await this.clearVenueQuickAdd();
 
 		showModal("mdlEvtVenue");
@@ -106,14 +97,29 @@ export default {
 	},
 
 	async currentWorkspace() {
-		const proposalId = Number(
-			appsmith.store.current_proposal_id || 0
-		);
+		const proposalId =
+					Number(
+						appsmith.store.current_proposal_id || 0
+					);
 
-		const workspace =
-					jsProposalWorkspaces.get(proposalId);
+		if (!proposalId) {
+			throw new Error(
+				"No Proposal is currently selected."
+			);
+		}
 
-		if (!proposalId || !workspace) {
+		let workspace =
+				jsProposalWorkspaces.get(
+					proposalId
+				);
+
+		if (!workspace?.header) {
+			workspace =
+				await jsProposalWorkspaces
+				.initializeCurrentHeader();
+		}
+
+		if (!workspace?.header) {
 			throw new Error(
 				"The current Proposal workspace could not be loaded."
 			);
@@ -366,22 +372,6 @@ export default {
 
 		const hasSelectedContacts =
 					selectedIds.length > 0;
-
-		/*
-	 * Locked Proposals may view existing Contact details,
-	 * but they may not open Add mode.
-	 */
-		if (
-			!jsProposalData.canEditDisplayedDocument() &&
-			!hasSelectedContacts
-		) {
-			showAlert(
-				"Only a Draft Proposal can add a Contact.",
-				"warning"
-			);
-
-			return;
-		}
 
 		await storeValue(
 			"evt_contact_context",
@@ -668,24 +658,6 @@ export default {
 					String(
 						inpEvtContactName.text || ""
 					).trim();
-
-		if (!contactName) {
-			showAlert(
-				"Contact Name is required.",
-				"warning"
-			);
-
-			return false;
-		}
-
-		if (!jsProposalData.canEditDisplayedDocument()) {
-			showAlert(
-				"Only a Draft Proposal can add a Contact.",
-				"warning"
-			);
-
-			return false;
-		}
 
 		const context =
 					appsmith.store.evt_contact_context;

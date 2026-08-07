@@ -3,7 +3,7 @@
   "borderColor": "",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 21,
+  "bottomRow": 28,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "defaultModel": "{{\n\t{\n\t\tcontacts:\n\t\t\tjsEvtAddressBook.selectedContactDetails()\n\t}\n}}",
   "dynamicBindingPathList": [
@@ -44,7 +44,7 @@
   "mobileTopRow": 15,
   "needsErrorInfo": false,
   "onResetClick": "{{showAlert('Successfully reset!!', '');}}",
-  "originalBottomRow": 21,
+  "originalBottomRow": 32,
   "originalTopRow": 4,
   "parentColumnSpace": 8.20849609375,
   "parentId": "ump0dn2ent",

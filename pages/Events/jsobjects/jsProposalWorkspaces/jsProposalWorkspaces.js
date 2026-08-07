@@ -129,6 +129,48 @@ export default {
 		};
 	},
 
+	async initializeCurrentHeader() {
+		const proposalId =
+					this.currentProposalId();
+
+		if (
+			proposalId === 0 ||
+			!jsProposalData.hasSelectedProposal()
+		) {
+			return null;
+		}
+
+		const existing =
+					this.get(proposalId);
+
+		if (existing?.header) {
+			return existing;
+		}
+
+		const queryHeader =
+					this.headerFromQuery();
+
+		return await this.set(
+			proposalId,
+			{
+				...(existing || {}),
+
+				header:
+				queryHeader,
+
+				saved_header:
+				this.deepCopy(
+					queryHeader
+				),
+
+				saved_updated_at:
+				qryGetSelectedProposal
+				.data?.[0]?.updated_at ||
+				null
+			}
+		);
+	},
+
 	componentsFromQuery() {
 		return jsProposalComponents.normalizeRows(
 			jsProposalComponents.queryRows()
@@ -379,17 +421,22 @@ export default {
 	},
 
 	async captureCurrentHeader() {
-		if (!jsProposalData.isProposalDraft()) {
+		if (!jsProposalData.hasSelectedProposal()) {
 			return null;
 		}
 
 		const proposalId =
 					this.currentProposalId();
 
-		const workspace =
-					this.get(proposalId);
+		let workspace =
+				this.get(proposalId);
 
-		if (!workspace) {
+		if (!workspace?.header) {
+			workspace =
+				await this.initializeCurrentHeader();
+		}
+
+		if (!workspace?.header) {
 			return null;
 		}
 
@@ -419,16 +466,6 @@ export default {
 					Number(proposalId) ===
 					this.currentProposalId();
 
-		/*
-	 * Locked Proposals cannot have valid unsaved edits.
-	 */
-		if (
-			isCurrentProposal &&
-			!jsProposalData.isProposalDraft()
-		) {
-			return false;
-		}
-
 		const currentHeader =
 					this.normalizeHeader(
 						workspace.header
@@ -439,15 +476,30 @@ export default {
 						workspace.saved_header
 					);
 
+		const headerDirty =
+					JSON.stringify(currentHeader) !==
+					JSON.stringify(savedHeader);
+
 		/*
-	 * For the displayed Draft, include edits still held
-	 * inside tblEvtComponents.updatedRows.
+	 * Locked Proposal:
+	 * only permitted operational header changes
+	 * can make it dirty.
+	 */
+		if (
+			isCurrentProposal &&
+			jsProposalData.isProposalLocked()
+		) {
+			return headerDirty;
+		}
+
+		/*
+	 * Draft:
+	 * header + components can be dirty.
 	 */
 		const currentRows =
 					isCurrentProposal &&
 					jsProposalData.isProposalDraft()
-		? jsProposalComponents
-		.mergeUpdatedRows()
+		? jsProposalComponents.mergeUpdatedRows()
 		: workspace.components;
 
 		const currentComponents =
@@ -461,8 +513,7 @@ export default {
 					);
 
 		return (
-			JSON.stringify(currentHeader) !==
-			JSON.stringify(savedHeader) ||
+			headerDirty ||
 			JSON.stringify(currentComponents) !==
 			JSON.stringify(savedComponents)
 		);

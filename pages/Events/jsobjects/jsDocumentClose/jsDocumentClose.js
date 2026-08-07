@@ -5,7 +5,7 @@ export default {
 		return {
 			event_dirty:
 			jsProposalData.isEventMode() &&
-			evtSave.isDirty(),
+			jsEventSave.isDirty(),
 
 			proposal_ids:
 			jsProposalWorkspaces.dirtyProposalIds()
@@ -94,7 +94,7 @@ export default {
 
 		if (state.event_dirty) {
 			const eventSaved =
-						await evtSave.saveEvent();
+						await jsEventSave.saveEvent();
 
 			if (!eventSaved) {
 				return false;

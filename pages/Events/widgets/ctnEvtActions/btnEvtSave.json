@@ -31,7 +31,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\njsProposalData.isProposalLocked() ||\n!jsProposalWorkspaces.isDirty()\n}}",
+  "isDisabled": "{{\njsProposalData.isEventMode()\n? !jsEventSave.isDirty()\n: !jsProposalWorkspaces.isDirty()\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "bv6gv3416k",

@@ -37,7 +37,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ evtSave.cancelGroceriesRemovalSave() }}",
+  "onClick": "{{ jsEventSave.cancelGroceriesRemovalSave() }}",
   "originalBottomRow": 30,
   "originalTopRow": 26,
   "parentId": "1hdbugvmom",

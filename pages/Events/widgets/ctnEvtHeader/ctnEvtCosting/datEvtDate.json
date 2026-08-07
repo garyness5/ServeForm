@@ -26,6 +26,9 @@
     },
     {
       "key": "dateFormat"
+    },
+    {
+      "key": "onDateSelected"
     }
   ],
   "dynamicTriggerPathList": [
@@ -56,7 +59,7 @@
   "mobileRightColumn": 15,
   "mobileTopRow": 1,
   "needsErrorInfo": false,
-  "onDateSelected": "",
+  "onDateSelected": "{{ jsProposalWorkspaces.captureCurrentHeader() }}",
   "parentColumnSpace": 4.2265625,
   "parentId": "o4uwuew4ll",
   "parentRowSpace": 10,

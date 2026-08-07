@@ -17,17 +17,17 @@ insert into public.evt_items
 values
 (
   '{{ appsmith.store.current_client_id }}'::uuid,
-  nullif('{{ (evtSave.headerSnapshotFromPage().name || "").replaceAll("'", "''") }}', ''),
-  {{ evtSave.headerSnapshotFromPage().customer_id ? Number(evtSave.headerSnapshotFromPage().customer_id) : null }},
-  {{ evtSave.headerSnapshotFromPage().contact_id ? Number(evtSave.headerSnapshotFromPage().contact_id) : null }},
-  {{ evtSave.headerSnapshotFromPage().venue_id ? Number(evtSave.headerSnapshotFromPage().venue_id) : null }},
-  {{ evtSave.headerSnapshotFromPage().event_date ? "'" + evtSave.headerSnapshotFromPage().event_date + "'" : null }},
-  {{ evtSave.headerSnapshotFromPage().event_datetime ? "'" + evtSave.headerSnapshotFromPage().event_datetime + "'" : null }},
-  nullif('{{ (evtSave.headerSnapshotFromPage().event_ref || "").replaceAll("'", "''") }}', ''),
-  {{ evtSave.headerSnapshotFromPage().total_guests_manual ? Number(evtSave.headerSnapshotFromPage().total_guests_manual) : null }},
-  '{{ (evtSave.headerSnapshotFromPage().status || "Draft").replaceAll("'", "''") }}',
-  nullif('{{ (evtSave.headerSnapshotFromPage().format || "").replaceAll("'", "''") }}', ''),
-  nullif('{{ (evtSave.headerSnapshotFromPage().notes || "").replaceAll("'", "''") }}', ''),
-  {{ evtSave.headerSnapshotFromPage().active ? true : false }}
+  nullif('{{ (jsEventSave.headerSnapshotFromPage().name || "").replaceAll("'", "''") }}', ''),
+  {{ jsEventSave.headerSnapshotFromPage().customer_id ? Number(jsEventSave.headerSnapshotFromPage().customer_id) : null }},
+  {{ jsEventSave.headerSnapshotFromPage().contact_id ? Number(jsEventSave.headerSnapshotFromPage().contact_id) : null }},
+  {{ jsEventSave.headerSnapshotFromPage().venue_id ? Number(jsEventSave.headerSnapshotFromPage().venue_id) : null }},
+  {{ jsEventSave.headerSnapshotFromPage().event_date ? "'" + jsEventSave.headerSnapshotFromPage().event_date + "'" : null }},
+  {{ jsEventSave.headerSnapshotFromPage().event_datetime ? "'" + jsEventSave.headerSnapshotFromPage().event_datetime + "'" : null }},
+  nullif('{{ (jsEventSave.headerSnapshotFromPage().event_ref || "").replaceAll("'", "''") }}', ''),
+  {{ jsEventSave.headerSnapshotFromPage().total_guests_manual ? Number(jsEventSave.headerSnapshotFromPage().total_guests_manual) : null }},
+  '{{ (jsEventSave.headerSnapshotFromPage().status || "Draft").replaceAll("'", "''") }}',
+  nullif('{{ (jsEventSave.headerSnapshotFromPage().format || "").replaceAll("'", "''") }}', ''),
+  nullif('{{ (jsEventSave.headerSnapshotFromPage().notes || "").replaceAll("'", "''") }}', ''),
+  {{ jsEventSave.headerSnapshotFromPage().active ? true : false }}
 )
 returning id;

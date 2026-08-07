@@ -15,6 +15,16 @@ export default {
 		const selectedDate =
 					datEvtDate.selectedDate || null;
 
+		const customerContactIds =
+					(msEvtContacts.selectedOptionValues || [])
+		.map(Number)
+		.filter(Boolean);
+
+		const venueContactIds =
+					(msEvtVenueContacts.selectedOptionValues || [])
+		.map(Number)
+		.filter(Boolean);
+
 		return {
 			proposal_id: Number(
 				appsmith.store.current_proposal_id || 0
@@ -28,25 +38,20 @@ export default {
 
 			event_date:
 			selectedDate
-			? moment
-			.utc(selectedDate)
+			? moment(selectedDate)
 			.format("YYYY-MM-DD")
 			: null,
 
 			event_time:
 			selectedDate
-			? moment
-			.utc(selectedDate)
+			? moment(selectedDate)
 			.format("HH:mm:ss")
 			: null,
 
 			event_datetime:
 			selectedDate
-			? moment
-			.utc(selectedDate)
-			.format(
-				"YYYY-MM-DD HH:mm:ss"
-			)
+			? moment(selectedDate)
+			.format("YYYY-MM-DD HH:mm:ss")
 			: null,
 
 			event_format:
@@ -66,11 +71,7 @@ export default {
 			) || null,
 
 			contact_ids:
-			(
-				msEvtContacts.selectedOptionValues || []
-			)
-			.map(Number)
-			.filter(Boolean),
+			customerContactIds,
 
 			venue_id:
 			Number(
@@ -78,11 +79,7 @@ export default {
 			) || null,
 
 			venue_contact_ids:
-			(
-				msEvtVenueContacts.selectedOptionValues || []
-			)
-			.map(Number)
-			.filter(Boolean),
+			venueContactIds,
 
 			proposal_customer_notes:
 			this.textClean(
