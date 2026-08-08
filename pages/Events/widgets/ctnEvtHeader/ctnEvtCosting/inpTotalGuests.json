@@ -26,7 +26,7 @@
   "dynamicTriggerPathList": [],
   "iconAlign": "left",
   "inputType": "TEXT",
-  "isDisabled": "{{ jsProposalData.isProposalLocked() }}",
+  "isDisabled": "{{ jsProposalData.eventControl().status === \"Closed\" }}",
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,

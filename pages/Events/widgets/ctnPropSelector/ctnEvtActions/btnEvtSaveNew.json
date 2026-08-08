@@ -1,25 +1,28 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 138,
+  "bottomRow": 9,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
-  "buttonVariant": "TERTIARY",
+  "buttonVariant": "PRIMARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
+    {
+      "key": "buttonColor"
+    },
     {
       "key": "borderRadius"
     },
     {
-      "key": "text"
-    },
-    {
-      "key": "buttonColor"
+      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -28,33 +31,34 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": false,
+  "isDisabled": "{{\njsProposalData.isProposalLocked() ||\n!jsProposalWorkspaces.isDirty()\n}}",
   "isLoading": false,
   "isVisible": true,
-  "key": "iu27lzhy00",
-  "leftColumn": 1,
+  "key": "bv6gv3416k",
+  "leftColumn": 12,
   "minWidth": 120,
-  "mobileBottomRow": 19,
-  "mobileLeftColumn": 0,
-  "mobileRightColumn": 16,
-  "mobileTopRow": 15,
+  "mobileBottomRow": 5,
+  "mobileLeftColumn": 2,
+  "mobileRightColumn": 18,
+  "mobileTopRow": 1,
   "needsErrorInfo": false,
-  "onClick": "{{\n  storeValue(\n    \"accEvtInternalNotes\",\n    !appsmith.store.accEvtInternalNotes\n  );\n}}",
-  "originalBottomRow": 138,
-  "originalTopRow": 134,
-  "parentColumnSpace": 17.9375,
-  "parentId": "0",
+  "onClick": "{{ true }}",
+  "originalBottomRow": 9,
+  "originalTopRow": 5,
+  "parentColumnSpace": 19.5,
+  "parentId": "fkom2toygm",
   "parentRowSpace": 10,
   "placement": "CENTER",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 3,
-  "text": "{{\n  appsmith.store.accEvtInternalNotes\n    ? \"▲\"\n    : \"▼\"\n}}",
-  "topRow": 134,
+  "rightColumn": 25,
+  "text": "Save & New",
+  "tooltip": "Save and create another event",
+  "topRow": 5,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "6h1y4lsrc6",
-  "widgetName": "accEvtInternalNotes"
+  "widgetId": "g66p0s6d2x",
+  "widgetName": "btnEvtSaveNew"
 }

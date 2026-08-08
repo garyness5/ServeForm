@@ -1,22 +1,12 @@
 {
   "animateLoading": true,
-  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
+  "borderRadius": "0px",
   "bottomRow": 138,
   "boxShadow": "none",
-  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonColor": "#231f20",
   "buttonVariant": "TERTIARY",
   "disabledWhenInvalid": false,
-  "dynamicBindingPathList": [
-    {
-      "key": "borderRadius"
-    },
-    {
-      "key": "text"
-    },
-    {
-      "key": "buttonColor"
-    }
-  ],
+  "dynamicBindingPathList": [],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
@@ -32,7 +22,9 @@
   "isLoading": false,
   "isVisible": true,
   "key": "iu27lzhy00",
-  "leftColumn": 1,
+  "labelStyle": "BOLD",
+  "labelTextSize": "1rem",
+  "leftColumn": 3,
   "minWidth": 120,
   "mobileBottomRow": 19,
   "mobileLeftColumn": 0,
@@ -45,16 +37,16 @@
   "parentColumnSpace": 17.9375,
   "parentId": "0",
   "parentRowSpace": 10,
-  "placement": "CENTER",
+  "placement": "START",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 3,
-  "text": "{{\n  appsmith.store.accEvtInternalNotes\n    ? \"▲\"\n    : \"▼\"\n}}",
+  "rightColumn": 64,
+  "text": "Internal Notes",
   "topRow": 134,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "6h1y4lsrc6",
-  "widgetName": "accEvtInternalNotes"
+  "widgetId": "e2da7h5dmc",
+  "widgetName": "accEvtInternalNotesCopy"
 }

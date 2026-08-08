@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 8,
   "boxShadow": "none",
-  "defaultText": "{{\nNumber(appsmith.store.current_event_id || 0) === 0\n? \"\"\n: jsProposalData.header().name || \"\"\n}}",
+  "defaultText": "{{\njsProposalData.isEventMode()\n? \"\"\n: jsProposalData.header().name || \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

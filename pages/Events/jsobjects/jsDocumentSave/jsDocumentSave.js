@@ -1,37 +1,20 @@
 export default {
 	async save() {
-		if (jsProposalData.isProposalDraft()) {
-			return await jsProposalSave.saveDraft();
-		}
-
-		if (jsProposalData.isProposalLocked()) {
+		/*
+		 * Existing Proposal:
+		 * regardless of Draft / Issued / Accepted,
+		 * save the whole Proposal.
+		 */
+		if (jsProposalData.hasSelectedProposal()) {
 			try {
-				await qrySavePropHeader.run();
+				const saved =
+							await jsProposalSave.saveDraft();
 
-				await qryGetSelectedProposal.run();
-
-				await Promise.all([
-					qryGetEvtContacts.run(),
-					qryGetEvtVenueContacts.run()
-				]);
-
-				await Promise.all([
-					resetWidget("datEvtDate", true),
-					resetWidget("selEvtVenue", true),
-					resetWidget("msEvtContacts", true),
-					resetWidget("msEvtVenueContacts", true)
-				]);
-
-				showAlert(
-					"Operational details saved.",
-					"success"
-				);
-
-				return true;
+				return saved === true;
 			} catch (error) {
 				showAlert(
 					error?.message ||
-					"Operational details could not be saved.",
+					"Proposal could not be saved.",
 					"error"
 				);
 
@@ -39,6 +22,85 @@ export default {
 			}
 		}
 
-		return await jsEventSave.saveEvent();
+		/*
+		 * Brand-new Event:
+		 * first Save creates Event + Draft 1.
+		 * We will normalize this path next.
+		 */
+		const header =
+					jsProposalSave.headerSnapshotFromPage();
+
+		if (!header.event_name) {
+			showAlert(
+				"Event Name is required.",
+				"warning"
+			);
+			return false;
+		}
+
+		if (!header.customer_id) {
+			showAlert(
+				"Customer is required.",
+				"warning"
+			);
+			return false;
+		}
+
+		try {
+			const result =
+						await createEventDraft.run();
+
+			const row =
+						result?.[0] || null;
+
+			const eventId =
+						Number(
+							row?.event_id || 0
+						);
+
+			const proposalId =
+						Number(
+							row?.proposal_id || 0
+						);
+
+			if (!eventId || !proposalId) {
+				throw new Error(
+					"Event and Draft 1 were created, but their IDs were not returned."
+				);
+			}
+
+			await storeValue(
+				"current_event_id",
+				eventId
+			);
+
+			await storeValue(
+				"current_proposal_id",
+				proposalId
+			);
+
+			await Promise.all([
+				getEvtItemById.run(),
+				qryGetProposalsForEvent.run()
+			]);
+
+			await jsProposalSelector
+				.loadSelectedProposal();
+
+			showAlert(
+				"Event saved. Draft 1 created.",
+				"success"
+			);
+
+			return true;
+		} catch (error) {
+			showAlert(
+				error?.message ||
+				"Event could not be saved.",
+				"error"
+			);
+
+			return false;
+		}
 	}
 };

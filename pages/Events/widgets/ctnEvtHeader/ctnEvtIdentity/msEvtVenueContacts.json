@@ -17,6 +17,9 @@
     },
     {
       "key": "defaultOptionValue"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicHeight": "FIXED",
@@ -29,6 +32,9 @@
     },
     {
       "key": "onDropdownOpen"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -39,7 +45,7 @@
       "key": "onDropdownOpen"
     }
   ],
-  "isDisabled": false,
+  "isDisabled": "{{ jsProposalData.eventControl().status === \"Closed\" }}",
   "isFilterable": true,
   "isLoading": false,
   "isRequired": false,

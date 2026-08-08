@@ -14,10 +14,20 @@ export default {
 			qryGetEvtVenueContacts.run()
 		]);
 
-		await jsProposalSelector.initialize(true);
+		await qryGetProposalsForEvent.run();
 
-		await storeValue("accEvtCustomerNotes", false);
-		await storeValue("accEvtInternalNotes", false);
+		await jsProposalSelector
+			.initialize(true);
+
+		await storeValue(
+			"accEvtCustomerNotes",
+			false
+		);
+
+		await storeValue(
+			"accEvtInternalNotes",
+			false
+		);
 
 		return true;
 	}

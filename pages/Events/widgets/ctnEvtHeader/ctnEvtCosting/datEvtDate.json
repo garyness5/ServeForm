@@ -17,6 +17,9 @@
     },
     {
       "key": "defaultDate"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicHeight": "FIXED",
@@ -29,6 +32,9 @@
     },
     {
       "key": "onDateSelected"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -37,7 +43,7 @@
     }
   ],
   "firstDayOfWeek": 0,
-  "isDisabled": false,
+  "isDisabled": "{{ jsProposalData.eventControl().status === \"Closed\" }}",
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,

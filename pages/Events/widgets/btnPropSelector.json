@@ -1,25 +1,18 @@
 {
   "animateLoading": true,
-  "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 138,
+  "borderRadius": "0px",
+  "bottomRow": 39,
   "boxShadow": "none",
-  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonColor": "#231f20",
   "buttonVariant": "TERTIARY",
   "disabledWhenInvalid": false,
-  "dynamicBindingPathList": [
-    {
-      "key": "borderRadius"
-    },
-    {
-      "key": "text"
-    },
-    {
-      "key": "buttonColor"
-    }
-  ],
+  "dynamicBindingPathList": [],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
+    },
+    {
+      "key": "labelTextColor"
     }
   ],
   "dynamicTriggerPathList": [
@@ -32,29 +25,32 @@
   "isLoading": false,
   "isVisible": true,
   "key": "iu27lzhy00",
-  "leftColumn": 1,
+  "labelStyle": "BOLD",
+  "labelTextColor": "",
+  "labelTextSize": "1rem",
+  "leftColumn": 3,
   "minWidth": 120,
   "mobileBottomRow": 19,
   "mobileLeftColumn": 0,
   "mobileRightColumn": 16,
   "mobileTopRow": 15,
   "needsErrorInfo": false,
-  "onClick": "{{\n  storeValue(\n    \"accEvtInternalNotes\",\n    !appsmith.store.accEvtInternalNotes\n  );\n}}",
-  "originalBottomRow": 138,
-  "originalTopRow": 134,
+  "onClick": "{{\nstoreValue(\n\t\"accPropSelector\",\n\t!appsmith.store.accPropSelector\n);\n}}",
+  "originalBottomRow": 39,
+  "originalTopRow": 35,
   "parentColumnSpace": 17.9375,
   "parentId": "0",
   "parentRowSpace": 10,
-  "placement": "CENTER",
+  "placement": "START",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 3,
-  "text": "{{\n  appsmith.store.accEvtInternalNotes\n    ? \"▲\"\n    : \"▼\"\n}}",
-  "topRow": 134,
+  "rightColumn": 64,
+  "text": "Proposals",
+  "topRow": 35,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "6h1y4lsrc6",
-  "widgetName": "accEvtInternalNotes"
+  "widgetId": "2zrbzt7zi3",
+  "widgetName": "btnPropSelector"
 }

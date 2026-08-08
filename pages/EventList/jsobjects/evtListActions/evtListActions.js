@@ -21,9 +21,21 @@ export default {
 	},
 
 	async addEvent() {
-		await storeValue("current_event_id", 0);
-		await removeValue("evt_components_local_rows");
+		await storeValue(
+			"current_event_id",
+			0
+		);
+
+		await removeValue(
+			"current_proposal_id"
+		);
+
+		await removeValue(
+			"evt_components_local_rows"
+		);
+
 		navigateTo("Events");
+
 		return true;
 	},
 
@@ -72,7 +84,7 @@ export default {
 		showAlert("Event deleted.", "success");
 		return true;
 	},
-	
+
 	async syncGroceriesEligibilityFromList() {
 		const row = tblEvtList.updatedRow || tblEvtList.triggeredRow || {};
 		const eventId = Number(row.id || 0);
@@ -121,7 +133,7 @@ export default {
 		await checkEvtGroceriesManualImpact.run();
 
 		const hasManual =
-			checkEvtGroceriesManualImpact.data?.[0]?.has_manual_values === true;
+					checkEvtGroceriesManualImpact.data?.[0]?.has_manual_values === true;
 
 		if (hasManual) {
 			showModal("mdlEvtListRemove");
@@ -156,8 +168,8 @@ export default {
 
 		showAlert(
 			keepManual
-				? "Event removed from Groceries. Quantities kept. Print cleared."
-				: "Event removed from Groceries. Quantities deleted. Print cleared.",
+			? "Event removed from Groceries. Quantities kept. Print cleared."
+			: "Event removed from Groceries. Quantities deleted. Print cleared.",
 			"success"
 		);
 

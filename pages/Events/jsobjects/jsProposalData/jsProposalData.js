@@ -72,7 +72,7 @@ export default {
 
 		/*
 	 * Editable Draft:
-	 * read the unsaved workspace first.
+	 * use its current workspace.
 	 */
 		if (this.isProposalDraft()) {
 			const workspace =
@@ -84,16 +84,14 @@ export default {
 
 				const eventDate =
 							r.event_date
-				? moment
-				.utc(r.event_date)
+				? moment(r.event_date)
 				.format("YYYY-MM-DD")
 				: null;
 
 				const eventTime =
 							r.event_time
-				? String(
-					r.event_time
-				).slice(0, 8)
+				? String(r.event_time)
+				.slice(0, 8)
 				: null;
 
 				const eventDateTime =
@@ -142,19 +140,17 @@ export default {
 					),
 
 					proposal_customer_notes:
-					r.proposal_customer_notes ??
-					"",
+					r.proposal_customer_notes ?? "",
 
 					proposal_internal_notes:
-					r.proposal_internal_notes ??
-					""
+					r.proposal_internal_notes ?? ""
 				};
 			}
 		}
 
 		/*
-	 * Any selected saved Proposal:
-	 * Draft fallback, Issued, Accepted, etc.
+	 * Saved Proposal:
+	 * workspace first, query fallback.
 	 */
 		if (this.hasSelectedProposal()) {
 			const workspace =
@@ -205,17 +201,15 @@ export default {
 				),
 
 				proposal_customer_notes:
-				r.proposal_customer_notes ??
-				"",
+				r.proposal_customer_notes ?? "",
 
 				proposal_internal_notes:
-				r.proposal_internal_notes ??
-				""
+				r.proposal_internal_notes ?? ""
 			};
 		}
 
 		/*
-	 * Brand-new Event before Draft 1 exists.
+	 * Event mode / brand-new unsaved Event.
 	 */
 		const r =
 					this.event();
@@ -261,9 +255,7 @@ export default {
 			),
 
 			proposal_customer_notes:
-			r.proposal_customer_notes ??
-			r.event_notes ??
-			"",
+			r.proposal_customer_notes ?? "",
 
 			proposal_internal_notes:
 			r.proposal_internal_notes ??

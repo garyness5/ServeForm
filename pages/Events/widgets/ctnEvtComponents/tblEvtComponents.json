@@ -66,7 +66,7 @@
     "created_at",
     "updated_at"
   ],
-  "columnUpdatedAt": 1786129964467,
+  "columnUpdatedAt": 1786155150942,
   "columnWidthMap": {
     "active": 81,
     "allergen_names": 106,
@@ -170,24 +170,6 @@
       "key": "primaryColumns.extra_guests.computedValue"
     },
     {
-      "key": "primaryColumns.category_name.isCellEditable"
-    },
-    {
-      "key": "primaryColumns.menu_name.isCellEditable"
-    },
-    {
-      "key": "primaryColumns.guests.isCellEditable"
-    },
-    {
-      "key": "primaryColumns.active.isCellEditable"
-    },
-    {
-      "key": "primaryColumns.extra_guests.isCellEditable"
-    },
-    {
-      "key": "primaryColumns.customColumn2.isDisabled"
-    },
-    {
       "key": "primaryColumns.customColumn2.isCellVisible"
     },
     {
@@ -260,24 +242,6 @@
     },
     {
       "key": "primaryColumns.menu_name.cellBackground"
-    },
-    {
-      "key": "primaryColumns.category_name.isCellEditable"
-    },
-    {
-      "key": "primaryColumns.menu_name.isCellEditable"
-    },
-    {
-      "key": "primaryColumns.guests.isCellEditable"
-    },
-    {
-      "key": "primaryColumns.active.isCellEditable"
-    },
-    {
-      "key": "primaryColumns.extra_guests.isCellEditable"
-    },
-    {
-      "key": "primaryColumns.customColumn2.isDisabled"
     },
     {
       "key": "primaryColumns.customColumn2.isCellVisible"
@@ -354,7 +318,7 @@
       "horizontalAlignment": "CENTER",
       "id": "active",
       "index": 13,
-      "isCellEditable": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\njsProposalData.isEventMode() ||\njsProposalData.isProposalDraft()\n)) : \njsProposalData.isEventMode() ||\njsProposalData.isProposalDraft()\n })()}}",
+      "isCellEditable": true,
       "isCellVisible": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( !!currentRow.menu_id )) :  !!currentRow.menu_id  })()}}",
       "isDerived": false,
       "isDisabled": false,
@@ -453,7 +417,7 @@
       "horizontalAlignment": "LEFT",
       "id": "category_name",
       "index": 5,
-      "isCellEditable": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\njsProposalData.isEventMode() ||\njsProposalData.isProposalDraft()\n)) : \njsProposalData.isEventMode() ||\njsProposalData.isProposalDraft()\n })()}}",
+      "isCellEditable": true,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
@@ -770,7 +734,7 @@
       "isCellEditable": false,
       "isCellVisible": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( !!currentRow.menu_id )) :  !!currentRow.menu_id  })()}}",
       "isDerived": true,
-      "isDisabled": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsProposalData.isProposalLocked() )) :  jsProposalData.isProposalLocked()  })()}}",
+      "isDisabled": false,
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
@@ -969,7 +933,7 @@
       "horizontalAlignment": "RIGHT",
       "id": "extra_guests",
       "index": 17,
-      "isCellEditable": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\njsProposalData.isEventMode() ||\njsProposalData.isProposalDraft()\n)) : \njsProposalData.isEventMode() ||\njsProposalData.isProposalDraft()\n })()}}",
+      "isCellEditable": true,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
@@ -1004,7 +968,7 @@
       "horizontalAlignment": "RIGHT",
       "id": "guests",
       "index": 8,
-      "isCellEditable": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\njsProposalData.isEventMode() ||\njsProposalData.isProposalDraft()\n)) : \njsProposalData.isEventMode() ||\njsProposalData.isProposalDraft()\n })()}}",
+      "isCellEditable": true,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
@@ -1234,7 +1198,7 @@
       "horizontalAlignment": "LEFT",
       "id": "menu_name",
       "index": 7,
-      "isCellEditable": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\njsProposalData.isEventMode() ||\njsProposalData.isProposalDraft()\n)) : \njsProposalData.isEventMode() ||\njsProposalData.isProposalDraft()\n })()}}",
+      "isCellEditable": true,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,

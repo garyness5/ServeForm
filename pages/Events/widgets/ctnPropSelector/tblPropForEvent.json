@@ -51,7 +51,7 @@
     "proposal_sequence_number",
     "proposal_number"
   ],
-  "columnUpdatedAt": 1785773988542,
+  "columnUpdatedAt": 1786142443133,
   "columnWidthMap": {
     "active": 105,
     "proposal_no": 150,
@@ -790,7 +790,7 @@
   },
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 64,
+  "rightColumn": 31,
   "searchKey": "",
   "serverSidePaginationEnabled": true,
   "showInlineEditingOptionDropdown": true,

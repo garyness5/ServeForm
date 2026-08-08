@@ -39,7 +39,7 @@
       "key": "onOptionChange"
     }
   ],
-  "isDisabled": "{{ jsProposalData.isProposalLocked() }}",
+  "isDisabled": "{{ jsProposalData.eventControl().status === \"Closed\" }}",
   "isFilterable": true,
   "isLoading": false,
   "isRequired": false,

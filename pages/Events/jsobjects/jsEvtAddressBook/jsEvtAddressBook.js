@@ -613,11 +613,6 @@ export default {
 											setTimeout(resolve, 50)
 										 );
 
-		const {
-			proposalId,
-			workspace
-		} = await this.currentWorkspace();
-
 		const isVenue =
 					context === "venue";
 
@@ -627,28 +622,59 @@ export default {
 			: selEvtCustomer.selectedOptionValue
 		) || null;
 
-		await jsProposalWorkspaces.set(
-			proposalId,
-			{
-				...workspace,
+		/*
+	 * Existing Proposal:
+	 * update the displayed Proposal workspace immediately
+	 * so the Select default does not snap back.
+	 */
+		if (jsProposalData.hasSelectedProposal()) {
+			const proposalId =
+						jsProposalWorkspaces.currentProposalId();
 
-				header: {
-					...(workspace.header || {}),
+			let workspace =
+					jsProposalWorkspaces.get(proposalId);
 
-					[isVenue
-					? "venue_id"
-					: "customer_id"]:
-					selectedId,
-
-					[isVenue
-					? "venue_contact_ids"
-					: "contact_ids"]:
-					[]
-				}
+			if (!workspace?.header) {
+				workspace =
+					jsProposalData.isProposalDraft()
+					? await jsProposalWorkspaces
+					.initializeCurrentDraft()
+				: await jsProposalWorkspaces
+					.initializeCurrentHeader();
 			}
-		);
 
-		await this.resetContactSelection(context);
+			if (workspace?.header) {
+				await jsProposalWorkspaces.set(
+					proposalId,
+					{
+						...workspace,
+
+						header: {
+							...(workspace.header || {}),
+
+							[isVenue
+							? "venue_id"
+							: "customer_id"]:
+							selectedId,
+
+							/*
+						 * New parent means the previous
+						 * Contacts no longer belong to
+						 * the current selection.
+						 */
+							[isVenue
+							? "venue_contact_ids"
+							: "contact_ids"]:
+							[]
+						}
+					}
+				);
+			}
+		}
+
+		await this.resetContactSelection(
+			context
+		);
 
 		return selectedId;
 	},

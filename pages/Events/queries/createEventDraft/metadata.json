@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_a00cf04c-3a40-4ed3-9439-a40e5ecb6b5a",
-  "id": "Events_qrySavePropHeader",
+  "gitSyncId": "6a0a1bde3214f344228346e7_c6dcb675-bb1c-4c34-9233-0de7dabbdb59",
+  "id": "Events_createEventDraft",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_proposal_operational_header(\n\t{{ Number(appsmith.store.current_proposal_id || 0) }},\n\n\t'{{\n\tJSON.stringify(\n\t\tjsProposalSave.headerSnapshotFromPage()\n\t).replaceAll(\"'\", \"''\")\n\t}}'::jsonb\n);",
+      "body": "select *\nfrom public.create_event_draft(\n\t{{ appsmith.store.current_client_id }},\n\t{{ JSON.stringify(jsProposalSave.headerSnapshotFromPage()) }}::jsonb,\n\t{{\n\t\tJSON.stringify(\n\t\t\tjsProposalComponents\n\t\t\t\t.effectiveRows()\n\t\t\t\t.filter(r =>\n\t\t\t\t\tr.menu_id ||\n\t\t\t\t\tr.menu_name ||\n\t\t\t\t\tr.guests != null ||\n\t\t\t\t\tr.extra_guests != null\n\t\t\t\t)\n\t\t)\n\t}}::jsonb\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,7 +27,7 @@
         "key": "body"
       }
     ],
-    "name": "qrySavePropHeader",
+    "name": "createEventDraft",
     "pageId": "Events",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

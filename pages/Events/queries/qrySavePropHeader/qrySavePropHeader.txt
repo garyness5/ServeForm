@@ -3,8 +3,8 @@ from public.save_proposal_operational_header(
 	{{ Number(appsmith.store.current_proposal_id || 0) }},
 
 	'{{
-		JSON.stringify(
-			jjsProposalSave.headerSnapshotFromPage()
-		).replaceAll("'", "''")
+	JSON.stringify(
+		jsProposalSave.headerSnapshotFromPage()
+	).replaceAll("'", "''")
 	}}'::jsonb
 );
