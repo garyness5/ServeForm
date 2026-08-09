@@ -1,14 +1,17 @@
 export default {
 	async save() {
 		/*
-		 * Existing Proposal:
-		 * regardless of Draft / Issued / Accepted,
-		 * save the whole Proposal.
+		 * Selected Proposal:
+		 * Save everything currently in front of us.
 		 */
-		if (jsProposalData.hasSelectedProposal()) {
+		if (
+			jsProposalData
+			.hasSelectedProposal()
+		) {
 			try {
 				const saved =
-							await jsProposalSave.saveDraft();
+							await jsProposalSave
+				.saveDraft();
 
 				return saved === true;
 			} catch (error) {
@@ -23,84 +26,39 @@ export default {
 		}
 
 		/*
-		 * Brand-new Event:
-		 * first Save creates Event + Draft 1.
-		 * We will normalize this path next.
+		 * Existing Event with no Proposal selected.
 		 */
-		const header =
-					jsProposalSave.headerSnapshotFromPage();
+		const eventId =
+					Number(
+						appsmith.store
+						.current_event_id ||
+						0
+					);
 
-		if (!header.event_name) {
-			showAlert(
-				"Event Name is required.",
-				"warning"
-			);
-			return false;
-		}
-
-		if (!header.customer_id) {
-			showAlert(
-				"Customer is required.",
-				"warning"
-			);
-			return false;
-		}
-
-		try {
-			const result =
-						await createEventDraft.run();
-
-			const row =
-						result?.[0] || null;
-
-			const eventId =
-						Number(
-							row?.event_id || 0
-						);
-
-			const proposalId =
-						Number(
-							row?.proposal_id || 0
-						);
-
-			if (!eventId || !proposalId) {
-				throw new Error(
-					"Event and Draft 1 were created, but their IDs were not returned."
+		if (eventId > 0) {
+			try {
+				return await jsEventSave
+					.saveEvent();
+			} catch (error) {
+				showAlert(
+					error?.message ||
+					"Event could not be saved.",
+					"error"
 				);
+
+				return false;
 			}
-
-			await storeValue(
-				"current_event_id",
-				eventId
-			);
-
-			await storeValue(
-				"current_proposal_id",
-				proposalId
-			);
-
-			await Promise.all([
-				getEvtItemById.run(),
-				qryGetProposalsForEvent.run()
-			]);
-
-			await jsProposalSelector
-				.loadSelectedProposal();
-
-			showAlert(
-				"Event saved. Draft 1 created.",
-				"success"
-			);
-
-			return true;
-		} catch (error) {
-			showAlert(
-				error?.message ||
-				"Event could not be saved.",
-				"error"
-			);
-
-			return false;
 		}
+
+		/*
+		 * Event creation now belongs to
+		 * the Add Event flow.
+		 */
+		showAlert(
+			"Create the Event first using Add Event.",
+			"warning"
+		);
+
+		return false;
 	}
 };
