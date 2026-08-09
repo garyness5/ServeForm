@@ -257,6 +257,15 @@ export default {
 		};
 	},
 
+	showRowActions(row) {
+		return !!(
+			row?.category_id ||
+			row?.category_name ||
+			row?.menu_id ||
+			row?.menu_name
+		);
+	},
+
 	normalizeRows(rows) {
 		const realRows = (rows || [])
 		.filter(row =>
@@ -385,11 +394,7 @@ export default {
 			return evtCompTable.getRows();
 		}
 
-		if (this.isDraftMode()) {
-			return this.draftRows();
-		}
-
-		return this.queryRows();
+		return this.draftRows();
 	},
 
 	mergeUpdatedRows() {
@@ -435,7 +440,7 @@ export default {
 	},
 
 	effectiveRows() {
-		if (this.isDraftMode()) {
+		if (this.isProposalMode()) {
 			return this.mergeUpdatedRows();
 		}
 
@@ -443,7 +448,7 @@ export default {
 	},
 
 	async setDraftRows(rows) {
-		if (!this.isDraftMode()) {
+		if (!jsProposalData.hasSelectedProposal()) {
 			return null;
 		}
 
@@ -468,10 +473,7 @@ export default {
 	},
 
 	async patchRow(row, patch) {
-		if (
-			!this.isDraftMode() ||
-			!row?.draft_row_id
-		) {
+		if (!row?.draft_row_id) {
 			return null;
 		}
 
@@ -533,7 +535,8 @@ export default {
 	},
 
 	menuOptions(row) {
-		const rows = this.isDraftMode()
+		const rows =
+					this.isProposalMode()
 		? this.draftRows()
 		: this.rows();
 
@@ -807,10 +810,7 @@ export default {
 	},
 
 	async onCategoryChange(row) {
-		if (
-			!this.isDraftMode() ||
-			!row?.draft_row_id
-		) {
+		if (!row?.draft_row_id) {
 			return null;
 		}
 
@@ -890,10 +890,7 @@ export default {
 	},
 
 	async onMenuChange(row) {
-		if (
-			!this.isDraftMode() ||
-			!row?.draft_row_id
-		) {
+		if (!row?.draft_row_id) {
 			return null;
 		}
 
@@ -1044,10 +1041,7 @@ export default {
 	},
 
 	async onQuantityChange(row) {
-		if (
-			!this.isDraftMode() ||
-			!row?.draft_row_id
-		) {
+		if (!row?.draft_row_id) {
 			return null;
 		}
 
@@ -1095,10 +1089,7 @@ export default {
 	},
 
 	async onActiveChange(row) {
-		if (
-			!this.isDraftMode() ||
-			!row?.draft_row_id
-		) {
+		if (!row?.draft_row_id) {
 			return null;
 		}
 
@@ -1125,10 +1116,7 @@ export default {
 	},
 
 	async deleteRow(row) {
-		if (
-			!this.isDraftMode() ||
-			!row?.draft_row_id
-		) {
+		if (!row?.draft_row_id) {
 			return null;
 		}
 
@@ -1149,20 +1137,6 @@ export default {
 	lineCost(row) {
 		if (!row?.menu_id) {
 			return null;
-		}
-
-		if (this.isLockedMode()) {
-			const storedCost =
-						this.numberOrNull(
-							row.line_cost ??
-							row.kitchen_cost
-						);
-
-			return storedCost == null
-				? null
-			: Math.round(
-				storedCost * 100
-			) / 100;
 		}
 
 		return this.refreshDerivedFields(
@@ -1189,38 +1163,48 @@ export default {
 	},
 
 	toProduce() {
-		return this.effectiveRows()
-			.reduce((sum, row) => {
-			if (
-				row.active === false
-			) {
-				return sum;
-			}
+		const rows =
+					this.mergeUpdatedRows();
 
-			return (
-				sum +
-				Number(
-					row.guests || 0
-				) +
-				Number(
-					row.extra_guests ||
-					0
-				)
-			);
-		}, 0);
+		return rows.reduce(
+			(sum, row) => {
+				if (
+					row.active === false
+				) {
+					return sum;
+				}
+
+				return (
+					sum +
+					Number(
+						row.guests || 0
+					) +
+					Number(
+						row.extra_guests || 0
+					)
+				);
+			},
+			0
+		);
 	},
 
 	totalCost() {
+		const rows =
+					this.mergeUpdatedRows();
+
 		const total =
-					this.effectiveRows()
-		.reduce((sum, row) =>
-						sum +
-						Number(
-			this.lineCost(row) ||
-			0
-		),
+					rows.reduce(
+						(sum, row) => {
+							const cost =
+										this.lineCost(row);
+
+							return (
+								sum +
+								Number(cost || 0)
+							);
+						},
 						0
-					 );
+					);
 
 		return Math.round(
 			total * 100

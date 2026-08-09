@@ -1,0 +1,6 @@
+select *
+from public.rename_event(
+    {{ Number(appsmith.store.current_event_id || 0) }},
+    '{{ appsmith.store.current_client_id }}'::uuid,
+    '{{ (inpEvtRenameName.text || "").trim().replaceAll("'", "''") }}'
+);

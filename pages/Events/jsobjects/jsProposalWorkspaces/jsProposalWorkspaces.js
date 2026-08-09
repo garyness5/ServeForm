@@ -71,89 +71,66 @@ export default {
 		];
 	},
 
-	headerFromQuery() {
-		const row =
-					qryGetSelectedProposal.data?.[0] ||
-					{};
+	async renameEventInWorkspaces(
+		eventId,
+		newName
+	) {
+		const name =
+					String(newName || "").trim();
 
-		const toIdArray = (
-			arrayValue,
-			singleValue
-		) => {
-			if (
-				Array.isArray(arrayValue)
-			) {
-				return arrayValue
-					.map(Number)
-					.filter(Boolean);
+		if (!name) {
+			return false;
+		}
+
+		/*
+	 * qryGetProposalsForEvent already contains
+	 * every Proposal belonging to the current Event.
+	 */
+		const proposalIds =
+					new Set(
+						(qryGetProposalsForEvent.data || [])
+						.map(row =>
+								 Number(row.id || 0)
+								)
+						.filter(Boolean)
+					);
+
+		const workspaces =
+					this.all();
+
+		const updated = {};
+
+		Object.entries(workspaces)
+			.forEach(
+			([proposalId, workspace]) => {
+
+				const belongsToEvent =
+							proposalIds.has(
+								Number(proposalId)
+							);
+
+				updated[proposalId] =
+					belongsToEvent
+					? {
+					...workspace,
+
+					header: {
+						...(workspace.header || {}),
+						event_name: name
+					},
+
+					saved_header: {
+						...(workspace.saved_header || {}),
+						event_name: name
+					}
+				}
+				: workspace;
 			}
+		);
 
-			const singleId =
-						Number(
-							singleValue || 0
-						);
+		await this.saveAll(updated);
 
-			return singleId > 0
-				? [singleId]
-			: [];
-		};
-
-		return {
-			proposal_id:
-			Number(
-				row.id ||
-				this.currentProposalId() ||
-				0
-			),
-
-			event_name:
-			row.event_name ?? "",
-
-			event_ref:
-			row.event_ref ?? "",
-
-			event_date:
-			row.event_date ?? null,
-
-			event_time:
-			row.event_time ?? null,
-
-			event_datetime:
-			row.event_datetime ?? null,
-
-			event_format:
-			row.event_format ?? "",
-
-			total_guests:
-			row.total_guests ?? null,
-
-			customer_id:
-			row.customer_id ?? null,
-
-			contact_ids:
-			toIdArray(
-				row.contact_ids,
-				row.contact_id
-			),
-
-			venue_id:
-			row.venue_id ?? null,
-
-			venue_contact_ids:
-			toIdArray(
-				row.venue_contact_ids,
-				row.venue_contact_id
-			),
-
-			proposal_customer_notes:
-			row.proposal_customer_notes ??
-			"",
-
-			proposal_internal_notes:
-			row.proposal_internal_notes ??
-			row.event_notes ??
-			""
-		};
+		return true;
 	},
 
 	async initializeCurrentHeader() {
@@ -170,27 +147,59 @@ export default {
 		const existing =
 					this.get(proposalId);
 
-		if (existing?.header) {
-			return existing;
-		}
-
 		const queryHeader =
 					this.headerFromQuery();
 
+		const queryComponents =
+					this.componentsFromQuery();
+
+		/*
+	 * Existing workspace already has the full
+	 * editable Proposal state.
+	 */
+		if (
+			existing?.header &&
+			Array.isArray(existing?.components) &&
+			Array.isArray(existing?.saved_components)
+		) {
+			return existing;
+		}
+
+		/*
+	 * Old locked-Proposal workspaces may contain
+	 * only a header. Complete them now.
+	 */
 		return await this.set(
 			proposalId,
 			{
 				...(existing || {}),
 
 				header:
+				existing?.header ||
 				queryHeader,
 
+				components:
+				Array.isArray(existing?.components)
+				? existing.components
+				: queryComponents,
+
 				saved_header:
+				existing?.saved_header ||
 				this.deepCopy(
 					queryHeader
 				),
 
+				saved_components:
+				Array.isArray(
+					existing?.saved_components
+				)
+				? existing.saved_components
+				: this.deepCopy(
+					queryComponents
+				),
+
 				saved_updated_at:
+				existing?.saved_updated_at ||
 				qryGetSelectedProposal
 				.data?.[0]
 				?.updated_at ||
@@ -209,7 +218,7 @@ export default {
 
 	async initializeCurrentDraft() {
 		if (
-			!this.isCurrentLoadedDraft()
+			!jsProposalData.hasSelectedProposal()
 		) {
 			return null;
 		}
@@ -299,31 +308,30 @@ export default {
 	},
 
 	async captureCurrentDraft() {
-		if (
-			!this.isCurrentLoadedDraft()
-		) {
+		if (!jsProposalData.hasSelectedProposal()) {
 			return null;
 		}
 
 		const proposalId =
 					this.currentProposalId();
 
-		const existing =
-					this.get(proposalId) ||
-					await this
-		.initializeCurrentDraft();
+		let existing =
+				this.get(proposalId);
+
+		if (!existing?.header) {
+			existing =
+				await this.initializeCurrentDraft();
+		}
 
 		if (!existing) {
 			return null;
 		}
 
 		const header =
-					jsProposalSave
-		.headerSnapshotFromPage();
+					jsProposalSave.headerSnapshotFromPage();
 
 		const components =
-					jsProposalComponents
-		.mergeUpdatedRows();
+					jsProposalComponents.mergeUpdatedRows();
 
 		return await this.set(
 			proposalId,
@@ -336,9 +344,7 @@ export default {
 	},
 
 	async setCurrentComponents(rows) {
-		if (
-			!jsProposalData.isProposalDraft()
-		) {
+		if (!jsProposalData.hasSelectedProposal()) {
 			return null;
 		}
 
@@ -355,9 +361,39 @@ export default {
 
 				components:
 				jsProposalComponents
-				.normalizeRows(
-					rows
-				)
+				.normalizeRows(rows)
+			}
+		);
+	},
+
+	async captureCurrentComponents() {
+		if (!jsProposalData.hasSelectedProposal()) {
+			return null;
+		}
+
+		const proposalId =
+					this.currentProposalId();
+
+		let workspace =
+				this.get(proposalId);
+
+		if (!workspace?.header) {
+			workspace =
+				await this.initializeCurrentDraft();
+		}
+
+		if (!workspace) {
+			return null;
+		}
+
+		const components =
+					jsProposalComponents.mergeUpdatedRows();
+
+		return await this.set(
+			proposalId,
+			{
+				...workspace,
+				components
 			}
 		);
 	},
@@ -471,6 +507,11 @@ export default {
 				.venue_contact_ids
 			),
 
+			event_id:
+			Number(
+				source.event_id || 0
+			) || null,
+
 			proposal_customer_notes:
 			String(
 				source
@@ -565,12 +606,7 @@ export default {
 
 		if (!workspace?.header) {
 			workspace =
-				jsProposalData
-				.isProposalDraft()
-				? await this
-				.initializeCurrentDraft()
-			: await this
-				.initializeCurrentHeader();
+				await this.initializeCurrentDraft();
 		}
 
 		if (!workspace?.header) {
@@ -590,8 +626,7 @@ export default {
 	},
 
 	isDirty(
-		proposalId =
-		this.currentProposalId()
+		proposalId = this.currentProposalId()
 	) {
 		const workspace =
 					this.get(proposalId);
@@ -614,37 +649,9 @@ export default {
 						workspace.saved_header
 					);
 
-		const headerDirty =
-					JSON.stringify(
-						currentHeader
-					) !==
-					JSON.stringify(
-						savedHeader
-					);
-
-		/*
-		 * Locked Proposal:
-		 * only permitted operational header
-		 * changes can make it dirty.
-		 */
-		if (
-			isCurrentProposal &&
-			jsProposalData
-			.isProposalLocked()
-		) {
-			return headerDirty;
-		}
-
-		/*
-		 * Draft:
-		 * header + components can be dirty.
-		 */
 		const currentRows =
-					isCurrentProposal &&
-					jsProposalData
-		.isProposalDraft()
-		? jsProposalComponents
-		.mergeUpdatedRows()
+					isCurrentProposal
+		? jsProposalComponents.mergeUpdatedRows()
 		: workspace.components;
 
 		const currentComponents =
@@ -654,18 +661,14 @@ export default {
 
 		const savedComponents =
 					this.normalizeComponents(
-						workspace
-						.saved_components
+						workspace.saved_components
 					);
 
 		return (
-			headerDirty ||
-			JSON.stringify(
-				currentComponents
-			) !==
-			JSON.stringify(
-				savedComponents
-			)
+			JSON.stringify(currentHeader) !==
+			JSON.stringify(savedHeader) ||
+			JSON.stringify(currentComponents) !==
+			JSON.stringify(savedComponents)
 		);
 	},
 

@@ -27,9 +27,7 @@ export default {
 			return "event";
 		}
 
-		return this.proposal().proposal_status === "Draft"
-			? "proposal_draft"
-		: "proposal_locked";
+		return "proposal";
 	},
 
 	isEventMode() {
@@ -37,18 +35,18 @@ export default {
 	},
 
 	isProposalDraft() {
-		return this.proposalMode() === "proposal_draft";
+		return (
+			this.hasSelectedProposal() &&
+			this.proposal().proposal_status === "Draft"
+		);
 	},
 
 	isProposalLocked() {
-		return this.proposalMode() === "proposal_locked";
+		return false;
 	},
 
 	canEditDisplayedDocument() {
-		return (
-			this.isEventMode() ||
-			this.isProposalDraft()
-		);
+		return true;
 	},
 
 	header() {
@@ -280,11 +278,16 @@ export default {
 			id: r.id ?? null,
 			status: r.proposal_status ?? null,
 			active: r.active === false ? false : true,
-			editable: this.isProposalDraft(),
+
+			editable: true,
+
 			closed: r.is_closed === true,
+
 			reference:
 			r.proposal_number ||
-			(r.proposal_no ? `Draft ${r.proposal_no}` : "")
+			(r.proposal_no
+			 ? `Draft ${r.proposal_no}`
+			 : "")
 		};
 	}
 };

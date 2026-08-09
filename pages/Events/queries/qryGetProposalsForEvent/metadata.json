@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n    id,\n    event_id,\n    proposal_no,\n    proposal_status,\n    proposal_title,\n    event_name,\n    event_ref,\n    event_date,\n    total_guests,\n    sent_at,\n    created_at,\n    active,\n    closed_at,\n    was_issued,\n    is_editable,\n    is_closed,\n    proposal_sequence_number,\n    proposal_number\nfrom public.vw_prop_selector\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and event_id = {{ Number(appsmith.store.current_event_id || 0) }}\norder by\n    case\n        when proposal_status = 'Ordered' then 0\n        else 1\n    end,\n    coalesce(sent_at, created_at) desc,\n    id desc;",
+      "body": "select\n    id,\n    event_id,\n    proposal_no,\n    proposal_status,\n    proposal_title,\n    event_name,\n    event_ref,\n    event_date,\n    total_guests,\n    sent_at,\n    created_at,\n    active,\n    closed_at,\n    was_issued,\n    is_editable,\n    is_closed,\n    proposal_sequence_number,\n    proposal_number\nfrom public.vw_prop_selector\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and event_id = {{ Number(appsmith.store.current_event_id || 0) }}\norder by\n    case\n        when proposal_status = 'Accepted' then 0\n        when proposal_status = 'Issued' then 1\n        when proposal_status = 'Draft' then 2\n        else 3\n    end,\n    coalesce(sent_at, created_at) desc,\n    id desc;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -29,7 +29,7 @@
     ],
     "name": "qryGetProposalsForEvent",
     "pageId": "Events",
-    "runBehaviour": "MANUAL",
+    "runBehaviour": "AUTOMATIC",
     "userSetOnLoad": true
   }
 }

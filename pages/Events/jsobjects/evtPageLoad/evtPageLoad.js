@@ -14,8 +14,6 @@ export default {
 			qryGetEvtVenueContacts.run()
 		]);
 
-		await qryGetProposalsForEvent.run();
-
 		await jsProposalSelector
 			.initialize(true);
 

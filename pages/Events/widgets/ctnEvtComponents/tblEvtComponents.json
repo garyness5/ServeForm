@@ -66,7 +66,7 @@
     "created_at",
     "updated_at"
   ],
-  "columnUpdatedAt": 1786155150942,
+  "columnUpdatedAt": 1786233689929,
   "columnWidthMap": {
     "active": 81,
     "allergen_names": 106,
@@ -247,16 +247,16 @@
       "key": "primaryColumns.customColumn2.isCellVisible"
     },
     {
-      "key": "primaryColumns.guests.onSubmit"
-    },
-    {
-      "key": "primaryColumns.extra_guests.onSubmit"
-    },
-    {
       "key": "primaryColumns.active.onCheckChange"
     },
     {
       "key": "primaryColumns.active.isCellVisible"
+    },
+    {
+      "key": "primaryColumns.guests.onSubmit"
+    },
+    {
+      "key": "primaryColumns.extra_guests.onSubmit"
     }
   ],
   "dynamicTriggerPathList": [
@@ -319,7 +319,7 @@
       "id": "active",
       "index": 13,
       "isCellEditable": true,
-      "isCellVisible": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( !!currentRow.menu_id )) :  !!currentRow.menu_id  })()}}",
+      "isCellVisible": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsProposalComponents.showRowActions(currentRow) )) :  jsProposalComponents.showRowActions(currentRow)  })()}}",
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
@@ -732,7 +732,7 @@
       "id": "customColumn2",
       "index": 10,
       "isCellEditable": false,
-      "isCellVisible": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( !!currentRow.menu_id )) :  !!currentRow.menu_id  })()}}",
+      "isCellVisible": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsProposalComponents.showRowActions(currentRow) )) :  jsProposalComponents.showRowActions(currentRow)  })()}}",
       "isDerived": true,
       "isDisabled": false,
       "isDiscardVisible": true,
@@ -855,7 +855,7 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "number",
+      "columnType": "text",
       "computedValue": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"event_component_id\"])) : event_component_id })()}}",
       "currencyCode": "USD",
       "decimals": 0,
@@ -943,7 +943,7 @@
       "isVisible": true,
       "label": "Extra",
       "notation": "standard",
-      "onSubmit": "{{ jsProposalComponents.onQuantityChange(tblEvtComponents.triggeredRow) }}",
+      "onSubmit": "{{ true }}",
       "originalId": "extra_guests",
       "sticky": "",
       "textColor": "",
@@ -978,7 +978,7 @@
       "isVisible": true,
       "label": "Guests",
       "notation": "standard",
-      "onSubmit": "{{ jsProposalComponents.onQuantityChange(tblEvtComponents.triggeredRow) }}",
+      "onSubmit": "{{ true }}",
       "originalId": "guests",
       "sticky": "",
       "textColor": "",

@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 30,
+  "bottomRow": 28,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -33,20 +33,20 @@
   "mobileRightColumn": 19,
   "mobileTopRow": 20,
   "needsErrorInfo": false,
-  "originalBottomRow": 30,
-  "originalTopRow": 26,
+  "originalBottomRow": 28,
+  "originalTopRow": 24,
   "overflow": "NONE",
   "parentColumnSpace": 4.5625,
   "parentId": "o4uwuew4ll",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 64,
+  "rightColumn": 62,
   "shouldTruncate": false,
   "text": "{{\n\"<b>Kitchen Cost:</b> \" +\n(\tjsProposalComponents.totalCost() > 0\n\t? fmt.currency(jsProposalComponents.totalCost())\n\t: \"\"\n)\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 26,
+  "topRow": 24,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

@@ -15,13 +15,8 @@ export default {
 		try {
 			await qryGetSelectedProposalMenus.run();
 
-			if (jsProposalData.isProposalDraft()) {
-				await jsProposalWorkspaces
-					.initializeCurrentDraft();
-			} else {
-				await jsProposalWorkspaces
-					.initializeCurrentHeader();
-			}
+			await jsProposalWorkspaces
+				.initializeCurrentDraft();
 		} catch (error) {
 			await qryGetSelectedProposalMenus.clear();
 
@@ -98,9 +93,9 @@ export default {
 		}
 
 		/*
-		 * Preserve the currently displayed Draft
-		 * before changing Proposal identity.
-		 */
+	 * Preserve the currently displayed Proposal
+	 * before changing Proposal identity.
+	 */
 		await jsProposalWorkspaces
 			.captureCurrentDraft();
 

@@ -98,8 +98,8 @@ export default {
 	},
 
 	requiredMessage() {
-		if (!this.isDraft()) {
-			return "Only a Draft Proposal can be edited.";
+		if (!jsProposalData.hasSelectedProposal()) {
+			return "No Proposal is currently selected.";
 		}
 
 		if (!this.headerSnapshotFromPage().event_name) {
@@ -112,8 +112,7 @@ export default {
 	menuPayload(rows) {
 		return (rows || [])
 			.filter(row =>
-							Number(row.menu_id || 0) > 0 ||
-							String(row.menu_name || "").trim()
+							jsProposalComponents.hasContent(row)
 						 )
 			.map((row, index) => {
 			const derived =
@@ -310,8 +309,13 @@ export default {
 			proposalId
 		);
 
-		await jsProposalWorkspaces
-			.initializeCurrentDraft();
+		if (jsProposalData.isProposalDraft()) {
+			await jsProposalWorkspaces
+				.initializeCurrentDraft();
+		} else {
+			await jsProposalWorkspaces
+				.initializeCurrentHeader();
+		}
 
 		await Promise.all([
 			resetWidget("inpEvtName", true),
@@ -324,8 +328,12 @@ export default {
 			resetWidget("selEvtVenue", true),
 			resetWidget("msEvtVenueContacts", true),
 			resetWidget("rteEvtCustomerNotes", true),
-			resetWidget("rteEvtInternalNotes", true)
+			resetWidget("rteEvtInternalNotes", true),
+
+			resetWidget("tblEvtComponents", true)
 		]);
+
+		return true;
 	},
 
 	async saveDraft() {

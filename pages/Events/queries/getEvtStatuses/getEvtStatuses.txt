@@ -4,4 +4,19 @@ select
 from public.system_status_options
 where domain_code = 'event'
   and active = true
-order by sort_order;
+  and status_value in (
+      'Draft',
+      'Accepted',
+      'Ordered',
+      'Closed',
+      'Cancelled'
+  )
+order by
+    case status_value
+        when 'Draft' then 1
+        when 'Accepted' then 2
+        when 'Ordered' then 3
+        when 'Closed' then 4
+        when 'Cancelled' then 5
+        else 99
+    end;

@@ -29,6 +29,131 @@ export default {
 		return true;
 	},
 
+	async createMinimalEvent() {
+		const result =
+					await createEvtMinimal.run();
+
+		const newId =
+					Number(
+						result?.[0]?.event_id || 0
+					);
+
+		if (!newId) {
+			showAlert(
+				"Event could not be created.",
+				"error"
+			);
+			return false;
+		}
+
+		await storeValue(
+			"current_event_id",
+			newId
+		);
+
+		await removeValue(
+			"current_proposal_id"
+		);
+
+		closeModal("mdlEvtAdd");
+
+		await getEvtItemById.run();
+		await getEvtComponents.run();
+
+		await jsProposalSelector
+			.initialize(true);
+
+		resetWidget(
+			"inpEvtAddName",
+			true
+		);
+
+		showAlert(
+			"Event created.",
+			"success"
+		);
+
+		return true;
+	},
+
+	canSaveRename() {
+		const newName =
+					String(
+						inpEvtRenameName.text || ""
+					).trim();
+
+		const oldName =
+					String(
+						jsProposalData.header().name || ""
+					).trim();
+
+		return (
+			newName.length > 0 &&
+			newName !== oldName
+		);
+	},
+
+	async renameEvent() {
+		const eventId =
+					Number(
+						appsmith.store.current_event_id || 0
+					);
+
+		if (!eventId) {
+			showAlert(
+				"There is no Event to rename.",
+				"warning"
+			);
+			return false;
+		}
+
+		if (!this.canSaveRename()) {
+			return false;
+		}
+
+		const newName =
+					String(
+						inpEvtRenameName.text || ""
+					).trim();
+
+		await renameEvt.run();
+
+		await getEvtItemById.run();
+		await qryGetProposalsForEvent.run();
+
+		const proposalId =
+					Number(
+						appsmith.store.current_proposal_id || 0
+					);
+
+		if (proposalId > 0) {
+			await qryGetSelectedProposal.run();
+
+			const workspace =
+						jsProposalWorkspaces.get(proposalId);
+
+			await jsProposalWorkspaces
+				.renameEventInWorkspaces(
+				eventId,
+				newName
+			);
+		}
+
+		closeModal("mdlEvtRename");
+
+		await resetWidget(
+			"inpEvtRenameName",
+			true
+		);
+
+		showAlert(
+			"Event renamed.",
+			"success"
+		);
+
+		return true;
+	},
+
 	headerSnapshotFromPage() {
 		const customerContactIds =
 					(msEvtContacts.selectedOptionValues || [])

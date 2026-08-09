@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n    status_value as value,\n    display_label as label\nfrom public.system_status_options\nwhere domain_code = 'event'\n  and active = true\norder by sort_order;",
+      "body": "select\n    status_value as value,\n    display_label as label\nfrom public.system_status_options\nwhere domain_code = 'event'\n  and active = true\n  and status_value in (\n      'Draft',\n      'Accepted',\n      'Ordered',\n      'Closed',\n      'Cancelled'\n  )\norder by\n    case status_value\n        when 'Draft' then 1\n        when 'Accepted' then 2\n        when 'Ordered' then 3\n        when 'Closed' then 4\n        when 'Cancelled' then 5\n        else 99\n    end;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

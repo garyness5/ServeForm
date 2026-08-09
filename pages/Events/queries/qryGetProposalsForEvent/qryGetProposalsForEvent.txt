@@ -22,8 +22,10 @@ where client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and event_id = {{ Number(appsmith.store.current_event_id || 0) }}
 order by
     case
-        when proposal_status = 'Ordered' then 0
-        else 1
+        when proposal_status = 'Accepted' then 0
+        when proposal_status = 'Issued' then 1
+        when proposal_status = 'Draft' then 2
+        else 3
     end,
     coalesce(sent_at, created_at) desc,
     id desc;
