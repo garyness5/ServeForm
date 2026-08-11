@@ -121,24 +121,6 @@ export default {
 		await getEvtItemById.run();
 		await qryGetProposalsForEvent.run();
 
-		const proposalId =
-					Number(
-						appsmith.store.current_proposal_id || 0
-					);
-
-		if (proposalId > 0) {
-			await qryGetSelectedProposal.run();
-
-			const workspace =
-						jsProposalWorkspaces.get(proposalId);
-
-			await jsProposalWorkspaces
-				.renameEventInWorkspaces(
-				eventId,
-				newName
-			);
-		}
-
 		closeModal("mdlEvtRename");
 
 		await resetWidget(
@@ -169,11 +151,8 @@ export default {
 			name:
 			this.textClean(inpEvtName.text),
 
-			event_date:
-			datEvtDate.selectedDate
-			? moment(datEvtDate.selectedDate)
-			.format("YYYY-MM-DD")
-			: null,
+			event_ref:
+			this.textClean(inpEvtRef.text),
 
 			event_datetime:
 			datEvtDate.selectedDate
@@ -186,13 +165,6 @@ export default {
 				selEvtCustomer.selectedOptionValue || 0
 			) || null,
 
-			/*
-		 * Temporary compatibility for evt_items.
-		 * Proposal saves use the full arrays.
-		 */
-			contact_id:
-			customerContactIds[0] || null,
-
 			contact_ids:
 			customerContactIds,
 
@@ -201,14 +173,8 @@ export default {
 				selEvtVenue.selectedOptionValue || 0
 			) || null,
 
-			venue_contact_id:
-			venueContactIds[0] || null,
-
 			venue_contact_ids:
 			venueContactIds,
-
-			event_ref:
-			this.textClean(inpEvtRef.text),
 
 			total_guests_manual:
 			inpTotalGuests.text === "" ||
@@ -217,28 +183,27 @@ export default {
 			? null
 			: Number(inpTotalGuests.text),
 
-			status:
-			selEvtStatus.selectedOptionValue ||
-			"Draft",
-
 			format:
-			selEvtFormat.selectedOptionValue ||
-			null,
+			selEvtFormat.selectedOptionValue || null,
 
-			active:
-			chkEvtActive.isChecked === false
-			? false
-			: true,
+			customer_notes:
+			this.textClean(
+				rteEvtCustomerNotes.text ||
+				rteEvtCustomerNotes.value ||
+				""
+			),
 
-			/*
-		 * Temporary compatibility for evt_items.notes.
-		 */
-			notes:
+			internal_notes:
 			this.textClean(
 				rteEvtInternalNotes.text ||
 				rteEvtInternalNotes.value ||
 				""
-			)
+			),
+
+			active:
+			chkEvtActive.isChecked === false
+			? false
+			: true
 		};
 	},
 
@@ -250,79 +215,74 @@ export default {
 		if (!r) {
 			return {
 				name: null,
-				event_date: null,
+				event_ref: null,
 				event_datetime: null,
 				customer_id: null,
-				contact_id: null,
+				contact_ids: [],
 				venue_id: null,
-				event_ref: null,
+				venue_contact_ids: [],
 				total_guests_manual: null,
-				status: "Draft",
 				format: null,
-				active: true,
-				notes: null
+				customer_notes: null,
+				internal_notes: null,
+				active: true
 			};
 		}
 
 		return {
-			name: this.textClean(r.name),
-			event_date: r.event_date
-			? moment(r.event_date).format("YYYY-MM-DD")
+			name:
+			this.textClean(r.name),
+
+			event_ref:
+			this.textClean(r.event_ref),
+
+			event_datetime:
+			r.event_datetime
+			? moment(
+				r.event_datetime,
+				"YYYY-MM-DD HH:mm:ss"
+			).format("YYYY-MM-DD HH:mm:ss")
 			: null,
-			event_datetime: r.event_datetime
-			? moment(r.event_datetime, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss")
+
+			customer_id:
+			r.customer_id
+			? Number(r.customer_id)
 			: null,
-			customer_id: r.customer_id ? Number(r.customer_id) : null,
-			contact_id: r.contact_id ? Number(r.contact_id) : null,
-			venue_id: r.venue_id ? Number(r.venue_id) : null,
-			event_ref: this.textClean(r.event_ref),
-			total_guests_manual: r.total_guests_manual == null ? null : Number(r.total_guests_manual),
-			status: r.status || "Draft",
-			format: r.format || null,
-			active: r.active === false ? false : true,
-			notes: this.textClean(r.notes)
-		};
-	},
 
-	componentSnapshotFromPage() {
-		return jsProposalComponents
-			.effectiveRows()
-			.filter(row =>
-							row.menu_id ||
-							row.guests != null ||
-							row.extra_guests != null
-						 )
-			.map((row, index) => ({
-			event_id:
-			Number(
-				appsmith.store.current_event_id || 0
-			),
+			contact_ids:
+			(r.contact_ids || [])
+			.map(Number)
+			.filter(Boolean),
 
-			line_no:
-			index + 1,
+			venue_id:
+			r.venue_id
+			? Number(r.venue_id)
+			: null,
 
-			menu_id:
-			Number(
-				row.menu_id || 0
-			) || null,
+			venue_contact_ids:
+			(r.venue_contact_ids || [])
+			.map(Number)
+			.filter(Boolean),
 
-			guests:
-			row.guests === "" ||
-			row.guests == null
+			total_guests_manual:
+			r.total_guests_manual == null
 			? null
-			: Number(row.guests),
+			: Number(r.total_guests_manual),
 
-			extra_guests:
-			row.extra_guests === "" ||
-			row.extra_guests == null
-			? 0
-			: Number(row.extra_guests),
+			format:
+			r.format || null,
+
+			customer_notes:
+			this.textClean(r.customer_notes),
+
+			internal_notes:
+			this.textClean(r.notes),
 
 			active:
-			row.active === false
+			r.active === false
 			? false
 			: true
-		}));
+		};
 	},
 
 	componentSnapshotFromSaved() {
@@ -392,13 +352,6 @@ export default {
 			) !==
 			JSON.stringify(
 				this.headerSnapshotFromSaved()
-			) ||
-
-			JSON.stringify(
-				this.componentSnapshotFromPage()
-			) !==
-			JSON.stringify(
-				this.componentSnapshotFromSaved()
 			)
 		);
 	},
@@ -440,16 +393,22 @@ export default {
 		let result = null;
 
 		if (isExisting) {
-			result = await updEvtItem.run();
+			result = await qrysaveEvtHeader.run();
 		} else {
 			result = await addEvtItem.run();
-			const newId = result?.[0]?.id;
+
+			const newId =
+						Number(
+							result?.[0]?.id || 0
+						);
+
 			if (newId) {
-				await storeValue("current_event_id", newId);
+				await storeValue(
+					"current_event_id",
+					newId
+				);
 			}
 		}
-
-		await saveEvtComponentsSnapshot.run();
 
 		await syncEvtGroceriesEligibility.run();
 

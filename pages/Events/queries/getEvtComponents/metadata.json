@@ -29,7 +29,7 @@
     ],
     "name": "getEvtComponents",
     "pageId": "Events",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }

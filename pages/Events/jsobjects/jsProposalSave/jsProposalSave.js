@@ -1,109 +1,12 @@
 export default {
-	isDraft() {
-		return (
-			jsProposalData.hasSelectedProposal() &&
-			jsProposalData.proposalControl().status === "Draft"
-		);
-	},
-
 	textClean(value) {
 		const text = String(value ?? "").trim();
 		return text || null;
 	},
 
-	headerSnapshotFromPage() {
-		const selectedDate =
-					datEvtDate.selectedDate || null;
-
-		const customerContactIds =
-					(msEvtContacts.selectedOptionValues || [])
-		.map(Number)
-		.filter(Boolean);
-
-		const venueContactIds =
-					(msEvtVenueContacts.selectedOptionValues || [])
-		.map(Number)
-		.filter(Boolean);
-
-		return {
-			proposal_id: Number(
-				appsmith.store.current_proposal_id || 0
-			),
-
-			event_name:
-			this.textClean(inpEvtName.text),
-
-			event_ref:
-			this.textClean(inpEvtRef.text),
-
-			event_date:
-			selectedDate
-			? moment(selectedDate)
-			.format("YYYY-MM-DD")
-			: null,
-
-			event_time:
-			selectedDate
-			? moment(selectedDate)
-			.format("HH:mm:ss")
-			: null,
-
-			event_datetime:
-			selectedDate
-			? moment(selectedDate)
-			.format("YYYY-MM-DD HH:mm:ss")
-			: null,
-
-			event_format:
-			selEvtFormat.selectedOptionValue ||
-			null,
-
-			total_guests:
-			inpTotalGuests.text === "" ||
-			inpTotalGuests.text === null ||
-			inpTotalGuests.text === undefined
-			? null
-			: Number(inpTotalGuests.text),
-
-			customer_id:
-			Number(
-				selEvtCustomer.selectedOptionValue || 0
-			) || null,
-
-			contact_ids:
-			customerContactIds,
-
-			venue_id:
-			Number(
-				selEvtVenue.selectedOptionValue || 0
-			) || null,
-
-			venue_contact_ids:
-			venueContactIds,
-
-			proposal_customer_notes:
-			this.textClean(
-				rteEvtCustomerNotes.text ||
-				rteEvtCustomerNotes.value ||
-				""
-			),
-
-			proposal_internal_notes:
-			this.textClean(
-				rteEvtInternalNotes.text ||
-				rteEvtInternalNotes.value ||
-				""
-			)
-		};
-	},
-
 	requiredMessage() {
 		if (!jsProposalData.hasSelectedProposal()) {
 			return "No Proposal is currently selected.";
-		}
-
-		if (!this.headerSnapshotFromPage().event_name) {
-			return "Event Name is required.";
 		}
 
 		return null;
@@ -120,7 +23,8 @@ export default {
 			.refreshDerivedFields(row);
 
 			return {
-				line_no: index + 1,
+				line_no:
+				index + 1,
 
 				menu_id:
 				Number(
@@ -157,13 +61,6 @@ export default {
 					derived.extra_guests
 				),
 
-				kitchen_cost:
-				derived.line_cost == null
-				? null
-				: Number(
-					derived.line_cost
-				),
-
 				allergen_names:
 				this.textClean(
 					derived.allergen_names
@@ -187,151 +84,25 @@ export default {
 		});
 	},
 
-	buildRequest(
-		proposalId,
-		header,
-		components
+	async refreshCurrentProposal(
+		proposalId
 	) {
-		return {
-			proposal_id:
-			Number(proposalId || 0),
-
-			header:
-			header || {},
-
-			menus:
-			this.menuPayload(
-				components || []
-			)
-		};
-	},
-
-	async runSaveRequest(request) {
-		await storeValue(
-			"proposal_save_request",
-			request
-		);
-
-		try {
-			const result =
-						await qrySaveProposalDraft.run();
-
-			return Number(
-				result?.[0]?.proposal_id || 0
-			) > 0;
-		} finally {
-			await removeValue(
-				"proposal_save_request"
-			);
-		}
-	},
-
-	async saveWorkspace(proposalId) {
-		const id =
-					Number(proposalId || 0);
-
-		const workspace =
-					jsProposalWorkspaces.get(id);
-
-		if (!workspace) {
-			return true;
-		}
-
-		if (
-			!String(
-				workspace.header?.event_name || ""
-			).trim()
-		) {
-			showAlert(
-				`Draft ${id} needs an Event Name.`,
-				"warning"
-			);
-
-			return false;
-		}
-
-		const request =
-					this.buildRequest(
-						id,
-						workspace.header,
-						workspace.components
-					);
-
-		const saved =
-					await this.runSaveRequest(request);
-
-		if (!saved) {
-			return false;
-		}
-
-		await jsProposalWorkspaces.discard(id);
-
-		return true;
-	},
-
-	async saveAllDirty() {
-		await jsProposalWorkspaces
-			.captureCurrentDraft();
-
-		const ids =
-					jsProposalWorkspaces
-		.dirtyProposalIds();
-
-		for (const proposalId of ids) {
-			const saved =
-						await this.saveWorkspace(
-							proposalId
-						);
-
-			if (!saved) {
-				showAlert(
-					`Draft ${proposalId} could not be saved.`,
-					"error"
-				);
-
-				return false;
-			}
-		}
-
-		return true;
-	},
-
-	async refreshCurrentDraft(proposalId) {
 		await Promise.all([
 			qryGetSelectedProposal.run(),
 			qryGetSelectedProposalMenus.run(),
-			qryGetProposalsForEvent.run(),
-			qryGetEvtContacts.run(),
-			qryGetEvtVenueContacts.run()
+			qryGetProposalsForEvent.run()
 		]);
 
-		await jsProposalWorkspaces.discard(
-			proposalId
+		await jsProposalWorkspaces
+			.discard(proposalId);
+
+		await jsProposalWorkspaces
+			.initializeCurrentDraft();
+
+		await resetWidget(
+			"tblEvtComponents",
+			true
 		);
-
-		if (jsProposalData.isProposalDraft()) {
-			await jsProposalWorkspaces
-				.initializeCurrentDraft();
-		} else {
-			await jsProposalWorkspaces
-				.initializeCurrentHeader();
-		}
-
-		await Promise.all([
-			resetWidget("inpEvtName", true),
-			resetWidget("datEvtDate", true),
-			resetWidget("inpEvtRef", true),
-			resetWidget("inpTotalGuests", true),
-			resetWidget("selEvtFormat", true),
-			resetWidget("selEvtCustomer", true),
-			resetWidget("msEvtContacts", true),
-			resetWidget("selEvtVenue", true),
-			resetWidget("msEvtVenueContacts", true),
-			resetWidget("rteEvtCustomerNotes", true),
-			resetWidget("rteEvtInternalNotes", true),
-
-			resetWidget("tblEvtComponents", true)
-		]);
 
 		return true;
 	},
@@ -349,42 +120,98 @@ export default {
 			return false;
 		}
 
-		await jsProposalWorkspaces
-			.captureCurrentDraft();
-
-		const proposalId = Number(
-			appsmith.store.current_proposal_id || 0
-		);
-
-		const request =
-					this.buildRequest(
-						proposalId,
-						this.headerSnapshotFromPage(),
-						jsProposalComponents
-						.effectiveRows()
+		const proposalId =
+					Number(
+						appsmith.store.current_proposal_id || 0
 					);
 
-		const saved =
-					await this.runSaveRequest(request);
+		/*
+	 * Capture exactly what is currently visible,
+	 * including tblEvtComponents.updatedRows.
+	 */
+		const rows =
+					jsProposalComponents.effectiveRows();
 
-		if (!saved) {
+		const request = {
+			proposal_id:
+			proposalId,
+
+			menus:
+			this.menuPayload(rows)
+		};
+
+		await storeValue(
+			"proposal_save_request",
+			request
+		);
+
+		try {
+			const result =
+						await qrySaveEventProposal.run();
+
+			const savedId =
+						Number(
+							result?.[0]?.proposal_id || 0
+						);
+
+			if (!savedId) {
+				showAlert(
+					"Proposal was not saved.",
+					"error"
+				);
+
+				return false;
+			}
+		} finally {
+			await removeValue(
+				"proposal_save_request"
+			);
+		}
+
+		await this.refreshCurrentProposal(
+			proposalId
+		);
+
+		showAlert(
+			"Proposal saved.",
+			"success"
+		);
+
+		return true;
+	},
+
+	async saveWorkspace(proposalId) {
+		const id =
+					Number(proposalId || 0);
+
+		if (!id) {
+			return false;
+		}
+
+		if (
+			id !==
+			Number(
+				appsmith.store.current_proposal_id || 0
+			)
+		) {
 			showAlert(
-				"Proposal Draft was not saved.",
-				"error"
+				"Only the currently selected Proposal can be saved.",
+				"warning"
 			);
 
 			return false;
 		}
 
-		await this.refreshCurrentDraft(
-			proposalId
-		);
+		return await this.saveDraft();
+	},
 
-		showAlert(
-			"Proposal Draft saved.",
-			"success"
-		);
+	async saveAllDirty() {
+		if (
+			!jsProposalWorkspaces.isDirty()
+		) {
+			return true;
+		}
 
-		return true;
+		return await this.saveDraft();
 	}
 };

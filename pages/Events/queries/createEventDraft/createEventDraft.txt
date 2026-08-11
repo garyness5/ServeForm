@@ -1,17 +1,1 @@
-select *
-from public.create_event_draft(
-	{{ appsmith.store.current_client_id }},
-	{{ JSON.stringify(jsProposalSave.headerSnapshotFromPage()) }}::jsonb,
-	{{
-		JSON.stringify(
-			jsProposalComponents
-				.effectiveRows()
-				.filter(r =>
-					r.menu_id ||
-					r.menu_name ||
-					r.guests != null ||
-					r.extra_guests != null
-				)
-		)
-	}}::jsonb
-);
+select 1;

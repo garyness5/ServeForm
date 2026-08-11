@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_evt_components_snapshot(\n    {{ Number(appsmith.store.current_event_id || 0) }},\n\n    '{{\n        JSON.stringify(\n            jsEventSave.componentSnapshotFromPage()\n        ).replaceAll(\"'\", \"''\")\n    }}'::jsonb\n);",
+      "body": "select 1;\n",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -22,11 +22,7 @@
       "name": "FoodCostingDB",
       "pluginId": "postgres-plugin"
     },
-    "dynamicBindingPathList": [
-      {
-        "key": "body"
-      }
-    ],
+    "dynamicBindingPathList": [],
     "name": "saveEvtComponentsSnapshot",
     "pageId": "Events",
     "runBehaviour": "MANUAL",

@@ -50,167 +50,21 @@ export default {
 	},
 
 	header() {
-		const toIdArray = (
-			arrayValue,
-			singleValue
-		) => {
+		const r = this.event();
+
+		const toIdArray = (arrayValue, singleValue) => {
 			if (Array.isArray(arrayValue)) {
 				return arrayValue
 					.map(Number)
 					.filter(Boolean);
 			}
 
-			const singleId =
-						Number(singleValue || 0);
+			const singleId = Number(singleValue || 0);
 
 			return singleId > 0
 				? [singleId]
 			: [];
 		};
-
-		/*
-	 * Editable Draft:
-	 * use its current workspace.
-	 */
-		if (this.isProposalDraft()) {
-			const workspace =
-						jsProposalWorkspaces.get();
-
-			if (workspace?.header) {
-				const r =
-							workspace.header;
-
-				const eventDate =
-							r.event_date
-				? moment(r.event_date)
-				.format("YYYY-MM-DD")
-				: null;
-
-				const eventTime =
-							r.event_time
-				? String(r.event_time)
-				.slice(0, 8)
-				: null;
-
-				const eventDateTime =
-							eventDate
-				? `${eventDate}T${eventTime || "00:00:00"}`
-				: null;
-
-				return {
-					name:
-					r.event_name ?? "",
-
-					event_ref:
-					r.event_ref ?? "",
-
-					event_date:
-					eventDate,
-
-					event_time:
-					eventTime,
-
-					event_datetime:
-					eventDateTime,
-
-					format:
-					r.event_format ?? "",
-
-					total_guests_manual:
-					r.total_guests ?? "",
-
-					customer_id:
-					r.customer_id ?? null,
-
-					contact_ids:
-					toIdArray(
-						r.contact_ids,
-						r.contact_id
-					),
-
-					venue_id:
-					r.venue_id ?? null,
-
-					venue_contact_ids:
-					toIdArray(
-						r.venue_contact_ids,
-						r.venue_contact_id
-					),
-
-					proposal_customer_notes:
-					r.proposal_customer_notes ?? "",
-
-					proposal_internal_notes:
-					r.proposal_internal_notes ?? ""
-				};
-			}
-		}
-
-		/*
-	 * Saved Proposal:
-	 * workspace first, query fallback.
-	 */
-		if (this.hasSelectedProposal()) {
-			const workspace =
-						jsProposalWorkspaces.get();
-
-			const r =
-						workspace?.header ||
-						this.proposal();
-
-			return {
-				name:
-				r.event_name ?? "",
-
-				event_ref:
-				r.event_ref ?? "",
-
-				event_date:
-				r.event_date ?? null,
-
-				event_datetime:
-				r.event_datetime ?? null,
-
-				event_time:
-				r.event_time ?? null,
-
-				format:
-				r.event_format ?? "",
-
-				total_guests_manual:
-				r.total_guests ?? "",
-
-				customer_id:
-				r.customer_id ?? null,
-
-				contact_ids:
-				toIdArray(
-					r.contact_ids,
-					r.contact_id
-				),
-
-				venue_id:
-				r.venue_id ?? null,
-
-				venue_contact_ids:
-				toIdArray(
-					r.venue_contact_ids,
-					r.venue_contact_id
-				),
-
-				proposal_customer_notes:
-				r.proposal_customer_notes ?? "",
-
-				proposal_internal_notes:
-				r.proposal_internal_notes ?? ""
-			};
-		}
-
-		/*
-	 * Event mode / brand-new unsaved Event.
-	 */
-		const r =
-					this.event();
 
 		return {
 			name:
@@ -253,12 +107,10 @@ export default {
 			),
 
 			proposal_customer_notes:
-			r.proposal_customer_notes ?? "",
+			r.customer_notes ?? "",
 
 			proposal_internal_notes:
-			r.proposal_internal_notes ??
-			r.notes ??
-			""
+			r.notes ?? ""
 		};
 	},
 
