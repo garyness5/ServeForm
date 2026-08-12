@@ -2,7 +2,7 @@
   "accentColor": "{{appsmith.theme.colors.primaryColor}}",
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 16,
+  "bottomRow": 17,
   "boxShadow": "none",
   "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \nNumber(appsmith.store.current_event_id || 0) === 0\n? \"Draft\"\n: jsProposalData.eventControl().status\n))(selEvtStatus.options, selEvtStatus.serverSideFiltering) }}",
   "dynamicBindingPathList": [
@@ -58,7 +58,7 @@
   "rightColumn": 63,
   "serverSideFiltering": false,
   "sourceData": "{{ getEvtStatuses.data ?? [] }}",
-  "topRow": 12,
+  "topRow": 13,
   "type": "SELECT_WIDGET",
   "version": 1,
   "widgetId": "6ap60sxd3o",

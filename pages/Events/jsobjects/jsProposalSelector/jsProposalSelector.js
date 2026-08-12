@@ -1,51 +1,34 @@
 export default {
 	async loadSelectedProposal() {
-		const proposalId = Number(
-			appsmith.store.current_proposal_id || 0
-		);
+		const proposalId =
+					Number(
+						appsmith.store.current_proposal_id || 0
+					);
 
-		if (proposalId === 0) {
-			await qryGetSelectedProposal.clear();
-			await qryGetSelectedProposalMenus.clear();
+		if (!proposalId) {
 			return null;
 		}
 
+		/*
+		 * Load the selected Proposal sequentially.
+		 * Do not run overlapping Proposal queries.
+		 */
 		await qryGetSelectedProposal.run();
 
-		try {
-			await qryGetSelectedProposalMenus.run();
+		await qryGetSelectedProposalMenus.run();
 
-			await jsProposalWorkspaces
-				.initializeCurrentDraft();
-		} catch (error) {
-			await qryGetSelectedProposalMenus.clear();
-
-			showAlert(
-				"Proposal header loaded, but Proposal menus failed to load.",
-				"warning"
-			);
-		}
+		await jsProposalWorkspaces
+			.initializeCurrentDraft();
 
 		await Promise.all([
 			qryGetEvtContacts.run(),
 			qryGetEvtVenueContacts.run()
 		]);
 
-		await Promise.all([
-			resetWidget("inpEvtName", true),
-			resetWidget("datEvtDate", true),
-			resetWidget("inpTotalGuests", true),
-			resetWidget("inpEvtRef", true),
-			resetWidget("selEvtFormat", true),
-			resetWidget("selEvtCustomer", true),
-			resetWidget("msEvtContacts", true),
-			resetWidget("selEvtVenue", true),
-			resetWidget("msEvtVenueContacts", true),
-			resetWidget("rteEvtCustomerNotes", true),
-			resetWidget("rteEvtInternalNotes", true)
-		]);
-
-		return qryGetSelectedProposal.data?.[0] ?? null;
+		return (
+			qryGetSelectedProposal.data?.[0] ??
+			null
+		);
 	},
 
 	async initialize(usePriority = false) {
@@ -54,24 +37,28 @@ export default {
 		const rows =
 					qryGetProposalsForEvent.data || [];
 
-		if (rows.length === 0) {
-			await removeValue("current_proposal_id");
-			await qryGetSelectedProposal.clear();
-			await qryGetSelectedProposalMenus.clear();
+		if (!rows.length) {
+			await removeValue(
+				"current_proposal_id"
+			);
+
 			return null;
 		}
 
-		const currentId = Number(
-			appsmith.store.current_proposal_id || 0
-		);
+		const currentId =
+					Number(
+						appsmith.store.current_proposal_id || 0
+					);
 
 		const currentStillExists =
 					rows.some(
-						row => Number(row.id) === currentId
+						row =>
+						Number(row.id) === currentId
 					);
 
 		const proposalId =
-					usePriority || !currentStillExists
+					usePriority ||
+					!currentStillExists
 		? Number(rows[0].id)
 		: currentId;
 
@@ -89,28 +76,47 @@ export default {
 				"Select a Proposal.",
 				"warning"
 			);
+
 			return null;
 		}
 
+		const newProposalId =
+					Number(row.id);
+
+		const currentProposalId =
+					Number(
+						appsmith.store.current_proposal_id || 0
+					);
+
+		if (
+			newProposalId ===
+			currentProposalId
+		) {
+			return true;
+		}
+
 		/*
-	 * Preserve the currently displayed Proposal
-	 * before changing Proposal identity.
-	 */
-		await jsProposalWorkspaces
-			.captureCurrentDraft();
+		 * Preserve unsaved work from the Proposal
+		 * currently on screen.
+		 */
+		if (currentProposalId > 0) {
+			await jsProposalWorkspaces
+				.captureCurrentComponents();
+		}
 
 		await storeValue(
 			"current_proposal_id",
-			Number(row.id)
+			newProposalId
 		);
 
 		return await this.loadSelectedProposal();
 	},
 
 	async clearSelection() {
-		await removeValue("current_proposal_id");
-		await qryGetSelectedProposal.clear();
-		await qryGetSelectedProposalMenus.clear();
-		return null;
+		await removeValue(
+			"current_proposal_id"
+		);
+
+		return true;
 	}
 };

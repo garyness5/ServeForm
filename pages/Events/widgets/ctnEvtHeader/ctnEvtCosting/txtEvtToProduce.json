@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 24,
+  "bottomRow": 25,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -46,7 +46,7 @@
   "text": "{{\n\"<b>To Produce:</b> \" +\n(\tjsProposalComponents.toProduce() > 0\n ? fmt.number(jsProposalComponents.toProduce())\n : \"\"\n)\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 20,
+  "topRow": 21,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

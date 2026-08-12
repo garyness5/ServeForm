@@ -44,7 +44,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 60,
   "shouldTruncate": false,
-  "text": "{{ \"This Event will no longer be available in Groceries group. There are quantites you have entered in the Order page. <br><br>Do you want to keep all these quantites? Or do you want them all removed? This action cannot be undone.  \" }}",
+  "text": "{{ \"This Event will no longer be available in Groceries group. There are quantites you have entered in the Order page. <br><br>Do you want to keep all these quantities? Or do you want them all removed? This action cannot be undone.  \" }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 6,

@@ -2,7 +2,7 @@
   "accentColor": "{{appsmith.theme.colors.primaryColor}}",
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 12,
+  "bottomRow": 13,
   "boxShadow": "none",
   "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n((options, serverSideFiltering) =>\n jsProposalData.header().format || \"\"\n)(selEvtFormat.options, selEvtFormat.serverSideFiltering)\n))(selEvtFormat.options, selEvtFormat.serverSideFiltering) }}",
   "dynamicBindingPathList": [
@@ -72,7 +72,7 @@
   "rightColumn": 63,
   "serverSideFiltering": false,
   "sourceData": "{{\n[\n  { label: \"Buffet\", value: \"Buffet\" },\n  { label: \"Canapés\", value: \"Canapés\" },\n  { label: \"Sit-down\", value: \"Sit-down\" },\n  { label: \"Family Style\", value: \"Family Style\" },\n  { label: \"Other\", value: \"Other\" }\n]\n}}",
-  "topRow": 8,
+  "topRow": 9,
   "type": "SELECT_WIDGET",
   "version": 1,
   "widgetId": "nra2juw4uh",

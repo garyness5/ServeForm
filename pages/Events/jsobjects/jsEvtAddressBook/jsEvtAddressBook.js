@@ -533,11 +533,6 @@ export default {
 											setTimeout(resolve, 50)
 										 );
 
-		const {
-			proposalId,
-			workspace
-		} = await this.currentWorkspace();
-
 		const isVenue =
 					context === "venue";
 
@@ -551,34 +546,21 @@ export default {
 		.map(Number)
 		.filter(Boolean);
 
-		const parentId = Number(
+		await storeValue(
 			isVenue
-			? selEvtVenue.selectedOptionValue
-			: selEvtCustomer.selectedOptionValue
-		) || 0;
-
-		await jsProposalWorkspaces.set(
-			proposalId,
-			{
-				...workspace,
-
-				header: {
-					...(workspace.header || {}),
-
-					[isVenue
-					? "venue_contact_ids"
-					: "contact_ids"]:
-					selectedIds
-				}
-			}
+			? "evt_working_venue_contact_ids"
+			: "evt_working_contact_ids",
+			selectedIds,
+			false
 		);
 
-		/*
-	 * Selecting a Contact permanently adds or restores
-	 * the Address Book relationship.
-	 *
-	 * Removing it from this Proposal does not unlink it.
-	 */
+		const parentId =
+					Number(
+						isVenue
+						? selEvtVenue.selectedOptionValue
+						: selEvtCustomer.selectedOptionValue
+					) || 0;
+
 		if (
 			parentId > 0 &&
 			selectedIds.length > 0
@@ -595,7 +577,9 @@ export default {
 				});
 			}
 
-			await this.refreshContactOptions(context);
+			await this.refreshContactOptions(
+				context
+			);
 		}
 
 		return selectedIds;
@@ -616,63 +600,46 @@ export default {
 		const isVenue =
 					context === "venue";
 
-		const selectedId = Number(
+		const selectedId =
+					Number(
+						isVenue
+						? selEvtVenue.selectedOptionValue
+						: selEvtCustomer.selectedOptionValue
+					) || null;
+
+		await storeValue(
 			isVenue
-			? selEvtVenue.selectedOptionValue
-			: selEvtCustomer.selectedOptionValue
-		) || null;
+			? "evt_working_venue_id"
+			: "evt_working_customer_id",
+			selectedId,
+			false
+		);
 
 		/*
-	 * Existing Proposal:
-	 * update the displayed Proposal workspace immediately
-	 * so the Select default does not snap back.
+	 * Changing Customer/Venue invalidates the
+	 * currently selected Contacts.
 	 */
-		if (jsProposalData.hasSelectedProposal()) {
-			const proposalId =
-						jsProposalWorkspaces.currentProposalId();
+		await storeValue(
+			isVenue
+			? "evt_working_venue_contact_ids"
+			: "evt_working_contact_ids",
+			[],
+			false
+		);
 
-			let workspace =
-					jsProposalWorkspaces.get(proposalId);
-
-			if (!workspace?.header) {
-				workspace =
-					jsProposalData.isProposalDraft()
-					? await jsProposalWorkspaces
-					.initializeCurrentDraft()
-				: await jsProposalWorkspaces
-					.initializeCurrentHeader();
-			}
-
-			if (workspace?.header) {
-				await jsProposalWorkspaces.set(
-					proposalId,
-					{
-						...workspace,
-
-						header: {
-							...(workspace.header || {}),
-
-							[isVenue
-							? "venue_id"
-							: "customer_id"]:
-							selectedId,
-
-							/*
-						 * New parent means the previous
-						 * Contacts no longer belong to
-						 * the current selection.
-						 */
-							[isVenue
-							? "venue_contact_ids"
-							: "contact_ids"]:
-							[]
-						}
-					}
-				);
-			}
+		if (isVenue) {
+			await resetWidget(
+				"msEvtVenueContacts",
+				true
+			);
+		} else {
+			await resetWidget(
+				"msEvtContacts",
+				true
+			);
 		}
 
-		await this.resetContactSelection(
+		await this.refreshContactOptions(
 			context
 		);
 

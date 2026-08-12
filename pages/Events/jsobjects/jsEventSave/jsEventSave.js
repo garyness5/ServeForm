@@ -238,16 +238,15 @@ export default {
 
 			event_datetime:
 			r.event_datetime
-			? moment(
-				r.event_datetime,
-				"YYYY-MM-DD HH:mm:ss"
-			).format("YYYY-MM-DD HH:mm:ss")
+			? moment
+			.utc(r.event_datetime)
+			.format("YYYY-MM-DD HH:mm:ss")
 			: null,
 
 			customer_id:
-			r.customer_id
-			? Number(r.customer_id)
-			: null,
+			r.customer_id == null
+			? null
+			: Number(r.customer_id),
 
 			contact_ids:
 			(r.contact_ids || [])
@@ -341,6 +340,25 @@ export default {
 		);
 	},
 
+	dirtyDifferences() {
+		const page =
+					this.headerSnapshotFromPage();
+
+		const saved =
+					this.headerSnapshotFromSaved();
+
+		return Object.keys(page)
+			.filter(key =>
+							JSON.stringify(page[key]) !==
+							JSON.stringify(saved[key])
+						 )
+			.map(key => ({
+			field: key,
+			page: page[key],
+			saved: saved[key]
+		}));
+	},
+
 	isDirty() {
 		if (this.isNewBlankEvent()) {
 			return false;
@@ -419,6 +437,23 @@ export default {
 		}
 
 		await getEvtItemById.run();
+
+		await removeValue(
+			"evt_working_customer_id"
+		);
+
+		await removeValue(
+			"evt_working_venue_id"
+		);
+
+		await removeValue(
+			"evt_working_contact_ids"
+		);
+
+		await removeValue(
+			"evt_working_venue_contact_ids"
+		);
+
 		await getEvtComponents.run();
 		await evtCompTable.loadFromQuery();
 
