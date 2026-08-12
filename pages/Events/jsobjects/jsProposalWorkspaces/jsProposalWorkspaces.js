@@ -9,20 +9,6 @@ export default {
 		);
 	},
 
-	isCurrentLoadedDraft() {
-		const proposalId =
-					this.currentProposalId();
-
-		const row =
-					qryGetSelectedProposal.data?.[0];
-
-		return (
-			proposalId > 0 &&
-			Number(row?.id || 0) === proposalId &&
-			row?.proposal_status === "Draft"
-		);
-	},
-
 	get(
 		proposalId = this.currentProposalId()
 	) {
@@ -122,6 +108,32 @@ export default {
 		}));
 	},
 
+	workspaceIsDirty(
+		proposalId = this.currentProposalId()
+	) {
+		const workspace =
+					this.get(proposalId);
+
+		if (!workspace) {
+			return false;
+		}
+
+		const current =
+					this.normalizeComponents(
+						workspace.components
+					);
+
+		const saved =
+					this.normalizeComponents(
+						workspace.saved_components
+					);
+
+		return (
+			JSON.stringify(current) !==
+			JSON.stringify(saved)
+		);
+	},
+
 	async initializeCurrentDraft() {
 		if (
 			!jsProposalData.hasSelectedProposal()
@@ -135,6 +147,22 @@ export default {
 		const existing =
 					this.get(proposalId);
 
+		/*
+	 * If this Proposal already has genuine
+	 * unsaved work, preserve it.
+	 */
+		if (
+			existing &&
+			this.workspaceIsDirty(
+				proposalId
+			)
+		) {
+			return existing;
+		}
+
+		/*
+	 * Otherwise freshly loaded database truth wins.
+	 */
 		const queryComponents =
 					this.componentsFromQuery();
 
@@ -144,49 +172,21 @@ export default {
 		?.updated_at ||
 					null;
 
-		if (!existing) {
-			return await this.set(
-				proposalId,
-				{
-					components:
-					queryComponents,
+		return await this.set(
+			proposalId,
+			{
+				components:
+				queryComponents,
 
-					saved_components:
-					this.deepCopy(
-						queryComponents
-					),
+				saved_components:
+				this.deepCopy(
+					queryComponents
+				),
 
-					saved_updated_at:
-					queryUpdatedAt
-				}
-			);
-		}
-
-		if (
-			queryUpdatedAt &&
-			queryUpdatedAt !==
-			(existing.saved_updated_at || null)
-		) {
-			return await this.set(
-				proposalId,
-				{
-					...existing,
-
-					components:
-					queryComponents,
-
-					saved_components:
-					this.deepCopy(
-						queryComponents
-					),
-
-					saved_updated_at:
-					queryUpdatedAt
-				}
-			);
-		}
-
-		return existing;
+				saved_updated_at:
+				queryUpdatedAt
+			}
+		);
 	},
 
 	/*
@@ -194,10 +194,6 @@ export default {
 	 * Proposal header ownership is being removed.
 	 * This no longer initializes any header state.
 	 */
-	async initializeCurrentHeader() {
-		return await this.initializeCurrentDraft();
-	},
-
 	async captureCurrentComponents() {
 		if (
 			!jsProposalData.hasSelectedProposal()
@@ -269,9 +265,6 @@ export default {
 	 * Event header is no longer Proposal-owned.
 	 * Kept only until remaining callers are removed.
 	 */
-	async captureCurrentHeader() {
-		return this.get();
-	},
 
 	isDirty(
 		proposalId = this.currentProposalId()

@@ -1,134 +1,40 @@
 export default {
 	async clearCustomerQuickAdd() {
-		await resetWidget(
-			"inpEvtCustomerName",
-			true
-		);
-
-		await resetWidget(
-			"inpEvtCustomerPhone",
-			true
-		);
-
-		await resetWidget(
-			"inpEvtCustomerMobile",
-			true
-		);
-
-		await resetWidget(
-			"inpEvtCustomerEmail",
-			true
-		);
-
-		await resetWidget(
-			"inpEvtCustomerAddress",
-			true
-		);
-
-		await resetWidget(
-			"inpEvtCustomerNotes",
-			true
-		);
+		await resetWidget("inpEvtCustomerName", true);
+		await resetWidget("inpEvtCustomerPhone", true);
+		await resetWidget("inpEvtCustomerMobile", true);
+		await resetWidget("inpEvtCustomerEmail", true);
+		await resetWidget("inpEvtCustomerAddress", true);
+		await resetWidget("inpEvtCustomerNotes", true);
 	},
 
 	async clearVenueQuickAdd() {
-		await resetWidget(
-			"inpEvtVenueName",
-			true
-		);
-
-		await resetWidget(
-			"inpEvtVenuePhone",
-			true
-		);
-
-		await resetWidget(
-			"inpEvtVenueMobile",
-			true
-		);
-
-		await resetWidget(
-			"inpEvtVenueEmail",
-			true
-		);
-
-		await resetWidget(
-			"inpEvtVenueAddress",
-			true
-		);
-
-		await resetWidget(
-			"inpEvtVenueNotes",
-			true
-		);
+		await resetWidget("inpEvtVenueName", true);
+		await resetWidget("inpEvtVenuePhone", true);
+		await resetWidget("inpEvtVenueMobile", true);
+		await resetWidget("inpEvtVenueEmail", true);
+		await resetWidget("inpEvtVenueAddress", true);
+		await resetWidget("inpEvtVenueNotes", true);
 	},
 
 	async openCustomerAdd() {
-		if (!jsProposalData.canEditDisplayedDocument()) {
-			showAlert(
-				"Only a Draft Proposal can be changed.",
-				"warning"
-			);
-
-			return;
-		}
-
 		await this.clearCustomerQuickAdd();
-
 		showModal("mdlEvtCustomer");
 	},
 
 	async closeCustomerAdd() {
 		closeModal("mdlEvtCustomer");
-
 		await this.clearCustomerQuickAdd();
 	},
 
 	async openVenueAdd() {
 		await this.clearVenueQuickAdd();
-
 		showModal("mdlEvtVenue");
 	},
 
 	async closeVenueAdd() {
 		closeModal("mdlEvtVenue");
-
 		await this.clearVenueQuickAdd();
-	},
-
-	async currentWorkspace() {
-		const proposalId =
-					Number(
-						appsmith.store.current_proposal_id || 0
-					);
-
-		if (!proposalId) {
-			throw new Error(
-				"No Proposal is currently selected."
-			);
-		}
-
-		let workspace =
-				jsProposalWorkspaces.get(
-					proposalId
-				);
-
-		if (!workspace?.header) {
-			workspace =
-				await jsProposalWorkspaces
-				.initializeCurrentHeader();
-		}
-
-		if (!workspace?.header) {
-			throw new Error(
-				"The current Proposal workspace could not be loaded."
-			);
-		}
-
-		return {
-			proposalId,
-			workspace
-		};
 	},
 
 	async refreshContactOptions(context) {
@@ -188,11 +94,12 @@ export default {
 			const result =
 						await qrySaveEvtCustomer.run();
 
-			const customerId = Number(
-				result?.[0]?.customer_id ??
-				result?.[0]?.id ??
-				0
-			);
+			const customerId =
+						Number(
+							result?.[0]?.customer_id ??
+							result?.[0]?.id ??
+							0
+						);
 
 			if (!customerId) {
 				throw new Error(
@@ -202,26 +109,20 @@ export default {
 
 			await qryGetEvtCustomers.run();
 
-			const {
-				proposalId,
-				workspace
-			} = await this.currentWorkspace();
+			/*
+			 * Customer is Event-owned.
+			 * Hold the new selection locally until Event Save.
+			 */
+			await storeValue(
+				"evt_working_customer_id",
+				customerId,
+				false
+			);
 
-			await jsProposalWorkspaces.set(
-				proposalId,
-				{
-					...workspace,
-
-					header: {
-						...(workspace.header || {}),
-
-						customer_id:
-						customerId,
-
-						contact_ids:
-						[]
-					}
-				}
+			await storeValue(
+				"evt_working_contact_ids",
+				[],
+				false
 			);
 
 			await resetWidget(
@@ -288,11 +189,12 @@ export default {
 			const result =
 						await qrySaveEvtVenue.run();
 
-			const venueId = Number(
-				result?.[0]?.venue_id ??
-				result?.[0]?.id ??
-				0
-			);
+			const venueId =
+						Number(
+							result?.[0]?.venue_id ??
+							result?.[0]?.id ??
+							0
+						);
 
 			if (!venueId) {
 				throw new Error(
@@ -302,26 +204,16 @@ export default {
 
 			await qryGetEvtVenues.run();
 
-			const {
-				proposalId,
-				workspace
-			} = await this.currentWorkspace();
+			await storeValue(
+				"evt_working_venue_id",
+				venueId,
+				false
+			);
 
-			await jsProposalWorkspaces.set(
-				proposalId,
-				{
-					...workspace,
-
-					header: {
-						...(workspace.header || {}),
-
-						venue_id:
-						venueId,
-
-						venue_contact_ids:
-						[]
-					}
-				}
+			await storeValue(
+				"evt_working_venue_contact_ids",
+				[],
+				false
 			);
 
 			await resetWidget(
@@ -364,10 +256,12 @@ export default {
 		const selectedIds =
 					isCustomer
 		? (
-			msEvtContacts.selectedOptionValues || []
+			msEvtContacts
+			.selectedOptionValues || []
 		)
 		: (
-			msEvtVenueContacts.selectedOptionValues || []
+			msEvtVenueContacts
+			.selectedOptionValues || []
 		);
 
 		const hasSelectedContacts =
@@ -375,7 +269,9 @@ export default {
 
 		await storeValue(
 			"evt_contact_context",
-			isCustomer ? "customer" : "venue"
+			isCustomer
+			? "customer"
+			: "venue"
 		);
 
 		await storeValue(
@@ -417,7 +313,8 @@ export default {
 
 	async toggleContactAdd() {
 		const isOpen =
-					appsmith.store.evt_contact_add_open === true;
+					appsmith.store
+		.evt_contact_add_open === true;
 
 		if (isOpen) {
 			await this.clearContactQuickAdd();
@@ -485,8 +382,10 @@ export default {
 
 		const values =
 					context === "venue"
-		? msEvtVenueContacts.selectedOptionValues
-		: msEvtContacts.selectedOptionValues;
+		? msEvtVenueContacts
+		.selectedOptionValues
+		: msEvtContacts
+		.selectedOptionValues;
 
 		return (values || [])
 			.map(String)
@@ -505,91 +404,51 @@ export default {
 
 		const rows =
 					context === "venue"
-		? (qryGetEvtVenueContacts.data || [])
-		: (qryGetEvtContacts.data || []);
+		? (
+			Array.isArray(
+				qryGetEvtVenueContacts.data
+			)
+			? qryGetEvtVenueContacts.data
+			: []
+		)
+		: (
+			Array.isArray(
+				qryGetEvtContacts.data
+			)
+			? qryGetEvtContacts.data
+			: []
+		);
 
 		return rows
 			.filter(row =>
 							selectedSet.has(
-			String(row.value ?? row.id ?? "")
+			String(
+				row.value ??
+				row.id ??
+				""
+			)
 		)
 						 )
 			.sort((a, b) => {
 			const aId =
-						String(a.value ?? a.id ?? "");
+						String(
+							a.value ??
+							a.id ??
+							""
+						);
 
 			const bId =
-						String(b.value ?? b.id ?? "");
+						String(
+							b.value ??
+							b.id ??
+							""
+						);
 
 			return (
 				selectedIds.indexOf(aId) -
 				selectedIds.indexOf(bId)
 			);
 		});
-	},
-
-	async captureContactSelection(context) {
-		await new Promise(resolve =>
-											setTimeout(resolve, 50)
-										 );
-
-		const isVenue =
-					context === "venue";
-
-		const values =
-					isVenue
-		? msEvtVenueContacts.selectedOptionValues
-		: msEvtContacts.selectedOptionValues;
-
-		const selectedIds =
-					(values || [])
-		.map(Number)
-		.filter(Boolean);
-
-		await storeValue(
-			isVenue
-			? "evt_working_venue_contact_ids"
-			: "evt_working_contact_ids",
-			selectedIds,
-			false
-		);
-
-		const parentId =
-					Number(
-						isVenue
-						? selEvtVenue.selectedOptionValue
-						: selEvtCustomer.selectedOptionValue
-					) || 0;
-
-		if (
-			parentId > 0 &&
-			selectedIds.length > 0
-		) {
-			if (isVenue) {
-				await qryLinkEvtVenueContacts.run({
-					venue_id: parentId,
-					contact_ids: selectedIds
-				});
-			} else {
-				await qryLinkEvtCustomerContacts.run({
-					customer_id: parentId,
-					contact_ids: selectedIds
-				});
-			}
-
-			await this.refreshContactOptions(
-				context
-			);
-		}
-
-		return selectedIds;
-	},
-
-	contactDisplayValue(value) {
-		const text =
-					String(value ?? "").trim();
-
-		return text || "—";
 	},
 
 	async captureParentSelection(context) {
@@ -603,8 +462,10 @@ export default {
 		const selectedId =
 					Number(
 						isVenue
-						? selEvtVenue.selectedOptionValue
-						: selEvtCustomer.selectedOptionValue
+						? selEvtVenue
+						.selectedOptionValue
+						: selEvtCustomer
+						.selectedOptionValue
 					) || null;
 
 		await storeValue(
@@ -616,9 +477,9 @@ export default {
 		);
 
 		/*
-	 * Changing Customer/Venue invalidates the
-	 * currently selected Contacts.
-	 */
+		 * New parent = old Contact selection
+		 * is no longer valid for this Event.
+		 */
 		await storeValue(
 			isVenue
 			? "evt_working_venue_contact_ids"
@@ -646,11 +507,98 @@ export default {
 		return selectedId;
 	},
 
+	async captureContactSelection(context) {
+		await new Promise(resolve =>
+											setTimeout(resolve, 50)
+										 );
+
+		const isVenue =
+					context === "venue";
+
+		const values =
+					isVenue
+		? msEvtVenueContacts
+		.selectedOptionValues
+		: msEvtContacts
+		.selectedOptionValues;
+
+		const selectedIds =
+					(values || [])
+		.map(Number)
+		.filter(Boolean);
+
+		await storeValue(
+			isVenue
+			? "evt_working_venue_contact_ids"
+			: "evt_working_contact_ids",
+			selectedIds,
+			false
+		);
+
+		const parentId =
+					Number(
+						isVenue
+						? selEvtVenue
+						.selectedOptionValue
+						: selEvtCustomer
+						.selectedOptionValue
+					) || 0;
+
+		/*
+		 * Selecting an existing Contact also
+		 * creates/restores its Address Book link.
+		 */
+		if (
+			parentId > 0 &&
+			selectedIds.length > 0
+		) {
+			if (isVenue) {
+				await qryLinkEvtVenueContacts.run({
+					venue_id:
+					parentId,
+
+					contact_ids:
+					selectedIds
+				});
+			} else {
+				await qryLinkEvtCustomerContacts.run({
+					customer_id:
+					parentId,
+
+					contact_ids:
+					selectedIds
+				});
+			}
+
+			await this.refreshContactOptions(
+				context
+			);
+		}
+
+		return selectedIds;
+	},
+
+	contactDisplayValue(value) {
+		const text =
+					String(value ?? "").trim();
+
+		return text || "—";
+	},
+
 	async saveContact() {
 		const contactName =
 					String(
 						inpEvtContactName.text || ""
 					).trim();
+
+		if (!contactName) {
+			showAlert(
+				"Contact Name is required.",
+				"warning"
+			);
+
+			return false;
+		}
 
 		const context =
 					appsmith.store.evt_contact_context;
@@ -658,11 +606,14 @@ export default {
 		const isVenue =
 					context === "venue";
 
-		const parentId = Number(
-			isVenue
-			? selEvtVenue.selectedOptionValue
-			: selEvtCustomer.selectedOptionValue
-		) || 0;
+		const parentId =
+					Number(
+						isVenue
+						? selEvtVenue
+						.selectedOptionValue
+						: selEvtCustomer
+						.selectedOptionValue
+					) || 0;
 
 		if (!parentId) {
 			showAlert(
@@ -691,11 +642,12 @@ export default {
 			const result =
 						await qrySaveEvtContact.run();
 
-			const contactId = Number(
-				result?.[0]?.contact_id ??
-				result?.[0]?.id ??
-				0
-			);
+			const contactId =
+						Number(
+							result?.[0]?.contact_id ??
+							result?.[0]?.id ??
+							0
+						);
 
 			if (!contactId) {
 				throw new Error(
@@ -703,16 +655,14 @@ export default {
 				);
 			}
 
-			const {
-				proposalId,
-				workspace
-			} = await this.currentWorkspace();
-
-			const currentIds = (
-				isVenue
-				? msEvtVenueContacts.selectedOptionValues
-				: msEvtContacts.selectedOptionValues
-			)
+			const currentIds =
+						(
+							isVenue
+							? msEvtVenueContacts
+							.selectedOptionValues
+							: msEvtContacts
+							.selectedOptionValues
+						)
 			.map(Number)
 			.filter(Boolean);
 
@@ -723,20 +673,12 @@ export default {
 				])
 			];
 
-			await jsProposalWorkspaces.set(
-				proposalId,
-				{
-					...workspace,
-
-					header: {
-						...(workspace.header || {}),
-
-						[isVenue
-						? "venue_contact_ids"
-						: "contact_ids"]:
-						selectedIds
-					}
-				}
+			await storeValue(
+				isVenue
+				? "evt_working_venue_contact_ids"
+				: "evt_working_contact_ids",
+				selectedIds,
+				false
 			);
 
 			if (isVenue) {
@@ -782,5 +724,5 @@ export default {
 
 			return false;
 		}
-	},
+	}
 };

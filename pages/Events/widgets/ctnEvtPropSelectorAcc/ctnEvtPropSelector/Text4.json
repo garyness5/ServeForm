@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 17,
+  "bottomRow": 135,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -33,7 +33,7 @@
   "mobileRightColumn": 48,
   "mobileTopRow": 14,
   "needsErrorInfo": false,
-  "originalBottomRow": 33,
+  "originalBottomRow": 17,
   "originalTopRow": 13,
   "overflow": "NONE",
   "parentColumnSpace": 18.1875,
@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 51,
   "shouldTruncate": false,
-  "text": "{{ JSON.stringify(jsEventSave.dirtyDifferences(), null, 2) }}",
+  "text": "{{\n\tJSON.stringify(\n\t\tjsEvtDebug.fullSaveRequest(),\n\t\tnull,\n\t\t2\n\t)\n}}\n",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 13,

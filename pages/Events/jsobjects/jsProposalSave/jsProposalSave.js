@@ -87,11 +87,15 @@ export default {
 	async refreshCurrentProposal(
 		proposalId
 	) {
-		await Promise.all([
-			qryGetSelectedProposal.run(),
-			qryGetSelectedProposalMenus.run(),
-			qryGetProposalsForEvent.run()
-		]);
+		/*
+		 * Proposal reload is deliberately sequential.
+		 * One owner, one load path.
+		 */
+		await qryGetSelectedProposal.run();
+
+		await qryGetSelectedProposalMenus.run();
+
+		await qryGetProposalsForEvent.run();
 
 		await jsProposalWorkspaces
 			.discard(proposalId);
@@ -125,12 +129,9 @@ export default {
 						appsmith.store.current_proposal_id || 0
 					);
 
-		/*
-	 * Capture exactly what is currently visible,
-	 * including tblEvtComponents.updatedRows.
-	 */
 		const rows =
-					jsProposalComponents.effectiveRows();
+					jsProposalComponents
+		.effectiveRows();
 
 		const request = {
 			proposal_id:
@@ -178,40 +179,5 @@ export default {
 		);
 
 		return true;
-	},
-
-	async saveWorkspace(proposalId) {
-		const id =
-					Number(proposalId || 0);
-
-		if (!id) {
-			return false;
-		}
-
-		if (
-			id !==
-			Number(
-				appsmith.store.current_proposal_id || 0
-			)
-		) {
-			showAlert(
-				"Only the currently selected Proposal can be saved.",
-				"warning"
-			);
-
-			return false;
-		}
-
-		return await this.saveDraft();
-	},
-
-	async saveAllDirty() {
-		if (
-			!jsProposalWorkspaces.isDirty()
-		) {
-			return true;
-		}
-
-		return await this.saveDraft();
 	}
 };

@@ -32,7 +32,7 @@
   ],
   "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\n!(\n\tjsEventSave.isDirty() ||\n\tjsProposalWorkspaces.isDirty()\n)\n}}",
+  "isDisabled": "{{\n!(\n\tjsEventSave.isDirty() ||\n\tjsProposalWorkspaces.dirtyProposalIds().length > 0\n)\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "o01hoigeqy",

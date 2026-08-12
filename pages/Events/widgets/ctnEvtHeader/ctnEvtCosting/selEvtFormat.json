@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 13,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n((options, serverSideFiltering) =>\n jsProposalData.header().format || \"\"\n)(selEvtFormat.options, selEvtFormat.serverSideFiltering)\n))(selEvtFormat.options, selEvtFormat.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  jsEventData.header().format || \"\" ))(selEvtFormat.options, selEvtFormat.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -13,13 +13,13 @@
       "key": "borderRadius"
     },
     {
+      "key": "isDisabled"
+    },
+    {
       "key": "sourceData"
     },
     {
       "key": "defaultOptionValue"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicHeight": "FIXED",
@@ -29,52 +29,44 @@
     },
     {
       "key": "isDisabled"
-    },
-    {
-      "key": "onOptionChange"
     }
   ],
-  "dynamicTriggerPathList": [
-    {
-      "key": "onOptionChange"
-    }
-  ],
-  "isDisabled": "{{ jsProposalData.eventControl().status === \"Closed\" }}",
+  "dynamicTriggerPathList": [],
+  "isDisabled": "{{ jsEventData.header().status === \"Closed\" }}",
   "isFilterable": true,
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,
-  "key": "nwaewcfdp6",
+  "key": "rdb3rby1bt",
   "labelAlignment": "left",
   "labelPosition": "Left",
   "labelStyle": "BOLD",
   "labelText": "Format",
   "labelTextSize": "1rem",
-  "labelWidth": "15",
+  "labelWidth": "16",
   "leftColumn": 0,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
-  "mobileBottomRow": 22,
+  "mobileBottomRow": 16,
   "mobileLeftColumn": 0,
-  "mobileRightColumn": 20,
-  "mobileTopRow": 15,
+  "mobileRightColumn": 17,
+  "mobileTopRow": 9,
   "needsErrorInfo": false,
-  "onOptionChange": "{{ jsProposalWorkspaces.captureCurrentHeader() }}",
   "optionLabel": "label",
   "optionValue": "value",
-  "parentColumnSpace": 6.021484375,
+  "parentColumnSpace": 4.234375,
   "parentId": "o4uwuew4ll",
   "parentRowSpace": 10,
-  "placeholderText": "Select format",
+  "placeholderText": "Select option",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "serverSideFiltering": false,
-  "sourceData": "{{\n[\n  { label: \"Buffet\", value: \"Buffet\" },\n  { label: \"Canapés\", value: \"Canapés\" },\n  { label: \"Sit-down\", value: \"Sit-down\" },\n  { label: \"Family Style\", value: \"Family Style\" },\n  { label: \"Other\", value: \"Other\" }\n]\n}}",
+  "sourceData": "{{\n[\n\t{ label: \"Buffet\", value: \"Buffet\" },\n\t{ label: \"Canapés\", value: \"Canapés\" },\n\t{ label: \"Sit-down\", value: \"Sit-down\" },\n\t{ label: \"Family Style\", value: \"Family Style\" },\n\t{ label: \"Other\", value: \"Other\" }\n]\n}}",
   "topRow": 9,
   "type": "SELECT_WIDGET",
   "version": 1,
-  "widgetId": "nra2juw4uh",
+  "widgetId": "7c5m2ig1gi",
   "widgetName": "selEvtFormat"
 }

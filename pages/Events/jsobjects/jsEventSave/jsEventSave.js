@@ -5,7 +5,7 @@ export default {
 	},
 
 	requiredSaveMessage() {
-		if (!String(inpEvtName.text || "").trim()) {
+		if (!String(jsEventData.header().name || "").trim()) {
 			return "You need an Event name before you can save.";
 		}
 
@@ -60,8 +60,11 @@ export default {
 		await getEvtItemById.run();
 		await getEvtComponents.run();
 
-		await jsProposalSelector
-			.initialize(true);
+		await qryGetProposalsForEvent.run();
+
+		await removeValue(
+			"current_proposal_id"
+		);
 
 		resetWidget(
 			"inpEvtAddName",
@@ -84,7 +87,7 @@ export default {
 
 		const oldName =
 					String(
-						jsProposalData.header().name || ""
+						jsEventData.header().name || ""
 					).trim();
 
 		return (
@@ -149,7 +152,9 @@ export default {
 
 		return {
 			name:
-			this.textClean(inpEvtName.text),
+			this.textClean(
+				jsEventData.header().name
+			),
 
 			event_ref:
 			this.textClean(inpEvtRef.text),

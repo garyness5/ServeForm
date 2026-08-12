@@ -12,7 +12,7 @@ export default {
 	list() {
 		const warnings = [];
 
-		const header = jsProposalData.header();
+		const header = jsEventData.header();
 
 		if (!header.customer_id) {
 			warnings.push("No Customer selected.");

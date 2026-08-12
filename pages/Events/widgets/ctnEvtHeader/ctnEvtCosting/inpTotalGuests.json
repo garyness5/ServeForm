@@ -5,7 +5,7 @@
   "borderRadius": "0.375rem",
   "bottomRow": 21,
   "boxShadow": "none",
-  "defaultText": "{{ jsProposalData.header().total_guests_manual ?? \"\" }}",
+  "defaultText": "{{ jsEventData.header().total_guests_manual ?? \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -26,7 +26,7 @@
   "dynamicTriggerPathList": [],
   "iconAlign": "left",
   "inputType": "TEXT",
-  "isDisabled": "{{ jsProposalData.eventControl().status === \"Closed\" }}",
+  "isDisabled": "{{ jsEventData.header().status === \"Closed\" }}",
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,

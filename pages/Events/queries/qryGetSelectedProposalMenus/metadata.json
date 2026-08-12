@@ -29,7 +29,7 @@
     ],
     "name": "qryGetSelectedProposalMenus",
     "pageId": "Events",
-    "runBehaviour": "AUTOMATIC",
-    "userSetOnLoad": false
+    "runBehaviour": "MANUAL",
+    "userSetOnLoad": true
   }
 }

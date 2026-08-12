@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 21,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n\tappsmith.store.evt_working_venue_contact_ids !== undefined\n\t\t? (appsmith.store.evt_working_venue_contact_ids || []).map(String)\n\t\t: (jsProposalData.header().venue_contact_ids || []).map(String)\n))(msEvtVenueContacts.options, msEvtVenueContacts.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n(\n\tappsmith.store.evt_working_venue_contact_ids !== undefined\n\t? appsmith.store.evt_working_venue_contact_ids\n\t: (jsEventData.header().venue_contact_ids || [])\n).map(String)\n))(msEvtVenueContacts.options, msEvtVenueContacts.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -45,7 +45,7 @@
       "key": "onDropdownOpen"
     }
   ],
-  "isDisabled": "{{ jsProposalData.eventControl().status === \"Closed\" }}",
+  "isDisabled": "{{ jsEventData.header().status === \"Closed\" }}",
   "isFilterable": true,
   "isLoading": false,
   "isRequired": false,
@@ -80,7 +80,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 58,
   "serverSideFiltering": false,
-  "sourceData": "{{ qryGetEvtVenueContacts.data || [] }}",
+  "sourceData": "{{\nArray.isArray(qryGetEvtVenueContacts.data)\n? qryGetEvtVenueContacts.data\n: []\n}}",
   "topRow": 17,
   "type": "MULTI_SELECT_WIDGET_V2",
   "version": 1,

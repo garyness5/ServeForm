@@ -1,4 +1,21 @@
 export default {
+	async clearSelection() {
+		await removeValue(
+			"current_proposal_id"
+		);
+
+		await removeValue(
+			"proposal_loading"
+		);
+
+		await resetWidget(
+			"tblEvtComponents",
+			true
+		);
+
+		return true;
+	},
+
 	async loadSelectedProposal() {
 		const proposalId =
 					Number(
@@ -9,114 +26,102 @@ export default {
 			return null;
 		}
 
-		/*
-		 * Load the selected Proposal sequentially.
-		 * Do not run overlapping Proposal queries.
-		 */
-		await qryGetSelectedProposal.run();
-
-		await qryGetSelectedProposalMenus.run();
-
-		await jsProposalWorkspaces
-			.initializeCurrentDraft();
-
-		await Promise.all([
-			qryGetEvtContacts.run(),
-			qryGetEvtVenueContacts.run()
-		]);
-
-		return (
-			qryGetSelectedProposal.data?.[0] ??
-			null
+		await storeValue(
+			"proposal_loading",
+			true
 		);
-	},
 
-	async initialize(usePriority = false) {
-		await qryGetProposalsForEvent.run();
+		try {
+			await qryGetSelectedProposal.run();
 
-		const rows =
-					qryGetProposalsForEvent.data || [];
+			const loadedId =
+						Number(
+							qryGetSelectedProposal
+							.data?.[0]?.id || 0
+						);
 
-		if (!rows.length) {
-			await removeValue(
-				"current_proposal_id"
+			if (
+				loadedId !== proposalId
+			) {
+				throw new Error(
+					"Selected Proposal could not be loaded."
+				);
+			}
+
+			await qryGetSelectedProposalMenus.run();
+
+			await jsProposalWorkspaces
+				.initializeCurrentDraft();
+
+			await resetWidget(
+				"tblEvtComponents",
+				true
+			);
+
+			return (
+				qryGetSelectedProposal
+				.data?.[0] ||
+				null
+			);
+		} catch (error) {
+			await this.clearSelection();
+
+			showAlert(
+				error?.message ||
+				"Proposal could not be loaded.",
+				"error"
 			);
 
 			return null;
+		} finally {
+			await removeValue(
+				"proposal_loading"
+			);
 		}
-
-		const currentId =
-					Number(
-						appsmith.store.current_proposal_id || 0
-					);
-
-		const currentStillExists =
-					rows.some(
-						row =>
-						Number(row.id) === currentId
-					);
-
-		const proposalId =
-					usePriority ||
-					!currentStillExists
-		? Number(rows[0].id)
-		: currentId;
-
-		await storeValue(
-			"current_proposal_id",
-			proposalId
-		);
-
-		return await this.loadSelectedProposal();
 	},
 
 	async selectProposal(row) {
-		if (!row?.id) {
-			showAlert(
-				"Select a Proposal.",
-				"warning"
-			);
+		const newProposalId =
+					Number(
+						row?.id || 0
+					);
 
+		if (!newProposalId) {
 			return null;
 		}
-
-		const newProposalId =
-					Number(row.id);
 
 		const currentProposalId =
 					Number(
 						appsmith.store.current_proposal_id || 0
 					);
 
+		/*
+		 * Preserve unsaved work before leaving
+		 * the currently displayed Proposal.
+		 */
 		if (
-			newProposalId ===
+			currentProposalId > 0 &&
+			newProposalId !==
 			currentProposalId
 		) {
-			return true;
+			await jsProposalWorkspaces
+				.captureCurrentDraft();
 		}
 
 		/*
-		 * Preserve unsaved work from the Proposal
-		 * currently on screen.
+		 * Hide the old Proposal immediately.
 		 */
-		if (currentProposalId > 0) {
-			await jsProposalWorkspaces
-				.captureCurrentComponents();
-		}
+		await storeValue(
+			"proposal_loading",
+			true
+		);
 
 		await storeValue(
 			"current_proposal_id",
 			newProposalId
 		);
 
-		return await this.loadSelectedProposal();
-	},
-
-	async clearSelection() {
-		await removeValue(
-			"current_proposal_id"
-		);
-
-		return true;
+		return await this
+			.loadSelectedProposal();
 	}
 };

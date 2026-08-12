@@ -37,7 +37,7 @@
   "labelStyle": "BOLD",
   "labelText": "Status",
   "labelTextSize": "1rem",
-  "labelWidth": "15",
+  "labelWidth": "16",
   "leftColumn": 0,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,

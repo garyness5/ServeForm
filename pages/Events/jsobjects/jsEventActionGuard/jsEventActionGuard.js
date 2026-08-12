@@ -333,24 +333,33 @@ export default {
 									)
 		};
 
-		const result =
-					await qrySaveEventDocument.run(
-						request
-					);
+		await storeValue(
+			"event_document_save_request",
+			request
+		);
 
-		if (
-			Number(
-				result?.[0]?.event_id || 0
-			) <= 0
-		) {
-			showAlert(
-				"Event and Proposals were not saved.",
-				"error"
+		try {
+			const result =
+						await qrySaveEventDocument.run();
+
+			if (
+				Number(
+					result?.[0]?.event_id || 0
+				) <= 0
+			) {
+				showAlert(
+					"Event and Proposals were not saved.",
+					"error"
+				);
+
+				return false;
+			}
+
+			return true;
+		} finally {
+			await removeValue(
+				"event_document_save_request"
 			);
-
-			return false;
 		}
-
-		return true;
 	},
 };

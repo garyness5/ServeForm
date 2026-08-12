@@ -1,6 +1,10 @@
 export default {
 	minRows: 10,
 
+	isLoading() {
+		return appsmith.store.proposal_loading === true;
+	},
+
 	isProposalMode() {
 		return jsProposalData.hasSelectedProposal();
 	},
@@ -298,10 +302,28 @@ export default {
 	},
 
 	queryRows() {
+		const proposalId =
+					Number(
+						appsmith.store.current_proposal_id || 0
+					);
+
+		if (!proposalId) {
+			return [];
+		}
+
 		return (
-			qryGetSelectedProposalMenus.data || []
-		).map((row, index) =>
-					this.prepareRow(
+			Array.isArray(
+				qryGetSelectedProposalMenus.data
+			)
+			? qryGetSelectedProposalMenus.data
+			: []
+		)
+			.filter(row =>
+							Number(row.proposal_id || 0) ===
+							proposalId
+						 )
+			.map((row, index) =>
+					 this.prepareRow(
 			{
 				...row,
 
@@ -318,12 +340,10 @@ export default {
 				row.category_name ?? null,
 
 				current_category_id:
-				row.current_category_id ??
-				null,
+				row.current_category_id ?? null,
 
 				current_category_name:
-				row.current_category_name ??
-				null,
+				row.current_category_name ?? null,
 
 				menu_id:
 				row.menu_id ?? null,
@@ -332,8 +352,7 @@ export default {
 				row.menu_name ?? null,
 
 				current_menu_name:
-				row.current_menu_name ??
-				null,
+				row.current_menu_name ?? null,
 
 				display_menu_name:
 				row.display_menu_name ??
@@ -344,7 +363,8 @@ export default {
 				menu_renamed:
 				row.menu_renamed === true,
 
-				menu_cost: null,
+				menu_cost:
+				null,
 
 				line_cost:
 				row.kitchen_cost ?? null,
@@ -368,7 +388,7 @@ export default {
 			row.line_no ??
 			index + 1
 		)
-				 );
+					);
 	},
 
 	draftRows() {
@@ -390,8 +410,11 @@ export default {
 	},
 
 	rows() {
-		if (!this.isProposalMode()) {
-			return evtCompTable.getRows();
+		if (
+			!jsProposalData.hasSelectedProposal() ||
+			this.isLoading()
+		) {
+			return [];
 		}
 
 		return this.draftRows();

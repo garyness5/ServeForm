@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "shouldTruncate": false,
-  "text": "{{ \"Event:  \" +\njsProposalData.header().name || \"\"\n}}",
+  "text": "{{ \"Event:  \" + (jsEventData.header().name || \"\") }}",
   "textAlign": "LEFT",
   "textColor": "",
   "topRow": 1,

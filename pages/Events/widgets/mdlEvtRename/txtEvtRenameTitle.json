@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 54,
   "shouldTruncate": false,
-  "text": "{{\n\t\"Rename \" +\n\t(jsProposalData.header().name || \"\")\n}}",
+  "text": "{{\n\"Rename \" +\njsEventData.header().name || \"\" }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,

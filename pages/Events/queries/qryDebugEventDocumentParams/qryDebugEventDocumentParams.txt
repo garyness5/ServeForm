@@ -1,0 +1,17 @@
+select
+	{{ Number(appsmith.store.event_document_save_request?.event_id || 0) }}::bigint
+		as event_id,
+
+	'{{
+JSON.stringify(
+	appsmith.store.event_document_save_request?.header || {}
+).replaceAll("'", "''")
+}}'::jsonb
+		as header,
+
+	'{{
+JSON.stringify(
+	appsmith.store.event_document_save_request?.proposals || []
+).replaceAll("'", "''")
+}}'::jsonb
+		as proposals;

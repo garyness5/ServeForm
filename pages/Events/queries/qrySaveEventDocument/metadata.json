@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_event_document(\n\t{{ Number(this.params.event_id || 0) }},\n\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\n\t'{{\n\tJSON.stringify(\n\t\tthis.params.header || {}\n\t).replaceAll(\"'\", \"''\")\n\t}}'::jsonb,\n\n\t'{{\n\tJSON.stringify(\n\t\tthis.params.proposals || []\n\t).replaceAll(\"'\", \"''\")\n\t}}'::jsonb\n);",
+      "body": "select *\nfrom public.save_event_document(\n\t{{ Number(appsmith.store.event_document_save_request?.event_id || 0) }},\n\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\n\t'{{\n\tJSON.stringify(\n\t\tappsmith.store.event_document_save_request?.header || {}\n\t).replaceAll(\"'\", \"''\")\n\t}}'::jsonb,\n\n\t'{{\n\tJSON.stringify(\n\t\tappsmith.store.event_document_save_request?.proposals || []\n\t).replaceAll(\"'\", \"''\")\n\t}}'::jsonb\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

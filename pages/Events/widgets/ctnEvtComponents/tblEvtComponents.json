@@ -66,7 +66,7 @@
     "current_menu_deleted",
     "client_id"
   ],
-  "columnUpdatedAt": 1786494412059,
+  "columnUpdatedAt": 1786572365996,
   "columnWidthMap": {
     "active": 81,
     "allergen_names": 106,
@@ -78,7 +78,7 @@
     "diet_tag_names": 99,
     "extra_guests": 93,
     "extra_percent": 91,
-    "guests": 103,
+    "guests": 109,
     "item_type": 119,
     "line_cost": 111,
     "line_no": 60,

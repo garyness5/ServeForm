@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 9,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \nappsmith.store.evt_working_customer_id !== undefined\n? appsmith.store.evt_working_customer_id\n: (jsProposalData.header().customer_id || \"\")\n))(selEvtCustomer.options, selEvtCustomer.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \nappsmith.store.evt_working_customer_id !== undefined\n? appsmith.store.evt_working_customer_id\n: (jsEventData.header().customer_id || \"\")\n))(selEvtCustomer.options, selEvtCustomer.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -39,7 +39,7 @@
       "key": "onOptionChange"
     }
   ],
-  "isDisabled": "{{ jsProposalData.eventControl().status === \"Closed\" }}",
+  "isDisabled": "{{ jsEventData.header().status === \"Closed\" }}",
   "isFilterable": true,
   "isLoading": false,
   "isRequired": false,
