@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  id,\n  name,\n  category_id,\n  category_name,\n  total_cost,\n  cost_per_unit,\n  derived_allergens as allergen_names,\n  diet_tag_names,\n  active,\n  deleted\nfrom public.vw_mnu_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and active = true\n  and coalesce(deleted, false) = false\norder by lower(category_name), lower(name);",
+      "body": "select\n  id,\n  name,\n  category_id,\n  category_name,\n  total_cost,\n  cost_per_unit,\n  derived_allergens as allergen_names,\n  diet_tag_names,\n  active,\n  deleted\nfrom public.vw_mnu_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\norder by lower(category_name), lower(name);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

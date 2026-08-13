@@ -463,11 +463,17 @@ export default {
 	},
 
 	effectiveRows() {
-		if (this.isProposalMode()) {
-			return this.mergeUpdatedRows();
+		if (!this.isProposalMode()) {
+			return this.rows();
 		}
 
-		return this.rows();
+		return this.draftRows()
+			.map((row, index) =>
+					 this.prepareRow(
+			this.refreshDerivedFields(row),
+			index + 1
+		)
+					);
 	},
 
 	async setDraftRows(rows) {
@@ -628,6 +634,9 @@ export default {
 						""
 					).trim();
 
+		/*
+	 * No Menu selected.
+	 */
 		if (
 			!base.menu_id &&
 			!selectedMenuName
@@ -665,52 +674,37 @@ export default {
 			};
 		}
 
-		const item = (
-			qryGetEvtComponentItems.data || []
-		).find(menu =>
-					 Number(menu.id || 0) ===
-					 Number(
-			base.menu_id || 0
-		) ||
-					 (
-			!base.menu_id &&
-			String(
-				menu.name || ""
-			).trim() ===
-			selectedMenuName
-		)
-					);
+		const item =
+					this.currentMenu(base);
 
+		const productionGuests =
+					base.guests == null
+		? null
+		: (
+			base.guests +
+			Number(
+				base.extra_guests || 0
+			)
+		);
+
+		/*
+	 * Source Menu no longer resolves.
+	 * Keep frozen Proposal identity and
+	 * user-owned quantities.
+	 */
 		if (!item) {
-			const productionGuests =
-						base.guests == null
-			? null
-			: (
-				base.guests +
-				Number(
-					base.extra_guests ||
-					0
-				)
-			);
-
 			return {
 				...base,
 
-				current_menu_name:
-				base.current_menu_name ??
-				null,
-
-				display_menu_name:
-				base.display_menu_name ||
-				base.menu_name ||
-				null,
+				production_guests:
+				productionGuests,
 
 				menu_cost: null,
 				line_cost: null,
 				kitchen_cost: null,
 
-				production_guests:
-				productionGuests,
+				allergen_names: null,
+				diet_tag_names: null,
 
 				current_menu_active:
 				null,
@@ -723,23 +717,6 @@ export default {
 			};
 		}
 
-		const menuCost =
-					this.numberOrNull(
-						item.cost_per_unit ??
-						item.total_cost
-					);
-
-		const productionGuests =
-					base.guests == null
-		? null
-		: (
-			base.guests +
-			Number(
-				base.extra_guests ||
-				0
-			)
-		);
-
 		const sourceDeleted =
 					item.deleted === true;
 
@@ -749,13 +726,53 @@ export default {
 		const rowInactive =
 					base.active === false;
 
-		const unavailable =
-					sourceDeleted ||
-					sourceInactive ||
-					rowInactive;
+		/*
+	 * Deleted source:
+	 * keep the Proposal's frozen Menu,
+	 * Category, Guests and Extras.
+	 *
+	 * Do not replace frozen identity with
+	 * current deleted-source values.
+	 */
+		if (sourceDeleted) {
+			return {
+				...base,
+
+				production_guests:
+				productionGuests,
+
+				menu_cost: null,
+				line_cost: null,
+				kitchen_cost: null,
+
+				allergen_names: null,
+				diet_tag_names: null,
+
+				current_menu_active:
+				false,
+
+				current_menu_deleted:
+				true,
+
+				component_status:
+				"Source Deleted"
+			};
+		}
+
+		/*
+	 * Active or Inactive source still exists.
+	 * Current upstream Menu truth overlays
+	 * the Proposal-owned row.
+	 */
+		const menuCost =
+					this.numberOrNull(
+						item.cost_per_unit ??
+						item.total_cost
+					);
 
 		const calculatedCost =
-					unavailable ||
+					sourceInactive ||
+					rowInactive ||
 					productionGuests == null ||
 					menuCost == null
 		? null
@@ -768,9 +785,11 @@ export default {
 		return {
 			...base,
 
-			menu_id: item.id,
+			menu_id:
+			item.id,
 
-			menu_name: item.name,
+			menu_name:
+			item.name,
 
 			current_menu_name:
 			item.name,
@@ -778,7 +797,9 @@ export default {
 			display_menu_name:
 			item.name,
 
-			menu_renamed: false,
+			menu_renamed:
+			String(base.menu_name || "").trim() !==
+			String(item.name || "").trim(),
 
 			category_id:
 			item.category_id ?? null,
@@ -792,7 +813,8 @@ export default {
 			current_category_name:
 			item.category_name ?? null,
 
-			menu_cost: menuCost,
+			menu_cost:
+			menuCost,
 
 			production_guests:
 			productionGuests,
@@ -819,12 +841,10 @@ export default {
 			: true,
 
 			current_menu_deleted:
-			sourceDeleted,
+			false,
 
 			component_status:
-			sourceDeleted
-			? "Source Deleted"
-			: sourceInactive
+			sourceInactive
 			? "Source Inactive"
 			: rowInactive
 			? "Inactive"
@@ -905,8 +925,6 @@ export default {
 						}
 					);
 
-		await this.captureEditedRows();
-
 		return result;
 	},
 
@@ -973,8 +991,6 @@ export default {
 							}
 						);
 
-			await this.captureEditedRows();
-
 			return result;
 		}
 
@@ -994,8 +1010,6 @@ export default {
 								menu_renamed: false
 							})
 						);
-
-			await this.captureEditedRows();
 
 			return result;
 		}
@@ -1069,8 +1083,6 @@ export default {
 							selectedRow
 						)
 					);
-
-		await this.captureEditedRows();
 
 		return result;
 	},
@@ -1147,12 +1159,7 @@ export default {
 			)
 		);
 
-		const result =
-					await this.setDraftRows(rows);
-
-		await this.captureEditedRows();
-
-		return result;
+		return await this.setDraftRows(rows);
 	},
 
 	async deleteRow(row) {
@@ -1169,14 +1176,9 @@ export default {
 														row.draft_row_id
 													 );
 
-		const result =
-					await this.setDraftRows(
-						remaining
-					);
-
-		await this.captureEditedRows();
-
-		return result;
+		return await this.setDraftRows(
+			remaining
+		);
 	},
 
 	lineCost(row) {
@@ -1208,13 +1210,12 @@ export default {
 	},
 
 	toProduce() {
-		const rows =
-					this.mergeUpdatedRows();
-
-		return rows.reduce(
+		return this.effectiveRows()
+			.reduce(
 			(sum, row) => {
 				if (
-					row.active === false
+					row.active === false ||
+					row.current_menu_deleted === true
 				) {
 					return sum;
 				}
@@ -1234,22 +1235,16 @@ export default {
 	},
 
 	totalCost() {
-		const rows =
-					this.mergeUpdatedRows();
-
 		const total =
-					rows.reduce(
-						(sum, row) => {
-							const cost =
-										this.lineCost(row);
-
-							return (
-								sum +
-								Number(cost || 0)
-							);
-						},
-						0
-					);
+					this.effectiveRows()
+		.reduce(
+			(sum, row) =>
+			sum +
+			Number(
+				row.line_cost || 0
+			),
+			0
+		);
 
 		return Math.round(
 			total * 100

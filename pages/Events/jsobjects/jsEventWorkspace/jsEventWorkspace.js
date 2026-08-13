@@ -220,8 +220,17 @@ export default {
 	},
 
 	async setEventDateTime(value) {
-		return await this.patch({
-			event_datetime: value
+		const workspace =
+					this.get();
+
+		return await this.set({
+			...workspace,
+
+			event_datetime:
+			value
+			? moment(value)
+			.format("YYYY-MM-DD HH:mm:ss")
+			: null
 		});
 	},
 

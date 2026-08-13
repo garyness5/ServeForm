@@ -194,47 +194,6 @@ export default {
 	 * Proposal header ownership is being removed.
 	 * This no longer initializes any header state.
 	 */
-	async captureCurrentComponents() {
-		if (
-			!jsProposalData.hasSelectedProposal()
-		) {
-			return null;
-		}
-
-		const proposalId =
-					this.currentProposalId();
-
-		let workspace =
-				this.get(proposalId);
-
-		if (!workspace) {
-			workspace =
-				await this.initializeCurrentDraft();
-		}
-
-		if (!workspace) {
-			return null;
-		}
-
-		const components =
-					jsProposalComponents
-		.normalizeRows(
-			jsProposalComponents
-			.mergeUpdatedRows()
-		);
-
-		return await this.set(
-			proposalId,
-			{
-				...workspace,
-				components
-			}
-		);
-	},
-
-	async captureCurrentDraft() {
-		return await this.captureCurrentComponents();
-	},
 
 	async setCurrentComponents(rows) {
 		if (

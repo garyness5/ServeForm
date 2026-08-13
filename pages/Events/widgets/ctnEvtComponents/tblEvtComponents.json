@@ -66,7 +66,7 @@
     "created_at",
     "updated_at"
   ],
-  "columnUpdatedAt": 1786652767661,
+  "columnUpdatedAt": 1786660639781,
   "columnWidthMap": {
     "active": 81,
     "allergen_names": 106,
@@ -1432,7 +1432,7 @@
   "rightColumn": 64,
   "searchKey": "",
   "showInlineEditingOptionDropdown": true,
-  "tableData": "{{ jsProposalComponents.rows() }}",
+  "tableData": "{{ jsProposalComponents.effectiveRows() }}",
   "textSize": "0.875rem",
   "topRow": 0,
   "totalRecordsCount": 0,

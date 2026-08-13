@@ -52,7 +52,7 @@
     "proposal_sequence_number",
     "proposal_number"
   ],
-  "columnUpdatedAt": 1786408682505,
+  "columnUpdatedAt": 1786658756501,
   "columnWidthMap": {
     "active": 105,
     "customColumn1": 60,
@@ -60,6 +60,7 @@
     "proposal_sequence_number": 233,
     "proposal_status": 149
   },
+  "compactMode": "SHORT",
   "customIsLoading": false,
   "customIsLoadingValue": "",
   "defaultPageSize": 0,

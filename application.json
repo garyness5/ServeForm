@@ -10,6 +10,10 @@
   "icon": "bicycle",
   "pages": [
     {
+      "id": "MenuList",
+      "isDefault": false
+    },
+    {
       "id": "Menu",
       "isDefault": false
     },
@@ -47,10 +51,6 @@
     },
     {
       "id": "Dish",
-      "isDefault": false
-    },
-    {
-      "id": "MenuList",
       "isDefault": false
     },
     {

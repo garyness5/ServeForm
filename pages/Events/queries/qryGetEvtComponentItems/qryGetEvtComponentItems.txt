@@ -11,6 +11,4 @@ select
   deleted
 from public.vw_mnu_items
 where client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and active = true
-  and coalesce(deleted, false) = false
 order by lower(category_name), lower(name);
