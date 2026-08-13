@@ -3,7 +3,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 23,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
-  "defaultText": "{{ jsEventData.header().customer_notes || \"\" }}",
+  "defaultText": "{{ jsEventWorkspace.get().customer_notes || \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "borderRadius"
@@ -22,9 +22,16 @@
   "dynamicPropertyPathList": [
     {
       "key": "isDisabled"
+    },
+    {
+      "key": "onTextChange"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onTextChange"
+    }
+  ],
   "flexVerticalAlignment": "start",
   "inputType": "html",
   "isDefaultClickDisabled": true,
@@ -48,6 +55,7 @@
   "mobileRightColumn": 16,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
+  "onTextChange": "{{ jsEventWorkspace.setCustomerNotes(rteEvtCustomerNotes.text) }}",
   "parentColumnSpace": 18.15625,
   "parentId": "23u7i8y0j3",
   "parentRowSpace": 10,

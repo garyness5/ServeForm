@@ -6,40 +6,29 @@ export default {
 		);
 
 		/*
-		 * Fresh page load = saved Event truth.
-		 * Remove temporary unsaved Event selections.
+		 * New Event page session.
+		 * Clear stale Event and Proposal Working State first.
 		 */
-		await removeValue(
-			"evt_working_customer_id"
-		);
+		await jsEventWorkspace.clear();
 
-		await removeValue(
-			"evt_working_contact_ids"
-		);
-
-		await removeValue(
-			"evt_working_venue_id"
-		);
-
-		await removeValue(
-			"evt_working_venue_contact_ids"
-		);
+		await removeValue("current_proposal_id");
+		await removeValue("proposal_workspaces");
+		await removeValue("evt_components_local_rows");
 
 		/*
-		 * No Proposal opens automatically.
+		 * Load saved Event truth explicitly.
 		 */
-		await removeValue(
-			"current_proposal_id"
-		);
+		await getEvtItemById.run();
 
-		await removeValue(
-			"proposal_workspaces"
-		);
+		/*
+		 * Establish Event Working State from saved truth.
+		 */
+		await jsEventWorkspace.initialize();
 
-		await removeValue(
-			"evt_components_local_rows"
-		);
-
+		/*
+		 * Load supporting page data.
+		 * No Proposal is selected automatically.
+		 */
 		await Promise.all([
 			qryGetEvtCategories.run(),
 			qryGetEvtComponentItems.run(),

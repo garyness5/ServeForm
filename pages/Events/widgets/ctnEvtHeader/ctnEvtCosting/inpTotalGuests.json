@@ -5,7 +5,7 @@
   "borderRadius": "0.375rem",
   "bottomRow": 21,
   "boxShadow": "none",
-  "defaultText": "{{ jsEventData.header().total_guests_manual ?? \"\" }}",
+  "defaultText": "{{ jsEventWorkspace.get().total_guests_manual ?? \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -21,9 +21,16 @@
   "dynamicPropertyPathList": [
     {
       "key": "isDisabled"
+    },
+    {
+      "key": "onTextChanged"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onTextChanged"
+    }
+  ],
   "iconAlign": "left",
   "inputType": "TEXT",
   "isDisabled": "{{ jsEventData.header().status === \"Closed\" }}",
@@ -46,6 +53,7 @@
   "mobileRightColumn": 19,
   "mobileTopRow": 11,
   "needsErrorInfo": false,
+  "onTextChanged": "{{ jsEventWorkspace.setTotalGuests(inpTotalGuests.text) }}",
   "originalBottomRow": 27,
   "originalTopRow": 23,
   "parentColumnSpace": 4.09375,

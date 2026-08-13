@@ -1,12 +1,5 @@
 export default {
 	async dirtyState() {
-		/*
-		 * Capture the live Proposal table before
-		 * checking dirty state.
-		 */
-		await jsProposalWorkspaces
-			.captureCurrentComponents();
-
 		return {
 			event_dirty:
 			jsEventSave.isDirty(),
@@ -310,9 +303,6 @@ export default {
 	},
 
 	async saveAllDirty() {
-		await jsProposalWorkspaces
-			.captureCurrentComponents();
-
 		const dirtyIds =
 					jsProposalWorkspaces
 		.dirtyProposalIds();

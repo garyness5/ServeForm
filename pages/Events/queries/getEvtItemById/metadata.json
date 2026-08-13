@@ -30,6 +30,6 @@
     "name": "getEvtItemById",
     "pageId": "Events",
     "runBehaviour": "AUTOMATIC",
-    "userSetOnLoad": false
+    "userSetOnLoad": true
   }
 }

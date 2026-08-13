@@ -56,8 +56,9 @@
   "columnWidthMap": {
     "active": 105,
     "customColumn1": 60,
-    "proposal_no": 150,
-    "proposal_sequence_number": 233
+    "proposal_no": 115,
+    "proposal_sequence_number": 233,
+    "proposal_status": 149
   },
   "customIsLoading": false,
   "customIsLoadingValue": "",
@@ -825,7 +826,7 @@
   },
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 34,
+  "rightColumn": 35,
   "searchKey": "",
   "serverSidePaginationEnabled": true,
   "showInlineEditingOptionDropdown": true,

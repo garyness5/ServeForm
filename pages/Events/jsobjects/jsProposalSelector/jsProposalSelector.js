@@ -90,27 +90,10 @@ export default {
 			return null;
 		}
 
-		const currentProposalId =
-					Number(
-						appsmith.store.current_proposal_id || 0
-					);
-
 		/*
-		 * Preserve unsaved work before leaving
-		 * the currently displayed Proposal.
-		 */
-		if (
-			currentProposalId > 0 &&
-			newProposalId !==
-			currentProposalId
-		) {
-			await jsProposalWorkspaces
-				.captureCurrentDraft();
-		}
-
-		/*
-		 * Hide the old Proposal immediately.
-		 */
+	 * Proposal Working State already owns
+	 * all unsaved edits.
+	 */
 		await storeValue(
 			"proposal_loading",
 			true

@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 13,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  jsEventData.header().format || \"\" ))(selEvtFormat.options, selEvtFormat.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  jsEventWorkspace.get().format || \"\" ))(selEvtFormat.options, selEvtFormat.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -29,9 +29,16 @@
     },
     {
       "key": "isDisabled"
+    },
+    {
+      "key": "onOptionChange"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onOptionChange"
+    }
+  ],
   "isDisabled": "{{ jsEventData.header().status === \"Closed\" }}",
   "isFilterable": true,
   "isLoading": false,
@@ -53,6 +60,7 @@
   "mobileRightColumn": 17,
   "mobileTopRow": 9,
   "needsErrorInfo": false,
+  "onOptionChange": "{{ jsEventWorkspace.setFormat(selEvtFormat.selectedOptionValue) }}",
   "optionLabel": "label",
   "optionValue": "value",
   "parentColumnSpace": 4.234375,

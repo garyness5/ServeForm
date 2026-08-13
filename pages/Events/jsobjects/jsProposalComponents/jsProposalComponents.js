@@ -842,19 +842,16 @@ export default {
 
 		const freshRow =
 					mergedRows.find(item =>
-													item.draft_row_id ===
-													row.draft_row_id
+													item.draft_row_id === row.draft_row_id
 												 ) || row;
 
 		const categoryName =
 					String(
-						freshRow.category_name ||
-						""
+						freshRow.category_name || ""
 					).trim() || null;
 
 		const category = (
-			qryGetEvtComponentItems.data ||
-			[]
+			qryGetEvtComponentItems.data || []
 		).find(item =>
 					 (
 			item.category_name ||
@@ -866,50 +863,51 @@ export default {
 		)
 					);
 
-		return await this.patchRow(
-			freshRow,
-			{
-				category_id:
-				category?.category_id ??
-				null,
+		const result =
+					await this.patchRow(
+						freshRow,
+						{
+							category_id:
+							category?.category_id ??
+							null,
 
-				category_name:
-				categoryName,
+							category_name:
+							categoryName,
 
-				current_category_id:
-				category?.category_id ??
-				null,
+							current_category_id:
+							category?.category_id ??
+							null,
 
-				current_category_name:
-				categoryName,
+							current_category_name:
+							categoryName,
 
-				menu_id: null,
-				menu_name: null,
+							menu_id: null,
+							menu_name: null,
 
-				current_menu_name: null,
-				display_menu_name: null,
-				menu_renamed: false,
+							current_menu_name: null,
+							display_menu_name: null,
+							menu_renamed: false,
 
-				menu_cost: null,
-				line_cost: null,
-				kitchen_cost: null,
+							menu_cost: null,
+							line_cost: null,
+							kitchen_cost: null,
 
-				allergen_names: null,
-				diet_tag_names: null,
+							allergen_names: null,
+							diet_tag_names: null,
 
-				current_menu_active:
-				null,
+							current_menu_active: null,
+							current_menu_deleted: null,
 
-				current_menu_deleted:
-				null,
+							component_status:
+							freshRow.active === false
+							? "Inactive"
+							: "Active"
+						}
+					);
 
-				component_status:
-				freshRow.active ===
-				false
-				? "Inactive"
-				: "Active"
-			}
-		);
+		await this.captureEditedRows();
+
+		return result;
 	},
 
 	async onMenuChange(row) {
@@ -956,41 +954,50 @@ export default {
 				"warning"
 			);
 
-			return await this.patchRow(freshRow, {
-				menu_id: null,
-				menu_name: null,
-				current_menu_name: null,
-				display_menu_name: null,
-				menu_renamed: false,
-				menu_cost: null,
-				line_cost: null,
-				kitchen_cost: null,
-				allergen_names: null,
-				diet_tag_names: null,
-				current_menu_active: null,
-				current_menu_deleted: null
-			});
+			const result =
+						await this.patchRow(
+							freshRow,
+							{
+								menu_id: null,
+								menu_name: null,
+								current_menu_name: null,
+								display_menu_name: null,
+								menu_renamed: false,
+								menu_cost: null,
+								line_cost: null,
+								kitchen_cost: null,
+								allergen_names: null,
+								diet_tag_names: null,
+								current_menu_active: null,
+								current_menu_deleted: null
+							}
+						);
+
+			await this.captureEditedRows();
+
+			return result;
 		}
 
 		if (!selectedName) {
-			return await this.patchRow(
-				freshRow,
-				this.refreshDerivedFields({
-					...freshRow,
+			const result =
+						await this.patchRow(
+							freshRow,
+							this.refreshDerivedFields({
+								...freshRow,
 
-					menu_id: null,
-					menu_name: null,
+								menu_id: null,
+								menu_name: null,
 
-					current_menu_name:
-					null,
+								current_menu_name: null,
+								display_menu_name: null,
 
-					display_menu_name:
-					null,
+								menu_renamed: false
+							})
+						);
 
-					menu_renamed:
-					false
-				})
-			);
+			await this.captureEditedRows();
+
+			return result;
 		}
 
 		const item = (
@@ -1055,12 +1062,17 @@ export default {
 			: true
 		};
 
-		return await this.patchRow(
-			freshRow,
-			this.refreshDerivedFields(
-				selectedRow
-			)
-		);
+		const result =
+					await this.patchRow(
+						freshRow,
+						this.refreshDerivedFields(
+							selectedRow
+						)
+					);
+
+		await this.captureEditedRows();
+
+		return result;
 	},
 
 	async onQuantityChange(row) {
@@ -1135,7 +1147,12 @@ export default {
 			)
 		);
 
-		return await this.setDraftRows(rows);
+		const result =
+					await this.setDraftRows(rows);
+
+		await this.captureEditedRows();
+
+		return result;
 	},
 
 	async deleteRow(row) {
@@ -1152,9 +1169,14 @@ export default {
 														row.draft_row_id
 													 );
 
-		return await this.setDraftRows(
-			remaining
-		);
+		const result =
+					await this.setDraftRows(
+						remaining
+					);
+
+		await this.captureEditedRows();
+
+		return result;
 	},
 
 	lineCost(row) {
@@ -1245,5 +1267,19 @@ export default {
 					 item.trim()
 					)
 			.filter(Boolean);
-	}
+	},
+
+	async captureEditedRows() {
+		if (!jsProposalData.hasSelectedProposal()) {
+			return null;
+		}
+
+		const rows =
+					this.normalizeRows(
+						this.mergeUpdatedRows()
+					);
+
+		return await jsProposalWorkspaces
+			.setCurrentComponents(rows);
+	},
 };

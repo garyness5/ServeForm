@@ -462,38 +462,24 @@ export default {
 		const selectedId =
 					Number(
 						isVenue
-						? selEvtVenue
-						.selectedOptionValue
-						: selEvtCustomer
-						.selectedOptionValue
+						? selEvtVenue.selectedOptionValue
+						: selEvtCustomer.selectedOptionValue
 					) || null;
 
-		await storeValue(
-			isVenue
-			? "evt_working_venue_id"
-			: "evt_working_customer_id",
-			selectedId,
-			false
-		);
-
-		/*
-		 * New parent = old Contact selection
-		 * is no longer valid for this Event.
-		 */
-		await storeValue(
-			isVenue
-			? "evt_working_venue_contact_ids"
-			: "evt_working_contact_ids",
-			[],
-			false
-		);
-
 		if (isVenue) {
+			await jsEventWorkspace.setVenue(
+				selectedId
+			);
+
 			await resetWidget(
 				"msEvtVenueContacts",
 				true
 			);
 		} else {
+			await jsEventWorkspace.setCustomer(
+				selectedId
+			);
+
 			await resetWidget(
 				"msEvtContacts",
 				true
@@ -517,56 +503,48 @@ export default {
 
 		const values =
 					isVenue
-		? msEvtVenueContacts
-		.selectedOptionValues
-		: msEvtContacts
-		.selectedOptionValues;
+		? msEvtVenueContacts.selectedOptionValues
+		: msEvtContacts.selectedOptionValues;
 
 		const selectedIds =
 					(values || [])
 		.map(Number)
 		.filter(Boolean);
 
-		await storeValue(
-			isVenue
-			? "evt_working_venue_contact_ids"
-			: "evt_working_contact_ids",
-			selectedIds,
-			false
-		);
+		if (isVenue) {
+			await jsEventWorkspace.setVenueContacts(
+				selectedIds
+			);
+		} else {
+			await jsEventWorkspace.setCustomerContacts(
+				selectedIds
+			);
+		}
 
 		const parentId =
 					Number(
 						isVenue
-						? selEvtVenue
-						.selectedOptionValue
-						: selEvtCustomer
-						.selectedOptionValue
+						? selEvtVenue.selectedOptionValue
+						: selEvtCustomer.selectedOptionValue
 					) || 0;
 
 		/*
-		 * Selecting an existing Contact also
-		 * creates/restores its Address Book link.
-		 */
+	 * Selecting an existing Contact may
+	 * create/restore its Address Book link.
+	 */
 		if (
 			parentId > 0 &&
 			selectedIds.length > 0
 		) {
 			if (isVenue) {
 				await qryLinkEvtVenueContacts.run({
-					venue_id:
-					parentId,
-
-					contact_ids:
-					selectedIds
+					venue_id: parentId,
+					contact_ids: selectedIds
 				});
 			} else {
 				await qryLinkEvtCustomerContacts.run({
-					customer_id:
-					parentId,
-
-					contact_ids:
-					selectedIds
+					customer_id: parentId,
+					contact_ids: selectedIds
 				});
 			}
 

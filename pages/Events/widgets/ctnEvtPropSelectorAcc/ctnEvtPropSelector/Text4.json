@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 135,
+  "bottomRow": 17,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -11,9 +11,6 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -24,7 +21,7 @@
   "isLoading": false,
   "isVisible": true,
   "key": "pbo90iwsno",
-  "leftColumn": 35,
+  "leftColumn": 36,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
@@ -41,9 +38,9 @@
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 51,
+  "rightColumn": 53,
   "shouldTruncate": false,
-  "text": "{{\n\tJSON.stringify(\n\t\tjsEvtDebug.fullSaveRequest(),\n\t\tnull,\n\t\t2\n\t)\n}}\n",
+  "text": "1",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 13,

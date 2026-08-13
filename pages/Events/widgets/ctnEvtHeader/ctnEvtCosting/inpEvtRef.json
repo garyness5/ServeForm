@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 9,
   "boxShadow": "none",
-  "defaultText": "{{ jsEventData.header().event_ref ?? \"\" }}",
+  "defaultText": "{{ jsEventWorkspace.get().event_ref ?? \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -24,9 +24,16 @@
   "dynamicPropertyPathList": [
     {
       "key": "isDisabled"
+    },
+    {
+      "key": "onTextChanged"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onTextChanged"
+    }
+  ],
   "iconAlign": "left",
   "inputType": "TEXT",
   "isDisabled": "{{ jsEventData.header().status === \"Closed\" }}",
@@ -49,6 +56,7 @@
   "mobileRightColumn": 61,
   "mobileTopRow": 11,
   "needsErrorInfo": false,
+  "onTextChanged": "{{ jsEventWorkspace.setEventRef(inpEvtRef.text) }}",
   "originalBottomRow": 15,
   "originalTopRow": 11,
   "parentColumnSpace": 18.1875,

@@ -5,7 +5,7 @@ export default {
 	},
 
 	requiredSaveMessage() {
-		if (!String(jsEventData.header().name || "").trim()) {
+		if (!String(jsEventWorkspace.get().name || "").trim()) {
 			return "You need an Event name before you can save.";
 		}
 
@@ -140,153 +140,21 @@ export default {
 	},
 
 	headerSnapshotFromPage() {
-		const customerContactIds =
-					(msEvtContacts.selectedOptionValues || [])
-		.map(Number)
-		.filter(Boolean);
+		const {
+			event_id,
+			...header
+		} = jsEventWorkspace.get();
 
-		const venueContactIds =
-					(msEvtVenueContacts.selectedOptionValues || [])
-		.map(Number)
-		.filter(Boolean);
-
-		return {
-			name:
-			this.textClean(
-				jsEventData.header().name
-			),
-
-			event_ref:
-			this.textClean(inpEvtRef.text),
-
-			event_datetime:
-			datEvtDate.selectedDate
-			? moment(datEvtDate.selectedDate)
-			.format("YYYY-MM-DD HH:mm:ss")
-			: null,
-
-			customer_id:
-			Number(
-				selEvtCustomer.selectedOptionValue || 0
-			) || null,
-
-			contact_ids:
-			customerContactIds,
-
-			venue_id:
-			Number(
-				selEvtVenue.selectedOptionValue || 0
-			) || null,
-
-			venue_contact_ids:
-			venueContactIds,
-
-			total_guests_manual:
-			inpTotalGuests.text === "" ||
-			inpTotalGuests.text === null ||
-			inpTotalGuests.text === undefined
-			? null
-			: Number(inpTotalGuests.text),
-
-			format:
-			selEvtFormat.selectedOptionValue || null,
-
-			customer_notes:
-			this.textClean(
-				rteEvtCustomerNotes.text ||
-				rteEvtCustomerNotes.value ||
-				""
-			),
-
-			internal_notes:
-			this.textClean(
-				rteEvtInternalNotes.text ||
-				rteEvtInternalNotes.value ||
-				""
-			),
-
-			active:
-			chkEvtActive.isChecked === false
-			? false
-			: true
-		};
+		return header;
 	},
 
 	headerSnapshotFromSaved() {
-		const r = Array.isArray(getEvtItemById.data)
-		? getEvtItemById.data[0]
-		: getEvtItemById.data;
+		const {
+			event_id,
+			...header
+		} = jsEventWorkspace.savedEvent();
 
-		if (!r) {
-			return {
-				name: null,
-				event_ref: null,
-				event_datetime: null,
-				customer_id: null,
-				contact_ids: [],
-				venue_id: null,
-				venue_contact_ids: [],
-				total_guests_manual: null,
-				format: null,
-				customer_notes: null,
-				internal_notes: null,
-				active: true
-			};
-		}
-
-		return {
-			name:
-			this.textClean(r.name),
-
-			event_ref:
-			this.textClean(r.event_ref),
-
-			event_datetime:
-			r.event_datetime
-			? moment
-			.utc(r.event_datetime)
-			.format("YYYY-MM-DD HH:mm:ss")
-			: null,
-
-			customer_id:
-			r.customer_id == null
-			? null
-			: Number(r.customer_id),
-
-			contact_ids:
-			(r.contact_ids || [])
-			.map(Number)
-			.filter(Boolean),
-
-			venue_id:
-			r.venue_id
-			? Number(r.venue_id)
-			: null,
-
-			venue_contact_ids:
-			(r.venue_contact_ids || [])
-			.map(Number)
-			.filter(Boolean),
-
-			total_guests_manual:
-			r.total_guests_manual == null
-			? null
-			: Number(r.total_guests_manual),
-
-			format:
-			r.format || null,
-
-			customer_notes:
-			this.textClean(r.customer_notes),
-
-			internal_notes:
-			this.textClean(r.notes),
-
-			active:
-			r.active === false
-			? false
-			: true
-		};
+		return header;
 	},
 
 	componentSnapshotFromSaved() {
@@ -338,7 +206,7 @@ export default {
 				appsmith.store.current_event_id || 0
 			) === 0 &&
 			!h.name &&
-			!h.event_date &&
+			!h.event_datetime &&
 			!h.customer_id &&
 			!h.venue_id &&
 			!h.format
@@ -379,39 +247,15 @@ export default {
 		);
 	},
 
-	async saveEvent(skipGroceriesCheck = false) {
-		if (!(await this.validateBeforeSave())) return false;
-
-		const isExisting = Number(appsmith.store.current_event_id || 0) > 0;
-
-		const oldHeader = this.headerSnapshotFromSaved();
-		const newHeader = this.headerSnapshotFromPage();
-
-		const oldEligible =
-					oldHeader.status === "Ordered" &&
-					oldHeader.active === true;
-
-		const newEligible =
-					newHeader.status === "Ordered" &&
-					newHeader.active === true;
-
-		if (
-			isExisting &&
-			!skipGroceriesCheck &&
-			oldEligible &&
-			!newEligible
-		) {
-			await checkEvtGroceriesManualImpact.run();
-
-			const hasManual =
-						checkEvtGroceriesManualImpact.data?.[0]?.has_manual_values === true;
-
-			if (hasManual) {
-				await storeValue("pendingEventAction", "groceries_removal_save");
-				showModal("mdlEvtRemoveFromGroceries");
-				return false;
-			}
+	async saveEvent() {
+		if (!(await this.validateBeforeSave())) {
+			return false;
 		}
+
+		const isExisting =
+					Number(
+						appsmith.store.current_event_id || 0
+					) > 0;
 
 		let result = null;
 
@@ -425,44 +269,38 @@ export default {
 							result?.[0]?.id || 0
 						);
 
-			if (newId) {
-				await storeValue(
-					"current_event_id",
-					newId
+			if (!newId) {
+				showAlert(
+					"Event could not be created.",
+					"error"
 				);
+
+				return false;
 			}
+
+			await storeValue(
+				"current_event_id",
+				newId
+			);
 		}
 
-		await syncEvtGroceriesEligibility.run();
-
-		if (isExisting && oldEligible && !newEligible) {
-			await refreshGroDetails.run();
-			await refreshGroOrder.run();
-			await clearGroPrint.run();
-		}
-
+		/*
+	 * Reload Published State only after
+	 * persistence succeeds.
+	 */
 		await getEvtItemById.run();
 
-		await removeValue(
-			"evt_working_customer_id"
+		/*
+	 * Saved truth now becomes the new
+	 * Event Working State baseline.
+	 */
+		await jsEventWorkspace.resetFromSaved();
+
+		showAlert(
+			"Event saved.",
+			"success"
 		);
 
-		await removeValue(
-			"evt_working_venue_id"
-		);
-
-		await removeValue(
-			"evt_working_contact_ids"
-		);
-
-		await removeValue(
-			"evt_working_venue_contact_ids"
-		);
-
-		await getEvtComponents.run();
-		await evtCompTable.loadFromQuery();
-
-		showAlert("Event saved.", "success");
 		return true;
 	},
 

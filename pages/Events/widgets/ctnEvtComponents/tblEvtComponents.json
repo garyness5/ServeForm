@@ -50,8 +50,6 @@
     "menu_cost",
     "notes",
     "component_status",
-    "created_at",
-    "updated_at",
     "source_type",
     "proposal_id",
     "event_component_id",
@@ -64,9 +62,11 @@
     "kitchen_cost",
     "current_menu_active",
     "current_menu_deleted",
-    "client_id"
+    "client_id",
+    "created_at",
+    "updated_at"
   ],
-  "columnUpdatedAt": 1786572365996,
+  "columnUpdatedAt": 1786652767661,
   "columnWidthMap": {
     "active": 81,
     "allergen_names": 106,
@@ -182,12 +182,6 @@
       "key": "primaryColumns.component_status.computedValue"
     },
     {
-      "key": "primaryColumns.created_at.computedValue"
-    },
-    {
-      "key": "primaryColumns.updated_at.computedValue"
-    },
-    {
       "key": "primaryColumns.source_type.computedValue"
     },
     {
@@ -225,6 +219,12 @@
     },
     {
       "key": "primaryColumns.client_id.computedValue"
+    },
+    {
+      "key": "primaryColumns.created_at.computedValue"
+    },
+    {
+      "key": "primaryColumns.updated_at.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -943,7 +943,7 @@
       "isVisible": true,
       "label": "Extra",
       "notation": "standard",
-      "onSubmit": "{{ true }}",
+      "onSubmit": "{{\njsProposalComponents.captureEditedRows()\n}}",
       "originalId": "extra_guests",
       "sticky": "",
       "textColor": "",
@@ -978,7 +978,7 @@
       "isVisible": true,
       "label": "Guests",
       "notation": "standard",
-      "onSubmit": "{{ true }}",
+      "onSubmit": "{{\njsProposalComponents.captureEditedRows()\n}}",
       "originalId": "guests",
       "sticky": "",
       "textColor": "",
