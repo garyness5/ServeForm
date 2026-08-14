@@ -4,7 +4,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 27,
+  "bottomRow": 31,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "cachedTableData": {},
   "canFreezeColumn": true,
@@ -52,13 +52,14 @@
     "proposal_sequence_number",
     "proposal_number"
   ],
-  "columnUpdatedAt": 1786658756501,
+  "columnUpdatedAt": 1786664412627,
   "columnWidthMap": {
     "active": 105,
     "customColumn1": 60,
-    "proposal_no": 115,
+    "proposal_no": 144,
     "proposal_sequence_number": 233,
-    "proposal_status": 149
+    "proposal_status": 101,
+    "sent_at": 149
   },
   "compactMode": "SHORT",
   "customIsLoading": false,
@@ -146,11 +147,17 @@
     },
     {
       "key": "onRowSelected"
+    },
+    {
+      "key": "primaryColumns.active.onCheckChange"
     }
   ],
   "dynamicTriggerPathList": [
     {
       "key": "onRowSelected"
+    },
+    {
+      "key": "primaryColumns.active.onCheckChange"
     }
   ],
   "enableClientSideSearch": true,
@@ -175,6 +182,8 @@
   "mobileTopRow": 0,
   "needsErrorInfo": false,
   "onRowSelected": "{{\njsProposalSelector.selectProposal(\n\ttblPropForEvent.selectedRow\n)\n}}",
+  "originalBottomRow": 38,
+  "originalTopRow": 11,
   "parentColumnSpace": 18.890625,
   "parentId": "9z10645pxt",
   "parentRowSpace": 10,
@@ -204,6 +213,7 @@
       "isVisible": true,
       "label": "active",
       "notation": "standard",
+      "onCheckChange": "{{ jsProposalActions.setActive(currentRow, currentRow.active !== true) }}",
       "originalId": "active",
       "sticky": "",
       "textColor": "",
@@ -472,7 +482,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "id",
       "notation": "standard",
       "originalId": "id",
@@ -831,9 +841,9 @@
   "searchKey": "",
   "serverSidePaginationEnabled": true,
   "showInlineEditingOptionDropdown": true,
-  "tableData": "{{ qryGetProposalsForEvent.data ?? [] }}",
+  "tableData": "{{ jsProposalActions.filteredProposals() }}",
   "textSize": "0.875rem",
-  "topRow": 0,
+  "topRow": 4,
   "totalRecordsCount": 0,
   "type": "TABLE_WIDGET_V2",
   "version": 2,

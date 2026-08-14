@@ -1,0 +1,5 @@
+select *
+from public.set_event_proposal_active(
+	{{ Number(appsmith.store.proposal_active_id || 0) }},
+	{{ appsmith.store.proposal_active_request === true }}
+);
