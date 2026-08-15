@@ -414,7 +414,7 @@ export default {
 			!jsProposalData.hasSelectedProposal() ||
 			this.isLoading()
 		) {
-			return [];
+			return this.normalizeRows([]);
 		}
 
 		return this.draftRows();

@@ -1,6 +1,6 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_340ddd5a-11ca-4d1a-850d-e3a823302546",
-  "id": "Events_jsProposalActions.toggleActive",
+  "gitSyncId": "6a0a1bde3214f344228346e7_407e5dc6-1e80-4323-8f3d-f8b13e814fa4",
+  "id": "Events_jsProposalActions.deleteCurrent",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
@@ -22,8 +22,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "jsProposalActions.toggleActive",
-    "name": "toggleActive",
+    "fullyQualifiedName": "jsProposalActions.deleteCurrent",
+    "name": "deleteCurrent",
     "pageId": "Events",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

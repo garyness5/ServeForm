@@ -375,5 +375,88 @@ export default {
 		);
 
 		return true;
-	}
+	},
+
+	makeTemporaryId() {
+		return -Math.max(
+			1,
+			Date.now()
+		);
+	},
+
+	isTemporary(
+		proposalId = this.currentProposalId()
+	) {
+		return Number(proposalId || 0) < 0;
+	},
+
+	async createTemporary(
+		components = [],
+		sourceProposalId = null
+	) {
+		const tempId =
+					this.makeTemporaryId();
+
+		const normalized =
+					jsProposalComponents
+		.normalizeRows(
+			this.deepCopy(
+				components || []
+			)
+		);
+
+		await this.set(
+			tempId,
+			{
+				proposal_id:
+				tempId,
+
+				is_new:
+				true,
+
+				source_proposal_id:
+				Number(sourceProposalId || 0) ||
+				null,
+
+				components:
+				normalized,
+
+				/*
+			 * A new/duplicated Proposal has never
+			 * been saved.
+			 *
+			 * Empty saved baseline makes meaningful
+			 * copied/entered work dirty immediately.
+			 */
+				saved_components:
+				jsProposalComponents
+				.normalizeRows([]),
+
+				saved_updated_at:
+				null
+			}
+		);
+
+		await storeValue(
+			"current_proposal_id",
+			tempId
+		);
+
+		return tempId;
+	},
+
+	async discardCurrent() {
+		const proposalId =
+					this.currentProposalId();
+
+		if (!proposalId) {
+			return true;
+		}
+
+		await this.discard(
+			proposalId
+		);
+
+		return true;
+	},
 };

@@ -35,24 +35,26 @@
     "customColumn1",
     "proposal_no",
     "proposal_status",
-    "sent_at",
     "active",
     "id",
-    "closed_at",
-    "was_issued",
-    "is_editable",
-    "is_closed",
     "proposal_title",
     "event_id",
+    "proposal_number",
+    "is_new",
+    "source_proposal_id",
     "event_name",
     "event_ref",
     "event_date",
     "total_guests",
+    "sent_at",
     "created_at",
-    "proposal_sequence_number",
-    "proposal_number"
+    "closed_at",
+    "was_issued",
+    "is_editable",
+    "is_closed",
+    "proposal_sequence_number"
   ],
-  "columnUpdatedAt": 1786664412627,
+  "columnUpdatedAt": 1786756241947,
   "columnWidthMap": {
     "active": 105,
     "customColumn1": 60,
@@ -65,7 +67,7 @@
   "customIsLoading": false,
   "customIsLoadingValue": "",
   "defaultPageSize": 0,
-  "defaultSelectedRowIndex": "",
+  "defaultSelectedRowIndex": "{{ jsProposalActions.selectedProposalIndex() }}",
   "defaultSelectedRowIndices": [
     0
   ],
@@ -99,6 +101,24 @@
       "key": "primaryColumns.proposal_title.computedValue"
     },
     {
+      "key": "primaryColumns.active.computedValue"
+    },
+    {
+      "key": "primaryColumns.proposal_number.computedValue"
+    },
+    {
+      "key": "primaryColumns.customColumn1.computedValue"
+    },
+    {
+      "key": "defaultSelectedRowIndex"
+    },
+    {
+      "key": "primaryColumns.is_new.computedValue"
+    },
+    {
+      "key": "primaryColumns.source_proposal_id.computedValue"
+    },
+    {
       "key": "primaryColumns.event_name.computedValue"
     },
     {
@@ -117,9 +137,6 @@
       "key": "primaryColumns.created_at.computedValue"
     },
     {
-      "key": "primaryColumns.active.computedValue"
-    },
-    {
       "key": "primaryColumns.closed_at.computedValue"
     },
     {
@@ -133,12 +150,6 @@
     },
     {
       "key": "primaryColumns.proposal_sequence_number.computedValue"
-    },
-    {
-      "key": "primaryColumns.proposal_number.computedValue"
-    },
-    {
-      "key": "primaryColumns.customColumn1.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -213,7 +224,7 @@
       "isVisible": true,
       "label": "active",
       "notation": "standard",
-      "onCheckChange": "{{ jsProposalActions.setActive(currentRow, currentRow.active !== true) }}",
+      "onCheckChange": "{{\njsProposalActions.setActive(\n\ttblPropForEvent.triggeredRow,\n\ttblPropForEvent.triggeredRow.active === false\n)\n}}",
       "originalId": "active",
       "sticky": "",
       "textColor": "",
@@ -245,7 +256,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "closed_at",
       "notation": "standard",
       "originalId": "closed_at",
@@ -279,7 +290,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "created_at",
       "notation": "standard",
       "originalId": "created_at",
@@ -346,7 +357,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "event_date",
       "notation": "standard",
       "originalId": "event_date",
@@ -414,7 +425,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "event_name",
       "notation": "standard",
       "originalId": "event_name",
@@ -448,7 +459,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "event_ref",
       "notation": "standard",
       "originalId": "event_ref",
@@ -516,7 +527,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "is_closed",
       "notation": "standard",
       "originalId": "is_closed",
@@ -550,10 +561,44 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "is_editable",
       "notation": "standard",
       "originalId": "is_editable",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "is_new": {
+      "alias": "is_new",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblPropForEvent.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"is_new\"])) : is_new })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "is_new",
+      "index": 18,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": false,
+      "label": "is_new",
+      "notation": "standard",
+      "originalId": "is_new",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
@@ -568,7 +613,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblPropForEvent.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\ncurrentRow.proposal_number\n? currentRow.proposal_number\n: \"Draft \" + currentRow.proposal_no\n)) : \ncurrentRow.proposal_number\n? currentRow.proposal_number\n: \"Draft \" + currentRow.proposal_no\n })()}}",
+      "computedValue": "{{(() => { const tableData = tblPropForEvent.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsProposalData.referenceDisplay(currentRow) )) :  jsProposalData.referenceDisplay(currentRow)  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -652,7 +697,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "proposal_sequence_number",
       "notation": "standard",
       "originalId": "proposal_sequence_number",
@@ -738,7 +783,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblPropForEvent.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\ncurrentRow.sent_at\n? moment(currentRow.sent_at)\n.format(\"YYYY-MMM-DD | HH:mm\")\n: \"\"\n)) : \ncurrentRow.sent_at\n? moment(currentRow.sent_at)\n.format(\"YYYY-MMM-DD | HH:mm\")\n: \"\"\n })()}}",
+      "computedValue": "{{(() => { const tableData = tblPropForEvent.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"sent_at\"])) : sent_at })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -755,9 +800,43 @@
       "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Sent",
+      "label": "sent_at",
       "notation": "standard",
       "originalId": "sent_at",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "source_proposal_id": {
+      "alias": "source_proposal_id",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblPropForEvent.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"source_proposal_id\"])) : source_proposal_id })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "source_proposal_id",
+      "index": 19,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": false,
+      "label": "source_proposal_id",
+      "notation": "standard",
+      "originalId": "source_proposal_id",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
@@ -788,7 +867,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "total_guests",
       "notation": "standard",
       "originalId": "total_guests",
@@ -822,7 +901,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "was_issued",
       "notation": "standard",
       "originalId": "was_issued",

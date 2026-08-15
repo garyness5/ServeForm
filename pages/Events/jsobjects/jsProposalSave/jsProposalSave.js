@@ -87,10 +87,6 @@ export default {
 	async refreshCurrentProposal(
 		proposalId
 	) {
-		/*
-		 * Proposal reload is deliberately sequential.
-		 * One owner, one load path.
-		 */
 		await qryGetSelectedProposal.run();
 
 		await qryGetSelectedProposalMenus.run();
@@ -109,6 +105,97 @@ export default {
 		);
 
 		return true;
+	},
+
+	async saveExistingProposal(
+		proposalId,
+		rows
+	) {
+		const request = {
+			proposal_id:
+			proposalId,
+
+			menus:
+			this.menuPayload(rows)
+		};
+
+		await storeValue(
+			"proposal_save_request",
+			request
+		);
+
+		try {
+			const result =
+						await qrySaveEventProposal.run();
+
+			const savedId =
+						Number(
+							result?.[0]?.proposal_id || 0
+						);
+
+			if (!savedId) {
+				return null;
+			}
+
+			return savedId;
+
+		} finally {
+			await removeValue(
+				"proposal_save_request"
+			);
+		}
+	},
+
+	async saveNewProposal(
+		tempProposalId,
+		rows
+	) {
+		const workspace =
+					jsProposalWorkspaces
+		.get(tempProposalId);
+
+		if (!workspace) {
+			return null;
+		}
+
+		const request = {
+			proposal_id:
+			tempProposalId,
+
+			source_proposal_id:
+			Number(
+				workspace.source_proposal_id || 0
+			) || null,
+
+			menus:
+			this.menuPayload(rows)
+		};
+
+		await storeValue(
+			"proposal_save_request",
+			request
+		);
+
+		try {
+			const result =
+						await qrySaveNewEventProposal.run();
+
+			const savedId =
+						Number(
+							result?.[0]?.proposal_id || 0
+						);
+
+			if (!savedId) {
+				return null;
+			}
+
+			return savedId;
+
+		} finally {
+			await removeValue(
+				"proposal_save_request"
+			);
+		}
 	},
 
 	async saveDraft() {
@@ -133,27 +220,17 @@ export default {
 					jsProposalComponents
 		.effectiveRows();
 
-		const request = {
-			proposal_id:
-			proposalId,
+		let savedId = null;
 
-			menus:
-			this.menuPayload(rows)
-		};
-
-		await storeValue(
-			"proposal_save_request",
-			request
-		);
-
-		try {
-			const result =
-						await qrySaveEventProposal.run();
-
-			const savedId =
-						Number(
-							result?.[0]?.proposal_id || 0
-						);
+		/*
+		 * Existing persisted Proposal.
+		 */
+		if (proposalId > 0) {
+			savedId =
+				await this.saveExistingProposal(
+				proposalId,
+				rows
+			);
 
 			if (!savedId) {
 				showAlert(
@@ -163,15 +240,65 @@ export default {
 
 				return false;
 			}
-		} finally {
-			await removeValue(
-				"proposal_save_request"
+
+			await this.refreshCurrentProposal(
+				savedId
 			);
 		}
 
-		await this.refreshCurrentProposal(
-			proposalId
-		);
+		/*
+		 * New unsaved Proposal workspace.
+		 */
+		else if (proposalId < 0) {
+			savedId =
+				await this.saveNewProposal(
+				proposalId,
+				rows
+			);
+
+			if (!savedId) {
+				showAlert(
+					"Proposal was not saved.",
+					"error"
+				);
+
+				return false;
+			}
+
+			/*
+			 * Remove the temporary workspace.
+			 */
+			await jsProposalWorkspaces
+				.discard(
+				proposalId
+			);
+
+			/*
+			 * Replace temporary identity with the
+			 * new real Supabase Proposal ID.
+			 */
+			await storeValue(
+				"current_proposal_id",
+				savedId
+			);
+
+			/*
+			 * Load the newly saved Proposal as the
+			 * new Published State + Working State.
+			 */
+			await this.refreshCurrentProposal(
+				savedId
+			);
+		}
+
+		else {
+			showAlert(
+				"Proposal was not saved.",
+				"error"
+			);
+
+			return false;
+		}
 
 		showAlert(
 			"Proposal saved.",

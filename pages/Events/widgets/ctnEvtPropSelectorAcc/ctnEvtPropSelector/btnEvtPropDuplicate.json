@@ -36,7 +36,7 @@
   "mobileRightColumn": 18,
   "mobileTopRow": 1,
   "needsErrorInfo": false,
-  "onClick": "{{ true }}",
+  "onClick": "{{ jsProposalActions.duplicateCurrent() }}",
   "originalBottomRow": 9,
   "originalTopRow": 5,
   "parentColumnSpace": 19.5,

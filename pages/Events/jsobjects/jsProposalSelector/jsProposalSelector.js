@@ -26,6 +26,24 @@ export default {
 			return null;
 		}
 
+		/*
+		 * Temporary Proposal:
+		 * no Supabase row exists yet.
+		 */
+		if (proposalId < 0) {
+			await removeValue(
+				"proposal_loading"
+			);
+
+			await resetWidget(
+				"tblEvtComponents",
+				true
+			);
+
+			return jsProposalWorkspaces
+				.get(proposalId);
+		}
+
 		await storeValue(
 			"proposal_loading",
 			true
@@ -40,9 +58,7 @@ export default {
 							.data?.[0]?.id || 0
 						);
 
-			if (
-				loadedId !== proposalId
-			) {
+			if (loadedId !== proposalId) {
 				throw new Error(
 					"Selected Proposal could not be loaded."
 				);
@@ -63,6 +79,7 @@ export default {
 				.data?.[0] ||
 				null
 			);
+
 		} catch (error) {
 			await this.clearSelection();
 
@@ -73,6 +90,7 @@ export default {
 			);
 
 			return null;
+
 		} finally {
 			await removeValue(
 				"proposal_loading"
@@ -90,18 +108,32 @@ export default {
 			return null;
 		}
 
-		/*
-	 * Proposal Working State already owns
-	 * all unsaved edits.
-	 */
-		await storeValue(
-			"proposal_loading",
-			true
-		);
-
 		await storeValue(
 			"current_proposal_id",
 			newProposalId
+		);
+
+		/*
+		 * Temporary Proposal already exists
+		 * entirely in Working State.
+		 */
+		if (newProposalId < 0) {
+			await removeValue(
+				"proposal_loading"
+			);
+
+			await resetWidget(
+				"tblEvtComponents",
+				true
+			);
+
+			return jsProposalWorkspaces
+				.get(newProposalId);
+		}
+
+		await storeValue(
+			"proposal_loading",
+			true
 		);
 
 		return await this

@@ -53,7 +53,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 2,
   "needsErrorInfo": false,
-  "onOptionChange": "{{ getCustomers.run() }}",
+  "onOptionChange": "{{ true }}",
   "optionLabel": "label",
   "optionValue": "value",
   "parentColumnSpace": 17.625,
