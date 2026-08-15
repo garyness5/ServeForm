@@ -42,7 +42,7 @@
   "labelText": "",
   "labelTextColor": "",
   "labelTextSize": "0.875rem",
-  "labelTooltip": "Customer Status Filter",
+  "labelTooltip": "Active/Inactive filter",
   "labelWidth": "3",
   "leftColumn": 27,
   "maxDynamicHeight": 9000,

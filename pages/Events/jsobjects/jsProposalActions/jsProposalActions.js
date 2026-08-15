@@ -145,6 +145,27 @@ export default {
 		return rows;
 	},
 
+
+	selectedRowIndex() {
+		const currentId =
+					Number(
+						appsmith.store.current_proposal_id || 0
+					);
+
+		const rows =
+					this.filteredProposals();
+
+		const index =
+					rows.findIndex(row =>
+												 Number(row.id || 0) === currentId
+												);
+
+		return Math.max(
+			0,
+			index
+		);
+	},
+
 	async addNew() {
 		const tempId =
 					await jsProposalWorkspaces
@@ -206,12 +227,7 @@ export default {
 	},
 
 	async deleteCurrent() {
-		const proposalId =
-					Number(
-						appsmith.store.current_proposal_id || 0
-					);
-
-		if (!proposalId) {
+		if (!jsProposalData.hasSelectedProposal()) {
 			showAlert(
 				"Select a Proposal first.",
 				"warning"
@@ -220,9 +236,14 @@ export default {
 			return false;
 		}
 
+		const proposalId =
+					Number(
+						appsmith.store.current_proposal_id || 0
+					);
+
 		/*
-	 * Temporary unsaved Proposal:
-	 * remove workspace only.
+	 * Unsaved temporary Proposal.
+	 * Nothing exists in Supabase.
 	 */
 		if (proposalId < 0) {
 			await jsProposalWorkspaces
@@ -240,17 +261,26 @@ export default {
 			return true;
 		}
 
-		/*
-	 * Saved Proposal:
-	 * soft delete in Supabase.
-	 */
 		await storeValue(
 			"proposal_delete_id",
 			proposalId
 		);
 
 		try {
-			await qryDeleteEventProposal.run();
+			const result =
+						await qryDeleteEventProposal.run();
+
+			const row =
+						result?.[0] || null;
+
+			if (!row) {
+				showAlert(
+					"Proposal was not deleted.",
+					"error"
+				);
+
+				return false;
+			}
 
 			await jsProposalWorkspaces
 				.discard(proposalId);
@@ -290,5 +320,49 @@ export default {
 										 Number(row.id || 0) === currentId
 										)
 		);
+	},
+
+	async discardCurrent() {
+		if (!jsProposalData.hasSelectedProposal()) {
+			return false;
+		}
+
+		const proposalId =
+					Number(
+						appsmith.store.current_proposal_id || 0
+					);
+
+		/*
+	 * Unsaved temporary Proposal:
+	 * remove the workspace completely.
+	 */
+		if (proposalId < 0) {
+			await jsProposalWorkspaces
+				.discard(proposalId);
+
+			await removeValue(
+				"current_proposal_id"
+			);
+
+			await resetWidget(
+				"tblEvtComponents",
+				true
+			);
+
+			return true;
+		}
+
+		/*
+	 * Saved Proposal:
+	 * discard dirty Working State and
+	 * rebuild it from Published State.
+	 */
+		await jsProposalWorkspaces
+			.discard(proposalId);
+
+		await jsProposalSelector
+			.loadSelectedProposal();
+
+		return true;
 	},
 };

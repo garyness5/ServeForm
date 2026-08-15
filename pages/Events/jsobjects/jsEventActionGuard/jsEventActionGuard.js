@@ -160,6 +160,32 @@ export default {
 		}
 	},
 
+	proposalIdMap(resultRow) {
+		const raw =
+					resultRow?.proposal_id_map;
+
+		if (!raw) {
+			return {};
+		}
+
+		if (
+			typeof raw === "object" &&
+			!Array.isArray(raw)
+		) {
+			return raw;
+		}
+
+		if (typeof raw === "string") {
+			try {
+				return JSON.parse(raw);
+			} catch (error) {
+				return {};
+			}
+		}
+
+		return {};
+	},
+
 	async confirm() {
 		const action =
 					appsmith.store
@@ -172,11 +198,53 @@ export default {
 
 		if (action === "save") {
 			try {
-				const saved =
+				const currentProposalId =
+							Number(
+								appsmith.store.current_proposal_id || 0
+							);
+
+				const saveResult =
 							await this.saveAllDirty();
 
-				if (!saved) {
+				if (!saveResult) {
 					return false;
+				}
+
+				const idMap =
+							this.proposalIdMap(
+								saveResult
+							);
+
+				/*
+				 * Resolve the currently displayed
+				 * temporary Proposal.
+				 *
+				 * Meaningful temp:
+				 *     negative ID -> new real ID
+				 *
+				 * Empty temp:
+				 *     not saved -> remove selection
+				 */
+				if (currentProposalId < 0) {
+					const mappedId =
+								Number(
+									idMap[
+										String(
+											currentProposalId
+										)
+									] || 0
+								);
+
+					if (mappedId > 0) {
+						await storeValue(
+							"current_proposal_id",
+							mappedId
+						);
+					} else {
+						await removeValue(
+							"current_proposal_id"
+						);
+					}
 				}
 
 				closeModal(
@@ -196,45 +264,54 @@ export default {
 				);
 
 				/*
-			 * Reload Event truth.
-			 */
+				 * Reload Event Published State.
+				 */
 				await getEvtItemById.run();
 
-				await Promise.all([
-					qryGetProposalsForEvent.run(),
-					qryGetSelectedProposal.run(),
-					qryGetSelectedProposalMenus.run()
-				]);
+				await jsEventWorkspace
+					.resetFromSaved();
 
 				/*
-			 * All saved Proposal workspaces are now stale.
-			 */
+				 * Refresh Proposal selector first.
+				 */
+				await qryGetProposalsForEvent.run();
+
+				const resolvedProposalId =
+							Number(
+								appsmith.store.current_proposal_id || 0
+							);
+
+				/*
+				 * All old Proposal Working State is
+				 * now stale.
+				 *
+				 * This also silently removes any
+				 * never-saved empty temporary Proposal.
+				 */
 				await removeValue(
 					"proposal_workspaces"
 				);
 
-				await jsProposalWorkspaces
-					.initializeCurrentDraft();
+				/*
+				 * Reload the current Proposal only
+				 * if it now has a real persisted ID.
+				 */
+				if (resolvedProposalId > 0) {
+					await qryGetSelectedProposal.run();
+
+					await qryGetSelectedProposalMenus.run();
+
+					await jsProposalWorkspaces
+						.initializeCurrentDraft();
+				} else {
+					await removeValue(
+						"current_proposal_id"
+					);
+				}
 
 				await resetWidget(
 					"tblEvtComponents",
 					true
-				);
-
-				await removeValue(
-					"evt_working_customer_id"
-				);
-
-				await removeValue(
-					"evt_working_venue_id"
-				);
-
-				await removeValue(
-					"evt_working_contact_ids"
-				);
-
-				await removeValue(
-					"evt_working_venue_contact_ids"
 				);
 
 				showAlert(
@@ -243,6 +320,7 @@ export default {
 				);
 
 				return true;
+
 			} catch (error) {
 				showAlert(
 					error?.message ||
@@ -293,7 +371,19 @@ export default {
 		: (workspace?.components || []);
 
 		return {
-			proposal_id: id,
+			proposal_id:
+			id,
+
+			source_proposal_id:
+			id < 0
+			? (
+				Number(
+					workspace
+					?.source_proposal_id ||
+					0
+				) || null
+			)
+			: null,
 
 			menus:
 			jsProposalSave.menuPayload(
@@ -332,9 +422,12 @@ export default {
 			const result =
 						await qrySaveEventDocument.run();
 
+			const row =
+						result?.[0] || null;
+
 			if (
 				Number(
-					result?.[0]?.event_id || 0
+					row?.event_id || 0
 				) <= 0
 			) {
 				showAlert(
@@ -342,14 +435,15 @@ export default {
 					"error"
 				);
 
-				return false;
+				return null;
 			}
 
-			return true;
+			return row;
+
 		} finally {
 			await removeValue(
 				"event_document_save_request"
 			);
 		}
-	},
+	}
 };

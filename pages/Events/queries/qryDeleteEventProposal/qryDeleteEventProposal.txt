@@ -1,3 +1,4 @@
-select public.delete_event_proposal(
-    {{ Number(appsmith.store.proposal_delete_id || 0) }}
-) as proposal_id;
+select *
+from public.delete_event_proposal(
+	{{ Number(appsmith.store.proposal_delete_id || 0) }}
+);

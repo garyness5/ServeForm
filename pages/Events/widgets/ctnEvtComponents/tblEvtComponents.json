@@ -63,7 +63,7 @@
     "current_menu_active",
     "current_menu_deleted"
   ],
-  "columnUpdatedAt": 1786756275510,
+  "columnUpdatedAt": 1786820127755,
   "columnWidthMap": {
     "active": 81,
     "allergen_names": 106,
@@ -1130,7 +1130,7 @@
       "notation": "standard",
       "onOptionChange": "{{ jsProposalComponents.onMenuChange(tblEvtComponents.triggeredRow) }}",
       "originalId": "menu_name",
-      "selectOptions": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  jsProposalData.hasSelectedProposal()\n    ? jsProposalComponents.menuOptions(currentRow)\n    : evtCompTable.menuOptions(currentRow)\n)) : \n  jsProposalData.hasSelectedProposal()\n    ? jsProposalComponents.menuOptions(currentRow)\n    : evtCompTable.menuOptions(currentRow)\n })()}}",
+      "selectOptions": "{{(() => { const tableData = tblEvtComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\njsProposalData.hasSelectedProposal()\n? jsProposalComponents.menuOptions(currentRow)\n: evtCompTable.menuOptions(currentRow)\n)) : \njsProposalData.hasSelectedProposal()\n? jsProposalComponents.menuOptions(currentRow)\n: evtCompTable.menuOptions(currentRow)\n })()}}",
       "sortBy": "label",
       "sticky": "",
       "textColor": "",

@@ -40,8 +40,6 @@
     "proposal_title",
     "event_id",
     "proposal_number",
-    "is_new",
-    "source_proposal_id",
     "event_name",
     "event_ref",
     "event_date",
@@ -54,7 +52,7 @@
     "is_closed",
     "proposal_sequence_number"
   ],
-  "columnUpdatedAt": 1786756241947,
+  "columnUpdatedAt": 1786815161953,
   "columnWidthMap": {
     "active": 105,
     "customColumn1": 60,
@@ -67,7 +65,7 @@
   "customIsLoading": false,
   "customIsLoadingValue": "",
   "defaultPageSize": 0,
-  "defaultSelectedRowIndex": "{{ jsProposalActions.selectedProposalIndex() }}",
+  "defaultSelectedRowIndex": "{{ jsProposalActions.selectedRowIndex() }}",
   "defaultSelectedRowIndices": [
     0
   ],
@@ -111,12 +109,6 @@
     },
     {
       "key": "defaultSelectedRowIndex"
-    },
-    {
-      "key": "primaryColumns.is_new.computedValue"
-    },
-    {
-      "key": "primaryColumns.source_proposal_id.computedValue"
     },
     {
       "key": "primaryColumns.event_name.computedValue"
@@ -573,40 +565,6 @@
       "verticalAlignment": "CENTER",
       "width": 150
     },
-    "is_new": {
-      "alias": "is_new",
-      "allowCellWrapping": false,
-      "allowSameOptionsInNewRow": true,
-      "cellBackground": "",
-      "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblPropForEvent.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"is_new\"])) : is_new })()}}",
-      "currencyCode": "USD",
-      "decimals": 0,
-      "enableFilter": true,
-      "enableSort": true,
-      "fontStyle": "",
-      "horizontalAlignment": "LEFT",
-      "id": "is_new",
-      "index": 18,
-      "isCellEditable": false,
-      "isCellVisible": true,
-      "isDerived": false,
-      "isDisabled": false,
-      "isDiscardVisible": true,
-      "isEditable": false,
-      "isSaveVisible": true,
-      "isVisible": false,
-      "label": "is_new",
-      "notation": "standard",
-      "originalId": "is_new",
-      "sticky": "",
-      "textColor": "",
-      "textSize": "0.875rem",
-      "thousandSeparator": true,
-      "validation": {},
-      "verticalAlignment": "CENTER",
-      "width": 150
-    },
     "proposal_no": {
       "alias": "proposal_no",
       "allowCellWrapping": false,
@@ -803,40 +761,6 @@
       "label": "sent_at",
       "notation": "standard",
       "originalId": "sent_at",
-      "sticky": "",
-      "textColor": "",
-      "textSize": "0.875rem",
-      "thousandSeparator": true,
-      "validation": {},
-      "verticalAlignment": "CENTER",
-      "width": 150
-    },
-    "source_proposal_id": {
-      "alias": "source_proposal_id",
-      "allowCellWrapping": false,
-      "allowSameOptionsInNewRow": true,
-      "cellBackground": "",
-      "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblPropForEvent.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"source_proposal_id\"])) : source_proposal_id })()}}",
-      "currencyCode": "USD",
-      "decimals": 0,
-      "enableFilter": true,
-      "enableSort": true,
-      "fontStyle": "",
-      "horizontalAlignment": "LEFT",
-      "id": "source_proposal_id",
-      "index": 19,
-      "isCellEditable": false,
-      "isCellVisible": true,
-      "isDerived": false,
-      "isDisabled": false,
-      "isDiscardVisible": true,
-      "isEditable": false,
-      "isSaveVisible": true,
-      "isVisible": false,
-      "label": "source_proposal_id",
-      "notation": "standard",
-      "originalId": "source_proposal_id",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",

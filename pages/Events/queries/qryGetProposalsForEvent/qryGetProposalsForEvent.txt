@@ -22,7 +22,7 @@ join public.prop_items pi
   on pi.id = v.id
 where v.client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and v.event_id = {{ Number(appsmith.store.current_event_id || 0) }}
-  and coalesce(pi.deleted, false) = false
+  and coalesce(pi.hidden, false) = false
 order by
     case
         when v.proposal_status = 'Ordered' then 0
