@@ -365,4 +365,67 @@ export default {
 
 		return true;
 	},
+
+	async setAccepted(accepted) {
+		if (!jsProposalData.hasSelectedProposal()) {
+			return false;
+		}
+
+		const proposalId =
+					Number(
+						appsmith.store.current_proposal_id || 0
+					);
+
+		/*
+	 * Workflow status requires a real,
+	 * persisted Proposal.
+	 */
+		if (proposalId <= 0) {
+			showAlert(
+				"Save the Proposal before accepting it.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		const proposal =
+					jsProposalData.proposal();
+
+		const newStatus =
+					accepted === true
+		? "Accepted"
+		: proposal.was_issued === true ||
+					proposal.sent_at != null
+		? "Issued"
+		: "Draft";
+
+		await storeValue(
+			"proposal_status_id",
+			proposalId
+		);
+
+		await storeValue(
+			"proposal_status_request",
+			newStatus
+		);
+
+		try {
+			await qrySetEvtProposalStatus.run();
+
+			await qryGetProposalsForEvent.run();
+			await qryGetSelectedProposal.run();
+
+			return true;
+
+		} finally {
+			await removeValue(
+				"proposal_status_id"
+			);
+
+			await removeValue(
+				"proposal_status_request"
+			);
+		}
+	},
 };

@@ -19,7 +19,11 @@ export default {
 			customer_notes: null,
 			internal_notes: null,
 
-			active: true
+			active: true,
+
+			status: "Draft",
+			closed_at: null,
+			closed_proposal_id: null
 		};
 	},
 
@@ -57,7 +61,9 @@ export default {
 			: Number(data.customer_id),
 
 			contact_ids:
-			this.normalizeIds(data.contact_ids),
+			this.normalizeIds(
+				data.contact_ids
+			),
 
 			venue_id:
 			data.venue_id == null
@@ -65,34 +71,59 @@ export default {
 			: Number(data.venue_id),
 
 			venue_contact_ids:
-			this.normalizeIds(data.venue_contact_ids),
+			this.normalizeIds(
+				data.venue_contact_ids
+			),
 
 			total_guests_manual:
 			data.total_guests_manual === "" ||
 			data.total_guests_manual === null ||
 			data.total_guests_manual === undefined
 			? null
-			: Number(data.total_guests_manual),
+			: Number(
+				data.total_guests_manual
+			),
 
 			format:
-			this.textClean(data.format),
+			this.textClean(
+				data.format
+			),
 
 			customer_notes:
-			this.textClean(data.customer_notes),
+			this.textClean(
+				data.customer_notes
+			),
 
 			internal_notes:
-			this.textClean(data.internal_notes),
+			this.textClean(
+				data.internal_notes
+			),
 
 			active:
 			data.active === false
 			? false
-			: true
+			: true,
+
+			status:
+			String(
+				data.status || "Draft"
+			).trim() || "Draft",
+
+			closed_at:
+			data.closed_at || null,
+
+			closed_proposal_id:
+			Number(
+				data.closed_proposal_id || 0
+			) || null
 		};
 	},
 
 	savedEvent() {
 		const row =
-					Array.isArray(getEvtItemById.data)
+					Array.isArray(
+						getEvtItemById.data
+					)
 		? getEvtItemById.data[0]
 		: getEvtItemById.data;
 
@@ -102,7 +133,9 @@ export default {
 
 		return this.normalizeWorkspace({
 			event_id:
-			Number(row.id || 0),
+			Number(
+				row.id || 0
+			),
 
 			name:
 			row.name,
@@ -138,7 +171,18 @@ export default {
 			row.notes,
 
 			active:
-			row.active
+			row.active,
+
+			status:
+			row.status || "Draft",
+
+			closed_at:
+			row.closed_at || null,
+
+			closed_proposal_id:
+			Number(
+				row.closed_proposal_id || 0
+			) || null
 		});
 	},
 
@@ -148,10 +192,16 @@ export default {
 
 		if (
 			workspace &&
-			Number(workspace.event_id || 0) ===
-			Number(appsmith.store.current_event_id || 0)
+			Number(
+				workspace.event_id || 0
+			) ===
+			Number(
+				appsmith.store.current_event_id || 0
+			)
 		) {
-			return this.normalizeWorkspace(workspace);
+			return this.normalizeWorkspace(
+				workspace
+			);
 		}
 
 		return this.savedEvent();
@@ -179,6 +229,7 @@ export default {
 
 	async resetFromSaved() {
 		await this.clear();
+
 		return await this.initialize();
 	},
 
@@ -186,6 +237,7 @@ export default {
 		const normalized =
 					this.normalizeWorkspace({
 						...workspace,
+
 						event_id:
 						Number(
 							appsmith.store.current_event_id || 0
@@ -229,7 +281,9 @@ export default {
 			event_datetime:
 			value
 			? moment(value)
-			.format("YYYY-MM-DD HH:mm:ss")
+			.format(
+				"YYYY-MM-DD HH:mm:ss"
+			)
 			: null
 		});
 	},
@@ -237,7 +291,8 @@ export default {
 	async setCustomer(value) {
 		return await this.patch({
 			customer_id:
-			value == null || value === ""
+			value == null ||
+			value === ""
 			? null
 			: Number(value),
 
@@ -248,14 +303,17 @@ export default {
 	async setCustomerContacts(values) {
 		return await this.patch({
 			contact_ids:
-			this.normalizeIds(values)
+			this.normalizeIds(
+				values
+			)
 		});
 	},
 
 	async setVenue(value) {
 		return await this.patch({
 			venue_id:
-			value == null || value === ""
+			value == null ||
+			value === ""
 			? null
 			: Number(value),
 
@@ -266,7 +324,9 @@ export default {
 	async setVenueContacts(values) {
 		return await this.patch({
 			venue_contact_ids:
-			this.normalizeIds(values)
+			this.normalizeIds(
+				values
+			)
 		});
 	},
 
@@ -308,10 +368,23 @@ export default {
 		});
 	},
 
+	async setClosed(value) {
+		return await this.patch({
+			status:
+			value === true
+			? "Closed"
+			: "Open"
+		});
+	},
+
 	isDirty() {
 		return (
-			JSON.stringify(this.get()) !==
-			JSON.stringify(this.savedEvent())
+			JSON.stringify(
+				this.get()
+			) !==
+			JSON.stringify(
+				this.savedEvent()
+			)
 		);
 	},
 
@@ -322,15 +395,50 @@ export default {
 		const saved =
 					this.savedEvent();
 
-		return Object.keys(working)
+		return Object.keys(
+			working
+		)
 			.filter(key =>
-							JSON.stringify(working[key]) !==
-							JSON.stringify(saved[key])
+							JSON.stringify(
+			working[key]
+		) !==
+							JSON.stringify(
+			saved[key]
+		)
 						 )
 			.map(key => ({
 			field: key,
 			working: working[key],
 			saved: saved[key]
 		}));
-	}
+	},
+
+	canShowClosed() {
+		const workspace =
+					this.get();
+
+		/*
+	 * A Closed Event must always show
+	 * the checkbox so it can be reopened.
+	 */
+		if (workspace.status === "Closed") {
+			return true;
+		}
+
+		if (workspace.active === false) {
+			return false;
+		}
+
+		const proposal =
+					jsProposalData.proposal();
+
+		return (
+			jsProposalData.hasSelectedProposal() &&
+			Number(
+				appsmith.store.current_proposal_id || 0
+			) > 0 &&
+			proposal.proposal_status === "Ordered" &&
+			proposal.active !== false
+		);
+	},
 };

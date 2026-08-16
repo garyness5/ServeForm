@@ -1,0 +1,5 @@
+select *
+from public.set_event_proposal_status(
+    {{ Number(appsmith.store.proposal_status_id || 0) }},
+    '{{ String(appsmith.store.proposal_status_request || "").replaceAll("'", "''") }}'
+);

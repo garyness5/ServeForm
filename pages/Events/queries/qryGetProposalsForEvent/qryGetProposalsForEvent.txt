@@ -1,8 +1,14 @@
 select
+    -- Visible tblPropForEvent columns
+    v.proposal_number,
+    v.proposal_status,
+    v.active,
+    v.updated_at,
+
+    -- Identity / support columns
     v.id,
     v.event_id,
     v.proposal_no,
-    v.proposal_status,
     v.proposal_title,
     v.event_name,
     v.event_ref,
@@ -10,19 +16,25 @@ select
     v.total_guests,
     v.sent_at,
     v.created_at,
-    v.active,
     v.closed_at,
     v.was_issued,
     v.is_editable,
     v.is_closed,
-    v.proposal_sequence_number,
-    v.proposal_number
+    v.proposal_sequence_number
+
 from public.vw_prop_selector v
+
 join public.prop_items pi
   on pi.id = v.id
-where v.client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and v.event_id = {{ Number(appsmith.store.current_event_id || 0) }}
+
+where v.client_id =
+      '{{ appsmith.store.current_client_id }}'::uuid
+
+  and v.event_id =
+      {{ Number(appsmith.store.current_event_id || 0) }}
+
   and coalesce(pi.hidden, false) = false
+
 order by
     case
         when v.proposal_status = 'Ordered' then 0
@@ -31,5 +43,10 @@ order by
         when v.proposal_status = 'Draft' then 3
         else 4
     end,
-    coalesce(v.sent_at, v.created_at) desc,
+
+    coalesce(
+        v.sent_at,
+        v.created_at
+    ) desc,
+
     v.id desc;
