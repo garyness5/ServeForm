@@ -67,7 +67,7 @@ export default {
 			await qryGetSelectedProposalMenus.run();
 
 			await jsProposalWorkspaces
-				.initializeCurrentDraft();
+				.initializeCurrentWorkspace();
 
 			await resetWidget(
 				"tblEvtComponents",

@@ -1,4 +1,0 @@
-select *
-from public.duplicate_event(
-  {{ Number(appsmith.store.current_event_id || 0) }}
-);

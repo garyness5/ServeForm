@@ -97,7 +97,7 @@ export default {
 			.discard(proposalId);
 
 		await jsProposalWorkspaces
-			.initializeCurrentDraft();
+			.initializeCurrentWorkspace();
 
 		await resetWidget(
 			"tblEvtComponents",
@@ -198,7 +198,7 @@ export default {
 		}
 	},
 
-	async saveDraft() {
+	async saveProposal() {
 		const message =
 					this.requiredMessage();
 

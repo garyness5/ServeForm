@@ -37,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{\nresetWidget(\"inpEvtAddName\", true);\nshowModal(\"mdlEvtAdd\");\n}}",
+  "onClick": "{{ jsEventActions.addNewEvent() }}",
   "parentColumnSpace": 10.609375,
   "parentId": "joic71iyv8",
   "parentRowSpace": 10,

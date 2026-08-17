@@ -37,7 +37,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ closeModal(\"mdlEvtRename\") }}",
+  "onClick": "{{ jsEventActions.cancelEventName() }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "vusu7sfnm4",

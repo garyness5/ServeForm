@@ -134,7 +134,7 @@ export default {
 		);
 	},
 
-	async initializeCurrentDraft() {
+	async initializeCurrentWorkspace() {
 		if (
 			!jsProposalData.hasSelectedProposal()
 		) {
@@ -189,12 +189,6 @@ export default {
 		);
 	},
 
-	/*
-	 * Temporary caller compatibility while
-	 * Proposal header ownership is being removed.
-	 * This no longer initializes any header state.
-	 */
-
 	async setCurrentComponents(rows) {
 		if (
 			!jsProposalData.hasSelectedProposal()
@@ -219,11 +213,6 @@ export default {
 			}
 		);
 	},
-
-	/*
-	 * Event header is no longer Proposal-owned.
-	 * Kept only until remaining callers are removed.
-	 */
 
 	isDirty(
 		proposalId = this.currentProposalId()
@@ -273,89 +262,6 @@ export default {
 			.filter(id =>
 							this.isDirty(id)
 						 );
-	},
-
-	dirtyProposals() {
-		const dirtyIds =
-					this.dirtyProposalIds();
-
-		return dirtyIds.map(
-			proposalId => {
-				const proposal =
-							(
-								qryGetProposalsForEvent.data ||
-								[]
-							).find(row =>
-										 Number(row.id || 0) ===
-										 Number(proposalId)
-										);
-
-				return {
-					proposal_id:
-					Number(proposalId),
-
-					proposal_no:
-					proposal?.proposal_no ??
-					null,
-
-					status:
-					proposal?.proposal_status ||
-					"Draft",
-
-					is_dirty:
-					true
-				};
-			}
-		);
-	},
-
-	dirtyProposalText() {
-		return this.dirtyProposals()
-			.map(proposal =>
-					 proposal.proposal_no != null
-					 ? `Proposal ${proposal.proposal_no}`
-					 : "Unsaved Proposal"
-					)
-			.join(", ");
-	},
-
-	async markCurrentSaved() {
-		const proposalId =
-					this.currentProposalId();
-
-		const workspace =
-					this.get(proposalId);
-
-		if (!workspace) {
-			return null;
-		}
-
-		const components =
-					jsProposalComponents
-		.normalizeRows(
-			jsProposalComponents
-			.mergeUpdatedRows()
-		);
-
-		return await this.set(
-			proposalId,
-			{
-				...workspace,
-
-				components,
-
-				saved_components:
-				this.deepCopy(
-					components
-				),
-
-				saved_updated_at:
-				qryGetSelectedProposal
-				.data?.[0]
-				?.updated_at ||
-				null
-			}
-		);
 	},
 
 	async discard(proposalId) {
@@ -530,20 +436,5 @@ export default {
 		}
 
 		return createdIds;
-	},
-
-	async discardCurrent() {
-		const proposalId =
-					this.currentProposalId();
-
-		if (!proposalId) {
-			return true;
-		}
-
-		await this.discard(
-			proposalId
-		);
-
-		return true;
-	},
+	}
 };

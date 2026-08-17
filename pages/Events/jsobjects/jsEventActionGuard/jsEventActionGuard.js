@@ -326,7 +326,7 @@ export default {
 				await qryGetSelectedProposalMenus.run();
 
 				await jsProposalWorkspaces
-					.initializeCurrentDraft();
+					.initializeCurrentWorkspace();
 			}
 			else {
 				await removeValue(
@@ -448,7 +448,7 @@ export default {
 			await qryGetSelectedProposalMenus.run();
 
 			await jsProposalWorkspaces
-				.initializeCurrentDraft();
+				.initializeCurrentWorkspace();
 		}
 		else {
 			await removeValue(

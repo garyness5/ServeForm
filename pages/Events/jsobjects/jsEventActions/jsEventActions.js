@@ -321,5 +321,40 @@ export default {
 
 		return await this
 			.openStagedDuplicate();
-	}
+	},
+
+	async addNewEvent() {
+		await storeValue(
+			"event_name_mode",
+			"add"
+		);
+
+		await resetWidget(
+			"inpEvtRenameName",
+			true
+		);
+
+		showModal(
+			"mdlEvtRename"
+		);
+
+		return true;
+	},
+
+	async cancelEventName() {
+		await resetWidget(
+			"inpEvtRenameName",
+			true
+		);
+
+		await removeValue(
+			"event_name_mode"
+		);
+
+		closeModal(
+			"mdlEvtRename"
+		);
+
+		return true;
+	},
 };

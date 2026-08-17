@@ -1,5 +1,0 @@
-select *
-from public.vw_evt_components
-where event_id =
-      {{ Number(appsmith.store.current_event_id || 0) }}
-order by line_no;

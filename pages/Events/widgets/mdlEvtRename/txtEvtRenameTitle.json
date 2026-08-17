@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 54,
   "shouldTruncate": false,
-  "text": "{{\n\"Rename \" +\njsEventData.header().name || \"\" }}",
+  "text": "{{\n\tappsmith.store.event_name_mode === \"add\"\n\t\t? \"Event Name\"\n\t\t: \"Rename \" + (jsEventWorkspace.current().name || \"Event\")\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,

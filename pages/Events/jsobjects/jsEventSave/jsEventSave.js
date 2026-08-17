@@ -29,56 +29,6 @@ export default {
 		return true;
 	},
 
-	async createMinimalEvent() {
-		const result =
-					await createEvtMinimal.run();
-
-		const newId =
-					Number(
-						result?.[0]?.event_id || 0
-					);
-
-		if (!newId) {
-			showAlert(
-				"Event could not be created.",
-				"error"
-			);
-			return false;
-		}
-
-		await storeValue(
-			"current_event_id",
-			newId
-		);
-
-		await removeValue(
-			"current_proposal_id"
-		);
-
-		closeModal("mdlEvtAdd");
-
-		await getEvtItemById.run();
-		await getEvtComponents.run();
-
-		await qryGetProposalsForEvent.run();
-
-		await removeValue(
-			"current_proposal_id"
-		);
-
-		resetWidget(
-			"inpEvtAddName",
-			true
-		);
-
-		showAlert(
-			"Event created.",
-			"success"
-		);
-
-		return true;
-	},
-
 	canSaveRename() {
 		const newName =
 					String(
@@ -119,6 +69,46 @@ export default {
 	 *
 	 * Nothing is committed until Save.
 	 */
+		if (
+			appsmith.store.event_name_mode === "add"
+		) {
+			await removeValue(
+				"current_event_id"
+			);
+
+			await removeValue(
+				"current_proposal_id"
+			);
+
+			await removeValue(
+				"proposal_workspaces"
+			);
+
+			await jsEventWorkspace.set({
+				...jsEventWorkspace.emptyWorkspace(),
+				name: newName
+			});
+
+			closeModal(
+				"mdlEvtRename"
+			);
+
+			await resetWidget(
+				"inpEvtRenameName",
+				true
+			);
+
+			await removeValue(
+				"event_name_mode"
+			);
+
+			return true;
+		}
+
+		/*
+ * Existing unsaved Event / Duplicate:
+ * rename Working State only.
+ */
 		if (eventId <= 0) {
 			await jsEventWorkspace.capture({
 				name: newName
@@ -131,6 +121,69 @@ export default {
 			await resetWidget(
 				"inpEvtRenameName",
 				true
+			);
+
+			await removeValue(
+				"event_name_mode"
+			);
+
+			return true;
+		}if (
+			appsmith.store.event_name_mode === "add"
+		) {
+			await removeValue(
+				"current_event_id"
+			);
+
+			await removeValue(
+				"current_proposal_id"
+			);
+
+			await removeValue(
+				"proposal_workspaces"
+			);
+
+			await jsEventWorkspace.set({
+				...jsEventWorkspace.emptyWorkspace(),
+				name: newName
+			});
+
+			closeModal(
+				"mdlEvtRename"
+			);
+
+			await resetWidget(
+				"inpEvtRenameName",
+				true
+			);
+
+			await removeValue(
+				"event_name_mode"
+			);
+
+			return true;
+		}
+
+		/*
+ * Existing unsaved Event / Duplicate:
+ * rename Working State only.
+ */
+		if (eventId <= 0) {
+			await jsEventWorkspace.capture({
+				name: newName
+			});
+
+			closeModal(
+				"mdlEvtRename"
+			);
+
+			await resetWidget(
+				"inpEvtRenameName",
+				true
+			);
+
+			await removeValue(
+				"event_name_mode"
 			);
 
 			return true;
@@ -183,46 +236,6 @@ export default {
 		delete header.event_id;
 
 		return header;
-	},
-
-	componentSnapshotFromSaved() {
-		return (getEvtComponents.data || [])
-			.filter(row =>
-							row.menu_id ||
-							row.guests != null ||
-							row.extra_guests != null
-						 )
-			.map((row, index) => ({
-			event_id:
-			Number(
-				appsmith.store.current_event_id || 0
-			),
-
-			line_no:
-			index + 1,
-
-			menu_id:
-			Number(
-				row.menu_id || 0
-			) || null,
-
-			guests:
-			row.guests === "" ||
-			row.guests == null
-			? null
-			: Number(row.guests),
-
-			extra_guests:
-			row.extra_guests === "" ||
-			row.extra_guests == null
-			? 0
-			: Number(row.extra_guests),
-
-			active:
-			row.active === false
-			? false
-			: true
-		}));
 	},
 
 	isNewBlankEvent() {

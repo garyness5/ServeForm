@@ -9,14 +9,6 @@ export default {
 		return jsProposalData.hasSelectedProposal();
 	},
 
-	isDraftMode() {
-		return jsProposalData.isProposalDraft();
-	},
-
-	isLockedMode() {
-		return jsProposalData.isProposalLocked();
-	},
-
 	makeDraftId() {
 		return (
 			"pr_" +

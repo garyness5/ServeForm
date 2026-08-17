@@ -107,53 +107,6 @@ export default {
 		);
 	},
 
-	isProposalDraft() {
-		return (
-			this.hasSelectedProposal() &&
-			this.proposal().proposal_status === "Draft"
-		);
-	},
-
-	isProposalLocked() {
-		return false;
-	},
-
-	canEditDisplayedDocument() {
-		return true;
-	},
-
-	proposalControl() {
-		const r =
-					this.proposal();
-
-		return {
-			id:
-			r.id ?? null,
-
-			status:
-			r.proposal_status ?? null,
-
-			active:
-			r.active === false
-			? false
-			: true,
-
-			editable:
-			true,
-
-			closed:
-			r.is_closed === true,
-
-			reference:
-			r.proposal_number ||
-			(
-				r.proposal_no
-				? `Proposal ${r.proposal_no}`
-				: ""
-			)
-		};
-	},
-
 	referenceDisplay(row) {
 		if (!row) {
 			return "";
