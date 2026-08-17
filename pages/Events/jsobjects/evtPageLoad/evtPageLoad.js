@@ -30,7 +30,6 @@ export default {
 		 * No Proposal is selected automatically.
 		 */
 		await Promise.all([
-			qryGetEvtCategories.run(),
 			qryGetEvtComponentItems.run(),
 			qryGetEvtCustomers.run(),
 			qryGetEvtContacts.run(),

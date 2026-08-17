@@ -95,18 +95,6 @@ export default {
 		);
 	},
 
-	proposalMode() {
-		return this.hasSelectedProposal()
-			? "proposal"
-		: "event";
-	},
-
-	isEventMode() {
-		return (
-			this.proposalMode() === "event"
-		);
-	},
-
 	referenceDisplay(row) {
 		if (!row) {
 			return "";

@@ -12,53 +12,119 @@ export default {
 	list() {
 		const warnings = [];
 
-		const header = jsEventData.header();
+		const header = jsEventWorkspace.current();
 
 		if (!header.customer_id) {
-			warnings.push("No Customer selected.");
+			warnings.push(
+				"No Customer selected."
+			);
 		}
 
-		if (!(header.contact_ids || []).length) {
-			warnings.push("No Customer Contact selected.");
+		if (
+			!(header.contact_ids || []).length
+		) {
+			warnings.push(
+				"No Customer Contact selected."
+			);
 		}
 
 		if (!header.venue_id) {
-			warnings.push("No Venue selected.");
+			warnings.push(
+				"No Venue selected."
+			);
 		}
 
 		if (
 			header.venue_id &&
 			!(header.venue_contact_ids || []).length
 		) {
-			warnings.push("No Venue Contact selected.");
+			warnings.push(
+				"No Venue Contact selected."
+			);
 		}
 
-		this.rows().forEach((r, i) => {
-			const line = r.line_no || i + 1;
-			const name = r.menu_name || "Menu";
+		if (!header.event_datetime) {
+			warnings.push(
+				"Event Date/Time missing."
+			);
+		}
 
-			if (r.menu_id && r.child_deleted === true) {
-				warnings.push(`Line ${line}: ${name} not found.`);
-				return;
-			}
+		if (
+			header.total_guests_manual === null ||
+			header.total_guests_manual === undefined ||
+			Number(header.total_guests_manual) <= 0
+		) {
+			warnings.push(
+				"Total Guests missing."
+			);
+		}
 
-			if (r.menu_id && r.child_active === false) {
-				warnings.push(`Line ${line}: ${name} is inactive.`);
-			}
+		this.rows().forEach(
+			(r, i) => {
+				const line =
+							r.line_no ||
+							i + 1;
 
-			if (r.menu_id && (r.guests === null || r.guests === "" || Number(r.guests) <= 0)) {
-				warnings.push(`Line ${line}: guests missing.`);
-			}
+				const name =
+							r.menu_name ||
+							"Menu";
 
-			if (r.menu_id && r.child_active !== false && (r.line_cost === null || r.line_cost === "")) {
-				warnings.push(`Line ${line}: line cost missing.`);
+				if (
+					r.menu_id &&
+					r.current_menu_deleted === true
+				) {
+					warnings.push(
+						`Line ${line}: ${name} not found.`
+					);
+
+					return;
+				}
+
+				if (
+					r.menu_id &&
+					r.current_menu_active === false
+				) {
+					warnings.push(
+						`Line ${line}: ${name} is inactive.`
+					);
+				}
+
+				if (
+					r.menu_id &&
+					(
+						r.guests === null ||
+						r.guests === "" ||
+						Number(r.guests) <= 0
+					)
+				) {
+					warnings.push(
+						`Line ${line}: guests missing.`
+					);
+				}
+
+				if (
+					r.menu_id &&
+					r.current_menu_active !== false &&
+					r.current_menu_deleted !== true &&
+					(
+						r.line_cost === null ||
+						r.line_cost === ""
+					)
+				) {
+					warnings.push(
+						`Line ${line}: line cost missing.`
+					);
+				}
 			}
-		});
+		);
 
 		return warnings;
 	},
 
 	text() {
-		return this.list().join("<br>&nbsp;&nbsp;");
+		return this.list()
+			.join(
+			"<br>&nbsp;&nbsp;"
+		);
 	}
-}
+};

@@ -311,18 +311,6 @@ export default {
 		};
 	},
 
-	async duplicateWorkingCopy() {
-		const staged =
-					await this.stageDuplicateSnapshot();
-
-		if (!staged) {
-			return false;
-		}
-
-		return await this
-			.openStagedDuplicate();
-	},
-
 	async addNewEvent() {
 		await storeValue(
 			"event_name_mode",

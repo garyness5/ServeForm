@@ -2,7 +2,10 @@ export default {
 	async setActive(row, active) {
 		const proposalId =
 					Number(
-						row?.id || 0
+						row?.id ||
+						row?.allFields?.id ||
+						row?.updatedFields?.id ||
+						0
 					);
 
 		if (!proposalId) {
@@ -67,6 +70,23 @@ export default {
 		return await this.setActive(
 			proposal,
 			proposal.active === false
+		);
+	},
+
+	async onActiveChange() {
+		const updates =
+					tblPropForEvent.updatedRows || [];
+
+		const update =
+					updates[updates.length - 1];
+
+		if (!update) {
+			return false;
+		}
+
+		return await this.setActive(
+			update,
+			update.updatedFields?.active
 		);
 	},
 
@@ -181,27 +201,6 @@ export default {
 		}
 
 		return rows;
-	},
-
-
-	selectedRowIndex() {
-		const currentId =
-					Number(
-						appsmith.store.current_proposal_id || 0
-					);
-
-		const rows =
-					this.filteredProposals();
-
-		const index =
-					rows.findIndex(row =>
-												 Number(row.id || 0) === currentId
-												);
-
-		return Math.max(
-			0,
-			index
-		);
 	},
 
 	async addNew() {

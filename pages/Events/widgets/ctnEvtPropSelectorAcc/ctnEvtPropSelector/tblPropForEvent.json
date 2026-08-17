@@ -67,7 +67,7 @@
   "customIsLoading": false,
   "customIsLoadingValue": "",
   "defaultPageSize": 0,
-  "defaultSelectedRowIndex": "{{ jsProposalActions.selectedRowIndex() }}",
+  "defaultSelectedRowIndex": "{{ jsProposalActions.selectedProposalIndex() }}",
   "defaultSelectedRowIndices": [
     0
   ],
@@ -221,7 +221,7 @@
       "isVisible": true,
       "label": "Active",
       "notation": "standard",
-      "onCheckChange": "{{\njsProposalActions.setActive(\n\ttblPropForEvent.triggeredRow,\n\ttblPropForEvent.triggeredRow.active === false\n)\n}}",
+      "onCheckChange": "{{ jsProposalActions.onActiveChange() }}",
       "originalId": "active",
       "sticky": "",
       "textColor": "",

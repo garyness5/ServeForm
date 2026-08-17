@@ -1,9 +1,4 @@
 export default {
-	textClean(value) {
-		const text = String(value || "").trim();
-		return text || null;
-	},
-
 	requiredSaveMessage() {
 		if (!String(jsEventWorkspace.current().name || "").trim()) {
 			return "You need an Event name before you can save.";
@@ -62,12 +57,9 @@ export default {
 					);
 
 		/*
-	 * Unsaved Event / duplicated Working State.
-	 *
-	 * Rename changes only the Appsmith
-	 * Event Working State.
-	 *
-	 * Nothing is committed until Save.
+	 * Add Event:
+	 * create a new blank Event Working State
+	 * using the entered name.
 	 */
 		if (
 			appsmith.store.event_name_mode === "add"
@@ -106,68 +98,9 @@ export default {
 		}
 
 		/*
- * Existing unsaved Event / Duplicate:
- * rename Working State only.
- */
-		if (eventId <= 0) {
-			await jsEventWorkspace.capture({
-				name: newName
-			});
-
-			closeModal(
-				"mdlEvtRename"
-			);
-
-			await resetWidget(
-				"inpEvtRenameName",
-				true
-			);
-
-			await removeValue(
-				"event_name_mode"
-			);
-
-			return true;
-		}if (
-			appsmith.store.event_name_mode === "add"
-		) {
-			await removeValue(
-				"current_event_id"
-			);
-
-			await removeValue(
-				"current_proposal_id"
-			);
-
-			await removeValue(
-				"proposal_workspaces"
-			);
-
-			await jsEventWorkspace.set({
-				...jsEventWorkspace.emptyWorkspace(),
-				name: newName
-			});
-
-			closeModal(
-				"mdlEvtRename"
-			);
-
-			await resetWidget(
-				"inpEvtRenameName",
-				true
-			);
-
-			await removeValue(
-				"event_name_mode"
-			);
-
-			return true;
-		}
-
-		/*
- * Existing unsaved Event / Duplicate:
- * rename Working State only.
- */
+	 * Existing unsaved Event / Duplicate:
+	 * rename Working State only.
+	 */
 		if (eventId <= 0) {
 			await jsEventWorkspace.capture({
 				name: newName
@@ -210,11 +143,6 @@ export default {
 			true
 		);
 
-		showAlert(
-			"Event renamed.",
-			"success"
-		);
-
 		return true;
 	},
 
@@ -252,25 +180,6 @@ export default {
 			!h.venue_id &&
 			!h.format
 		);
-	},
-
-	dirtyDifferences() {
-		const page =
-					this.headerSnapshotFromPage();
-
-		const saved =
-					this.headerSnapshotFromSaved();
-
-		return Object.keys(page)
-			.filter(key =>
-							JSON.stringify(page[key]) !==
-							JSON.stringify(saved[key])
-						 )
-			.map(key => ({
-			field: key,
-			page: page[key],
-			saved: saved[key]
-		}));
 	},
 
 	isDirty() {

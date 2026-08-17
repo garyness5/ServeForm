@@ -308,12 +308,6 @@ export default {
 		return tempId;
 	},
 
-	isTemporary(
-		proposalId = this.currentProposalId()
-	) {
-		return Number(proposalId || 0) < 0;
-	},
-
 	async createTemporary(
 		components = [],
 		sourceProposalId = null

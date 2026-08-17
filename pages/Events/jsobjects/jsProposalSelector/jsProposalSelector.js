@@ -113,29 +113,6 @@ export default {
 			newProposalId
 		);
 
-		/*
-		 * Temporary Proposal already exists
-		 * entirely in Working State.
-		 */
-		if (newProposalId < 0) {
-			await removeValue(
-				"proposal_loading"
-			);
-
-			await resetWidget(
-				"tblEvtComponents",
-				true
-			);
-
-			return jsProposalWorkspaces
-				.get(newProposalId);
-		}
-
-		await storeValue(
-			"proposal_loading",
-			true
-		);
-
 		return await this
 			.loadSelectedProposal();
 	}

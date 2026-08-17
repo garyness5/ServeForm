@@ -38,30 +38,19 @@ export default {
 		return "New Proposal";
 	},
 
-	proposalText(proposalIds) {
-		return (proposalIds || [])
-			.map(id =>
-					 this.proposalLabel(id)
-					)
-			.join(", ");
-	},
-
 	actionTitle(action) {
 		switch (action) {
 			case "save":
 				return "Proposals: Unsaved Changes";
-
-			case "save_new":
-				return "Save & New";
-
-			case "add":
-				return "Add Event";
 
 			case "duplicate":
 				return "Duplicate Event";
 
 			case "close":
 				return "Close Event";
+
+			case "delete":
+				return "Delete Event";
 
 			default:
 				return "Proposals: Unsaved Changes";

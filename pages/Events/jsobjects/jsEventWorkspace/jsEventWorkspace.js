@@ -300,8 +300,13 @@ export default {
 			inpTotalGuests.text,
 
 			event_datetime:
-			datEvtDate.selectedDate ||
-			base.event_datetime,
+			datEvtDate.selectedDate === "" ||
+			datEvtDate.selectedDate === null
+			? null
+			: (
+				datEvtDate.selectedDate ??
+				base.event_datetime
+			),
 
 			customer_id:
 			selEvtCustomer
@@ -398,30 +403,6 @@ export default {
 		});
 	},
 
-	async setName(value) {
-		return await this.capture({
-			name: value
-		});
-	},
-
-	async setEventRef(value) {
-		return await this.capture({
-			event_ref: value
-		});
-	},
-
-	async setEventDateTime(value) {
-		return await this.capture({
-			event_datetime:
-			value
-			? moment(value)
-			.format(
-				"YYYY-MM-DD HH:mm:ss"
-			)
-			: null
-		});
-	},
-
 	async setCustomer(value) {
 		return await this.capture({
 			customer_id:
@@ -458,28 +439,9 @@ export default {
 		});
 	},
 
-	async setTotalGuests(value) {
-		return await this.capture({
-			total_guests_manual:
-			this.numberOrNull(value)
-		});
-	},
-
 	async setFormat(value) {
 		return await this.capture({
 			format: value
-		});
-	},
-
-	async setCustomerNotes(value) {
-		return await this.capture({
-			customer_notes: value
-		});
-	},
-
-	async setInternalNotes(value) {
-		return await this.capture({
-			internal_notes: value
 		});
 	},
 
@@ -545,45 +507,6 @@ export default {
 
 		return "Draft";
 	},
-
-	isDirty() {
-		return (
-			JSON.stringify(
-				this.current()
-			) !==
-			JSON.stringify(
-				this.savedEvent()
-			)
-		);
-	},
-
-	dirtyDifferences() {
-		const working =
-					this.current();
-
-		const saved =
-					this.savedEvent();
-
-		return Object.keys(
-			working
-		)
-			.filter(key =>
-							JSON.stringify(
-			working[key]
-		) !==
-							JSON.stringify(
-			saved[key]
-		)
-						 )
-			.map(key => ({
-			field: key,
-			working:
-			working[key],
-			saved:
-			saved[key]
-		}));
-	},
-
 	canShowClosed() {
 		const workspace =
 					this.current();

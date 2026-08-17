@@ -487,12 +487,6 @@ export default {
 		);
 	},
 
-	async syncFromTable() {
-		return await this.setDraftRows(
-			this.mergeUpdatedRows()
-		);
-	},
-
 	async patchRow(row, patch) {
 		if (!row?.draft_row_id) {
 			return null;
@@ -1242,20 +1236,6 @@ export default {
 			total * 100
 		) / 100;
 	},
-
-	uniqueTextList(value) {
-		if (!value) {
-			return [];
-		}
-
-		return String(value)
-			.split(",")
-			.map(item =>
-					 item.trim()
-					)
-			.filter(Boolean);
-	},
-
 	async captureEditedRows() {
 		if (!jsProposalData.hasSelectedProposal()) {
 			return null;
