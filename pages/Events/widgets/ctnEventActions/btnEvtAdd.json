@@ -12,17 +12,11 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -32,11 +26,11 @@
   ],
   "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ !tblCustomers.selectedRow?.id }}",
+  "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
   "key": "o01hoigeqy",
-  "leftColumn": 15,
+  "leftColumn": 14,
   "minWidth": 120,
   "mobileBottomRow": 8,
   "mobileLeftColumn": 6,
@@ -52,7 +46,7 @@
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 20,
+  "rightColumn": 19,
   "text": "Add",
   "tooltip": "Duplicate selected customer",
   "topRow": 2,

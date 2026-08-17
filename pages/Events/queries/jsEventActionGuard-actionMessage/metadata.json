@@ -11,7 +11,7 @@
           "name": "action"
         },
         {
-          "name": "proposalIds"
+          "name": "state"
         }
       ],
       "paginationType": "NONE",

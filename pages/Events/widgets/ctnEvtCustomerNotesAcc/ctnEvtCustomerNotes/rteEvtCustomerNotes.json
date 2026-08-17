@@ -55,7 +55,7 @@
   "mobileRightColumn": 16,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onTextChange": "{{ jsEventWorkspace.setCustomerNotes(rteEvtCustomerNotes.text) }}",
+  "onTextChange": "{{ true }}",
   "parentColumnSpace": 18.15625,
   "parentId": "23u7i8y0j3",
   "parentRowSpace": 10,

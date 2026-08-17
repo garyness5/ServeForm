@@ -12,17 +12,11 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -32,11 +26,11 @@
   ],
   "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ !tblCustomers.selectedRow?.id }}",
+  "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
   "key": "o01hoigeqy",
-  "leftColumn": 27,
+  "leftColumn": 26,
   "minWidth": 120,
   "mobileBottomRow": 8,
   "mobileLeftColumn": 6,
@@ -52,7 +46,7 @@
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 32,
+  "rightColumn": 31,
   "text": "Rename",
   "tooltip": "Duplicate selected customer",
   "topRow": 2,

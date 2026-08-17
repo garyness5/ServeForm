@@ -1,0 +1,10 @@
+select *
+from public.save_new_event(
+	'{{ appsmith.store.current_client_id }}'::uuid,
+
+	'{{
+	JSON.stringify(
+		jsEventSave.headerSnapshotFromPage()
+	).replaceAll("'", "''")
+	}}'::jsonb
+);

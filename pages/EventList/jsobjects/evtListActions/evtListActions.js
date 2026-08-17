@@ -9,21 +9,20 @@ export default {
 
 	async openSelectedEvent() {
 		if (!this.hasSelection()) {
-			showAlert("Select an event first.", "warning");
+			showAlert(
+				"Select an event first.",
+				"warning"
+			);
+
 			return false;
 		}
 
-		await storeValue("current_event_id", this.selectedEventId());
-		await removeValue("evt_components_local_rows");
-
-		navigateTo("Events");
-		return true;
-	},
-
-	async addEvent() {
-		await storeValue(
-			"current_event_id",
-			0
+		/*
+	 * Opening another saved Event abandons
+	 * any unsaved Events-page Working State.
+	 */
+		await removeValue(
+			"event_workspace"
 		);
 
 		await removeValue(
@@ -31,7 +30,43 @@ export default {
 		);
 
 		await removeValue(
+			"proposal_workspaces"
+		);
+
+		await removeValue(
 			"evt_components_local_rows"
+		);
+
+		await storeValue(
+			"current_event_id",
+			this.selectedEventId()
+		);
+
+		navigateTo("Events");
+
+		return true;
+	},
+
+	async addEvent() {
+		await removeValue(
+			"event_workspace"
+		);
+
+		await removeValue(
+			"current_proposal_id"
+		);
+
+		await removeValue(
+			"proposal_workspaces"
+		);
+
+		await removeValue(
+			"evt_components_local_rows"
+		);
+
+		await storeValue(
+			"current_event_id",
+			0
 		);
 
 		navigateTo("Events");

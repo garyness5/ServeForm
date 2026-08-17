@@ -54,7 +54,7 @@
   "mobileRightColumn": 7,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onTextChange": "{{ jsEventWorkspace.setInternalNotes(rteEvtInternalNotes.text) }}",
+  "onTextChange": "{{ true }}",
   "parentColumnSpace": 18.15625,
   "parentId": "0m96i63pgp",
   "parentRowSpace": 10,

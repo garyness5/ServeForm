@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_9a92e890-7f24-48b1-b699-003867c847a1",
-  "id": "Events_Query2",
+  "gitSyncId": "6a0a1bde3214f344228346e7_a1ab7922-c7b1-4e99-9623-7b265a16472d",
+  "id": "Events_qryGetEventNames",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT * FROM auth.\"audit_log_entries\" LIMIT 10;",
+      "body": "select\n    id,\n    name\nfrom public.evt_items\nwhere client_id =\n      '{{ appsmith.store.current_client_id }}'::uuid\n\n  and coalesce(deleted, false) = false\n\norder by lower(name);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -22,7 +22,12 @@
       "name": "FoodCostingDB",
       "pluginId": "postgres-plugin"
     },
-    "name": "Query2",
+    "dynamicBindingPathList": [
+      {
+        "key": "body"
+      }
+    ],
+    "name": "qryGetEventNames",
     "pageId": "Events",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

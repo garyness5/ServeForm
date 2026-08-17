@@ -28,8 +28,27 @@ export default {
 	},
 
 	textClean(value) {
-		const text = String(value || "").trim();
+		const text =
+					String(value || "").trim();
+
 		return text || null;
+	},
+
+	numberOrNull(value) {
+		if (
+			value === "" ||
+			value === null ||
+			value === undefined
+		) {
+			return null;
+		}
+
+		const number =
+					Number(value);
+
+		return Number.isFinite(number)
+			? number
+		: null;
 	},
 
 	normalizeIds(values) {
@@ -38,27 +57,74 @@ export default {
 			.filter(Boolean);
 	},
 
+	savedEventDateTime(row) {
+		if (!row) {
+			return null;
+		}
+
+		if (
+			row.event_date &&
+			row.event_time
+		) {
+			const date =
+						String(row.event_date)
+			.substring(0, 10);
+
+			const time =
+						String(row.event_time)
+			.substring(0, 8);
+
+			return `${date} ${time}`;
+		}
+
+		if (row.event_datetime) {
+			/*
+		 * Fallback only.
+		 *
+		 * Database value is a wall-clock
+		 * timestamp, so preserve its clock
+		 * digits without timezone conversion.
+		 */
+			return moment
+				.utc(row.event_datetime)
+				.format(
+				"YYYY-MM-DD HH:mm:ss"
+			);
+		}
+
+		return null;
+	},
+
 	normalizeWorkspace(data = {}) {
 		return {
 			event_id:
-			Number(data.event_id || 0),
+			Number(
+				data.event_id || 0
+			),
 
 			name:
-			this.textClean(data.name),
+			this.textClean(
+				data.name
+			),
 
 			event_ref:
-			this.textClean(data.event_ref),
+			this.textClean(
+				data.event_ref
+			),
 
 			event_datetime:
 			data.event_datetime
-			? moment.utc(data.event_datetime)
-			.format("YYYY-MM-DD HH:mm:ss")
+			? moment(
+				data.event_datetime
+			).format(
+				"YYYY-MM-DD HH:mm:ss"
+			)
 			: null,
 
 			customer_id:
-			data.customer_id == null
-			? null
-			: Number(data.customer_id),
+			this.numberOrNull(
+				data.customer_id
+			),
 
 			contact_ids:
 			this.normalizeIds(
@@ -66,9 +132,9 @@ export default {
 			),
 
 			venue_id:
-			data.venue_id == null
-			? null
-			: Number(data.venue_id),
+			this.numberOrNull(
+				data.venue_id
+			),
 
 			venue_contact_ids:
 			this.normalizeIds(
@@ -76,11 +142,7 @@ export default {
 			),
 
 			total_guests_manual:
-			data.total_guests_manual === "" ||
-			data.total_guests_manual === null ||
-			data.total_guests_manual === undefined
-			? null
-			: Number(
+			this.numberOrNull(
 				data.total_guests_manual
 			),
 
@@ -144,7 +206,7 @@ export default {
 			row.event_ref,
 
 			event_datetime:
-			row.event_datetime,
+			this.savedEventDateTime(row),
 
 			customer_id:
 			row.customer_id,
@@ -186,6 +248,13 @@ export default {
 		});
 	},
 
+	/*
+	 * Stored Event Working State.
+	 *
+	 * This is the last captured complete
+	 * Header state, not necessarily every
+	 * character currently being typed.
+	 */
 	get() {
 		const workspace =
 					appsmith.store.event_workspace;
@@ -205,6 +274,66 @@ export default {
 		}
 
 		return this.savedEvent();
+	},
+
+	/*
+	 * Current visible Header Working State.
+	 *
+	 * Text widgets are read directly here
+	 * instead of writing to appsmith.store
+	 * on every keystroke.
+	 *
+	 * Therefore rapid typing cannot race
+	 * against a workspace rerender.
+	 */
+	current() {
+		const base =
+					this.get();
+
+		return this.normalizeWorkspace({
+			...base,
+
+			event_ref:
+			inpEvtRef.text,
+
+			total_guests_manual:
+			inpTotalGuests.text,
+
+			event_datetime:
+			datEvtDate.selectedDate ||
+			base.event_datetime,
+
+			customer_id:
+			selEvtCustomer
+			.selectedOptionValue,
+
+			contact_ids:
+			msEvtContacts
+			.selectedOptionValues ||
+			[],
+
+			venue_id:
+			selEvtVenue
+			.selectedOptionValue,
+
+			venue_contact_ids:
+			msEvtVenueContacts
+			.selectedOptionValues ||
+			[],
+
+			format:
+			selEvtFormat
+			.selectedOptionValue,
+
+			customer_notes:
+			rteEvtCustomerNotes.text,
+
+			internal_notes:
+			rteEvtInternalNotes.text,
+
+			active:
+			chkEvtActive.isChecked
+		});
 	},
 
 	async initialize() {
@@ -240,7 +369,9 @@ export default {
 
 						event_id:
 						Number(
-							appsmith.store.current_event_id || 0
+							appsmith.store
+							.current_event_id ||
+							0
 						)
 					});
 
@@ -252,32 +383,35 @@ export default {
 		return normalized;
 	},
 
-	async patch(patch = {}) {
+	/*
+	 * Capture EVERYTHING currently visible
+	 * before applying a field-specific change.
+	 *
+	 * This is the key rule:
+	 * changing one Header field can never
+	 * overwrite unsaved work in another.
+	 */
+	async capture(patch = {}) {
 		return await this.set({
-			...this.get(),
+			...this.current(),
 			...patch
 		});
 	},
 
 	async setName(value) {
-		return await this.patch({
+		return await this.capture({
 			name: value
 		});
 	},
 
 	async setEventRef(value) {
-		return await this.patch({
+		return await this.capture({
 			event_ref: value
 		});
 	},
 
 	async setEventDateTime(value) {
-		const workspace =
-					this.get();
-
-		return await this.set({
-			...workspace,
-
+		return await this.capture({
 			event_datetime:
 			value
 			? moment(value)
@@ -289,19 +423,16 @@ export default {
 	},
 
 	async setCustomer(value) {
-		return await this.patch({
+		return await this.capture({
 			customer_id:
-			value == null ||
-			value === ""
-			? null
-			: Number(value),
+			this.numberOrNull(value),
 
 			contact_ids: []
 		});
 	},
 
 	async setCustomerContacts(values) {
-		return await this.patch({
+		return await this.capture({
 			contact_ids:
 			this.normalizeIds(
 				values
@@ -310,19 +441,16 @@ export default {
 	},
 
 	async setVenue(value) {
-		return await this.patch({
+		return await this.capture({
 			venue_id:
-			value == null ||
-			value === ""
-			? null
-			: Number(value),
+			this.numberOrNull(value),
 
 			venue_contact_ids: []
 		});
 	},
 
 	async setVenueContacts(values) {
-		return await this.patch({
+		return await this.capture({
 			venue_contact_ids:
 			this.normalizeIds(
 				values
@@ -331,36 +459,32 @@ export default {
 	},
 
 	async setTotalGuests(value) {
-		return await this.patch({
+		return await this.capture({
 			total_guests_manual:
-			value === "" ||
-			value === null ||
-			value === undefined
-			? null
-			: Number(value)
+			this.numberOrNull(value)
 		});
 	},
 
 	async setFormat(value) {
-		return await this.patch({
+		return await this.capture({
 			format: value
 		});
 	},
 
 	async setCustomerNotes(value) {
-		return await this.patch({
+		return await this.capture({
 			customer_notes: value
 		});
 	},
 
 	async setInternalNotes(value) {
-		return await this.patch({
+		return await this.capture({
 			internal_notes: value
 		});
 	},
 
 	async setActive(value) {
-		return await this.patch({
+		return await this.capture({
 			active:
 			value === false
 			? false
@@ -369,7 +493,7 @@ export default {
 	},
 
 	async setClosed(value) {
-		return await this.patch({
+		return await this.capture({
 			status:
 			value === true
 			? "Closed"
@@ -377,10 +501,55 @@ export default {
 		});
 	},
 
+	displayStatus() {
+		const workspace =
+					this.current();
+
+		if (
+			workspace.status ===
+			"Closed"
+		) {
+			return "Closed";
+		}
+
+		const rows =
+					qryGetProposalsForEvent.data ||
+					[];
+
+		if (
+			rows.some(row =>
+								row.proposal_status ===
+								"Ordered"
+							 )
+		) {
+			return "Ordered";
+		}
+
+		if (
+			rows.some(row =>
+								row.proposal_status ===
+								"Accepted"
+							 )
+		) {
+			return "Accepted";
+		}
+
+		if (
+			rows.some(row =>
+								row.proposal_status ===
+								"Issued"
+							 )
+		) {
+			return "Sent";
+		}
+
+		return "Draft";
+	},
+
 	isDirty() {
 		return (
 			JSON.stringify(
-				this.get()
+				this.current()
 			) !==
 			JSON.stringify(
 				this.savedEvent()
@@ -390,7 +559,7 @@ export default {
 
 	dirtyDifferences() {
 		const working =
-					this.get();
+					this.current();
 
 		const saved =
 					this.savedEvent();
@@ -408,24 +577,27 @@ export default {
 						 )
 			.map(key => ({
 			field: key,
-			working: working[key],
-			saved: saved[key]
+			working:
+			working[key],
+			saved:
+			saved[key]
 		}));
 	},
 
 	canShowClosed() {
 		const workspace =
-					this.get();
+					this.current();
 
-		/*
-	 * A Closed Event must always show
-	 * the checkbox so it can be reopened.
-	 */
-		if (workspace.status === "Closed") {
+		if (
+			workspace.status ===
+			"Closed"
+		) {
 			return true;
 		}
 
-		if (workspace.active === false) {
+		if (
+			workspace.active === false
+		) {
 			return false;
 		}
 
@@ -433,11 +605,15 @@ export default {
 					jsProposalData.proposal();
 
 		return (
-			jsProposalData.hasSelectedProposal() &&
+			jsProposalData
+			.hasSelectedProposal() &&
 			Number(
-				appsmith.store.current_proposal_id || 0
+				appsmith.store
+				.current_proposal_id ||
+				0
 			) > 0 &&
-			proposal.proposal_status === "Ordered" &&
+			proposal.proposal_status ===
+			"Ordered" &&
 			proposal.active !== false
 		);
 	},

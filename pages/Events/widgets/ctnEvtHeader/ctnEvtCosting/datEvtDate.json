@@ -65,7 +65,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onDateSelected": "{{ jsEventWorkspace.setEventDateTime(datEvtDate.selectedDate) }}",
+  "onDateSelected": "{{ true }}",
   "parentColumnSpace": 4.234375,
   "parentId": "o4uwuew4ll",
   "parentRowSpace": 10,

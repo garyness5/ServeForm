@@ -5,7 +5,7 @@ export default {
 	},
 
 	requiredSaveMessage() {
-		if (!String(jsEventWorkspace.get().name || "").trim()) {
+		if (!String(jsEventWorkspace.current().name || "").trim()) {
 			return "You need an Event name before you can save.";
 		}
 
@@ -87,7 +87,7 @@ export default {
 
 		const oldName =
 					String(
-						jsEventData.header().name || ""
+						jsEventWorkspace.current().name || ""
 					).trim();
 
 		return (
@@ -97,19 +97,6 @@ export default {
 	},
 
 	async renameEvent() {
-		const eventId =
-					Number(
-						appsmith.store.current_event_id || 0
-					);
-
-		if (!eventId) {
-			showAlert(
-				"There is no Event to rename.",
-				"warning"
-			);
-			return false;
-		}
-
 		if (!this.canSaveRename()) {
 			return false;
 		}
@@ -119,12 +106,51 @@ export default {
 						inpEvtRenameName.text || ""
 					).trim();
 
+		const eventId =
+					Number(
+						appsmith.store.current_event_id || 0
+					);
+
+		/*
+	 * Unsaved Event / duplicated Working State.
+	 *
+	 * Rename changes only the Appsmith
+	 * Event Working State.
+	 *
+	 * Nothing is committed until Save.
+	 */
+		if (eventId <= 0) {
+			await jsEventWorkspace.capture({
+				name: newName
+			});
+
+			closeModal(
+				"mdlEvtRename"
+			);
+
+			await resetWidget(
+				"inpEvtRenameName",
+				true
+			);
+
+			return true;
+		}
+
+		/*
+	 * Persisted Event.
+	 */
 		await renameEvt.run();
 
 		await getEvtItemById.run();
+
+		await jsEventWorkspace
+			.resetFromSaved();
+
 		await qryGetProposalsForEvent.run();
 
-		closeModal("mdlEvtRename");
+		closeModal(
+			"mdlEvtRename"
+		);
 
 		await resetWidget(
 			"inpEvtRenameName",
@@ -140,19 +166,21 @@ export default {
 	},
 
 	headerSnapshotFromPage() {
-		const {
-			event_id,
-			...header
-		} = jsEventWorkspace.get();
+		const header = {
+			...jsEventWorkspace.current()
+		};
+
+		delete header.event_id;
 
 		return header;
 	},
 
 	headerSnapshotFromSaved() {
-		const {
-			event_id,
-			...header
-		} = jsEventWorkspace.savedEvent();
+		const header = {
+			...jsEventWorkspace.savedEvent()
+		};
+
+		delete header.event_id;
 
 		return header;
 	},
@@ -237,13 +265,15 @@ export default {
 			return false;
 		}
 
+		const page =
+					this.headerSnapshotFromPage();
+
+		const saved =
+					this.headerSnapshotFromSaved();
+
 		return (
-			JSON.stringify(
-				this.headerSnapshotFromPage()
-			) !==
-			JSON.stringify(
-				this.headerSnapshotFromSaved()
-			)
+			JSON.stringify(page) !==
+			JSON.stringify(saved)
 		);
 	},
 
@@ -260,13 +290,16 @@ export default {
 		let result = null;
 
 		if (isExisting) {
-			result = await qrysaveEvtHeader.run();
-		} else {
-			result = await addEvtItem.run();
+			result =
+				await qrysaveEvtHeader.run();
+		}
+		else {
+			result =
+				await qrySaveNewEvent.run();
 
 			const newId =
 						Number(
-							result?.[0]?.id || 0
+							result?.[0]?.event_id || 0
 						);
 
 			if (!newId) {
@@ -278,6 +311,10 @@ export default {
 				return false;
 			}
 
+			/*
+		 * Event becomes real only here,
+		 * on Save.
+		 */
 			await storeValue(
 				"current_event_id",
 				newId
@@ -285,14 +322,13 @@ export default {
 		}
 
 		/*
-	 * Reload Published State only after
-	 * persistence succeeds.
+	 * Reload Published State after persistence.
 	 */
 		await getEvtItemById.run();
 
 		/*
-	 * Saved truth now becomes the new
-	 * Event Working State baseline.
+	 * Saved truth becomes the Event
+	 * Working State baseline.
 	 */
 		await jsEventWorkspace.resetFromSaved();
 

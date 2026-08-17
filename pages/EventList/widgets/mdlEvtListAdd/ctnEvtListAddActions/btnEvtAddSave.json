@@ -43,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEventSave.createMinimalEvent() }}",
+  "onClick": "{{ evtListActions.addEvent() }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "pzi0ihzyxx",

@@ -378,10 +378,28 @@ export default {
 	},
 
 	makeTemporaryId() {
-		return -Math.max(
-			1,
-			Date.now()
-		);
+		const existingIds =
+					Object.keys(
+						this.all()
+					)
+		.map(Number)
+		.filter(id => id < 0);
+
+		let tempId =
+				-Math.max(
+					1,
+					Date.now()
+				);
+
+		while (
+			existingIds.includes(
+				tempId
+			)
+		) {
+			tempId -= 1;
+		}
+
+		return tempId;
 	},
 
 	isTemporary(
@@ -443,6 +461,75 @@ export default {
 		);
 
 		return tempId;
+	},
+
+	async createTemporaryBatch(
+		proposals = []
+	) {
+		const createdIds = [];
+
+		for (const proposal of proposals) {
+			const tempId =
+						this.makeTemporaryId();
+
+			const normalized =
+						jsProposalComponents
+			.normalizeRows(
+				this.deepCopy(
+					proposal.components || []
+				)
+			);
+
+			await this.set(
+				tempId,
+				{
+					proposal_id:
+					tempId,
+
+					is_new:
+					true,
+
+					source_proposal_id:
+					Number(
+						proposal.source_proposal_id || 0
+					) || null,
+
+					/*
+				 * Used only for displaying
+				 * Draft 1, Draft 2, etc.
+				 * while this duplicated Event
+				 * still exists only in Working State.
+				 */
+					temp_proposal_no:
+					Number(
+						proposal.temp_proposal_no || 0
+					) || null,
+
+					components:
+					normalized,
+
+					saved_components:
+					jsProposalComponents
+					.normalizeRows([]),
+
+					saved_updated_at:
+					null
+				}
+			);
+
+			createdIds.push(
+				tempId
+			);
+		}
+
+		if (createdIds.length) {
+			await storeValue(
+				"current_proposal_id",
+				createdIds[0]
+			);
+		}
+
+		return createdIds;
 	},
 
 	async discardCurrent() {

@@ -24,42 +24,34 @@
   "dynamicPropertyPathList": [
     {
       "key": "isDisabled"
-    },
-    {
-      "key": "onTextChanged"
     }
   ],
-  "dynamicTriggerPathList": [
-    {
-      "key": "onTextChanged"
-    }
-  ],
+  "dynamicTriggerPathList": [],
   "iconAlign": "left",
   "inputType": "TEXT",
   "isDisabled": "{{ jsEventData.header().status === \"Closed\" }}",
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,
-  "key": "aq7wb59058",
+  "key": "ozn7l79091",
   "label": "Ref#",
   "labelAlignment": "left",
   "labelPosition": "Left",
   "labelStyle": "BOLD",
   "labelTextSize": "1rem",
-  "labelWidth": "16",
+  "labelWidth": "17",
   "leftColumn": 0,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
-  "mobileBottomRow": 18,
-  "mobileLeftColumn": 41,
-  "mobileRightColumn": 61,
-  "mobileTopRow": 11,
+  "mobileBottomRow": 24,
+  "mobileLeftColumn": 0,
+  "mobileRightColumn": 16,
+  "mobileTopRow": 17,
   "needsErrorInfo": false,
-  "onTextChanged": "{{ jsEventWorkspace.setEventRef(inpEvtRef.text) }}",
-  "originalBottomRow": 15,
-  "originalTopRow": 11,
-  "parentColumnSpace": 18.1875,
+  "originalBottomRow": 24,
+  "originalTopRow": 17,
+  "parentColumnSpace": 4.234375,
   "parentId": "o4uwuew4ll",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
@@ -70,6 +62,6 @@
   "topRow": 5,
   "type": "INPUT_WIDGET_V2",
   "version": 2,
-  "widgetId": "ovot7o4aut",
+  "widgetId": "92yuyq4cob",
   "widgetName": "inpEvtRef"
 }

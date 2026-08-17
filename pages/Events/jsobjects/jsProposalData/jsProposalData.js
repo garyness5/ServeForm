@@ -66,6 +66,10 @@ export default {
 				proposal_status:
 				"Draft",
 
+				temp_proposal_no:
+				workspace?.temp_proposal_no ??
+				null,
+
 				active:
 				true,
 
@@ -168,7 +172,10 @@ export default {
 		let reference = "";
 
 		if (row.is_new === true) {
-			reference = "New Proposal";
+			reference =
+				row.temp_proposal_no != null
+				? `Draft ${row.temp_proposal_no}`
+			: "New Proposal";
 		}
 		else if (row.proposal_number) {
 			reference =

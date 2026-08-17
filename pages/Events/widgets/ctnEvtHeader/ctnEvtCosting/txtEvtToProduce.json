@@ -41,7 +41,7 @@
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 60,
+  "rightColumn": 63,
   "shouldTruncate": false,
   "text": "{{\n\"<b>To Produce:</b> \" +\n(\tjsProposalComponents.toProduce() > 0\n ? fmt.number(jsProposalComponents.toProduce())\n : \"\"\n)\n}}",
   "textAlign": "LEFT",

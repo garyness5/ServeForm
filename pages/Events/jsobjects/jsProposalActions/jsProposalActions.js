@@ -75,10 +75,26 @@ export default {
 					selPropActiveFilter.selectedOptionValue ||
 					"All";
 
+		const eventId =
+					Number(
+						appsmith.store.current_event_id || 0
+					);
+
+		/*
+	 * Saved Proposal rows belong only to
+	 * a persisted Event.
+	 *
+	 * When eventId = 0, this is a new/duplicated
+	 * Event existing only in Working State.
+	 * Never expose stale query rows from the
+	 * source Event.
+	 */
 		const savedRows =
-					[
-						...(qryGetProposalsForEvent.data || [])
-					];
+					eventId > 0
+		? [
+			...(qryGetProposalsForEvent.data || [])
+		]
+		: [];
 
 		const temporaryRows =
 					Object.keys(
@@ -97,20 +113,40 @@ export default {
 				id,
 
 				event_id:
-				Number(
-					appsmith.store.current_event_id || 0
-				),
+				eventId,
 
 				proposal_no:
+				null,
+
+				temp_proposal_no:
+				workspace?.temp_proposal_no ??
 				null,
 
 				proposal_number:
 				null,
 
 				proposal_status:
-				null,
+				"Draft",
 
 				active:
+				true,
+
+				updated_at:
+				null,
+
+				sent_at:
+				null,
+
+				closed_at:
+				null,
+
+				was_issued:
+				false,
+
+				is_closed:
+				false,
+
+				is_editable:
 				true,
 
 				is_new:
@@ -121,7 +157,9 @@ export default {
 				null,
 
 				proposal_title:
-				"New Proposal"
+				workspace?.temp_proposal_no != null
+				? `Draft ${workspace.temp_proposal_no}`
+				: "New Proposal"
 			};
 		});
 
