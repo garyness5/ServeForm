@@ -54,25 +54,6 @@ export default {
 		}
 	},
 
-	async toggleActive() {
-		if (!jsProposalData.hasSelectedProposal()) {
-			showAlert(
-				"Select a Proposal first.",
-				"warning"
-			);
-
-			return false;
-		}
-
-		const proposal =
-					jsProposalData.proposal();
-
-		return await this.setActive(
-			proposal,
-			proposal.active === false
-		);
-	},
-
 	async onActiveChange() {
 		const updates =
 					tblPropForEvent.updatedRows || [];

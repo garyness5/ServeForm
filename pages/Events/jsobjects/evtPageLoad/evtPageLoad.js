@@ -13,7 +13,6 @@ export default {
 
 		await removeValue("current_proposal_id");
 		await removeValue("proposal_workspaces");
-		await removeValue("evt_components_local_rows");
 
 		/*
 		 * Load saved Event truth explicitly.

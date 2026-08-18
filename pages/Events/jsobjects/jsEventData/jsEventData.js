@@ -63,9 +63,5 @@ export default {
 			status:
 			r.status || "Draft"
 		};
-	},
-
-	isClosed() {
-		return this.header().status === "Closed";
 	}
 };

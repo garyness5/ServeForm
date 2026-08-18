@@ -113,16 +113,8 @@ export default {
 			 * Customer is Event-owned.
 			 * Hold the new selection locally until Event Save.
 			 */
-			await storeValue(
-				"evt_working_customer_id",
-				customerId,
-				false
-			);
-
-			await storeValue(
-				"evt_working_contact_ids",
-				[],
-				false
+			await jsEventWorkspace.setCustomer(
+				customerId
 			);
 
 			await resetWidget(
@@ -204,16 +196,8 @@ export default {
 
 			await qryGetEvtVenues.run();
 
-			await storeValue(
-				"evt_working_venue_id",
-				venueId,
-				false
-			);
-
-			await storeValue(
-				"evt_working_venue_contact_ids",
-				[],
-				false
+			await jsEventWorkspace.setVenue(
+				venueId
 			);
 
 			await resetWidget(
@@ -651,13 +635,15 @@ export default {
 				])
 			];
 
-			await storeValue(
-				isVenue
-				? "evt_working_venue_contact_ids"
-				: "evt_working_contact_ids",
-				selectedIds,
-				false
-			);
+			if (isVenue) {
+				await jsEventWorkspace.setVenueContacts(
+					selectedIds
+				);
+			} else {
+				await jsEventWorkspace.setCustomerContacts(
+					selectedIds
+				);
+			}
 
 			if (isVenue) {
 				await qryGetEvtVenueContacts.run();
