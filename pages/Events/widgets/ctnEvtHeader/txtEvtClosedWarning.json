@@ -3,7 +3,7 @@
   "borderColor": "#e0dede",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 26,
+  "bottomRow": 24,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -40,8 +40,8 @@
   "mobileRightColumn": 57,
   "mobileTopRow": 10,
   "needsErrorInfo": false,
-  "originalBottomRow": 24,
-  "originalTopRow": 17,
+  "originalBottomRow": 20,
+  "originalTopRow": 13,
   "overflow": "NONE",
   "parentColumnSpace": 18.1875,
   "parentId": "hfqtbvx5ku",
@@ -53,7 +53,7 @@
   "text": "This Event is Closed. You can review the Event and linked profiles, but changes cannot be saved while Closed. Uncheck Closed to reopen the Event before making changes.",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 19,
+  "topRow": 17,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

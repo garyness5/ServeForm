@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n    v.*,\n\n    coalesce(\n\t\t\t(\n\t\t\t\tselect array_agg(\n\t\t\t\t\tpcc.contact_id\n\t\t\t\t\torder by pcc.line_no, pcc.contact_id\n\t\t\t\t)\n\t\t\t\tfrom public.prop_customer_contacts pcc\n\t\t\t\twhere pcc.proposal_id = v.id\n\t\t\t),\n\t\t\t'{}'::bigint[]\n\t\t) as contact_ids,\n\n    coalesce(\n\t\t\t(\n\t\t\t\tselect array_agg(\n\t\t\t\t\tpvc.contact_id\n\t\t\t\t\torder by pvc.line_no, pvc.contact_id\n\t\t\t\t)\n\t\t\t\tfrom public.prop_venue_contacts pvc\n\t\t\t\twhere pvc.proposal_id = v.id\n\t\t\t),\n\t\t\t'{}'::bigint[]\n\t\t) as venue_contact_ids,\n\n    pi.proposal_customer_notes,\n    pi.proposal_internal_notes\n\nfrom public.vw_prop_items v\n\njoin public.prop_items pi\n  on pi.id = v.id\n\nwhere v.client_id =\n      '{{ appsmith.store.current_client_id }}'::uuid\n\n  and v.id =\n      {{ Number(appsmith.store.current_proposal_id || 0) }}\n\nlimit 1;",
+      "body": "select\n    v.*\n\nfrom public.vw_prop_items v\n\nwhere v.client_id =\n      '{{ appsmith.store.current_client_id }}'::uuid\n\n  and v.id =\n      {{ Number(appsmith.store.current_proposal_id || 0) }}\n\nlimit 1;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

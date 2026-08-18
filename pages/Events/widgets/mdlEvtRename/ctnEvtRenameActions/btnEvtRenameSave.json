@@ -16,6 +16,9 @@
     },
     {
       "key": "isDisabled"
+    },
+    {
+      "key": "text"
     }
   ],
   "dynamicPropertyPathList": [
@@ -53,7 +56,7 @@
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
   "rightColumn": 63,
-  "text": "Rename",
+  "text": "{{\nappsmith.store.event_name_mode === \"add\"\n? \"Add\"\n: \"Rename\"\n}}",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,

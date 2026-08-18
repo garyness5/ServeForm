@@ -329,15 +329,16 @@ export default {
 						appsmith.store.current_proposal_id || 0
 					);
 
+		if (!currentId) {
+			return -1;
+		}
+
 		const rows =
 					this.filteredProposals();
 
-		return Math.max(
-			0,
-			rows.findIndex(row =>
-										 Number(row.id || 0) === currentId
-										)
-		);
+		return rows.findIndex(row =>
+													Number(row.id || 0) === currentId
+												 );
 	},
 
 	async discardCurrent() {

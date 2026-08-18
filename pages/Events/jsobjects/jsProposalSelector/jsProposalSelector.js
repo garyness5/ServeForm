@@ -27,9 +27,9 @@ export default {
 		}
 
 		/*
-		 * Temporary Proposal:
-		 * no Supabase row exists yet.
-		 */
+	 * Temporary Proposal:
+	 * no Supabase row exists yet.
+	 */
 		if (proposalId < 0) {
 			await removeValue(
 				"proposal_loading"

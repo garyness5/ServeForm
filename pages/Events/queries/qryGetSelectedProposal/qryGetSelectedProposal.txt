@@ -1,37 +1,7 @@
 select
-    v.*,
-
-    coalesce(
-			(
-				select array_agg(
-					pcc.contact_id
-					order by pcc.line_no, pcc.contact_id
-				)
-				from public.prop_customer_contacts pcc
-				where pcc.proposal_id = v.id
-			),
-			'{}'::bigint[]
-		) as contact_ids,
-
-    coalesce(
-			(
-				select array_agg(
-					pvc.contact_id
-					order by pvc.line_no, pvc.contact_id
-				)
-				from public.prop_venue_contacts pvc
-				where pvc.proposal_id = v.id
-			),
-			'{}'::bigint[]
-		) as venue_contact_ids,
-
-    pi.proposal_customer_notes,
-    pi.proposal_internal_notes
+    v.*
 
 from public.vw_prop_items v
-
-join public.prop_items pi
-  on pi.id = v.id
 
 where v.client_id =
       '{{ appsmith.store.current_client_id }}'::uuid

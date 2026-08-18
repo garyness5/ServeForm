@@ -14,14 +14,23 @@ export default {
 			return false;
 		}
 
-		await checkEvtNameExists.run();
+		const header =
+					jsEventWorkspace.current();
 
-		if (Number(checkEvtNameExists.data?.[0]?.match_count || 0) > 0) {
-			showAlert("An event with this name already exists.", "warning");
+		const nameExists =
+					await this.eventNameExists(
+						header.name,
+						appsmith.store.current_event_id
+					);
+
+		if (nameExists) {
+			showAlert(
+				"Event Name already exists.",
+				"warning"
+			);
+
 			return false;
 		}
-
-		return true;
 	},
 
 	canSaveRename() {
@@ -55,6 +64,23 @@ export default {
 					Number(
 						appsmith.store.current_event_id || 0
 					);
+
+		const nameExists =
+					await this.eventNameExists(
+						newName,
+						eventId > 0
+						? eventId
+						: 0
+					);
+
+		if (nameExists) {
+			showAlert(
+				"Event Name already exists.",
+				"warning"
+			);
+
+			return false;
+		}
 
 		/*
 	 * Add Event:
@@ -197,6 +223,36 @@ export default {
 			JSON.stringify(page) !==
 			JSON.stringify(saved)
 		);
+	},
+
+	async eventNameExists(name, excludeEventId = 0) {
+		await storeValue(
+			"event_name_check",
+			{
+				name:
+				String(name || "").trim(),
+
+				exclude_event_id:
+				Number(excludeEventId || 0)
+			}
+		);
+
+		try {
+			await checkEvtNameExists.run();
+
+			return (
+				Number(
+					checkEvtNameExists
+					.data?.[0]
+					?.match_count || 0
+				) > 0
+			);
+		}
+		finally {
+			await removeValue(
+				"event_name_check"
+			);
+		}
 	},
 
 	async saveEvent() {
