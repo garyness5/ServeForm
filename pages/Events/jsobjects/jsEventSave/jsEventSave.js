@@ -9,8 +9,13 @@ export default {
 
 	async validateBeforeSave() {
 		const message = this.requiredSaveMessage();
+
 		if (message) {
-			showAlert(message, "warning");
+			showAlert(
+				message,
+				"warning"
+			);
+
 			return false;
 		}
 
@@ -31,6 +36,8 @@ export default {
 
 			return false;
 		}
+
+		return true;
 	},
 
 	canSaveRename() {
@@ -151,9 +158,9 @@ export default {
 		/*
 	 * Persisted Event.
 	 */
-		await renameEvt.run();
+		await qryRenameEvt.run();
 
-		await getEvtItemById.run();
+		await qryGetEvtItemById.run();
 
 		await jsEventWorkspace
 			.resetFromSaved();
@@ -238,11 +245,11 @@ export default {
 		);
 
 		try {
-			await checkEvtNameExists.run();
+			await qryCheckEvtNameExists.run();
 
 			return (
 				Number(
-					checkEvtNameExists
+					qryCheckEvtNameExists
 					.data?.[0]
 					?.match_count || 0
 				) > 0
@@ -302,7 +309,7 @@ export default {
 		/*
 	 * Reload Published State after persistence.
 	 */
-		await getEvtItemById.run();
+		await qryGetEvtItemById.run();
 
 		/*
 	 * Saved truth becomes the Event
@@ -312,35 +319,6 @@ export default {
 
 		showAlert(
 			"Event saved.",
-			"success"
-		);
-
-		return true;
-	},
-
-	async cancelGroceriesRemovalSave() {
-		closeModal("mdlEvtRemoveFromGroceries");
-		await removeValue("pendingEventAction");
-		return true;
-	},
-
-	async confirmGroceriesRemovalSave(keepManual = true) {
-		closeModal("mdlEvtRemoveFromGroceries");
-
-		const saved = await this.saveEvent(true);
-		if (!saved) return false;
-
-		if (!keepManual) {
-			await clearGroOrderManualValues.run();
-			await refreshGroOrder.run();
-		}
-
-		await clearGroPrint.run();
-
-		showAlert(
-			keepManual
-			? "Event saved. Quantities kept. Print cleared."
-			: "Event saved. Quantities deleted. Print cleared.",
 			"success"
 		);
 

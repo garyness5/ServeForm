@@ -13,6 +13,9 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
@@ -29,7 +32,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "",
+  "isDisabled": "{{ qryDeleteEvent.isLoading }}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -40,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ true }}",
+  "onClick": "{{ jsEventActions.deleteEvent() }}",
   "originalBottomRow": 60,
   "originalTopRow": 56,
   "parentId": "khdvs9gsae",

@@ -17,7 +17,7 @@ export default {
 		/*
 		 * Load saved Event truth explicitly.
 		 */
-		await getEvtItemById.run();
+		await qryGetEvtItemById.run();
 
 		/*
 		 * Establish Event Working State from saved truth.

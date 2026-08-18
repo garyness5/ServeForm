@@ -32,7 +32,7 @@
   ],
   "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\njsEventWorkspace.get().status === \"Closed\" ||\n!(\n\tjsEventSave.isDirty() ||\n\tjsProposalWorkspaces.dirtyProposalIds().length > 0\n)\n}}",
+  "isDisabled": "{{\njsEventWorkspace.isClosedLocked() ||\n!(\n\tjsEventSave.isDirty() ||\n\tjsProposalWorkspaces.dirtyProposalIds().length > 0\n)\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "o01hoigeqy",

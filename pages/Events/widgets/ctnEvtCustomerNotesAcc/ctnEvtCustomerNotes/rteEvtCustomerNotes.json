@@ -35,7 +35,7 @@
   "flexVerticalAlignment": "start",
   "inputType": "html",
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ jsEventData.header().status === \"Closed\" }}",
+  "isDisabled": "{{ jsEventWorkspace.isClosedLocked() }}",
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,

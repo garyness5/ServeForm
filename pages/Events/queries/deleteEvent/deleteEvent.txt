@@ -1,3 +1,0 @@
-select public.delete_event(
-  {{ Number(appsmith.store.current_event_id || 0) }}
-);

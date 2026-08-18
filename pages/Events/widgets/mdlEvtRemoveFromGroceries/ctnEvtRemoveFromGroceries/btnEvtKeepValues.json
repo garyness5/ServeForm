@@ -40,7 +40,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEventSave.confirmGroceriesRemovalSave(true) }}",
+  "onClick": "{{ true }}",
   "originalBottomRow": 60,
   "originalTopRow": 56,
   "parentId": "j8noe1hibk",

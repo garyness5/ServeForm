@@ -43,7 +43,7 @@
     }
   ],
   "firstDayOfWeek": 0,
-  "isDisabled": "{{ jsEventData.header().status === \"Closed\" }}",
+  "isDisabled": "{{ jsEventWorkspace.isClosedLocked() }}",
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,

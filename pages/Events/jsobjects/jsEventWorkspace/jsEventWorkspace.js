@@ -184,10 +184,10 @@ export default {
 	savedEvent() {
 		const row =
 					Array.isArray(
-						getEvtItemById.data
+						qryGetEvtItemById.data
 					)
-		? getEvtItemById.data[0]
-		: getEvtItemById.data;
+		? qryGetEvtItemById.data[0]
+		: qryGetEvtItemById.data;
 
 		if (!row) {
 			return this.emptyWorkspace();
@@ -507,37 +507,50 @@ export default {
 
 		return "Draft";
 	},
+
 	canShowClosed() {
 		const workspace =
 					this.current();
 
-		if (
-			workspace.status ===
-			"Closed"
-		) {
+		/*
+	 * Already Closed:
+	 * keep the checkbox visible so the user can
+	 * uncheck / recheck it during the reopen session.
+	 */
+		if (workspace.status === "Closed") {
 			return true;
 		}
 
-		if (
-			workspace.active === false
-		) {
-			return false;
+		/*
+	 * A reopened saved Closed Event must also keep
+	 * Closed available until the next Save.
+	 */
+		const saved =
+					this.savedEvent();
+
+		if (saved.status === "Closed") {
+			return true;
 		}
 
-		const proposal =
-					jsProposalData.proposal();
-
+		/*
+	 * Otherwise Closed is available only when the
+	 * Event has a saved Active Ordered Proposal.
+	 *
+	 * Do not depend on which Proposal happens
+	 * to be selected in the selector.
+	 */
 		return (
-			jsProposalData
-			.hasSelectedProposal() &&
-			Number(
-				appsmith.store
-				.current_proposal_id ||
-				0
-			) > 0 &&
-			proposal.proposal_status ===
-			"Ordered" &&
-			proposal.active !== false
+			qryGetProposalsForEvent.data || []
+		).some(row =>
+					 row.proposal_status === "Ordered" &&
+					 row.active !== false
+					);
+	},
+
+	isClosedLocked() {
+		return (
+			this.savedEvent().status === "Closed" &&
+			this.current().status === "Closed"
 		);
 	},
 };

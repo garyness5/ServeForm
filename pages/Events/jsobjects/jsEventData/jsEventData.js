@@ -1,8 +1,8 @@
 export default {
 	event() {
-		return Array.isArray(getEvtItemById.data)
-			? (getEvtItemById.data[0] || {})
-		: (getEvtItemById.data || {});
+		return Array.isArray(qryGetEvtItemById.data)
+			? (qryGetEvtItemById.data[0] || {})
+		: (qryGetEvtItemById.data || {});
 	},
 
 	header() {

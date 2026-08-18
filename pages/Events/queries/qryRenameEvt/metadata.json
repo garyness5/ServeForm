@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_8e890537-3a97-4e85-abd6-7542b3c56d64",
-  "id": "Events_syncEvtGroceriesEligibility",
+  "gitSyncId": "6a0a1bde3214f344228346e7_619a10d2-2fc9-4917-9e36-668a4c767a76",
+  "id": "Events_qryRenameEvt",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.sync_event_groceries_eligibility(\n  '{{ appsmith.store.current_client_id }}'::uuid,\n  {{ Number(appsmith.store.current_event_id || 0) }},\n  1\n);",
+      "body": "select *\nfrom public.rename_event(\n    {{ Number(appsmith.store.current_event_id || 0) }},\n    '{{ appsmith.store.current_client_id }}'::uuid,\n    '{{ (inpEvtRenameName.text || \"\").trim().replaceAll(\"'\", \"''\") }}'\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,7 +27,7 @@
         "key": "body"
       }
     ],
-    "name": "syncEvtGroceriesEligibility",
+    "name": "qryRenameEvt",
     "pageId": "Events",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

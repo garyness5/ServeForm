@@ -345,4 +345,64 @@ export default {
 
 		return true;
 	},
+
+	async deleteEvent() {
+		const eventId =
+					Number(
+						appsmith.store.current_event_id || 0
+					);
+
+		if (eventId <= 0) {
+			closeModal(
+				"mdlEvtDelete"
+			);
+
+			showAlert(
+				"No saved Event is selected.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		try {
+			const result =
+						await qryDeleteEvent.run();
+
+			const row =
+						result?.[0] || null;
+
+			if (row?.deleted !== true) {
+				throw new Error(
+					"Event could not be deleted."
+				);
+			}
+
+			closeModal(
+				"mdlEvtDelete"
+			);
+
+			showAlert(
+				"Event deleted.",
+				"success"
+			);
+
+			navigateTo(
+				"EventList",
+				{},
+				"SAME_WINDOW"
+			);
+
+			return true;
+		}
+		catch (error) {
+			showAlert(
+				error?.message ||
+				"Event could not be deleted.",
+				"error"
+			);
+
+			return false;
+		}
+	},
 };

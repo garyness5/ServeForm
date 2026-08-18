@@ -88,8 +88,16 @@ export default {
 	},
 
 	async request(action) {
+		/*
+	 * Capture the visible Event Header first.
+	 * This preserves whatever is currently on screen.
+	 */
 		await jsEventWorkspace.capture();
 
+		/*
+	 * Duplicate needs its staged snapshot before
+	 * any Save / Discard decision.
+	 */
 		if (action === "duplicate") {
 			const staged =
 						await jsEventActions
@@ -100,16 +108,32 @@ export default {
 			}
 		}
 
-		const state =
-					await this.dirtyState();
+		/*
+	 * Read the actual current dirty state.
+	 */
+		const eventDirty =
+					jsEventSave.isDirty();
+
+		const proposalIds =
+					jsProposalWorkspaces
+		.dirtyProposalIds();
+
+		const state = {
+			event_dirty: eventDirty,
+			proposal_ids: proposalIds
+		};
 
 		/*
-	 * SAVE:
-	 * Event-only dirty = save directly.
-	 * Dirty Proposals = warn because Save becomes Save All.
+	 * SAVE
+	 *
+	 * Event-only dirty:
+	 * save directly.
+	 *
+	 * Dirty Proposals:
+	 * Save becomes Save All decision.
 	 */
 		if (action === "save") {
-			if (state.proposal_ids.length) {
+			if (proposalIds.length) {
 				await storeValue(
 					"pendingEventAction",
 					action
@@ -135,16 +159,19 @@ export default {
 				return false;
 			}
 
-			return await jsEventSave.saveEvent();
+			return await jsEventSave
+				.saveEvent();
 		}
 
 		/*
-	 * Other Event actions:
-	 * warn for Event OR Proposal dirty state.
+	 * CLOSE / DUPLICATE / other guarded actions
+	 *
+	 * Any Event or Proposal dirty state must
+	 * go through Save All / Discard / Cancel.
 	 */
 		if (
-			state.event_dirty ||
-			state.proposal_ids.length
+			eventDirty ||
+			proposalIds.length
 		) {
 			await storeValue(
 				"pendingEventAction",
@@ -171,7 +198,8 @@ export default {
 			return false;
 		}
 
-		return await this.executeWithoutWarning(
+		return await this
+			.executeWithoutWarning(
 			action
 		);
 	},
@@ -185,6 +213,15 @@ export default {
 			case "duplicate":
 				return await jsEventActions
 					.openStagedDuplicate();
+
+			case "close":
+				navigateTo(
+					"EventList",
+					{},
+					"SAME_WINDOW"
+				);
+
+				return true;
 
 			default:
 				return false;
@@ -291,7 +328,7 @@ export default {
 			/*
 		 * Reload saved Event truth.
 		 */
-			await getEvtItemById.run();
+			await qryGetEvtItemById.run();
 
 			await jsEventWorkspace
 				.resetFromSaved();

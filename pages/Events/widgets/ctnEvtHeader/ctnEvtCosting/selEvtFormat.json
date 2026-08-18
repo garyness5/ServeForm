@@ -39,7 +39,7 @@
       "key": "onOptionChange"
     }
   ],
-  "isDisabled": "{{ jsEventData.header().status === \"Closed\" }}",
+  "isDisabled": "{{ jsEventWorkspace.isClosedLocked() }}",
   "isFilterable": true,
   "isLoading": false,
   "isRequired": false,

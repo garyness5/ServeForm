@@ -29,7 +29,7 @@
   "dynamicTriggerPathList": [],
   "iconAlign": "left",
   "inputType": "TEXT",
-  "isDisabled": "{{ jsEventData.header().status === \"Closed\" }}",
+  "isDisabled": "{{ jsEventWorkspace.isClosedLocked() }}",
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,
