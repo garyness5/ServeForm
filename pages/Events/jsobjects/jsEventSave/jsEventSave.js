@@ -114,6 +114,8 @@ export default {
 				name: newName
 			});
 
+			await jsProposalActions.addNew();
+
 			closeModal(
 				"mdlEvtRename"
 			);

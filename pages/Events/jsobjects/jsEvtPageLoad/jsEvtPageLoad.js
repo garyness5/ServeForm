@@ -1,9 +1,16 @@
 export default {
 	async load() {
+		showAlert(
+			"jsEvtPageLoad running",
+			"info"
+		);
+
 		await storeValue(
 			"current_client_id",
 			"1315144c-801a-4371-aae4-52f2a78873d1"
 		);
+
+		// rest of your existing load() continues here...
 
 		const openMode =
 					String(
@@ -52,6 +59,43 @@ export default {
 			"accEvtInternalNotes",
 			false
 		);
+
+		/*
+ * ==================================================
+ * NEW EVENT HANDOFF
+ *
+ * EventList may supply the new Event name.
+ * A genuinely new Event begins with one
+ * temporary selected Proposal so Menu entry
+ * is immediately available.
+ * ==================================================
+ */
+		if (
+			Number(
+				appsmith.store.current_event_id || 0
+			) <= 0 &&
+			String(
+				appsmith.store.event_new_name || ""
+			).trim()
+		) {
+			const newName =
+						String(
+							appsmith.store.event_new_name || ""
+						).trim();
+
+			await jsEventWorkspace.set({
+				...jsEventWorkspace.emptyWorkspace(),
+				name: newName
+			});
+
+			await removeValue(
+				"event_new_name"
+			);
+
+			await jsProposalActions.addNew();
+
+			return true;
+		}
 
 		/*
 		 * ==================================================

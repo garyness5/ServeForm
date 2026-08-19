@@ -127,7 +127,10 @@ export default {
 				`Draft ${row.proposal_no}`;
 		}
 
-		return isDirty
+		return (
+			row.is_new === true ||
+			isDirty
+		)
 			? `• ${reference}`
 		: reference;
 	},

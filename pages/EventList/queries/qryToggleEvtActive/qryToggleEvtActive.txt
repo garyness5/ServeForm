@@ -1,0 +1,18 @@
+update public.evt_items e
+set
+    active = {{ tblEvtList.updatedRow.active === false ? false : true }},
+    updated_at = now()
+where e.id = {{
+    Number(
+        tblEvtList.updatedRow?.id ||
+        tblEvtList.triggeredRow?.id ||
+        0
+    )
+}}
+  and e.client_id =
+      '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(e.deleted, false) = false
+returning
+    e.id,
+    e.active,
+    e.updated_at;

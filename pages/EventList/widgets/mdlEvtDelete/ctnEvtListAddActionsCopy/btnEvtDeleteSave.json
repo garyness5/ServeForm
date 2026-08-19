@@ -1,11 +1,11 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 27,
+  "bottomRow": 7,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
-  "buttonStyle": "PRIMARY",
-  "buttonVariant": "SECONDARY",
+  "buttonStyle": "PRIMARY_BUTTON",
+  "buttonVariant": "PRIMARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
     {
@@ -13,40 +13,50 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
-  "dynamicPropertyPathList": [],
+  "dynamicPropertyPathList": [
+    {
+      "key": "isDisabled"
+    },
+    {
+      "key": "onClick"
+    }
+  ],
   "dynamicTriggerPathList": [
     {
       "key": "onClick"
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": false,
+  "isDisabled": "{{ qryDeleteEvtList.isLoading }}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
-  "leftColumn": 44,
+  "leftColumn": 51,
   "minWidth": 120,
   "mobileBottomRow": 22,
-  "mobileLeftColumn": 31,
-  "mobileRightColumn": 47,
+  "mobileLeftColumn": 47,
+  "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{closeModal(mdlEvtDelete.name);}}",
-  "originalBottomRow": 27,
-  "originalTopRow": 23,
-  "parentId": "8uevqmxa6a",
+  "onClick": "{{ jsEvtListActions.deleteSelectedEventConfirm() }}",
+  "originalBottomRow": 36,
+  "originalTopRow": 32,
+  "parentId": "673iutptzq",
   "placement": "CENTER",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 60,
-  "text": "Cancel",
-  "topRow": 23,
+  "rightColumn": 64,
+  "text": "Yes",
+  "topRow": 3,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "d56s4xoaqh",
-  "widgetName": "btnEvtDeleteCancel"
+  "widgetId": "vzoktozt9r",
+  "widgetName": "btnEvtDeleteSave"
 }

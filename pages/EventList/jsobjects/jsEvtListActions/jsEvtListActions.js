@@ -34,7 +34,7 @@ export default {
 		);
 
 		await removeValue(
-			"evt_components_local_rows"
+			"event_open_mode"
 		);
 
 		await storeValue(
@@ -48,6 +48,23 @@ export default {
 	},
 
 	async addEvent() {
+		const newName =
+					String(
+						inpEvtListAddName.text || ""
+					).trim();
+
+		if (!newName) {
+			showAlert(
+				"Enter an Event name.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		/*
+	 * Clear any stale Events-page state.
+	 */
 		await removeValue(
 			"event_workspace"
 		);
@@ -61,7 +78,20 @@ export default {
 		);
 
 		await removeValue(
-			"evt_components_local_rows"
+			"event_duplicate_snapshot"
+		);
+
+		await removeValue(
+			"event_open_mode"
+		);
+
+		/*
+	 * Carry the EventList-entered name
+	 * into the new Events workspace.
+	 */
+		await storeValue(
+			"event_new_name",
+			newName
 		);
 
 		await storeValue(
@@ -69,7 +99,11 @@ export default {
 			0
 		);
 
-		navigateTo("Events");
+		navigateTo(
+			"Events",
+			{},
+			"SAME_WINDOW"
+		);
 
 		return true;
 	},
@@ -139,17 +173,80 @@ export default {
 
 	async deleteSelectedEventConfirm() {
 		if (!this.hasSelection()) {
-			showAlert("Select an event first.", "warning");
+			showAlert(
+				"Select an event first.",
+				"warning"
+			);
+
 			return false;
 		}
 
-		await deleteEvtFromList.run();
+		try {
+			const result =
+						await qryDeleteEvtList.run();
 
-		closeModal("mdlEvtDelete");
+			const row =
+						result?.[0] || null;
 
-		await getEvtList.run();
+			if (row?.deleted !== true) {
+				throw new Error(
+					"Event could not be deleted."
+				);
+			}
 
-		showAlert("Event deleted.", "success");
-		return true;
+			closeModal(
+				"mdlEvtDelete"
+			);
+
+			await qryGetEvtList.run();
+
+			showAlert(
+				"Event deleted.",
+				"success"
+			);
+
+			return true;
+		}
+		catch (error) {
+			showAlert(
+				error?.message ||
+				"Event could not be deleted.",
+				"error"
+			);
+
+			return false;
+		}
+	},
+
+	filteredEvents() {
+		const rows =
+					qryGetEvtList.data || [];
+
+		const filter =
+					selEvtListFilter.selectedOptionValue ||
+					"active";
+
+		switch (filter) {
+			case "active":
+				return rows.filter(row =>
+													 row.active === true &&
+													 row.status !== "Closed"
+													);
+
+			case "inactive":
+				return rows.filter(row =>
+													 row.active === false &&
+													 row.status !== "Closed"
+													);
+
+			case "closed":
+				return rows.filter(row =>
+													 row.status === "Closed"
+													);
+
+			case "all":
+			default:
+				return rows;
+		}
 	},
 }
