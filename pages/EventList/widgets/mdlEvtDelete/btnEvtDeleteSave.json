@@ -40,7 +40,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ evtListActions.deleteSelectedEventConfirm() }}",
+  "onClick": "{{ jsEvtListActions.deleteSelectedEventConfirm() }}",
   "originalBottomRow": 27,
   "originalTopRow": 23,
   "parentId": "8uevqmxa6a",

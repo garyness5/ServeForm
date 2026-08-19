@@ -182,6 +182,19 @@ export default {
 	},
 
 	savedEvent() {
+		const currentEventId =
+					Number(
+						appsmith.store.current_event_id || 0
+					);
+
+		/*
+	 * Unsaved Event / Duplicate:
+	 * there is no persisted Event baseline.
+	 */
+		if (currentEventId <= 0) {
+			return this.emptyWorkspace();
+		}
+
 		const row =
 					Array.isArray(
 						qryGetEvtItemById.data
@@ -189,15 +202,20 @@ export default {
 		? qryGetEvtItemById.data[0]
 		: qryGetEvtItemById.data;
 
-		if (!row) {
+		/*
+	 * Never allow stale query data from another
+	 * Event identity to become saved truth.
+	 */
+		if (
+			!row ||
+			Number(row.id || 0) !== currentEventId
+		) {
 			return this.emptyWorkspace();
 		}
 
 		return this.normalizeWorkspace({
 			event_id:
-			Number(
-				row.id || 0
-			),
+			Number(row.id || 0),
 
 			name:
 			row.name,
@@ -249,12 +267,12 @@ export default {
 	},
 
 	/*
-	 * Stored Event Working State.
-	 *
-	 * This is the last captured complete
-	 * Header state, not necessarily every
-	 * character currently being typed.
-	 */
+ * Stored Event Working State.
+ *
+ * This is the last captured complete
+ * Header state, not necessarily every
+ * character currently being typed.
+ */
 	get() {
 		const workspace =
 					appsmith.store.event_workspace;
@@ -277,15 +295,15 @@ export default {
 	},
 
 	/*
-	 * Current visible Header Working State.
-	 *
-	 * Text widgets are read directly here
-	 * instead of writing to appsmith.store
-	 * on every keystroke.
-	 *
-	 * Therefore rapid typing cannot race
-	 * against a workspace rerender.
-	 */
+ * Current visible Header Working State.
+ *
+ * Text widgets are read directly here
+ * instead of writing to appsmith.store
+ * on every keystroke.
+ *
+ * Therefore rapid typing cannot race
+ * against a workspace rerender.
+ */
 	current() {
 		const base =
 					this.get();

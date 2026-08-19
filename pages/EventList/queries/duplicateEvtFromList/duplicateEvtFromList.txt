@@ -1,4 +1,0 @@
-select *
-from public.duplicate_event(
-  {{ Number(tblEvtList.selectedRow?.id || 0) }}
-);
