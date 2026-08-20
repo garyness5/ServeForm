@@ -1,0 +1,5 @@
+select *
+from public.restore_gro_participation(
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	1
+);

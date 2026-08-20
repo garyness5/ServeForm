@@ -1,0 +1,5 @@
+select *
+from public.reconcile_gro_queue_sources(
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	1
+);

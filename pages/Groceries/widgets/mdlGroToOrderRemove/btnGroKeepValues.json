@@ -40,7 +40,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ groActions.confirmToOrderRemoval(true) }}",
+  "onClick": "{{ jsGroceriesActions.confirmUpdate(true) }}",
   "originalBottomRow": 28,
   "originalTopRow": 24,
   "parentId": "vapd6k2vrl",
