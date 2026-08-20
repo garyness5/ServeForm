@@ -211,20 +211,76 @@ export default {
 			return false;
 		}
 
+		/*
+	 * Capture the Proposal identity before
+	 * the parent Event changes from temporary
+	 * to persisted.
+	 */
 		const proposalId =
 					Number(
 						appsmith.store.current_proposal_id || 0
 					);
 
+		if (!proposalId) {
+			showAlert(
+				"Proposal was not saved.",
+				"error"
+			);
+
+			return false;
+		}
+
 		const rows =
 					jsProposalComponents
 		.effectiveRows();
 
+		/*
+	 * A Proposal cannot exist in Supabase
+	 * until its parent Event has a real ID.
+	 *
+	 * For a new / duplicated Event:
+	 * save only the Event Header/Notes first.
+	 *
+	 * Other temporary Proposals remain
+	 * untouched in proposal_workspaces.
+	 */
+		if (
+			Number(
+				appsmith.store.current_event_id || 0
+			) <= 0
+		) {
+			const eventSaved =
+						await jsEventSave.saveEvent();
+
+			if (!eventSaved) {
+				showAlert(
+					"Proposal was not saved because the Event could not be created.",
+					"error"
+				);
+
+				return false;
+			}
+
+			/*
+		 * current_event_id now belongs to the
+		 * newly created Event.
+		 *
+		 * Replace stale saved Proposal rows from
+		 * the source Event with saved truth for
+		 * the new Event.
+		 *
+		 * Negative temporary Proposal workspaces
+		 * remain untouched and continue to appear
+		 * through filteredProposals().
+		 */
+			await qryGetProposalsForEvent.run();
+		}
+
 		let savedId = null;
 
 		/*
-		 * Existing persisted Proposal.
-		 */
+	 * Existing persisted Proposal.
+	 */
 		if (proposalId > 0) {
 			savedId =
 				await this.saveExistingProposal(
@@ -247,8 +303,8 @@ export default {
 		}
 
 		/*
-		 * New unsaved Proposal workspace.
-		 */
+	 * Temporary unsaved Proposal.
+	 */
 		else if (proposalId < 0) {
 			savedId =
 				await this.saveNewProposal(
@@ -266,38 +322,41 @@ export default {
 			}
 
 			/*
-			 * Remove the temporary workspace.
-			 */
+		 * Remove ONLY the temporary workspace
+		 * that has just been persisted.
+		 *
+		 * Every other temporary Proposal remains
+		 * exactly as the user left it.
+		 */
 			await jsProposalWorkspaces
 				.discard(
 				proposalId
 			);
 
 			/*
-			 * Replace temporary identity with the
-			 * new real Supabase Proposal ID.
-			 */
+		 * Current Proposal now uses its real
+		 * Supabase identity.
+		 */
 			await storeValue(
 				"current_proposal_id",
 				savedId
 			);
 
 			/*
-			 * Load the newly saved Proposal as the
-			 * new Published State + Working State.
-			 */
+		 * Load the newly saved Proposal as its
+		 * new Published + Working State.
+		 */
 			await this.refreshCurrentProposal(
 				savedId
 			);
-		}
 
-		else {
-			showAlert(
-				"Proposal was not saved.",
-				"error"
-			);
-
-			return false;
+			/*
+ * Renumber any remaining duplicated
+ * temporary Draft labels after this
+ * Proposal received its real number.
+ */
+			await jsProposalWorkspaces
+				.renumberTemporaryDrafts();
 		}
 
 		showAlert(
@@ -306,5 +365,5 @@ export default {
 		);
 
 		return true;
-	}
+	},
 };

@@ -1,34 +1,28 @@
 export default {
 	hasSelectedProposal() {
+		return (
+			Number(
+				appsmith.store.current_proposal_id || 0
+			) !== 0
+		);
+	},
+
+	canUseProposalActions() {
+		return this.hasSelectedProposal();
+	},
+
+	canDiscardProposal() {
 		const proposalId =
 					Number(
 						appsmith.store.current_proposal_id || 0
 					);
 
-		if (!proposalId) {
-			return false;
-		}
-
-		/*
-	 * Appsmith-only unsaved Proposal.
-	 */
-		if (proposalId < 0) {
-			return (
-				jsProposalWorkspaces
-				.get(proposalId)
-				?.is_new === true
-			);
-		}
-
-		const loadedProposalId =
-					Number(
-						qryGetSelectedProposal
-						.data?.[0]?.id || 0
-					);
-
 		return (
+			this.hasSelectedProposal() &&
 			proposalId > 0 &&
-			loadedProposalId === proposalId
+			jsProposalWorkspaces.isDirty(
+				proposalId
+			)
 		);
 	},
 

@@ -105,15 +105,29 @@ export default {
 					);
 
 		if (!newProposalId) {
-			return null;
+			return false;
 		}
+
+		/*
+	 * Preserve visible Event Header edits
+	 * before Proposal selection causes any
+	 * reactive refresh.
+	 */
+		await jsEventWorkspace.capture();
 
 		await storeValue(
 			"current_proposal_id",
 			newProposalId
 		);
 
-		return await this
-			.loadSelectedProposal();
+		const loaded =
+					await this.loadSelectedProposal();
+
+		await resetWidget(
+			"tblPropForEvent",
+			true
+		);
+
+		return loaded;
 	}
 };

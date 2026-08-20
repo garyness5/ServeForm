@@ -363,6 +363,59 @@ export default {
 		return tempId;
 	},
 
+	async renumberTemporaryDrafts() {
+		const workspaces = {
+			...this.all()
+		};
+
+		/*
+	 * Start after the highest real saved
+	 * Proposal number for this Event.
+	 */
+		const maxSavedNo =
+					Math.max(
+						0,
+						...(qryGetProposalsForEvent.data || [])
+						.map(row =>
+								 Number(row.proposal_no || 0)
+								)
+						.filter(Boolean)
+					);
+
+		/*
+	 * Only duplicated/temp Drafts that already
+	 * use Draft numbering participate.
+	 *
+	 * A normal blank "New Proposal" keeps that
+	 * label until first Save.
+	 */
+		const tempIds =
+					Object.keys(workspaces)
+		.map(Number)
+		.filter(id =>
+						id < 0 &&
+						workspaces[String(id)]
+						?.temp_proposal_no != null
+					 );
+
+		tempIds.forEach(
+			(id, index) => {
+				workspaces[String(id)] = {
+					...workspaces[String(id)],
+
+					temp_proposal_no:
+					maxSavedNo + index + 1
+				};
+			}
+		);
+
+		await this.saveAll(
+			workspaces
+		);
+
+		return true;
+	},
+
 	async createTemporaryBatch(
 		proposals = []
 	) {

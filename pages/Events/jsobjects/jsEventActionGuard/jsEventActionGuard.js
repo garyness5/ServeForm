@@ -72,7 +72,7 @@ export default {
 			"This Event has unsaved changes.",
 			"",
 			"Save All — save all Event and Proposal changes, then continue.",
-			"Discard — discard all unsaved changes and revert to the last saved state, then continue.",
+			"Discard — discard all unsaved changes and revert to the last saved state. Any Proposal that has never been saved will be deleted.",
 			"Cancel — return without doing anything."
 		];
 
@@ -222,6 +222,30 @@ export default {
 				);
 
 				return true;
+
+			case "navigate": {
+				const target =
+							String(
+								appsmith.store
+								.pendingEventNavigationTarget || ""
+							).trim();
+
+				if (!target) {
+					return false;
+				}
+
+				await removeValue(
+					"pendingEventNavigationTarget"
+				);
+
+				navigateTo(
+					target,
+					{},
+					"SAME_WINDOW"
+				);
+
+				return true;
+			}
 
 			default:
 				return false;
@@ -511,6 +535,10 @@ export default {
 			"event_duplicate_snapshot"
 		);
 
+		await removeValue(
+			"pendingEventNavigationTarget"
+		);
+
 		return true;
 	},
 
@@ -625,5 +653,74 @@ export default {
 				"event_document_save_request"
 			);
 		}
-	}
+	},
+
+	async requestNavigation(pageName) {
+		const target =
+					String(pageName || "").trim();
+
+		if (!target) {
+			return false;
+		}
+
+		/*
+	 * Capture current visible Event Header
+	 * before any navigation decision.
+	 */
+		await jsEventWorkspace.capture();
+
+		const state =
+					await this.dirtyState();
+
+		/*
+	 * Clean page:
+	 * navigate immediately.
+	 */
+		if (
+			!state.event_dirty &&
+			!state.proposal_ids.length
+		) {
+			navigateTo(
+				target,
+				{},
+				"SAME_WINDOW"
+			);
+
+			return true;
+		}
+
+		/*
+	 * Dirty page:
+	 * remember the destination and use the
+	 * standard Save All / Discard / Cancel modal.
+	 */
+		await storeValue(
+			"pendingEventNavigationTarget",
+			target
+		);
+
+		await storeValue(
+			"pendingEventAction",
+			"navigate"
+		);
+
+		await storeValue(
+			"evt_unsaved_title",
+			"Unsaved Changes"
+		);
+
+		await storeValue(
+			"evt_unsaved_message",
+			this.actionMessage(
+				"navigate",
+				state
+			)
+		);
+
+		showModal(
+			"mdlEvtUnsavedChanges"
+		);
+
+		return false;
+	},
 };
