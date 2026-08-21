@@ -1,0 +1,10 @@
+select *
+from public.refresh_gro_order(
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	1,
+	{{
+	appsmith.store.gro_keep_manual !== false
+	? 'true'
+	: 'false'
+	}}
+);

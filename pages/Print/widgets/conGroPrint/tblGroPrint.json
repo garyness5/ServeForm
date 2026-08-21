@@ -53,7 +53,7 @@
     "ingredient_code": 74,
     "packs_to_order": 90,
     "purchased": 62,
-    "supplier_name": 115
+    "supplier_name": 133
   },
   "customIsLoading": false,
   "customIsLoadingValue": "",
@@ -555,7 +555,7 @@
   },
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 63,
+  "rightColumn": 64,
   "searchKey": "",
   "showInlineEditingOptionDropdown": true,
   "tableData": "{{ getGroPrint.data }}",

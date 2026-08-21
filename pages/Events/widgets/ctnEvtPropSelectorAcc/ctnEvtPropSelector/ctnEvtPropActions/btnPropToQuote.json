@@ -4,7 +4,7 @@
   "bottomRow": 6,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
-  "buttonVariant": "PRIMARY",
+  "buttonVariant": "SECONDARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
     {
@@ -20,7 +20,7 @@
   "isLoading": false,
   "isVisible": true,
   "key": "o44ycvptxg",
-  "leftColumn": 0,
+  "leftColumn": 14,
   "minWidth": 120,
   "mobileBottomRow": 8,
   "mobileLeftColumn": 0,
@@ -35,7 +35,7 @@
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 13,
+  "rightColumn": 27,
   "text": "To Quote",
   "topRow": 2,
   "type": "BUTTON_WIDGET",

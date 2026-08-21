@@ -1,0 +1,7 @@
+select *
+from public.replace_gro_proposal_source(
+    {{ Number(appsmith.store.current_proposal_id || 0) }},
+    '{{ appsmith.store.current_client_id }}'::uuid,
+    {{ appsmith.store.evt_gro_keep_manual === true }},
+    1
+);

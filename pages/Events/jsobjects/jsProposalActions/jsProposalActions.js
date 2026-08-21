@@ -568,12 +568,39 @@ export default {
 
 		try {
 
-			if (keepManual === false) {
-				await qryClearEvtGroManualValues.run();
+			const request =
+						appsmith.store.evt_gro_replace_request || null;
+
+			let result = null;
+
+			/*
+		 * Exploded replacement:
+		 * remove old Event Details,
+		 * rebuild Order from remaining Details,
+		 * clear Print,
+		 * replace Proposal source,
+		 * leave replacement dormant.
+		 */
+			if (request) {
+
+				await storeValue(
+					"evt_gro_keep_manual",
+					keepManual === true
+				);
+
+				result =
+					await qryReplaceGroProposalSource.run();
+
+			} else {
+
+				/*
+			 * Dormant / first-time send:
+			 * no downstream rebuild required.
+			 */
+				result =
+					await qrySendProposalToGroceries.run();
 			}
 
-			const result =
-						await qrySendProposalToGroceries.run();
 
 			const row =
 						result?.[0] || null;
@@ -587,11 +614,16 @@ export default {
 				return false;
 			}
 
+
 			await qryGetProposalsForEvent.run();
 			await qryGetSelectedProposal.run();
 
 			await removeValue(
 				"evt_gro_replace_request"
+			);
+
+			await removeValue(
+				"evt_gro_keep_manual"
 			);
 
 			closeModal(
@@ -606,6 +638,10 @@ export default {
 			return true;
 
 		} catch (error) {
+
+			await removeValue(
+				"evt_gro_keep_manual"
+			);
 
 			showAlert(
 				error?.message ||

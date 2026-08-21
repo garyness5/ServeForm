@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_gro_print_rows(\n  '{{ appsmith.store.current_client_id }}'::uuid,\n  1,\n  '{{ JSON.stringify(groPrintTable.rowsForSave()).replaceAll(\"'\", \"''\") }}'::jsonb,\n  {{ JSON.stringify(rteGroPrint.text || \"\") }}\n);",
+      "body": "select *\nfrom public.save_gro_print_rows(\n  '{{ appsmith.store.current_client_id }}'::uuid,\n  1,\n  '{{ JSON.stringify(jsPrintTable.rowsForSave()).replaceAll(\"'\", \"''\") }}'::jsonb,\n  {{ JSON.stringify(rteGroPrint.text || \"\") }}\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

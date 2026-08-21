@@ -33,17 +33,8 @@ export default {
 		await jsEventWorkspace.initialize();
 
 		/*
-		 * Load all supporting data required by
-		 * normal Events operation and Event Duplicate.
-		 */
-		await Promise.all([
-			qryGetEvtComponentItems.run(),
-			qryGetEvtCustomers.run(),
-			qryGetEvtContacts.run(),
-			qryGetEvtVenues.run(),
-			qryGetEvtVenueContacts.run(),
-			qryGetProposalsForEvent.run()
-		]);
+		* Supporting queries load automatically.
+		*/
 
 		await storeValue(
 			"accEvtCustomerNotes",
@@ -56,6 +47,8 @@ export default {
 		);
 
 		/*
+
+
  * ==================================================
  * NEW EVENT HANDOFF
  *

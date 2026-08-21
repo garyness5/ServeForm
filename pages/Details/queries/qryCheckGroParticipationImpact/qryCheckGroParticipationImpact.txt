@@ -1,0 +1,5 @@
+select *
+from public.check_gro_participation_impact(
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	1
+);
