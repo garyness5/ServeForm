@@ -272,5 +272,21 @@ export default {
 		);
 
 		return true;
-	}
+	},
+
+	removeEventsText() {
+
+		const names =
+					appsmith.store.gro_affected_event_names || [];
+
+		const list =
+					names.length
+		? names.map(name => "• " + name).join("\n")
+		: "• Selected Event(s)";
+
+		return (
+			"The following Event(s) will be removed from the Order:\n\n" +
+			list
+		);
+	},
 };

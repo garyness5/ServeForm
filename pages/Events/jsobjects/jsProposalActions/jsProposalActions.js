@@ -447,4 +447,211 @@ export default {
 			);
 		}
 	},
+
+	async sendToOrder() {
+
+		const proposalId =
+					Number(
+						appsmith.store.current_proposal_id || 0
+					);
+
+		if (!proposalId) {
+			showAlert(
+				"Select a Proposal first.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		if (proposalId < 0) {
+			showAlert(
+				"Save the Proposal before sending it to Order.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		if (
+			jsProposalWorkspaces.isDirty(
+				proposalId
+			)
+		) {
+			showAlert(
+				"Save the Proposal before sending it to Order.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		if (jsEventSave.isDirty()) {
+			showAlert(
+				"Save the Event before sending the Proposal to Order.",
+				"warning"
+			);
+
+			return false;
+		}
+
+
+		/*
+	 * Check whether Groceries already has this Event.
+	 */
+		await qryCheckEvtGroReplaceImpact.run();
+
+		const impact =
+					qryCheckEvtGroReplaceImpact.data?.[0] || null;
+
+
+		/*
+	 * Same Proposal already owns the Groceries row.
+	 * Sending again is harmless/idempotent.
+	 */
+		if (
+			impact &&
+			Number(impact.current_proposal_id || 0) === proposalId
+		) {
+			return await this.confirmSendToOrder(true);
+		}
+
+
+		/*
+	 * Different Proposal, but the current Groceries source
+	 * has already generated Details.
+	 *
+	 * Ask before replacing it.
+	 */
+		if (
+			impact &&
+			impact.has_generated_details === true
+		) {
+			await storeValue(
+				"evt_gro_replace_request",
+				{
+					proposal_id: proposalId,
+					event_id:
+					Number(
+						appsmith.store.current_event_id || 0
+					),
+
+					current_proposal_id:
+					Number(
+						impact.current_proposal_id || 0
+					),
+
+					current_proposal_number:
+					impact.current_proposal_number || "",
+
+					has_manual_values:
+					impact.has_manual_values === true
+				}
+			);
+
+			showModal(
+				"mdlEvtGroReplace"
+			);
+
+			return false;
+		}
+
+
+		/*
+	 * Dormant / never-generated Groceries source:
+	 * replace silently.
+	 */
+		return await this.confirmSendToOrder(true);
+	},
+
+	async confirmSendToOrder(keepManual = true) {
+
+		try {
+
+			if (keepManual === false) {
+				await qryClearEvtGroManualValues.run();
+			}
+
+			const result =
+						await qrySendProposalToGroceries.run();
+
+			const row =
+						result?.[0] || null;
+
+			if (!row?.gro_event_id) {
+				showAlert(
+					"Proposal could not be sent to Groceries.",
+					"error"
+				);
+
+				return false;
+			}
+
+			await qryGetProposalsForEvent.run();
+			await qryGetSelectedProposal.run();
+
+			await removeValue(
+				"evt_gro_replace_request"
+			);
+
+			closeModal(
+				"mdlEvtGroReplace"
+			);
+
+			showAlert(
+				"Proposal sent to Groceries.",
+				"success"
+			);
+
+			return true;
+
+		} catch (error) {
+
+			showAlert(
+				error?.message ||
+				"Proposal could not be sent to Groceries.",
+				"error"
+			);
+
+			return false;
+		}
+	},
+
+	async cancelGroReplace() {
+
+		await removeValue(
+			"evt_gro_replace_request"
+		);
+
+		closeModal(
+			"mdlEvtGroReplace"
+		);
+
+		return true;
+	},
+
+	groReplaceEventText() {
+
+		const request =
+					appsmith.store.evt_gro_replace_request || {};
+
+		const eventName =
+					String(
+						jsEventWorkspace.current()?.name ||
+						"This Event"
+					).trim();
+
+		const proposalRef =
+					String(
+						request.current_proposal_number ||
+						"the current Proposal"
+					).trim();
+
+		return (
+			eventName +
+			" is already represented in the Order using " +
+			proposalRef +
+			"."
+		);
+	},
 };

@@ -1,9 +1,7 @@
 {
   "animateLoading": true,
-  "borderColor": "#7f1d1d",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "borderWidth": "1",
-  "bottomRow": 23,
+  "bottomRow": 11,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -15,48 +13,43 @@
       "key": "borderRadius"
     },
     {
-      "key": "isVisible"
+      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
-  "dynamicPropertyPathList": [
-    {
-      "key": "isVisible"
-    }
-  ],
   "dynamicTriggerPathList": [],
   "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
   "fontSize": "0.875rem",
-  "fontStyle": "ITALIC",
+  "fontStyle": "",
   "isLoading": false,
-  "isVisible": "{{\njsEventWorkspace.get().status === \"Closed\"\n}}",
-  "key": "9kjttflf0u",
-  "leftColumn": 41,
+  "isVisible": true,
+  "key": "y5ocbcsrju",
+  "leftColumn": 4,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
-  "mobileBottomRow": 14,
-  "mobileLeftColumn": 41,
-  "mobileRightColumn": 57,
-  "mobileTopRow": 10,
+  "mobileBottomRow": 10,
+  "mobileLeftColumn": 4,
+  "mobileRightColumn": 20,
+  "mobileTopRow": 6,
   "needsErrorInfo": false,
-  "originalBottomRow": 23,
-  "originalTopRow": 13,
+  "originalBottomRow": 11,
+  "originalTopRow": 6,
   "overflow": "NONE",
-  "parentColumnSpace": 18.1875,
-  "parentId": "hfqtbvx5ku",
+  "parentColumnSpace": 6.9375,
+  "parentId": "sgf64gnnvx",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 64,
+  "rightColumn": 59,
   "shouldTruncate": false,
-  "text": "\nThis Event is Closed. You can review the Event and linked profiles, but changes cannot be saved while Closed. Uncheck Closed to reopen the Event before making changes.\n\n",
+  "text": "{{ jsProposalActions.groReplaceEventText() }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 13,
+  "topRow": 6,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "8i1o248frx",
-  "widgetName": "txtEvtClosedWarning"
+  "widgetId": "0vbj2hej45",
+  "widgetName": "txtEvtGroReplaceEvents"
 }

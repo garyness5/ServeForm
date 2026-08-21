@@ -2,7 +2,7 @@
   "animateLoading": true,
   "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 29,
+  "bottomRow": 30,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -31,7 +31,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 6,
   "needsErrorInfo": false,
-  "originalBottomRow": 29,
+  "originalBottomRow": 30,
   "originalTopRow": 14,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 60,
   "shouldTruncate": false,
-  "text": "You have manually entered quantities in the Order.\n\nKeep: keeps quantities for ingredients still needed by the remaining Events.\n\nRemove: clears the manually entered quantities.\n\nIf no Events remain selected, the Order will be cleared.",
+  "text": "You have manually entered quantities in the Order.\n\nKeep: keeps quantities for ingredients still needed by other Events in the rebuilt Order.\n\nRemove: clears the manually entered quantities.\n\nIf an ingredient is no longer needed after the rebuild, its manually entered quantity will be removed.",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 14,
