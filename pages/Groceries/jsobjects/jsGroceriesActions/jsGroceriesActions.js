@@ -1,7 +1,44 @@
 export default {
+	async updateToOrder(row) {
+
+		const groEventId =
+					Number(row?.gro_event_id || 0);
+
+		if (!groEventId) {
+			showAlert(
+				"Could not identify the Groceries row.",
+				"error"
+			);
+
+			return false;
+		}
+
+		await storeValue(
+			"gro_queue_row_id",
+			groEventId
+		);
+
+		await storeValue(
+			"gro_queue_to_order",
+			row?.to_order === true
+		);
+
+		await qryUpdateGroQueueToOrder.run();
+
+		await qryGetGroQueue.run();
+
+		await removeValue(
+			"gro_queue_row_id"
+		);
+
+		await removeValue(
+			"gro_queue_to_order"
+		);
+
+		return true;
+	},
 
 	async updateAll() {
-
 		/*
          * Safety net:
          * ensure every currently eligible
@@ -101,14 +138,23 @@ export default {
 			(addedCount > 0 || removedCount > 0) &&
 			participationHasManualValues
 		) {
+			const affectedEvents =
+						(qryGetGroQueue.data || [])
+			.filter(row => row.to_order === false)
+			.map(row => row.event_name)
+			.filter(Boolean);
+
+			await storeValue(
+				"gro_affected_event_names",
+				affectedEvents
+			);
+
 			await storeValue(
 				"gro_pending_update_reason",
 				"participation"
 			);
 
-			showModal(
-				"mdlGroToOrderRemove"
-			);
+			showModal("mdlGroToOrderRemove");
 
 			return false;
 		}
@@ -153,6 +199,7 @@ export default {
 			qryGetGroQueue.data
 		);
 
+		await removeValue("gro_affected_event_names");
 
 		await removeValue(
 			"gro_pending_update_reason"
@@ -214,6 +261,7 @@ export default {
 			qryGetGroQueue.data
 		);
 
+		await removeValue("gro_affected_event_names");
 
 		await removeValue(
 			"gro_pending_update_reason"

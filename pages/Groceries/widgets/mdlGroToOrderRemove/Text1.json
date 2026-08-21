@@ -1,8 +1,7 @@
 {
   "animateLoading": true,
-  "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 29,
+  "bottomRow": 12,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -12,6 +11,9 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -21,7 +23,7 @@
   "fontStyle": "",
   "isLoading": false,
   "isVisible": true,
-  "key": "hk41io6ubo",
+  "key": "y5ocbcsrju",
   "leftColumn": 4,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
@@ -31,23 +33,23 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 6,
   "needsErrorInfo": false,
-  "originalBottomRow": 29,
-  "originalTopRow": 14,
+  "originalBottomRow": 12,
+  "originalTopRow": 6,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
   "parentId": "vapd6k2vrl",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 60,
+  "rightColumn": 59,
   "shouldTruncate": false,
-  "text": "You have manually entered quantities in the Order.\n\nKeep: keeps quantities for ingredients still needed by the remaining Events.\n\nRemove: clears the manually entered quantities.\n\nIf no Events remain selected, the Order will be cleared.",
+  "text": "{{\n\"The following Event(s) will be removed from the Order:\\n\\n\" +\n(\n  appsmith.store.gro_affected_event_names?.length\n    ? appsmith.store.gro_affected_event_names.map(name => \"• \" + name).join(\"\\n\")\n    : \"• Selected Event(s)\"\n)\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 14,
+  "topRow": 6,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "27ucbq4jgb",
-  "widgetName": "txtGroRemoveWarning"
+  "widgetId": "8oxvnx3jpr",
+  "widgetName": "Text1"
 }

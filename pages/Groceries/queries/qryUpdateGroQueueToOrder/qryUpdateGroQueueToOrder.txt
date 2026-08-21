@@ -1,12 +1,11 @@
 update public.gro_events
 set
-  to_order = {{
-tblGroEvents.updatedRow.to_order === true
-? true
-: false
-}},
-  updated_at = now()
-where id = {{
-Number(tblGroEvents.updatedRow.gro_event_id)
-}}
-returning id, to_order;
+    to_order = {{ appsmith.store.gro_queue_to_order === true }},
+    updated_at = now()
+where id = {{ Number(appsmith.store.gro_queue_row_id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+returning
+    id as gro_event_id,
+    event_id,
+    proposal_id,
+    to_order;

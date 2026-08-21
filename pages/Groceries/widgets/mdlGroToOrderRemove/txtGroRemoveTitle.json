@@ -11,9 +11,6 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -41,7 +38,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 53,
   "shouldTruncate": false,
-  "text": "{{ \"Exclude \" + (appsmith.store.pending_evt_name || \"this Event\") + \" from Ordering?\" }}",
+  "text": "Remove Events from Order?",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,
@@ -49,5 +46,5 @@
   "type": "TEXT_WIDGET",
   "version": 1,
   "widgetId": "kv9c3xpha0",
-  "widgetName": "titGroRemove"
+  "widgetName": "txtGroRemoveTitle"
 }
