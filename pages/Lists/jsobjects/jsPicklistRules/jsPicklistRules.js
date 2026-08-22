@@ -78,18 +78,22 @@ export default {
 		);
 	},
 
-	mustReplaceBeforeDelete() {
-		return (
-			this.isCategory() &&
-			this.totalImpactCount() > 0
-		);
-	},
-
 	replaceSaveDisabled() {
-		return (
-			radPLReplaceDeleteAction.selectedOptionValue === "replace" &&
+		const action =
+					radPLReplaceDeleteAction.selectedOptionValue;
+
+		if (!action) {
+			return true;
+		}
+
+		if (
+			action === "replace" &&
 			!selPLReplaceWith.selectedOptionValue
-		);
+		) {
+			return true;
+		}
+
+		return false;
 	},
 
 	replaceWithDisabled() {
@@ -150,20 +154,10 @@ export default {
 	},
 
 	deleteMessage() {
-		if (
-			appsmith.store.plReplaceAction === "Replace"
-		) {
-			return "<b>Replace everywhere used?</b><br>The original item will remain in the list.";
-		}
-
-		if (this.mustReplaceBeforeDelete()) {
-			return "<b>Replace required</b><br>This category is currently being used. Replace it before deleting.";
-		}
-
 		if (this.totalImpactCount() > 0) {
-			return "<b>Delete item?</b><br>This item is currently being used. Only the selected item will be deleted. Everything else will remain unchanged.";
+			return "<b>This item is currently being used.</b><br>Review the impact before applying the change.";
 		}
 
-		return "<b>Delete unused item?</b><br>The selected item is not currently being used.";
+		return "<b>This item is not currently being used.</b>";
 	}
 }

@@ -1,0 +1,6 @@
+SELECT * FROM auth."audit_log_entries" LIMIT 10;select *
+from public.add_helper_item(
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	{{ Number(selListsType.selectedOptionValue) }},
+	{{ inpPLAddName.text }}
+);

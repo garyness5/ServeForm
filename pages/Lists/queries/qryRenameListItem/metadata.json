@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_d50e91bc-e975-47a1-a3eb-ec781fd49c34",
-  "id": "Lists_qryGetPicklistItems",
+  "gitSyncId": "6a0a1bde3214f344228346e7_82f00d63-998a-4c00-9644-c26fa411b352",
+  "id": "Lists_qryRenameListItem",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  id,\n  name,\n  active,\n  is_system\nfrom public.helper_list_items\nwhere list_id = {{ Number(selListsType.selectedOptionValue || 0) }}\n  and coalesce(deleted, false) = false\n  and (\n    client_id = '{{ appsmith.store.current_client_id }}'::uuid\n    or is_system = true\n  )\norder by lower(name);",
+      "body": "select *\nfrom public.rename_helper_item(\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t{{ Number(tblListsItems.selectedRow?.id || 0) }},\n\t{{ inpPLRenameName.text }}\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,9 +27,9 @@
         "key": "body"
       }
     ],
-    "name": "qryGetPicklistItems",
+    "name": "qryRenameListItem",
     "pageId": "Lists",
     "runBehaviour": "MANUAL",
-    "userSetOnLoad": true
+    "userSetOnLoad": false
   }
 }

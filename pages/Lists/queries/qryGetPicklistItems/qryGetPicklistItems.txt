@@ -3,8 +3,9 @@ select
   name,
   active,
   is_system
-from helper_list_items
+from public.helper_list_items
 where list_id = {{ Number(selListsType.selectedOptionValue || 0) }}
+  and coalesce(deleted, false) = false
   and (
     client_id = '{{ appsmith.store.current_client_id }}'::uuid
     or is_system = true

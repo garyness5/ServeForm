@@ -238,7 +238,7 @@
       "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "name",
+      "label": "Item Name",
       "notation": "standard",
       "originalId": "name",
       "sticky": "",

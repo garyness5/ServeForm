@@ -23,9 +23,16 @@
   "dynamicPropertyPathList": [
     {
       "key": "sourceData"
+    },
+    {
+      "key": "onOptionChange"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onOptionChange"
+    }
+  ],
   "isDisabled": false,
   "isFilterable": true,
   "isLoading": false,
@@ -47,6 +54,7 @@
   "mobileRightColumn": 21,
   "mobileTopRow": 15,
   "needsErrorInfo": false,
+  "onOptionChange": "{{ qryGetPicklistItems.run() }}",
   "optionLabel": "label",
   "optionValue": "value",
   "originalBottomRow": 22,

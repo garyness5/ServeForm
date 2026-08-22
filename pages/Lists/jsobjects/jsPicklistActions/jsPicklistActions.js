@@ -43,7 +43,7 @@ export default {
 			return false;
 		}
 
-		await addPicklistItems.run();
+		await qryAddListItem.run();
 
 		await qryGetPicklistItems.run();
 
@@ -138,11 +138,7 @@ export default {
 
 	async openReplaceDelete() {
 		if (!jsPicklistRules.hasSelection()) {
-			showAlert(
-				"Select an item first.",
-				"warning"
-			);
-
+			showAlert("Select an item first.", "warning");
 			return false;
 		}
 
@@ -152,55 +148,32 @@ export default {
 
 		await qryGetListItemImpact.run();
 
-		resetWidget(
-			"radPLReplaceDeleteAction"
-		);
-
-		resetWidget(
-			"selPLReplaceWith"
-		);
+		resetWidget("radPLReplaceDeleteAction");
+		resetWidget("selPLReplaceWith");
 
 		showModal("mdlPLReplace");
 
 		return true;
 	},
 
-
 	onReplaceDeleteActionChange() {
-		if (
-			jsPicklistRules.isDietTag() &&
-			radPLReplaceDeleteAction
-			.selectedOptionValue === "replace"
-		) {
-			resetWidget(
-				"radPLReplaceDeleteAction"
-			);
-
-			showAlert(
-				"Dietary tags cannot be replaced. They can only be deleted.",
-				"warning"
-			);
-
-			return false;
-		}
-
 		return true;
 	},
-
 
 	async saveReplaceDelete() {
 		const action =
 					jsPicklistRules.isDietTag()
 		? "delete"
-		: radPLReplaceDeleteAction
-		.selectedOptionValue;
+		: radPLReplaceDeleteAction.selectedOptionValue;
 
 		const replaceToId =
 					jsPicklistRules.isDietTag()
 		? null
-		: selPLReplaceWith
-		.selectedOptionValue;
+		: selPLReplaceWith.selectedOptionValue;
 
+		if (!action) {
+			return false;
+		}
 
 		if (
 			action === "replace" &&
@@ -214,24 +187,7 @@ export default {
 			return false;
 		}
 
-
 		await qryGetListItemImpact.run();
-
-
-		if (
-			action === "delete" &&
-			jsPicklistRules.isCategory() &&
-			jsPicklistRules.totalImpactCount() > 0 &&
-			!replaceToId
-		) {
-			showAlert(
-				"This category is currently being used. Select a replacement before deleting.",
-				"warning"
-			);
-
-			return false;
-		}
-
 
 		await storeValue(
 			"plReplaceAction",
@@ -245,91 +201,26 @@ export default {
 			replaceToId || null
 		);
 
-
-		if (
-			action === "delete" &&
-			!replaceToId &&
-			jsPicklistRules.totalImpactCount() > 0
-		) {
-			showModal(
-				"mdPLReplaceConfirm"
-			);
-
-			return true;
-		}
-
-
 		return await this.confirmReplaceDelete();
 	},
 
 
 	async confirmReplaceDelete() {
-		if (
-			appsmith.store.plReplaceAction ===
-			"Replace"
-		) {
-			await updPicklistReplaceEverywhere.run();
-
-			await qryGetPicklistItems.run();
-
-			closeModal(
-				"mdPLReplaceConfirm"
-			);
-
-			closeModal(
-				"mdlPLReplace"
-			);
-
-			showAlert(
-				"Item replaced everywhere used",
-				"success"
-			);
-
-			return true;
-		}
-
-
-		if (appsmith.store.plReplaceToId) {
-			await updPicklistReplaceEverywhere.run();
-
-			await delPicklistItem.run();
-
-			await qryGetPicklistItems.run();
-
-			closeModal(
-				"mdPLReplaceConfirm"
-			);
-
-			closeModal(
-				"mdlPLReplace"
-			);
-
-			showAlert(
-				"Item replaced everywhere used and deleted",
-				"success"
-			);
-
-			return true;
-		}
-
-
-		await delPicklistItem.run();
+		await qryReplaceDeleteListItem.run();
 
 		await qryGetPicklistItems.run();
 
-		closeModal(
-			"mdPLReplaceConfirm"
-		);
-
-		closeModal(
-			"mdlPLReplace"
-		);
+		closeModal("mdlPLReplace");
 
 		showAlert(
-			"Item deleted",
+			appsmith.store.plReplaceAction === "Replace"
+			? "Item replaced everywhere used."
+			: appsmith.store.plReplaceToId
+			? "Item replaced everywhere used and deleted."
+			: "Item deleted.",
 			"success"
 		);
 
 		return true;
-	}
+	},
 }
