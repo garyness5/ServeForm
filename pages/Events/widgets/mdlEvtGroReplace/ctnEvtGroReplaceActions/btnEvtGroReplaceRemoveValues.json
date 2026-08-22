@@ -40,7 +40,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsProposalActions.confirmSendToOrder(false) }}",
+  "onClick": "{{\nappsmith.store.evt_gro_unorder_request\n? jsProposalActions.confirmUnorder(false)\n: jsProposalActions.confirmSendToOrder(false)\n}}",
   "originalBottomRow": 50,
   "originalTopRow": 46,
   "parentId": "vyshzmvstx",

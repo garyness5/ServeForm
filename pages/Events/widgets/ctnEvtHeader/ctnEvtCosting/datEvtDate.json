@@ -28,13 +28,13 @@
       "key": "defaultDate"
     },
     {
-      "key": "dateFormat"
-    },
-    {
       "key": "isDisabled"
     },
     {
       "key": "onDateSelected"
+    },
+    {
+      "key": "dateFormat"
     }
   ],
   "dynamicTriggerPathList": [

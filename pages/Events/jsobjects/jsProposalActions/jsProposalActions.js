@@ -655,13 +655,11 @@ export default {
 
 	async cancelGroReplace() {
 
-		await removeValue(
-			"evt_gro_replace_request"
-		);
+		await removeValue("evt_gro_replace_request");
+		await removeValue("evt_gro_unorder_request");
+		await removeValue("evt_gro_keep_manual");
 
-		closeModal(
-			"mdlEvtGroReplace"
-		);
+		closeModal("mdlEvtGroReplace");
 
 		return true;
 	},
@@ -689,5 +687,238 @@ export default {
 			proposalRef +
 			"."
 		);
+	},
+
+	async unorder() {
+
+		const proposalId =
+					Number(appsmith.store.current_proposal_id || 0);
+
+		if (!proposalId) {
+			showAlert(
+				"Select a Proposal first.",
+				"warning"
+			);
+			return false;
+		}
+
+		await qryCheckEvtGroReplaceImpact.run();
+
+		const impact =
+					qryCheckEvtGroReplaceImpact.data?.[0] || null;
+
+		if (
+			impact &&
+			impact.has_generated_details === true &&
+			impact.has_manual_values === true
+		) {
+			await storeValue(
+				"evt_gro_unorder_request",
+				{ proposal_id: proposalId }
+			);
+
+			showModal("mdlEvtGroReplace");
+
+			return false;
+		}
+
+		return await this.confirmUnorder(true);
+	},
+
+
+	async confirmUnorder(keepManual = true) {
+
+		try {
+
+			await storeValue(
+				"evt_gro_keep_manual",
+				keepManual === true
+			);
+
+			const result =
+						await qryUnorderPropFromGroceries.run();
+
+			const row =
+						result?.[0] || null;
+
+			if (!row?.proposal_id) {
+				showAlert(
+					"Proposal could not be Unordered.",
+					"error"
+				);
+				return false;
+			}
+
+			await qryGetProposalsForEvent.run();
+			await qryGetSelectedProposal.run();
+
+			await removeValue("evt_gro_unorder_request");
+			await removeValue("evt_gro_keep_manual");
+
+			closeModal("mdlEvtGroReplace");
+
+			showAlert(
+				"Proposal removed from Groceries.",
+				"success"
+			);
+
+			return true;
+
+		} catch (error) {
+
+			await removeValue("evt_gro_keep_manual");
+
+			showAlert(
+				error?.message ||
+				"Proposal could not be Unordered.",
+				"error"
+			);
+
+			return false;
+		}
+	},
+
+	currentProposal() {
+
+		const proposalId =
+					Number(appsmith.store.current_proposal_id || 0);
+
+		if (!proposalId) {
+			return null;
+		}
+
+		return (
+			(qryGetProposalsForEvent.data || [])
+			.find(
+				row =>
+				Number(row.id) === proposalId
+			)
+			||
+			qryGetSelectedProposal.data?.[0]
+			||
+			null
+		);
+	},
+
+
+	isOrdered() {
+
+		return (
+			this.currentProposal()?.proposal_status === "Ordered"
+		);
+	},
+
+
+	orderButtonText() {
+
+		return this.isOrdered()
+			? "Unorder"
+		: "To Order";
+	},
+
+
+	async orderButtonAction() {
+
+		return this.isOrdered()
+			? await this.unorder()
+		: await this.sendToOrder();
+	},
+
+	async updateOrder() {
+
+		const proposalId =
+					Number(appsmith.store.current_proposal_id || 0);
+
+		if (!proposalId || proposalId < 0) {
+
+			showAlert(
+				"Select a saved Proposal first.",
+				"warning"
+			);
+
+			return false;
+		}
+
+
+		if (!this.isOrdered()) {
+
+			showAlert(
+				"Only an Ordered Proposal can update the Order.",
+				"warning"
+			);
+
+			return false;
+		}
+
+
+		/*
+	 * Groceries must receive saved truth only.
+	 */
+		if (
+			jsProposalWorkspaces.isDirty(
+				proposalId
+			)
+		) {
+
+			showAlert(
+				"Save the Proposal before updating the Order.",
+				"warning"
+			);
+
+			return false;
+		}
+
+
+		if (jsEventSave.isDirty()) {
+
+			showAlert(
+				"Save the Event before updating the Order.",
+				"warning"
+			);
+
+			return false;
+		}
+
+
+		try {
+
+			const result =
+						await qrySendProposalToGroceries.run();
+
+			const row =
+						result?.[0] || null;
+
+			if (!row?.gro_event_id) {
+
+				showAlert(
+					"Order could not be updated.",
+					"error"
+				);
+
+				return false;
+			}
+
+
+			await qryGetProposalsForEvent.run();
+			await qryGetSelectedProposal.run();
+
+
+			showAlert(
+				"Order updated. Click Update All in Groceries to apply the changes.",
+				"success"
+			);
+
+			return true;
+
+		} catch (error) {
+
+			showAlert(
+				error?.message ||
+				"Order could not be updated.",
+				"error"
+			);
+
+			return false;
+		}
 	},
 };

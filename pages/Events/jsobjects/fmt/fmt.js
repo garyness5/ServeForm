@@ -23,5 +23,81 @@ export default {
 			minimumFractionDigits: Number.isInteger(n) ? 0 : 0,
 			maximumFractionDigits: 2
 		});
-	}
+	},
+
+	date(value) {
+
+		if (!value) return "";
+
+		const d = new Date(value);
+
+		if (isNaN(d.getTime())) return "";
+
+		const year =
+					d.getFullYear();
+
+		const month =
+					new Intl.DateTimeFormat(
+						undefined,
+						{ month: "short" }
+					).format(d);
+
+		const day =
+					String(d.getDate()).padStart(2, "0");
+
+		return `${year}-${month}-${day}`;
+	},
+
+	time(value) {
+
+		if (!value) return "";
+
+		const d = new Date(value);
+
+		if (isNaN(d.getTime())) return "";
+
+		return new Intl.DateTimeFormat(
+			undefined,
+			{
+				hour: "numeric",
+				minute: "2-digit"
+			}
+		).format(d);
+	},
+
+	dateTime(value) {
+
+		if (!value) return "";
+
+		const d = new Date(value);
+
+		if (isNaN(d.getTime())) {
+			return "";
+		}
+
+		const year =
+					d.getFullYear();
+
+		const month =
+					new Intl.DateTimeFormat(
+						undefined,
+						{ month: "short" }
+					).format(d);
+
+		const day =
+					String(
+						d.getDate()
+					).padStart(2, "0");
+
+		const time =
+					new Intl.DateTimeFormat(
+						undefined,
+						{
+							hour: "numeric",
+							minute: "2-digit"
+						}
+					).format(d);
+
+		return `${year}-${month}-${day} | ${time}`;
+	},
 }

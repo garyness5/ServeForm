@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 6,
+  "bottomRow": 4,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
   "buttonVariant": "SECONDARY",
@@ -12,34 +12,53 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
+    },
+    {
+      "key": "text"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    },
+    {
+      "key": "isDisabled"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
   "isDefaultClickDisabled": true,
-  "isDisabled": false,
+  "isDisabled": "{{\n!jsProposalData.hasSelectedProposal() ||\nNumber(appsmith.store.current_proposal_id || 0) <= 0\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "o44ycvptxg",
-  "leftColumn": 14,
+  "leftColumn": 49,
   "minWidth": 120,
   "mobileBottomRow": 8,
   "mobileLeftColumn": 0,
   "mobileRightColumn": 14,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
+  "onClick": "{{ jsProposalActions.orderButtonAction() }}",
   "parentColumnSpace": 7.787109375,
-  "parentId": "0l9nb1q6zy",
+  "parentId": "9z10645pxt",
   "parentRowSpace": 10,
   "placement": "CENTER",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 27,
-  "text": "To Quote",
-  "topRow": 2,
+  "rightColumn": 54,
+  "text": "{{ jsProposalActions.orderButtonText() }}",
+  "topRow": 0,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "jib84gf351",
-  "widgetName": "btnPropToQuote"
+  "widgetId": "vrs91rd3kq",
+  "widgetName": "btnPropToOrder"
 }
