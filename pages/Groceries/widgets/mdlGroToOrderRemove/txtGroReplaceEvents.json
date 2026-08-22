@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 59,
   "shouldTruncate": false,
-  "text": "{{ jsGroceriesActions.removeEventsText() }}",
+  "text": "{{ jsGroceriesActions.modalEventsText() }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 6,

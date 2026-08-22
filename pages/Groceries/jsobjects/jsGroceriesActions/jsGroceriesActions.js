@@ -70,7 +70,6 @@ export default {
 		const hasManualValues =
 					queueImpact.has_manual_values === true;
 
-
 		/*
          * If an invalid source has already generated
          * Groceries work and Order contains manual values,
@@ -127,6 +126,19 @@ export default {
 					participationImpact
 		.has_manual_values === true;
 
+		const addedNames =
+					participationImpact.added_event_names || [];
+
+		const removedNames =
+					participationImpact.removed_event_names || [];
+
+		const affectedEvents =
+					[
+						...new Set([
+							...addedNames,
+							...removedNames
+						])
+					];
 
 		/*
          * Adding or removing participating sources
@@ -138,11 +150,6 @@ export default {
 			(addedCount > 0 || removedCount > 0) &&
 			participationHasManualValues
 		) {
-			const affectedEvents =
-						(qryGetGroQueue.data || [])
-			.filter(row => row.to_order === false)
-			.map(row => row.event_name)
-			.filter(Boolean);
 
 			await storeValue(
 				"gro_affected_event_names",
@@ -159,10 +166,8 @@ export default {
 			return false;
 		}
 
-
 		return await this.runUpdateAll(true);
 	},
-
 
 	async runUpdateAll(keepManual = true) {
 
@@ -267,6 +272,9 @@ export default {
 			"gro_pending_update_reason"
 		);
 
+		await removeValue("gro_remove_event_id");
+		await removeValue("gro_remove_proposal_id");
+
 		closeModal(
 			"mdlGroToOrderRemove"
 		);
@@ -286,6 +294,283 @@ export default {
 
 		return (
 			"The following Event(s) will be removed from the Order:\n\n" +
+			list
+		);
+	},
+
+	filteredRows() {
+
+		const rows =
+					qryGetGroQueue.data || [];
+
+		const filter =
+					selGroFilter.selectedOptionValue || "All";
+
+		const search =
+					String(inpGroSearch.text || "")
+		.trim()
+		.toLowerCase();
+
+		return rows.filter(row => {
+
+			const matchesFilter =
+						filter === "All"
+
+			|| (
+				filter === "To Order" &&
+				row.to_order === true
+			)
+
+			|| (
+				filter === "Waiting" &&
+				row.to_order !== true
+			);
+
+			if (!matchesFilter) {
+				return false;
+			}
+
+			if (!search) {
+				return true;
+			}
+
+			const searchable =
+						[
+							row.event_name,
+							row.event_ref,
+							row.proposal_number
+						]
+			.filter(Boolean)
+			.join(" ")
+			.toLowerCase();
+
+			return searchable.includes(search);
+		});
+	},
+
+	async removeSelected() {
+
+		const row =
+					tblGroEvents.selectedRow || null;
+
+		if (!row?.gro_event_id || !row?.proposal_id) {
+			showAlert(
+				"Select an Event to remove.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		await storeValue(
+			"gro_remove_event_id",
+			Number(row.gro_event_id)
+		);
+
+		await storeValue(
+			"gro_remove_proposal_id",
+			Number(row.proposal_id)
+		);
+
+		await storeValue(
+			"gro_affected_event_names",
+			[row.event_name || "Selected Event"]
+		);
+
+		await qryCheckGroRemoveImpact.run();
+
+		const impact =
+					qryCheckGroRemoveImpact.data?.[0] || {};
+
+		/*
+	 * Generated + manual purchasing values:
+	 * user must choose Keep / Remove / Cancel.
+	 */
+		if (
+			impact.has_generated_details === true &&
+			impact.has_manual_values === true
+		) {
+			await storeValue(
+				"gro_pending_update_reason",
+				"remove_event"
+			);
+
+			showModal(
+				"mdlGroToOrderRemove"
+			);
+
+			return false;
+		}
+
+		/*
+	 * Dormant or no manual-value impact:
+	 * remove immediately.
+	 */
+		return await this.confirmRemoveSelected(true);
+	},
+
+
+	async confirmRemoveSelected(keepManual = true) {
+
+		try {
+
+			await storeValue(
+				"gro_keep_manual",
+				keepManual === true
+			);
+
+			const result =
+						await qryUnorderPropFromGroceries.run();
+
+			const row =
+						result?.[0] || null;
+
+			if (!row?.proposal_id) {
+				showAlert(
+					"Event could not be removed from Groceries.",
+					"error"
+				);
+
+				return false;
+			}
+
+			await qryGetGroQueue.run();
+
+			await resetWidget(
+				"tblGroEvents",
+				true
+			);
+
+			await tblGroEvents.setData(
+				jsGroceriesActions.filteredRows()
+			);
+
+			await removeValue("gro_remove_event_id");
+			await removeValue("gro_remove_proposal_id");
+			await removeValue("gro_affected_event_names");
+			await removeValue("gro_pending_update_reason");
+			await removeValue("gro_keep_manual");
+
+			closeModal(
+				"mdlGroToOrderRemove"
+			);
+
+			showAlert(
+				"Event removed from Groceries.",
+				"success"
+			);
+
+			return true;
+
+		} catch (error) {
+
+			showAlert(
+				error?.message ||
+				"Event could not be removed from Groceries.",
+				"error"
+			);
+
+			return false;
+		}
+	},
+
+	modalTitle() {
+
+		const reason =
+					appsmith.store.gro_pending_update_reason || "";
+
+		if (reason === "remove_event") {
+			return "Remove Event from Groceries?";
+		}
+
+		if (reason === "invalid_source") {
+			return "Update Groceries?";
+		}
+
+		/*
+	 * Participation change.
+	 */
+		const impact =
+					qryCheckGroParticipationImpact.data?.[0] || {};
+
+		const added =
+					Number(impact.added_count || 0);
+
+		const removed =
+					Number(impact.removed_count || 0);
+
+		if (added > 0 && removed === 0) {
+			return "Add Events to Order?";
+		}
+
+		if (removed > 0 && added === 0) {
+			return "Remove Events from Order?";
+		}
+
+		return "Update Order?";
+	},
+
+
+	modalEventsText() {
+
+		const reason =
+					appsmith.store.gro_pending_update_reason || "";
+
+		const names =
+					appsmith.store.gro_affected_event_names || [];
+
+		const list =
+					names.length
+		? names
+		.map(name => "• " + name)
+		.join("\n")
+		: "• Selected Event(s)";
+
+
+		if (reason === "remove_event") {
+			return (
+				"The following Event will be removed from Groceries:\n\n" +
+				list
+			);
+		}
+
+
+		if (reason === "invalid_source") {
+			return (
+				"The following Event(s) can no longer remain in the Order:\n\n" +
+				list
+			);
+		}
+
+
+		const impact =
+					qryCheckGroParticipationImpact.data?.[0] || {};
+
+		const added =
+					Number(impact.added_count || 0);
+
+		const removed =
+					Number(impact.removed_count || 0);
+
+
+		if (added > 0 && removed === 0) {
+			return (
+				"The following Event(s) will be added to the Order:\n\n" +
+				list
+			);
+		}
+
+
+		if (removed > 0 && added === 0) {
+			return (
+				"The following Event(s) will be removed from the Order:\n\n" +
+				list
+			);
+		}
+
+
+		return (
+			"The following Event changes will rebuild the Order:\n\n" +
 			list
 		);
 	},

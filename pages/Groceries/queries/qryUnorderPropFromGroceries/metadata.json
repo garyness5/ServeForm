@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_672d065e-ef44-42ae-9288-1b9f02718e04",
-  "id": "Groceries_qryCheckGroParticipationImpact",
+  "gitSyncId": "6a0a1bde3214f344228346e7_77314fb3-3bab-4097-bf1d-d17ce8f8b185",
+  "id": "Groceries_qryUnorderPropFromGroceries",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.check_gro_participation_impact(\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t1\n);",
+      "body": "select *\nfrom public.unorder_proposal_from_groceries(\n    {{ Number(appsmith.store.gro_remove_proposal_id || 0) }},\n    '{{ appsmith.store.current_client_id }}'::uuid,\n    {{ appsmith.store.gro_keep_manual === true }},\n    1\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,9 +27,9 @@
         "key": "body"
       }
     ],
-    "name": "qryCheckGroParticipationImpact",
+    "name": "qryUnorderPropFromGroceries",
     "pageId": "Groceries",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }

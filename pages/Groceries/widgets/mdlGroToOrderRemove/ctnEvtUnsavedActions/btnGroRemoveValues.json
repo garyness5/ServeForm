@@ -40,7 +40,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsGroceriesActions.confirmUpdate(false) }}",
+  "onClick": "{{\nappsmith.store.gro_pending_update_reason === \"remove_event\"\n? jsGroceriesActions.confirmRemoveSelected(false)\n: jsGroceriesActions.confirmUpdate(false)\n}}",
   "originalBottomRow": 50,
   "originalTopRow": 46,
   "parentId": "7mnr3bh9ga",

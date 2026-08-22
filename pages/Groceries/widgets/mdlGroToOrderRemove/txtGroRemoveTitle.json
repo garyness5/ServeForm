@@ -11,6 +11,9 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -38,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 53,
   "shouldTruncate": false,
-  "text": "Remove Events from Order?",
+  "text": "{{ jsGroceriesActions.modalTitle() }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,
