@@ -1,0 +1,5 @@
+select *
+from public.get_helper_item_impact(
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	{{ Number(tblListsItems.selectedRow?.id || 0) }}
+);

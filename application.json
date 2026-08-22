@@ -10,6 +10,30 @@
   "icon": "bicycle",
   "pages": [
     {
+      "id": "Lists",
+      "isDefault": false
+    },
+    {
+      "id": "Ingredients",
+      "isDefault": true
+    },
+    {
+      "id": "RecipeList",
+      "isDefault": false
+    },
+    {
+      "id": "Recipe",
+      "isDefault": false
+    },
+    {
+      "id": "DishList",
+      "isDefault": false
+    },
+    {
+      "id": "Dish",
+      "isDefault": false
+    },
+    {
       "id": "MenuList",
       "isDefault": false
     },
@@ -34,38 +58,6 @@
       "isDefault": false
     },
     {
-      "id": "Ingredients",
-      "isDefault": true
-    },
-    {
-      "id": "RecipeList",
-      "isDefault": false
-    },
-    {
-      "id": "Recipe",
-      "isDefault": false
-    },
-    {
-      "id": "DishList",
-      "isDefault": false
-    },
-    {
-      "id": "Dish",
-      "isDefault": false
-    },
-    {
-      "id": "ContactList",
-      "isDefault": false
-    },
-    {
-      "id": "CustomerList",
-      "isDefault": false
-    },
-    {
-      "id": "VenueList",
-      "isDefault": false
-    },
-    {
       "id": "Groceries",
       "isDefault": false
     },
@@ -82,7 +74,15 @@
       "isDefault": false
     },
     {
-      "id": "Settings",
+      "id": "CustomerList",
+      "isDefault": false
+    },
+    {
+      "id": "VenueList",
+      "isDefault": false
+    },
+    {
+      "id": "ContactList",
       "isDefault": false
     }
   ],
