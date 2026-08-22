@@ -29,7 +29,7 @@
     ],
     "name": "qryGetEvtItemById",
     "pageId": "Events",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": true
   }
 }
