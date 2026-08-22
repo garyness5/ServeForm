@@ -36,7 +36,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 13,
   "needsErrorInfo": false,
-  "onClick": "{{\n  cleanupBlankHelperItems.run()\n    .then(() => qryGetPicklistItems.run())\n    .then(() => showAlert('Blank list items cleaned up', 'success'))\n}}",
+  "onClick": "{{ jsPicklistActions.cleanupBlankRows() }}",
   "parentColumnSpace": 11.005859375,
   "parentId": "wv7i1vgy7u",
   "parentRowSpace": 10,

@@ -2,9 +2,9 @@
   "accentColor": "{{appsmith.theme.colors.primaryColor}}",
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 21,
+  "bottomRow": 22,
   "boxShadow": "none",
-  "defaultOptionValue": "",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  \"\" ))(selListsType.options, selListsType.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -14,49 +14,44 @@
     },
     {
       "key": "sourceData"
+    },
+    {
+      "key": "defaultOptionValue"
     }
   ],
   "dynamicHeight": "FIXED",
   "dynamicPropertyPathList": [
     {
       "key": "sourceData"
-    },
-    {
-      "key": "onOptionChange"
     }
   ],
-  "dynamicTriggerPathList": [
-    {
-      "key": "onOptionChange"
-    }
-  ],
+  "dynamicTriggerPathList": [],
   "isDisabled": false,
   "isFilterable": true,
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,
-  "key": "6b6bvlnmmx",
+  "key": "cmtdb7uwp7",
   "labelAlignment": "left",
   "labelPosition": "Top",
   "labelStyle": "BOLD",
-  "labelText": "Select list",
+  "labelText": "Select List",
   "labelTextSize": "1rem",
   "labelWidth": 5,
   "leftColumn": 1,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
-  "mobileBottomRow": 12,
-  "mobileLeftColumn": 4,
-  "mobileRightColumn": 24,
-  "mobileTopRow": 5,
+  "mobileBottomRow": 22,
+  "mobileLeftColumn": 1,
+  "mobileRightColumn": 21,
+  "mobileTopRow": 15,
   "needsErrorInfo": false,
-  "onOptionChange": "{{qryGetPicklistItems.run()}}",
   "optionLabel": "label",
   "optionValue": "value",
-  "originalBottomRow": 21,
+  "originalBottomRow": 22,
   "originalTopRow": 15,
-  "parentColumnSpace": 11.005859375,
+  "parentColumnSpace": 8.867919921875,
   "parentId": "5itqvw0350",
   "parentRowSpace": 10,
   "placeholderText": "Select option",
@@ -68,6 +63,6 @@
   "topRow": 15,
   "type": "SELECT_WIDGET",
   "version": 1,
-  "widgetId": "162kesxs0m",
+  "widgetId": "ap25re0mqm",
   "widgetName": "selListsType"
 }

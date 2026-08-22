@@ -43,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  (() => {\n\n    const norm = s =>\n      (s || \"\")\n        .trim()\n        .normalize(\"NFD\")\n        .replace(/[\\u0300-\\u036f]/g, \"\")\n        .toLowerCase();\n\n    const newName = inpPLAddName.text;\n\n    const exists = qryGetPicklistItems.data.some(\n      item =>\n        item.name &&\n        norm(item.name) === norm(newName)\n    );\n\n    if (exists) {\n\n      showAlert('Name already exists in this list', 'warning');\n\n    } else {\n\n      addPicklistItems.run()\n        .then(() => qryGetPicklistItems.run())\n        .then(() => resetWidget('inpPLAddName'))\n        .then(() => closeModal('mdlPLAdd'));\n\n    }\n\n  })()\n}}",
+  "onClick": "{{ jsPicklistActions.saveAdd() }}",
   "parentId": "cezvj11cz7",
   "placement": "CENTER",
   "recaptchaType": "V3",

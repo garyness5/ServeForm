@@ -32,7 +32,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\n  !inpPLRenameName.text ||\n  !inpPLRenameName.text.trim()\n}}",
+  "isDisabled": "{{ !inpPLRenameName.text || !inpPLRenameName.text.trim() }}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -43,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  (() => {\n\n    const norm = s =>\n      (s || \"\")\n        .trim()\n        .normalize(\"NFD\")\n        .replace(/[\\u0300-\\u036f]/g, \"\")\n        .toLowerCase();\n\n    const newName = inpPLRenameName.text;\n    const oldId = tblListsItems.selectedRow.id;\n\n    const exists = qryGetPicklistItems.data.some(\n      item =>\n        item.id !== oldId &&\n        item.name &&\n        norm(item.name) === norm(newName)\n    );\n\n    if (exists) {\n      showAlert('Name already exists in this list', 'warning');\n    } else {\n      renamePicklistItem.run()\n        .then(() => qryGetPicklistItems.run())\n        .then(() => closeModal('mdlPLRename'))\n        .then(() => showAlert('Item renamed', 'success'));\n    }\n\n  })()\n}}",
+  "onClick": "{{ jsPicklistActions.saveRename() }}",
   "originalBottomRow": 25,
   "originalTopRow": 21,
   "parentId": "cl0dp922vr",

@@ -4,7 +4,7 @@
   "animateLoading": true,
   "bottomRow": 37,
   "boxShadow": "none",
-  "defaultOptionValue": "{{\n  getHelperLists.data.find(\n    x => String(x.id) === String(selListsType.selectedOptionValue)\n  )?.list_code === \"diet_tag\"\n    ? \"delete\"\n    : \"replace\"\n}}",
+  "defaultOptionValue": "{{ jsPicklistRules.replaceActionDefault() }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -50,10 +50,10 @@
   "mobileRightColumn": 24,
   "mobileTopRow": 14,
   "needsErrorInfo": false,
-  "onSelectionChange": "{{\n  getHelperLists.data.find(x => String(x.id) === String(selListsType.selectedOptionValue))?.behavior === \"reference\"\n  && radPLReplaceDeleteAction.selectedOptionValue === \"replace\"\n    ? (\n        resetWidget(\"radPLReplaceDeleteAction\"),\n        showAlert(\"Dietary tags cannot be replaced. They can only be deleted.\", \"warning\")\n      )\n    : null\n}}",
-  "options": "{{\n  selListsType.selectedOption?.list_code === \"diet_tag\"\n    ? [\n        { label: \"Delete\", value: \"delete\" }\n      ]\n    : [\n        { label: \"Replace\", value: \"replace\" },\n        { label: \"Delete\", value: \"delete\" }\n      ]\n}}",
-  "originalBottomRow": 35,
-  "originalTopRow": 29,
+  "onSelectionChange": "{{ jsPicklistActions.onReplaceDeleteActionChange() }}",
+  "options": "{{ jsPicklistRules.replaceActionOptions() }}",
+  "originalBottomRow": 37,
+  "originalTopRow": 31,
   "parentColumnSpace": 6.9375,
   "parentId": "7hgaofawbt",
   "parentRowSpace": 10,

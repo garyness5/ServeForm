@@ -14,6 +14,11 @@
       "key": "buttonColor"
     }
   ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
   "dynamicTriggerPathList": [
     {
       "key": "onClick"
@@ -31,7 +36,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 13,
   "needsErrorInfo": false,
-  "onClick": "{{showModal(mdlPLAdd.name);}}",
+  "onClick": "{{ jsPicklistActions.openAdd() }}",
   "parentColumnSpace": 11.005859375,
   "parentId": "wv7i1vgy7u",
   "parentRowSpace": 10,

@@ -27,6 +27,9 @@
     },
     {
       "key": "isDisabled"
+    },
+    {
+      "key": "onClick"
     }
   ],
   "dynamicTriggerPathList": [
@@ -35,9 +38,9 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\n  getHelperLists.data.find(\n    x => String(x.id) === String(selListsType.selectedOptionValue)\n  )?.list_code === \"diet_tag\"\n  &&\n  String(tblListsItems.selectedRow?.is_system) === \"true\"\n}}",
+  "isDisabled": "{{ !jsPicklistRules.canReplaceDeleteSelected() }}",
   "isLoading": false,
-  "isVisible": "{{\n  !!tblListsItems.selectedRow\n}}",
+  "isVisible": "{{ jsPicklistRules.hasSelection() }}",
   "key": "ve73w085th",
   "leftColumn": 23,
   "minWidth": 120,
@@ -46,7 +49,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 13,
   "needsErrorInfo": false,
-  "onClick": "{{showModal(mdlPLReplace.name);}}",
+  "onClick": "{{ jsPicklistActions.openReplaceDelete() }}",
   "originalBottomRow": 13,
   "originalTopRow": 9,
   "parentColumnSpace": 11.005859375,

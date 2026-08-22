@@ -29,7 +29,7 @@
     ],
     "name": "qryGetListItemImpact",
     "pageId": "Lists",
-    "runBehaviour": "MANUAL",
+    "runBehaviour": "AUTOMATIC",
     "userSetOnLoad": false
   }
 }

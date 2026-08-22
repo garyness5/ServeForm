@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 41,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  \"\"\n))(selPLReplaceWith.options, selPLReplaceWith.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  \"\" ))(selPLReplaceWith.options, selPLReplaceWith.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -32,7 +32,7 @@
     }
   ],
   "dynamicTriggerPathList": [],
-  "isDisabled": "{{\n  (\n    getHelperLists.data.find(\n      x => String(x.id) === String(selListsType.selectedOptionValue)\n    )?.list_code || \"\"\n  ) === \"diet_tag\"\n}}",
+  "isDisabled": "{{ jsPicklistRules.replaceWithDisabled() }}",
   "isFilterable": true,
   "isLoading": false,
   "isRequired": false,
@@ -53,10 +53,10 @@
   "mobileRightColumn": 25,
   "mobileTopRow": 14,
   "needsErrorInfo": false,
-  "optionLabel": "name",
-  "optionValue": "id",
-  "originalBottomRow": 39,
-  "originalTopRow": 35,
+  "optionLabel": "label",
+  "optionValue": "value",
+  "originalBottomRow": 41,
+  "originalTopRow": 37,
   "parentColumnSpace": 6.9375,
   "parentId": "7hgaofawbt",
   "parentRowSpace": 10,
@@ -65,7 +65,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 61,
   "serverSideFiltering": false,
-  "sourceData": "{{\n  qryGetPicklistItems.data.filter(\n    item => item.id !== tblListsItems.selectedRow.id\n  )\n}}",
+  "sourceData": "{{ jsPicklistRules.replacementOptions() }}",
   "topRow": 37,
   "type": "SELECT_WIDGET",
   "version": 1,
