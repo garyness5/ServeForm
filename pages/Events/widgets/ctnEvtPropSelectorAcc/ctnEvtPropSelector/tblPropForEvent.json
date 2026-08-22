@@ -50,7 +50,7 @@
     "is_new",
     "source_proposal_id"
   ],
-  "columnUpdatedAt": 1787406049370,
+  "columnUpdatedAt": 1787406367253,
   "columnWidthMap": {
     "active": 103,
     "customColumn1": 60,
@@ -671,7 +671,7 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "text",
+      "columnType": "number",
       "computedValue": "{{(() => { const tableData = tblPropForEvent.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"temp_proposal_no\"])) : temp_proposal_no })()}}",
       "currencyCode": "USD",
       "decimals": 0,
