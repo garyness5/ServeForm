@@ -37,7 +37,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEvtAddressBook.closeVenueAdd() }}",
+  "onClick": "{{ jsEventAddressBook.closeVenueAdd() }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "ffl7e56imc",

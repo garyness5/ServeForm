@@ -49,7 +49,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEvtAddressBook.saveContact() }}",
+  "onClick": "{{ jsEventAddressBook.saveContact() }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "h6j432pay7",

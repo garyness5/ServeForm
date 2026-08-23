@@ -47,7 +47,7 @@
   "mobileRightColumn": 36,
   "mobileTopRow": 23,
   "needsErrorInfo": false,
-  "onClick": "{{\njsEvtAddressBook.openContactModal(\n\t\"venue\"\n)\n}}",
+  "onClick": "{{\njsEventAddressBook.openContactModal(\n\t\"venue\"\n)\n}}",
   "originalBottomRow": 21,
   "originalTopRow": 17,
   "parentColumnSpace": 6.021484375,

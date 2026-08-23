@@ -50,7 +50,7 @@
   "mobileRightColumn": 16,
   "mobileTopRow": 15,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEvtAddressBook.toggleContactAdd() }}",
+  "onClick": "{{ jsEventAddressBook.toggleContactAdd() }}",
   "originalBottomRow": 18,
   "originalTopRow": 14,
   "parentColumnSpace": 17.9375,

@@ -65,7 +65,7 @@
     "saved_unit_id",
     "saved_unit_abbreviation"
   ],
-  "columnUpdatedAt": 1786659958733,
+  "columnUpdatedAt": 1787510260515,
   "columnWidthMap": {
     "active": 103,
     "allergen_names": 124,
@@ -535,7 +535,7 @@
       "alias": "component_name",
       "allowCellWrapping": true,
       "allowSameOptionsInNewRow": true,
-      "cellBackground": "{{(() => { const tableData = tblMnuComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  currentRow.child_deleted === true || currentRow.component_status === \"Deleted\"\n    ? \"#FFE6E6\"\n    : currentRow.child_active === false || currentRow.component_status === \"Inactive\"\n      ? \"#FFF3CD\"\n      : \"\"\n)) : \n  currentRow.child_deleted === true || currentRow.component_status === \"Deleted\"\n    ? \"#FFE6E6\"\n    : currentRow.child_active === false || currentRow.component_status === \"Inactive\"\n      ? \"#FFF3CD\"\n      : \"\"\n })()}}",
+      "cellBackground": "{{(() => { const tableData = tblMnuComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\ncurrentRow.child_deleted === true || currentRow.component_status === \"Deleted\"\n? \"#FFE6E6\"\n: currentRow.child_active === false || currentRow.component_status === \"Inactive\"\n? \"#FFF3CD\"\n: \"\"\n)) : \ncurrentRow.child_deleted === true || currentRow.component_status === \"Deleted\"\n? \"#FFE6E6\"\n: currentRow.child_active === false || currentRow.component_status === \"Inactive\"\n? \"#FFF3CD\"\n: \"\"\n })()}}",
       "columnType": "select",
       "computedValue": "{{(() => { const tableData = tblMnuComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.component_name )) :  currentRow.component_name  })()}}",
       "currencyCode": "USD",

@@ -49,6 +49,7 @@
   "labelPosition": "Left",
   "labelStyle": "BOLD",
   "labelText": "Format",
+  "labelTextColor": "",
   "labelTextSize": "1rem",
   "labelWidth": "16",
   "leftColumn": 0,

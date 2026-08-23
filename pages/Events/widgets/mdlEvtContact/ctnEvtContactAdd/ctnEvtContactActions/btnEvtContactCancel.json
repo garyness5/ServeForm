@@ -37,7 +37,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEvtAddressBook.closeContactModal() }}",
+  "onClick": "{{ jsEventAddressBook.closeContactModal() }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "h6j432pay7",

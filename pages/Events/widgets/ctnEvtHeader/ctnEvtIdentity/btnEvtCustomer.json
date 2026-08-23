@@ -47,7 +47,7 @@
   "mobileRightColumn": 36,
   "mobileTopRow": 23,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEvtAddressBook.openCustomerAdd() }}",
+  "onClick": "{{ jsEventAddressBook.openCustomerAdd() }}",
   "originalBottomRow": 9,
   "originalTopRow": 5,
   "parentColumnSpace": 6.021484375,

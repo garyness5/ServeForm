@@ -67,7 +67,7 @@
   "mobileTopRow": 15,
   "needsErrorInfo": false,
   "onDropdownOpen": "{{ qryGetEvtContacts.run() }}",
-  "onOptionChange": "{{\njsEvtAddressBook.captureContactSelection(\n\t\"customer\"\n)\n}}",
+  "onOptionChange": "{{\njsEventAddressBook.captureContactSelection(\n\t\"customer\"\n)\n}}",
   "optionLabel": "label",
   "optionValue": "value",
   "originalBottomRow": 13,

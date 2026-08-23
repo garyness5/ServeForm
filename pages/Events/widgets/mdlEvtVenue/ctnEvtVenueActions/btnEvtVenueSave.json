@@ -49,7 +49,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEvtAddressBook.saveVenue() }}",
+  "onClick": "{{ jsEventAddressBook.saveVenue() }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "ffl7e56imc",
