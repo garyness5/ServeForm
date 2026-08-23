@@ -32,6 +32,10 @@ export default {
 		return Number(this.impact().menu_count || 0);
 	},
 
+	eventCount() {
+		return Number(this.impact().event_count || 0);
+	},
+
 	totalImpactCount() {
 		return Number(this.impact().total_count || 0);
 	},

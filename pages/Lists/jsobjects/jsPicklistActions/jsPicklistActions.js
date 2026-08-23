@@ -107,7 +107,7 @@ export default {
 			return false;
 		}
 
-		await renamePicklistItem.run();
+		await qryRenameListItem.run();
 
 		await qryGetPicklistItems.run();
 

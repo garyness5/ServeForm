@@ -71,7 +71,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 62,
   "serverSideFiltering": false,
-  "sourceData": "{{\n[\n\t{ label: \"Buffet\", value: \"Buffet\" },\n\t{ label: \"Canapés\", value: \"Canapés\" },\n\t{ label: \"Sit-down\", value: \"Sit-down\" },\n\t{ label: \"Family Style\", value: \"Family Style\" },\n\t{ label: \"Other\", value: \"Other\" }\n]\n}}",
+  "sourceData": "{{ qryGetEvtFormats.data || [] }}",
   "topRow": 9,
   "type": "SELECT_WIDGET",
   "version": 1,

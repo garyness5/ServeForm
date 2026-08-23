@@ -5,8 +5,6 @@ export default {
 			"1315144c-801a-4371-aae4-52f2a78873d1"
 		);
 
-		// rest of your existing load() continues here...
-
 		const openMode =
 					String(
 						appsmith.store.event_open_mode || ""
@@ -33,8 +31,14 @@ export default {
 		await jsEventWorkspace.initialize();
 
 		/*
-		* Supporting queries load automatically.
-		*/
+		 * Event Formats depends on the current client
+		 * and is intentionally Manual.
+		 */
+		await qryGetEvtFormats.run();
+
+		/*
+		 * Supporting queries load automatically.
+		 */
 
 		await storeValue(
 			"accEvtCustomerNotes",
@@ -47,17 +51,15 @@ export default {
 		);
 
 		/*
-
-
- * ==================================================
- * NEW EVENT HANDOFF
- *
- * EventList may supply the new Event name.
- * A genuinely new Event begins with one
- * temporary selected Proposal so Menu entry
- * is immediately available.
- * ==================================================
- */
+		 * ==================================================
+		 * NEW EVENT HANDOFF
+		 *
+		 * EventList may supply the new Event name.
+		 * A genuinely new Event begins with one
+		 * temporary selected Proposal so Menu entry
+		 * is immediately available.
+		 * ==================================================
+		 */
 		if (
 			Number(
 				appsmith.store.current_event_id || 0
