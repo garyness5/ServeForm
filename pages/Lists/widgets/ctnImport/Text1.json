@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 57,
+  "bottomRow": 53,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -33,7 +33,7 @@
   "mobileRightColumn": 17,
   "mobileTopRow": 8,
   "needsErrorInfo": false,
-  "originalBottomRow": 103,
+  "originalBottomRow": 53,
   "originalTopRow": 44,
   "overflow": "NONE",
   "parentColumnSpace": 8.867919921875,
@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 47,
   "shouldTruncate": false,
-  "text": "{{\nJSON.stringify(\n\tjsPicklistRules.replacementOptions(),\n\tnull,\n\t2\n)\n}}",
+  "text": "{{\nJSON.stringify({\n\tlabel: selListsType.selectedOptionLabel,\n\tvalue: selListsType.selectedOptionValue,\n\toption: selListsType.selectedOption\n}, null, 2)\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 44,

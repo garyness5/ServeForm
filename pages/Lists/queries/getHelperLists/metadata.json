@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  id,\n  list_name,\n  list_code,\n  domain,\n  behavior\nfrom helper_lists\nwhere active = true\n  and list_code in (\n    'ingredient_category',\n    'recipe_category',\n    'dish_category',\n    'menu_category',\n    'supplier',\n    'packaging',\n    'diet_tag',\n    'serve_form'\n  )\norder by lower(list_name);",
+      "body": "select\n  id,\n  list_name,\n  list_code,\n  domain,\n  behavior\nfrom helper_lists\nwhere active = true\n  and list_code in (\n\t\t'ingredient_category',\n\t\t'recipe_category',\n\t\t'dish_category',\n\t\t'menu_category',\n\t\t'supplier',\n\t\t'packaging',\n\t\t'diet_tag',\n\t\t'serve_form',\n\t\t'service_style'\n\t)\norder by lower(list_name);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
