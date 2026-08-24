@@ -15,16 +15,8 @@
     }
   ],
   "dynamicHeight": "FIXED",
-  "dynamicPropertyPathList": [
-    {
-      "key": "onTextChanged"
-    }
-  ],
-  "dynamicTriggerPathList": [
-    {
-      "key": "onTextChanged"
-    }
-  ],
+  "dynamicPropertyPathList": [],
+  "dynamicTriggerPathList": [],
   "iconAlign": "left",
   "iconName": "search",
   "inputType": "TEXT",
@@ -48,7 +40,7 @@
   "mobileRightColumn": 49,
   "mobileTopRow": 9,
   "needsErrorInfo": false,
-  "onTextChanged": "{{ qryGetEvtList.run() }}",
+  "onTextChanged": "",
   "parentColumnSpace": 17.625,
   "parentId": "tuqb8ri69l",
   "parentRowSpace": 10,

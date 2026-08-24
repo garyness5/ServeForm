@@ -64,7 +64,7 @@
     "created_at",
     "updated_at"
   ],
-  "columnUpdatedAt": 1787535228956,
+  "columnUpdatedAt": 1787575187360,
   "columnWidthMap": {
     "active": 60,
     "allergen_names": 60,
@@ -78,7 +78,7 @@
     "line_cost": 60,
     "qty": 60,
     "unit_abbreviation": 64,
-    "wastage_percent": 97
+    "wastage_percent": 99
   },
   "customIsLoading": false,
   "customIsLoadingValue": "",
@@ -858,7 +858,7 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( recCompTable.lineCost(currentRow) == null ? \"\" : fmt.currency(recCompTable.lineCost(currentRow)) )) :  recCompTable.lineCost(currentRow) == null ? \"\" : fmt.currency(recCompTable.lineCost(currentRow))  })()}}",
+      "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( recCompTable.lineCost(currentRow) == null ? \"\" : jsFmt.currency(recCompTable.lineCost(currentRow)) )) :  recCompTable.lineCost(currentRow) == null ? \"\" : jsFmt.currency(recCompTable.lineCost(currentRow))  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,

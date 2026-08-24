@@ -27,7 +27,7 @@ export default {
 
 		await qryGetIngAllergenIds.run();
 		await qryGetIngDietTagIds.run();
-		await getIngredientImpactCount.run();
+		await qryGetIngredientImpactCount.run();
 
 		resetWidget("mdlAddIng", true);
 		showModal("mdlAddIng");
@@ -142,15 +142,25 @@ export default {
 	},
 
 	async openDeleteConfirm() {
-		const row = tblIngList.selectedRow;
+		const id =
+					Number(appsmith.store.IngForm_edit_id || 0);
 
-		if (!row || !row.id) {
-			showAlert("Select an ingredient to delete.", "warning");
-			return;
+		const row =
+					appsmith.store.IngForm_edit_row || {};
+
+		if (!id) {
+			showAlert(
+				"This Ingredient has not been saved yet.",
+				"warning"
+			);
+			return false;
 		}
 
-		await getIngredientImpactCount.run();
+		await qryGetIngredientImpactCount.run();
+
 		showModal("mdlDelConfirmIng");
+
+		return true;
 	},
 
 	async confirmDelete() {
@@ -173,22 +183,19 @@ export default {
 	},
 
 	async openDuplicateFromIngredients() {
-		const row = tblIngList.selectedRow;
+		const row =
+					appsmith.store.IngForm_edit_row || {};
 
-		if (!row?.id) {
+		const sourceId =
+					Number(appsmith.store.IngForm_edit_id || 0);
+
+		if (!sourceId || !row?.name) {
 			showAlert(
-				"Select an ingredient to duplicate.",
+				"This Ingredient has not been saved yet.",
 				"warning"
 			);
 			return false;
 		}
-
-		// Load source-owned relationship data before
-		// removing the source Ingredient identity.
-		await storeValue(
-			"IngForm_edit_id",
-			row.id
-		);
 
 		const allergenRows =
 					await qryGetIngAllergenIds.run();
@@ -204,9 +211,6 @@ export default {
 					(dietTagRows || [])
 		.map(r => String(r.helper_list_item_id));
 
-
-		// Generate the next available copy name from
-		// currently published Ingredients.
 		const allNames =
 					(qryGetIngredients.data || [])
 		.map(r => String(r.name || ""));
@@ -245,8 +249,6 @@ export default {
 		? `${row.name} - Copy`
 		: `${row.name} - Copy ${nextNumber}`;
 
-
-		// Duplicate is a new unsaved Ingredient workspace.
 		await storeValue(
 			"IngForm_context",
 			this.CONTEXT_ADD_INGREDIENTS
@@ -286,10 +288,6 @@ export default {
 			true
 		);
 
-		showModal(
-			"mdlAddIng"
-		);
-
 		return true;
 	},
 
@@ -317,5 +315,130 @@ export default {
 		}
 
 		return [];
+	},
+
+	yieldUnitText() {
+		return selIngPurchaseUnit.selectedOptionLabel || "";
+	},
+
+	netYieldText() {
+		const qty = Number(inpIngQuantity.text || 0);
+		const wastage = Number(inpIngWastage.text || 0);
+
+		if (!qty) {
+			return "Net yield: ";
+		}
+
+		const netYield =
+					qty * (1 - wastage / 100);
+
+		const value =
+					jsFmt.number(netYield);
+
+		const unit =
+					this.yieldUnitText();
+
+		return unit
+			? `Net yield:    ${value} ${unit}`
+		: `Net yield:    ${value}`;
+	},
+
+	pricePerUnitText() {
+		const qty =
+					Number(inpIngQuantity.text || 0);
+
+		const cost =
+					Number(inpIngPurchaseCost.text || 0);
+
+		const wastage =
+					Number(inpIngWastage.text || 0);
+
+		if (!qty || !cost) {
+			return "Cost / unit ";
+		}
+
+		const netYield =
+					qty * (1 - wastage / 100);
+
+		if (!netYield || netYield <= 0) {
+			return "Cost / unit ";
+		}
+
+		const price =
+					cost / netYield;
+
+		const formattedPrice =
+					jsFmt.currency(price);
+
+		const unit =
+					this.yieldUnitText();
+
+		return unit
+			? `Cost/unit:    $${formattedPrice} / ${unit}`
+		: `Cost/unit   $${formattedPrice}`;
+	},
+
+	purchaseUnitOptions() {
+		return (qryGetUnits.data || [])
+			.map(u => ({
+			label: u.abbreviation,
+			value: String(u.id)
+		}));
+	},
+
+	cancel() {
+		closeModal("mdlAddIng");
+		return true;
+	},
+
+	async duplicateFromList() {
+		const row = tblIngList.selectedRow;
+
+		if (!row?.id) {
+			showAlert(
+				"Select an ingredient to duplicate.",
+				"warning"
+			);
+			return false;
+		}
+
+		await storeValue(
+			"IngForm_context",
+			this.CONTEXT_EDIT_INGREDIENTS
+		);
+
+		await storeValue(
+			"IngForm_mode",
+			"edit"
+		);
+
+		await storeValue(
+			"IngForm_edit_id",
+			row.id
+		);
+
+		await storeValue(
+			"IngForm_edit_row",
+			row
+		);
+
+		await qryGetIngAllergenIds.run();
+		await qryGetIngDietTagIds.run();
+
+		const ok =
+					await this.openDuplicateFromIngredients();
+
+		if (ok) {
+			resetWidget(
+				"mdlAddIng",
+				true
+			);
+
+			showModal(
+				"mdlAddIng"
+			);
+		}
+
+		return ok;
 	},
 }

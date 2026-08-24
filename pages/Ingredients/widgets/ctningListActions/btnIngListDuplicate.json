@@ -37,7 +37,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ jsIngForm.openDuplicateFromIngredients() }}",
+  "onClick": "{{ jsIngForm.duplicateFromList() }}",
   "originalBottomRow": 14,
   "originalTopRow": 10,
   "parentColumnSpace": 10.609375,
