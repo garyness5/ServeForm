@@ -43,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  !inpIngRenameTo.text?.trim()\n\n    ? showAlert(\"Ingredient name is required.\", \"warning\")\n\n    : checkIngRenameToExists.run(() => {\n\n        if (checkIngRenameToExists.data?.[0]?.match_count > 0) {\n\n          showAlert(\"Ingredient name already exists. Choose another name.\", \"warning\");\n\n        } else {\n\n          renameIngredient.run(() => {\n            getIngredients.run();\n            closeModal(\"mdlRenameIng\");\n            showAlert(\"Ingredient renamed\", \"success\");\n          });\n\n        }\n\n      })\n}}",
+  "onClick": "{{\n  !inpIngRenameTo.text?.trim()\n\n    ? showAlert(\"Ingredient name is required.\", \"warning\")\n\n    : checkIngRenameToExists.run(() => {\n\n        if (checkIngRenameToExists.data?.[0]?.match_count > 0) {\n\n          showAlert(\"Ingredient name already exists. Choose another name.\", \"warning\");\n\n        } else {\n\n          renameIngredient.run(() => {\n            qryGetIngredients.run();\n            closeModal(\"mdlRenameIng\");\n            showAlert(\"Ingredient renamed\", \"success\");\n          });\n\n        }\n\n      })\n}}",
   "originalBottomRow": 25,
   "originalTopRow": 21,
   "parentId": "0vgb38fbeh",

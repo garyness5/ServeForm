@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ IngForm.confirmDelete() }}",
+  "onClick": "{{ jsIngForm.confirmDelete() }}",
   "originalBottomRow": 30,
   "originalTopRow": 26,
   "parentId": "6pp4tm9qzz",

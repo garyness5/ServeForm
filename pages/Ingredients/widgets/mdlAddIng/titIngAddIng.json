@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 6,
+  "bottomRow": 5,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -20,12 +20,12 @@
   "dynamicPropertyPathList": [],
   "dynamicTriggerPathList": [],
   "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
-  "fontSize": "1.875rem",
+  "fontSize": "1rem",
   "fontStyle": "BOLD",
   "isLoading": false,
   "isVisible": true,
   "key": "rvyiyncwqf",
-  "leftColumn": 2,
+  "leftColumn": 1,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
@@ -42,7 +42,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 50,
   "shouldTruncate": false,
-  "text": "{{\n  appsmith.store.IngForm_mode === \"edit\"\n    ? \"Edit \" + (IngForm.editRow().name || \"Ingredient\")\n    : appsmith.store.IngForm_mode === \"duplicate\"\n      ? \"Duplicate \" + (tblIngList.selectedRow?.name || \"Ingredient\")\n      : \"Add Ingredient\"\n}}",
+  "text": "{{\n  appsmith.store.IngForm_mode === \"edit\"\n    ? \"Edit \" + (jsIngForm.editRow().name || \"Ingredient\")\n    : appsmith.store.IngForm_mode === \"duplicate\"\n      ? \"Duplicate \" + (tblIngList.selectedRow?.name || \"Ingredient\")\n      : \"Add Ingredient\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,

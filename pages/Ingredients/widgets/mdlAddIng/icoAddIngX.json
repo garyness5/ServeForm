@@ -36,7 +36,7 @@
   "mobileRightColumn": 64,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onClick": "{{ IngForm.cancel() }}",
+  "onClick": "{{ jsIngForm.cancel() }}",
   "parentId": "n8150rk8r5",
   "renderMode": "CANVAS",
   "responsiveBehavior": "hug",

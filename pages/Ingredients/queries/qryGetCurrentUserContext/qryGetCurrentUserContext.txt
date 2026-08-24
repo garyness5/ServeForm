@@ -1,0 +1,11 @@
+select
+    au.client_id,
+    c.client_name,
+    au.email
+from public.app_users au
+join public.clients c
+    on c.id = au.client_id
+where lower(trim(au.email)) =
+      lower(trim('{{ appsmith.user.email }}'))
+  and au.active = true
+limit 1;
