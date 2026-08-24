@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 24,
   "boxShadow": "none",
-  "defaultText": "{{ jsIngForm.isEdit() ? jsIngForm.editRow().wastage_percent : \"\" }}",
+  "defaultText": "{{\njsIngForm.isEdit()\n? String(jsIngForm.editRow().wastage_percent ?? \"\")\n: \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

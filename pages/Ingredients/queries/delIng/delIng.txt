@@ -1,8 +1,0 @@
-update public.ing_items
-set
-  active = false,
-  deleted = true,
-  updated_at = now()
-where id = {{ Number(tblIngList.selectedRow.id) }}
-  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
-returning *;

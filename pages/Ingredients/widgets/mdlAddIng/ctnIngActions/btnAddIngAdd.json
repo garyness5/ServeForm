@@ -43,7 +43,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ jsIngForm.openDeleteConfirm() }}",
+  "onClick": "{{ jsIngForm.requestAdd() }}",
   "parentColumnSpace": 10.609375,
   "parentId": "x4fcnqb4yv",
   "parentRowSpace": 10,

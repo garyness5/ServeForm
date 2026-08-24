@@ -41,12 +41,12 @@
     "wastage_percent",
     "yield_qty",
     "yield_unit",
-    "allergen_names",
-    "diet_tag_names",
+    "active",
     "item_code",
     "supplier_name",
     "packaging_name",
-    "active",
+    "allergen_names",
+    "diet_tag_names",
     "price_per_unit",
     "cost_per_base_unit",
     "notes",
@@ -67,7 +67,7 @@
     "deleted",
     "created_at"
   ],
-  "columnUpdatedAt": 1787574241342,
+  "columnUpdatedAt": 1787583817835,
   "columnWidthMap": {
     "active": 95,
     "allergen_names": 60,
@@ -97,10 +97,10 @@
     "total_cost": 86,
     "unit": 68,
     "unit_type": 116,
-    "wastage_percent": 79,
+    "wastage_percent": 112,
     "yield_base_qty": 130,
-    "yield_qty": 82,
-    "yield_unit": 60,
+    "yield_qty": 108,
+    "yield_unit": 113,
     "yield_unit_id": 136
   },
   "compactMode": "SHORT",
@@ -229,6 +229,21 @@
     },
     {
       "key": "headerTextColor"
+    },
+    {
+      "key": "primaryColumns.purchase_unit.selectOptions"
+    },
+    {
+      "key": "primaryColumns.category_name.selectOptions"
+    },
+    {
+      "key": "primaryColumns.supplier_name.selectOptions"
+    },
+    {
+      "key": "primaryColumns.packaging_name.selectOptions"
+    },
+    {
+      "key": "primaryColumns.yield_unit.selectOptions"
     }
   ],
   "dynamicPropertyPathList": [
@@ -243,6 +258,27 @@
     },
     {
       "key": "primaryColumns.total_cost.onSubmit"
+    },
+    {
+      "key": "primaryColumns.purchase_unit.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.category_name.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.supplier_name.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.packaging_name.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.wastage_percent.onSubmit"
+    },
+    {
+      "key": "primaryColumns.yield_unit.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.item_code.onSubmit"
     }
   ],
   "dynamicTriggerPathList": [
@@ -254,6 +290,27 @@
     },
     {
       "key": "primaryColumns.total_cost.onSubmit"
+    },
+    {
+      "key": "primaryColumns.purchase_unit.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.category_name.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.supplier_name.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.packaging_name.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.wastage_percent.onSubmit"
+    },
+    {
+      "key": "primaryColumns.yield_unit.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.item_code.onSubmit"
     }
   ],
   "enableClientSideSearch": true,
@@ -334,14 +391,14 @@
       "horizontalAlignment": "RIGHT",
       "id": "allergen_names",
       "index": 19,
-      "isCellEditable": true,
+      "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": true,
+      "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": true,
+      "isVisible": false,
       "label": "Allergens",
       "notation": "standard",
       "originalId": "allergen_names",
@@ -426,8 +483,8 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"category_name\"])) : category_name })()}}",
+      "columnType": "select",
+      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( String(currentRow.category_id || \"\") )) :  String(currentRow.category_id || \"\")  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -436,17 +493,20 @@
       "horizontalAlignment": "LEFT",
       "id": "category_name",
       "index": 5,
-      "isCellEditable": false,
+      "isCellEditable": true,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": false,
+      "isEditable": true,
       "isSaveVisible": true,
       "isVisible": true,
       "label": "Category",
       "notation": "standard",
+      "onOptionChange": "{{ jsIngList.saveCategoryInline(currentRow.id, currentRow.category_name) }}",
       "originalId": "category_name",
+      "selectOptions": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n(qryGetIngCategories.data || []).map(c => ({\n    label: c.name,\n    value: String(c.id)\n}))\n)) : \n(qryGetIngCategories.data || []).map(c => ({\n    label: c.name,\n    value: String(c.id)\n}))\n })()}}",
+      "sortBy": "label",
       "sticky": "left",
       "textColor": "",
       "textSize": "0.875rem",
@@ -603,14 +663,14 @@
       "horizontalAlignment": "RIGHT",
       "id": "diet_tag_names",
       "index": 20,
-      "isCellEditable": true,
+      "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": true,
+      "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": true,
+      "isVisible": false,
       "label": "Diet Tags",
       "notation": "standard",
       "originalId": "diet_tag_names",
@@ -693,7 +753,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"item_code\"])) : item_code })()}}",
+      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.item_code || \"\" )) :  currentRow.item_code || \"\"  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -712,6 +772,7 @@
       "isVisible": true,
       "label": "Code",
       "notation": "standard",
+      "onSubmit": "{{ jsIngList.saveInline() }}",
       "originalId": "item_code",
       "sticky": "",
       "textColor": "",
@@ -862,14 +923,14 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"packaging_name\"])) : packaging_name })()}}",
+      "columnType": "select",
+      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( String(currentRow.packaging_id || \"\") )) :  String(currentRow.packaging_id || \"\")  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "RIGHT",
+      "horizontalAlignment": "LEFT",
       "id": "packaging_name",
       "index": 9,
       "isCellEditable": true,
@@ -882,7 +943,9 @@
       "isVisible": true,
       "label": "Pack",
       "notation": "standard",
+      "onOptionChange": "{{ jsIngList.savePackagingInline(currentRow.id, currentRow.packaging_name) }}",
       "originalId": "packaging_name",
+      "selectOptions": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n(getPackaging.data || []).map(p => ({\n\tlabel: p.name,\n\tvalue: String(p.id)\n}))\n)) : \n(getPackaging.data || []).map(p => ({\n\tlabel: p.name,\n\tvalue: String(p.id)\n}))\n })()}}",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
@@ -966,7 +1029,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "select",
-      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"purchase_unit\"])) : purchase_unit })()}}",
+      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( String(currentRow.purchase_unit_id || \"\") )) :  String(currentRow.purchase_unit_id || \"\")  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -985,7 +1048,10 @@
       "isVisible": true,
       "label": "Unit",
       "notation": "standard",
+      "onOptionChange": "{{ jsIngList.saveUnitInline(currentRow.id, currentRow.purchase_unit) }}",
       "originalId": "purchase_unit",
+      "selectOptions": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsIngList.unitOptions(currentRow.unit_type) )) :  jsIngList.unitOptions(currentRow.unit_type)  })()}}",
+      "sortBy": "label",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
@@ -1101,14 +1167,14 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"supplier_name\"])) : supplier_name })()}}",
+      "columnType": "select",
+      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( String(currentRow.supplier_id || \"\") )) :  String(currentRow.supplier_id || \"\")  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "RIGHT",
+      "horizontalAlignment": "LEFT",
       "id": "supplier_name",
       "index": 7,
       "isCellEditable": true,
@@ -1121,7 +1187,9 @@
       "isVisible": true,
       "label": "Suplr",
       "notation": "standard",
+      "onOptionChange": "{{ jsIngList.saveSupplierInline(currentRow.id, currentRow.supplier_name) }}",
       "originalId": "supplier_name",
+      "selectOptions": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n(getSuppliers.data || []).map(s => ({\n\tlabel: s.name,\n\tvalue: String(s.id)\n}))\n)) : \n(getSuppliers.data || []).map(s => ({\n\tlabel: s.name,\n\tvalue: String(s.id)\n}))\n })()}}",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
@@ -1235,7 +1303,7 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "columnType": "number",
-      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"wastage_percent\"])) : wastage_percent })()}}",
+      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsFmt.number(currentRow.wastage_percent) )) :  jsFmt.number(currentRow.wastage_percent)  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -1251,8 +1319,9 @@
       "isEditable": true,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Waste",
+      "label": "Waste%",
       "notation": "standard",
+      "onSubmit": "{{ jsIngList.saveInline() }}",
       "originalId": "wastage_percent",
       "sticky": "",
       "textSize": "0.875rem",
@@ -1301,7 +1370,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "number",
-      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"yield_qty\"])) : yield_qty })()}}",
+      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsFmt.number(currentRow.yield_qty) )) :  jsFmt.number(currentRow.yield_qty)  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -1310,12 +1379,12 @@
       "horizontalAlignment": "RIGHT",
       "id": "yield_qty",
       "index": 25,
-      "isCellEditable": true,
+      "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": true,
+      "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
       "label": "Yld qty",
@@ -1334,8 +1403,8 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"yield_unit\"])) : yield_unit })()}}",
+      "columnType": "select",
+      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( String(currentRow.yield_unit_id || \"\") )) :  String(currentRow.yield_unit_id || \"\")  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -1354,7 +1423,9 @@
       "isVisible": true,
       "label": "Yld unit",
       "notation": "standard",
+      "onOptionChange": "{{ jsIngList.saveYieldUnitInline(currentRow.id, currentRow.yield_unit) }}",
       "originalId": "yield_unit",
+      "selectOptions": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsIngList.unitOptions(currentRow.unit_type) )) :  jsIngList.unitOptions(currentRow.unit_type)  })()}}",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",

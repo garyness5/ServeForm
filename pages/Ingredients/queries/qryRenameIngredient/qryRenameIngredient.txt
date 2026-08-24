@@ -1,0 +1,6 @@
+select *
+from public.rename_ingredient(
+	{{ Number(this.params.ingredient_id || 0) }},
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	'{{ String(this.params.new_name || "").replaceAll("'", "''") }}'
+);
