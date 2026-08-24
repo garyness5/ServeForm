@@ -5,4 +5,5 @@ set
     updated_at = now()
 where id = {{ Number(this.params.ingredient_id || 0) }}
   and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
 returning id;

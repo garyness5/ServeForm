@@ -36,6 +36,10 @@ export default {
 			"IngForm_duplicate_diet_tags"
 		);
 
+		await removeValue(
+			"IngForm_duplicate_row"
+		);
+
 		await resetWidget(
 			"mdlAddIng",
 			true
@@ -118,6 +122,14 @@ export default {
 	},
 
 	editRow() {
+		if (
+			appsmith.store.IngForm_mode === "duplicate"
+		) {
+			return (
+				appsmith.store.IngForm_duplicate_row || {}
+			);
+		}
+
 		return (
 			appsmith.store.IngForm_edit_row || {}
 		);
@@ -436,35 +448,62 @@ export default {
 
 
 	async confirmDelete() {
-		const row =
-					tblIngList.selectedRow;
+		const id =
+					Number(
+						appsmith.store.IngForm_edit_id || 0
+					);
 
-		if (!row?.id) {
+		if (!id) {
 			showAlert(
-				"No ingredient selected.",
+				"No Ingredient selected.",
 				"warning"
+			);
+			return false;
+		}
+
+		try {
+			const result =
+						await qryDelIng.run({
+							ingredient_id: id
+						});
+
+			const deletedId =
+						Number(result?.[0]?.id || 0);
+
+			if (!deletedId) {
+				showAlert(
+					"Ingredient was not deleted.",
+					"error"
+				);
+				return false;
+			}
+
+			await qryGetIngredients.run();
+
+			closeModal(
+				"mdlDelConfirmIng"
+			);
+
+			closeModal(
+				"mdlAddIng"
+			);
+
+			showAlert(
+				"Ingredient deleted.",
+				"success"
+			);
+
+			return true;
+
+		} catch (e) {
+			showAlert(
+				e?.message ||
+				"Ingredient could not be deleted.",
+				"error"
 			);
 
 			return false;
 		}
-
-		await qryDelIng.run();
-		await qryGetIngredients.run();
-
-		closeModal(
-			"mdlDelConfirmIng"
-		);
-
-		closeModal(
-			"mdlAddIng"
-		);
-
-		showAlert(
-			"Ingredient deleted.",
-			"success"
-		);
-
-		return true;
 	},
 
 
@@ -543,9 +582,7 @@ export default {
 
 		const allNames =
 					(qryGetIngredients.data || [])
-		.map(
-			r => String(r.name || "")
-		);
+		.map(r => String(r.name || ""));
 
 		const escapedName =
 					String(sourceRow.name || "")
@@ -580,10 +617,72 @@ export default {
 		? 1
 		: Math.max(...usedNumbers) + 1;
 
-		const copyName =
-					nextNumber === 1
-		? `${sourceRow.name} - Copy`
-		: `${sourceRow.name} - Copy ${nextNumber}`;
+		const savedName =
+					String(sourceRow.name || "").trim();
+
+		const currentName =
+					String(current.name || "").trim();
+
+		const nameChanged =
+					currentName !== savedName;
+
+		let copyName = currentName || savedName;
+
+		if (!nameChanged) {
+			const allNames =
+						(qryGetIngredients.data || [])
+			.map(r => String(r.name || ""));
+
+			const escapedName =
+						savedName.replace(
+							/[.*+?^${}()|[\]\\]/g,
+							"\\$&"
+						);
+
+			const copyRegex =
+						new RegExp(
+							`^${escapedName} - Copy(?: (\\d+))?$`
+						);
+
+			const usedNumbers =
+						allNames
+			.map(name => {
+				const match =
+							name.match(copyRegex);
+
+				if (!match) {
+					return 0;
+				}
+
+				return match[1]
+					? Number(match[1])
+				: 1;
+			})
+			.filter(n => n > 0);
+
+			const nextNumber =
+						usedNumbers.length === 0
+			? 1
+			: Math.max(...usedNumbers) + 1;
+
+			copyName =
+				nextNumber === 1
+				? `${savedName} - Copy`
+			: `${savedName} - Copy ${nextNumber}`;
+		}
+
+
+		const duplicateRow = {
+			...sourceRow,
+			...current,
+
+			id: null,
+			name: copyName,
+
+			// Preserve the saved Yield Unit preference.
+			yield_unit_id:
+			sourceRow.yield_unit_id || null
+		};
 
 
 		await storeValue(
@@ -594,6 +693,11 @@ export default {
 		await storeValue(
 			"IngForm_duplicate_diet_tags",
 			current.diet_tags
+		);
+
+		await storeValue(
+			"IngForm_duplicate_row",
+			duplicateRow
 		);
 
 		await storeValue(
@@ -613,42 +717,7 @@ export default {
 
 		await storeValue(
 			"IngForm_edit_row",
-			{
-				...sourceRow,
-
-				id: null,
-				name: copyName,
-
-				category_id:
-				current.category_id,
-
-				purchase_qty:
-				current.purchase_qty,
-
-				purchase_unit_id:
-				current.purchase_unit_id,
-
-				total_cost:
-				current.total_cost,
-
-				wastage_percent:
-				current.wastage_percent,
-
-				supplier_id:
-				current.supplier_id,
-
-				packaging_id:
-				current.packaging_id,
-
-				item_code:
-				current.item_code,
-
-				notes:
-				current.notes,
-
-				active:
-				current.active
-			}
+			duplicateRow
 		);
 
 		await resetWidget(
@@ -658,7 +727,6 @@ export default {
 
 		return true;
 	},
-
 
 	// ============================================================
 	// DUPLICATE FROM LIST

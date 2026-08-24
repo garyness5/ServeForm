@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "update public.ing_items\nset\n    active = false,\n    deleted = true,\n    updated_at = now()\nwhere id = {{ Number(this.params.ingredient_id || 0) }}\n  and client_id = '{{ appsmith.store.current_client_id }}'::uuid\nreturning id;",
+      "body": "update public.ing_items\nset\n    active = false,\n    deleted = true,\n    updated_at = now()\nwhere id = {{ Number(this.params.ingredient_id || 0) }}\n  and client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\nreturning id;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

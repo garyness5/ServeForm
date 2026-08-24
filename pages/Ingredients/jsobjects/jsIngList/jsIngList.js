@@ -385,12 +385,97 @@ export default {
 		}
 	},
 
-
 	cancelRename() {
 		closeModal(
 			"mdlRenameIng"
 		);
 
 		return true;
+	},
+
+	async saveActiveInline() {
+		const row = tblIngList.updatedRow || {};
+
+		const ingredientId =
+					Number(row.id || 0);
+
+		if (!ingredientId) {
+			showAlert(
+				"Ingredient could not be identified.",
+				"error"
+			);
+			return false;
+		}
+
+		try {
+			await qryUpdateIngredientInline.run({
+				ingredient_id: ingredientId,
+				changes: {
+					active: row.active === false
+					? false
+					: true
+				}
+			});
+
+			await qryGetIngredients.run();
+
+			return true;
+
+		} catch (e) {
+			await qryGetIngredients.run();
+
+			showAlert(
+				e?.message ||
+				"Ingredient Status could not be updated.",
+				"error"
+			);
+
+			return false;
+		}
+	},
+
+	filteredRows() {
+		const rows = qryGetIngredients.data || [];
+
+		const status = String(
+			selIngListFilter.selectedOptionValue || "all"
+		)
+		.trim()
+		.toLowerCase();
+
+		const search = String(
+			inpIngListSearch.text || ""
+		)
+		.trim()
+		.toLowerCase();
+
+		return rows.filter(row => {
+			const statusOk =
+						status === "all" ||
+						(status === "active" && row.active === true) ||
+						(status === "inactive" && row.active === false);
+
+			if (!statusOk) {
+				return false;
+			}
+
+			if (!search) {
+				return true;
+			}
+
+			return [
+				row.name,
+				row.category_name,
+				row.supplier_name,
+				row.packaging_name,
+				row.item_code
+			]
+				.filter(Boolean)
+				.some(value =>
+							String(value)
+							.toLowerCase()
+							.includes(search)
+						 );
+		});
 	},
 };
