@@ -40,7 +40,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 59,
   "shouldTruncate": false,
-  "text": "You have unsaved changes. Do you want to save before closing?",
+  "text": "You have unsaved changes. Do you want to save or discard your changes before closing?",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 8,

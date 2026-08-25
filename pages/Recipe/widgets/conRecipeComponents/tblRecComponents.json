@@ -60,9 +60,11 @@
     "component_status",
     "saved_qty",
     "saved_unit_id",
-    "saved_unit_abbreviation"
+    "saved_unit_abbreviation",
+    "created_at",
+    "updated_at"
   ],
-  "columnUpdatedAt": 1787615488340,
+  "columnUpdatedAt": 1787621309505,
   "columnWidthMap": {
     "active": 60,
     "allergen_names": 60,
@@ -204,6 +206,21 @@
     },
     {
       "key": "primaryColumns.component_name.cellBackground"
+    },
+    {
+      "key": "primaryColumns.apply_wastage.isCellVisible"
+    },
+    {
+      "key": "primaryColumns.customColumn1.isCellVisible"
+    },
+    {
+      "key": "primaryColumns.active.isCellVisible"
+    },
+    {
+      "key": "primaryColumns.created_at.computedValue"
+    },
+    {
+      "key": "primaryColumns.updated_at.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -227,6 +244,15 @@
     },
     {
       "key": "primaryColumns.component_name.cellBackground"
+    },
+    {
+      "key": "primaryColumns.apply_wastage.isCellVisible"
+    },
+    {
+      "key": "primaryColumns.customColumn1.isCellVisible"
+    },
+    {
+      "key": "primaryColumns.active.isCellVisible"
     }
   ],
   "dynamicTriggerPathList": [
@@ -283,7 +309,7 @@
       "id": "active",
       "index": 14,
       "isCellEditable": true,
-      "isCellVisible": true,
+      "isCellVisible": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n!!(\n\tcurrentRow?.ingredient_id ||\n\tcurrentRow?.child_recipe_id\n)\n)) : \n!!(\n\tcurrentRow?.ingredient_id ||\n\tcurrentRow?.child_recipe_id\n)\n })()}}",
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
@@ -345,7 +371,7 @@
       "id": "apply_wastage",
       "index": 13,
       "isCellEditable": true,
-      "isCellVisible": true,
+      "isCellVisible": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\ncurrentRow?.item_type === \"ingredient\" &&\n!!currentRow?.ingredient_id\n)) : \ncurrentRow?.item_type === \"ingredient\" &&\n!!currentRow?.ingredient_id\n })()}}",
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
@@ -584,6 +610,40 @@
       "verticalAlignment": "CENTER",
       "width": 150
     },
+    "created_at": {
+      "alias": "created_at",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"created_at\"])) : created_at })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "created_at",
+      "index": 28,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "created_at",
+      "notation": "standard",
+      "originalId": "created_at",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
     "customColumn1": {
       "alias": "Delete",
       "allowCellWrapping": false,
@@ -605,7 +665,7 @@
       "id": "customColumn1",
       "index": 10,
       "isCellEditable": false,
-      "isCellVisible": true,
+      "isCellVisible": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n!!(\n\tcurrentRow?.ingredient_id ||\n\tcurrentRow?.child_recipe_id\n)\n)) : \n!!(\n\tcurrentRow?.ingredient_id ||\n\tcurrentRow?.child_recipe_id\n)\n })()}}",
       "isDerived": true,
       "isDisabled": false,
       "isDiscardVisible": true,
@@ -1148,6 +1208,40 @@
       "notation": "standard",
       "originalId": "unit_type",
       "sticky": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "updated_at": {
+      "alias": "updated_at",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"updated_at\"])) : updated_at })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "updated_at",
+      "index": 29,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "updated_at",
+      "notation": "standard",
+      "originalId": "updated_at",
+      "sticky": "",
+      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},

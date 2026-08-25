@@ -42,7 +42,7 @@
   "mobileRightColumn": 18,
   "mobileTopRow": 1,
   "needsErrorInfo": false,
-  "onClick": "{{ jsRecipeSave.saveAndNew() }}",
+  "onClick": "{{ jsRecipeSave.addRecipe() }}",
   "parentColumnSpace": 19.5,
   "parentId": "ipoua5qx1i",
   "parentRowSpace": 10,

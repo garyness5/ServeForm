@@ -167,31 +167,6 @@ export default {
 		}
 	},
 
-	async saveAndNew() {
-		const result = await this.saveRecipe();
-		if (!result) return null;
-
-		await storeValue("current_recipe_id", 0);
-		await recCompTable.clearDraftRows();
-
-		await storeValue("rec_components_local_rows", recCompTable.normalizeRows([]));
-
-		await this.safeReset("inpRecName");
-		await this.safeReset("selRecCategory");
-		await this.safeReset("chkRecActive");
-		await this.safeReset("inpRecYieldQty");
-		await this.safeReset("selRecYieldUnit");
-		await this.safeReset("inpRecExtraPercent");
-		await this.safeReset("msRecDietTags");
-		await this.safeReset("rteRecNotes");
-		await this.safeReset("tblRecComponents");
-
-		await getRecComponents.run();
-
-		showAlert("Saved. Ready for new recipe.", "success");
-		return true;
-	},
-
 	clean(value) {
 		if (value === undefined || value === "") return null;
 		if (typeof value === "number") return Number(value);
@@ -537,16 +512,61 @@ export default {
 	},
 
 	async deleteRecipeConfirm() {
-		await deleteRecipe.run();
+		try {
+			const result =
+						await qryDeleteRecipe.run();
 
-		closeModal("mdlRecDeleteConfirm");
-		await recCompTable.clearDraftRows();
-		await storeValue("current_recipe_id", 0);
+			const deletedId =
+						Number(result?.[0]?.id || 0);
 
-		showAlert("Recipe deleted", "success");
-		navigateTo("RecipeList");
+			const currentId =
+						Number(
+							appsmith.store.current_recipe_id || 0
+						);
 
-		return true;
+			if (
+				!deletedId ||
+				deletedId !== currentId
+			) {
+				showAlert(
+					"Recipe was not deleted.",
+					"error"
+				);
+
+				return false;
+			}
+
+			closeModal(
+				"mdlRecDeleteConfirm"
+			);
+
+			await recCompTable.clearDraftRows();
+
+			await storeValue(
+				"current_recipe_id",
+				0
+			);
+
+			showAlert(
+				"Recipe deleted.",
+				"success"
+			);
+
+			navigateTo(
+				"RecipeList"
+			);
+
+			return true;
+
+		} catch (error) {
+			showAlert(
+				error?.message ||
+				"Recipe could not be deleted.",
+				"error"
+			);
+
+			return false;
+		}
 	},
 
 	async saveAndDeleteRecipe() {
@@ -568,6 +588,114 @@ export default {
 		showModal("mdlRecDeleteConfirm");
 
 		return true;
+	},
+
+	async unsavedYes() {
+		switch (appsmith.store.pendingRecipeAction) {
+			case "close":
+				return await this.saveAndCloseRecipe();
+
+			case "add":
+				return await this.saveAndAddRecipe();
+
+			case "delete":
+				return await this.saveAndDeleteRecipe();
+
+			default:
+				return false;
+		}
+	},
+
+	async unsavedNo() {
+		switch (appsmith.store.pendingRecipeAction) {
+			case "close":
+				return await this.closeWithoutSaving();
+
+			case "add":
+				return await this.addWithoutSaving();
+
+			case "delete":
+				return await this.deleteWithoutSaving();
+
+			default:
+				return false;
+		}
+	},
+
+	async startNewRecipe() {
+		await storeValue(
+			"current_recipe_id",
+			0
+		);
+
+		await storeValue(
+			"Recipe_mode",
+			"add"
+		);
+
+		await removeValue(
+			"Recipe_duplicate_header"
+		);
+
+		await removeValue(
+			"Recipe_duplicate_diet_tags"
+		);
+
+		await recCompTable.clearDraftRows();
+
+		await this.safeReset("inpRecName");
+		await this.safeReset("selRecCategory");
+		await this.safeReset("chkRecActive");
+		await this.safeReset("inpRecYieldQty");
+		await this.safeReset("selRecYieldUnit");
+		await this.safeReset("inpRecExtraPercent");
+		await this.safeReset("msRecDietTags");
+		await this.safeReset("rteRecNotes");
+		await this.safeReset("tblRecComponents");
+
+		return true;
+	},
+
+	async addRecipe() {
+		await recCompTable.syncFromTable();
+
+		if (this.isDirty()) {
+			await storeValue(
+				"pendingRecipeAction",
+				"add"
+			);
+
+			showModal(
+				"mdlRecUnsavedChanges"
+			);
+
+			return false;
+		}
+
+		return await this.startNewRecipe();
+	},
+
+	async saveAndAddRecipe() {
+		const saved =
+					await this.saveRecipe();
+
+		if (!saved) {
+			return false;
+		}
+
+		closeModal(
+			"mdlRecUnsavedChanges"
+		);
+
+		return await this.startNewRecipe();
+	},
+
+	async addWithoutSaving() {
+		closeModal(
+			"mdlRecUnsavedChanges"
+		);
+
+		return await this.startNewRecipe();
 	},
 
 }
