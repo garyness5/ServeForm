@@ -3,8 +3,8 @@
   "alignWidget": "LEFT",
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 29,
-  "defaultCheckedState": "{{\n  Number(appsmith.store.current_recipe_id || 0) === 0\n    ? true\n    : getRecItemById.data?.[0]\n      ? Boolean(getRecItemById.data[0].active)\n      : true\n}}",
+  "bottomRow": 25,
+  "defaultCheckedState": "{{\n  Number(appsmith.store.current_recipe_id || 0) === 0\n    ? true\n    : qryRecGetItemById.data?.[0]\n      ? Boolean(qryRecGetItemById.data[0].active)\n      : true\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -30,9 +30,9 @@
   "key": "8fdlnxcriq",
   "label": "Status",
   "labelPosition": "Left",
-  "labelStyle": "BOLD",
+  "labelStyle": "",
   "labelTextSize": "1rem",
-  "leftColumn": 1,
+  "leftColumn": 0,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
@@ -48,8 +48,8 @@
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 18,
-  "topRow": 25,
+  "rightColumn": 17,
+  "topRow": 21,
   "type": "CHECKBOX_WIDGET",
   "version": 1,
   "widgetId": "dsgiyyelnc",

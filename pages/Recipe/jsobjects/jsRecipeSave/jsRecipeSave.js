@@ -143,9 +143,9 @@ export default {
 				savedId
 			);
 
-			await getRecItemById.run();
-			await getSelectedRecDietTags.run();
-			await getRecComponents.run();
+			await qryRecGetItemById.run();
+			await qryRecGetSelectedDietTags.run();
+			await qryRecGetComponents.run();
 
 			await recCompTable.loadFromQuery();
 
@@ -207,9 +207,9 @@ export default {
 		}
 
 		const r =
-					Array.isArray(getRecItemById.data)
-		? getRecItemById.data[0]
-		: getRecItemById.data;
+					Array.isArray(qryRecGetItemById.data)
+		? qryRecGetItemById.data[0]
+		: qryRecGetItemById.data;
 
 		if (!r) {
 			return {
@@ -261,7 +261,7 @@ export default {
 		}
 
 		return this.componentSnapshot(
-			getRecComponents.data || []
+			qryRecGetComponents.data || []
 		);
 	},
 
@@ -286,7 +286,7 @@ export default {
 			return [];
 		}
 
-		return (getSelectedRecDietTags.data || [])
+		return (qryRecGetSelectedDietTags.data || [])
 			.map(r => Number(r.value))
 			.filter(x => x)
 			.sort((a, b) => a - b);
@@ -350,7 +350,7 @@ export default {
 
 		const savedName =
 					String(
-						getRecItemById.data?.[0]?.name || ""
+						qryRecGetItemById.data?.[0]?.name || ""
 					).trim();
 
 		const nameChanged =
@@ -506,7 +506,7 @@ export default {
 			return false;
 		}
 
-		await getRecImpactCount.run();
+		await qryRecGetImpactCount.run();
 		showModal("mdlRecDeleteConfirm");
 		return true;
 	},
@@ -575,7 +575,7 @@ export default {
 
 		closeModal("mdlRecUnsavedChanges");
 
-		await getRecImpactCount.run();
+		await qryRecGetImpactCount.run();
 		showModal("mdlRecDeleteConfirm");
 
 		return true;
@@ -584,7 +584,7 @@ export default {
 	async deleteWithoutSaving() {
 		closeModal("mdlRecUnsavedChanges");
 
-		await getRecImpactCount.run();
+		await qryRecGetImpactCount.run();
 		showModal("mdlRecDeleteConfirm");
 
 		return true;

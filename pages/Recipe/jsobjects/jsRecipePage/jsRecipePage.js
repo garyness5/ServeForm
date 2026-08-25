@@ -4,7 +4,7 @@ export default {
 			"rec_components_local_rows"
 		);
 
-		await getRecComponents.run();
+		await qryRecGetComponents.run();
 
 		await recCompTable.loadFromQuery();
 	}

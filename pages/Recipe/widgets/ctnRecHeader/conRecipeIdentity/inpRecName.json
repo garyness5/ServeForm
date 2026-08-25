@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 8,
   "boxShadow": "none",
-  "defaultText": "{{\nappsmith.store.Recipe_mode === \"duplicate\"\n? appsmith.store.Recipe_duplicate_header?.name || \"\"\n: Number(appsmith.store.current_recipe_id || 0) === 0\n? \"\"\n: getRecItemById.data?.[0]?.name || \"\"\n}}",
+  "defaultText": "{{\nappsmith.store.Recipe_mode === \"duplicate\"\n? appsmith.store.Recipe_duplicate_header?.name || \"\"\n: Number(appsmith.store.current_recipe_id || 0) === 0\n? \"\"\n: qryRecGetItemById.data?.[0]?.name || \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -29,7 +29,7 @@
   "label": "Recipe Name",
   "labelAlignment": "left",
   "labelPosition": "Top",
-  "labelStyle": "BOLD",
+  "labelStyle": "",
   "labelTextSize": "1rem",
   "labelWidth": 5,
   "leftColumn": 0,

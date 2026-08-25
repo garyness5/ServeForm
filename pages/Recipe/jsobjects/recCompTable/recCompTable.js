@@ -133,7 +133,7 @@ export default {
 	},
 
 	async loadFromQuery() {
-		const queryRows = getRecComponents.data || [];
+		const queryRows = qryRecGetComponents.data || [];
 		return await this.setRows(queryRows);
 	},
 
@@ -282,7 +282,7 @@ export default {
 
 		const currentRecipeId = Number(appsmith.store.current_recipe_id || 0);
 
-		const categories = (getRecComponentItems.data || [])
+		const categories = (qryRecGetComponentItems.data || [])
 			.filter(i => i.item_type === itemType)
 			.filter(i => !(itemType === "recipe" && Number(i.id) === currentRecipeId))
 			.map(i => i.category_name)
@@ -300,7 +300,7 @@ export default {
 		const used = this.usedItemKeys(row);
 		const currentRecipeId = Number(appsmith.store.current_recipe_id || 0);
 
-		return (getRecComponentItems.data || [])
+		return (qryRecGetComponentItems.data || [])
 			.filter(i => i.item_type === itemType)
 			.filter(i => !(itemType === "recipe" && Number(i.id) === currentRecipeId))
 			.filter(i => !row?.component_category || i.category_name === row.component_category)
@@ -319,7 +319,7 @@ export default {
 
 		const freshRow = this.getRows().find(r => r.draft_row_id === row.draft_row_id) || row;
 
-		const item = (getRecComponentItems.data || []).find(i =>
+		const item = (qryRecGetComponentItems.data || []).find(i =>
 			i.item_type === freshRow.item_type &&
 			i.name === freshRow.component_name
 		);
@@ -395,12 +395,12 @@ export default {
 					};
 				}
 
-				const item = (getRecComponentItems.data || []).find(i =>
+				const item = (qryRecGetComponentItems.data || []).find(i =>
 					i.item_type === r.item_type &&
 					i.name === r.component_name
 				);
 
-				const unit = (getRecComponentUnits.data || []).find(u =>
+				const unit = (qryRecGetComponentUnits.data || []).find(u =>
 					u.abbreviation === r.unit_abbreviation
 				);
 
@@ -422,7 +422,7 @@ export default {
 		const unitType = row?.unit_type;
 		if (!unitType) return [];
 
-		return (getRecComponentUnits.data || [])
+		return (qryRecGetComponentUnits.data || [])
 			.filter(u => u.unit_type === unitType)
 			.map(u => ({
 				label: u.abbreviation,
@@ -443,12 +443,12 @@ export default {
 			!row.component_name
 		) return null;
 
-		const item = (getRecComponentItems.data || []).find(i =>
+		const item = (qryRecGetComponentItems.data || []).find(i =>
 			i.item_type === row.item_type &&
 			Number(i.id) === Number(row.item_type === "ingredient" ? row.ingredient_id : row.child_recipe_id)
 		);
 
-		const unit = (getRecComponentUnits.data || []).find(u =>
+		const unit = (qryRecGetComponentUnits.data || []).find(u =>
 			u.abbreviation === row.unit_abbreviation
 		);
 

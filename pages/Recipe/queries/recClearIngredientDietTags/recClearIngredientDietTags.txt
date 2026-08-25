@@ -1,2 +1,0 @@
-delete from public.ing_diet_tags
-where ingredient_id = {{ appsmith.store.RecIngForm_saved_id }};

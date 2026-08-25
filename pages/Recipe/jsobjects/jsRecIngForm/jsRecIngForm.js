@@ -66,7 +66,7 @@ export default {
 				savedId
 			);
 
-			await getRecComponentItems.run();
+			await qryRecGetComponentItems.run();
 
 			showAlert(
 				"Ingredient saved.",

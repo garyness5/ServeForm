@@ -1,0 +1,8 @@
+update public.rec_items
+set
+  category_id = {{ Number(this.params.category_id || 0) || null }},
+  updated_at = now()
+where id = {{ Number(this.params.recipe_id || 0) }}
+  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(deleted, false) = false
+returning id, category_id;

@@ -58,7 +58,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "serverSideFiltering": false,
-  "sourceData": "{{\n  (recGetPackaging.data || []).map(x => ({\n    label: x.name,\n    value: String(x.id)\n  }))\n}}",
+  "sourceData": "{{\n  (qryRecGetPackaging.data || []).map(x => ({\n    label: x.name,\n    value: String(x.id)\n  }))\n}}",
   "topRow": 17,
   "type": "SELECT_WIDGET",
   "version": 1,

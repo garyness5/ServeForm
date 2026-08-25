@@ -1,4 +1,0 @@
-select *
-from public.delete_recipe(
-  {{ Number(tblRecipeList.selectedRow?.id || 0) }}
-);

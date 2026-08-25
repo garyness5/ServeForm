@@ -58,7 +58,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "serverSideFiltering": false,
-  "sourceData": "{{\n  (recGetSuppliers.data || []).map(x => ({\n    label: x.name,\n    value: String(x.id)\n  }))\n}}",
+  "sourceData": "{{\n  (qryRecGetSuppliers.data || []).map(x => ({\n    label: x.name,\n    value: String(x.id)\n  }))\n}}",
   "topRow": 13,
   "type": "SELECT_WIDGET",
   "version": 1,
