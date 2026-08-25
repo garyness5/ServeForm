@@ -2,7 +2,7 @@
   "animateLoading": true,
   "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 15,
+  "bottomRow": 13,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -47,7 +47,7 @@
   "text": "{{ \"This ingredient will no longer be available for use. This action cannot be undone. It will show in red where it was present. \" }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 9,
+  "topRow": 7,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

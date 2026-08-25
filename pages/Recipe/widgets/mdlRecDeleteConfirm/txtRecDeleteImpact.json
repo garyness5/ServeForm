@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 28,
+  "bottomRow": 26,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -54,7 +54,7 @@
   "text": "{{\n`This will impact\n    Recipes: ${getRecImpactCount.data?.[0]?.recipe_count || 0}\n    Dishes: ${getRecImpactCount.data?.[0]?.dish_count || 0}\n    Menus: ${getRecImpactCount.data?.[0]?.menu_count || 0}\n    Events: ${getRecImpactCount.data?.[0]?.event_count || 0}`\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 18,
+  "topRow": 16,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 24,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  Number(appsmith.store.current_recipe_id || 0) === 0\n    ? []\n    : (getSelectedRecDietTags.data || []).map(x => String(x.value))\n))(msRecDietTags.options, msRecDietTags.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \nappsmith.store.Recipe_mode === \"duplicate\"\n? appsmith.store.Recipe_duplicate_diet_tags || []\n: Number(appsmith.store.current_recipe_id || 0) === 0\n? []\n: (getSelectedRecDietTags.data || []).map(x => String(x.value))\n))(msRecDietTags.options, msRecDietTags.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

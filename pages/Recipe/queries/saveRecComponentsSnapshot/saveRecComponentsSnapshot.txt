@@ -1,5 +1,0 @@
-select *
-from public.save_rec_components_snapshot(
-  {{ Number(appsmith.store.current_recipe_id || 0) }},
-  '{{ JSON.stringify(recCompTable.rowsForSave()).replaceAll("'", "''") }}'::jsonb
-);

@@ -1,0 +1,8 @@
+select *
+from public.save_recipe(
+	{{ Number(appsmith.store.current_recipe_id || 0) || null }},
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	'{{ JSON.stringify(jsRecipeSave.headerPayload()).replaceAll("'", "''") }}'::jsonb,
+	'{{ JSON.stringify(jsRecipeSave.dietTagsPayload()).replaceAll("'", "''") }}'::jsonb,
+	'{{ JSON.stringify(jsRecipeSave.componentsPayload()).replaceAll("'", "''") }}'::jsonb
+);

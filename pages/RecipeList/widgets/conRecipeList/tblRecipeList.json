@@ -185,7 +185,7 @@
   "enableClientSideSearch": true,
   "endOfData": false,
   "flexVerticalAlignment": "start",
-  "headerRowColor": "#8cb3b3",
+  "headerRowColor": "",
   "horizontalAlignment": "LEFT",
   "infiniteScrollEnabled": false,
   "inlineEditingSaveOption": "CUSTOM",
