@@ -1,6 +1,6 @@
 export default {
 	rows() {
-		return recCompTable.rowsForSave();
+		return jsRecCompTable.rowsForSave();
 	},
 
   list() {

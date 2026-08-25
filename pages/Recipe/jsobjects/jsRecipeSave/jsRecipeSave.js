@@ -78,7 +78,7 @@ export default {
 	},
 
 	componentsPayload() {
-		return recCompTable
+		return jsRecCompTable
 			.rowsForSave()
 			.map(row => ({
 			item_type:
@@ -119,7 +119,7 @@ export default {
 		}
 
 		try {
-			await recCompTable.syncFromTable();
+			await jsRecCompTable.syncFromTable();
 
 			const result =
 						await qrySaveRecipe.run();
@@ -147,7 +147,7 @@ export default {
 			await qryRecGetSelectedDietTags.run();
 			await qryRecGetComponents.run();
 
-			await recCompTable.loadFromQuery();
+			await jsRecCompTable.loadFromQuery();
 
 			showAlert(
 				"Recipe saved.",
@@ -250,7 +250,7 @@ export default {
 	},
 
 	currentComponentSnapshot() {
-		return this.componentSnapshot(recCompTable.rowsForSave());
+		return this.componentSnapshot(jsRecCompTable.rowsForSave());
 	},
 
 	savedComponentSnapshot() {
@@ -303,7 +303,7 @@ export default {
 	},
 
 	async closeRecipe() {
-		await recCompTable.syncFromTable();
+		await jsRecCompTable.syncFromTable();
 
 		if (this.isDirty()) {
 			await storeValue("pendingRecipeAction", "close");
@@ -324,12 +324,12 @@ export default {
 
 	async closeWithoutSaving() {
 		closeModal("mdlRecUnsavedChanges");
-		await recCompTable.clearDraftRows();
+		await jsRecCompTable.clearDraftRows();
 		navigateTo("RecipeList");
 	},
 
 	async duplicateRecipe() {
-		await recCompTable.syncFromTable();
+		await jsRecCompTable.syncFromTable();
 
 		const sourceId =
 					Number(appsmith.store.current_recipe_id || 0);
@@ -410,16 +410,16 @@ export default {
 		.map(String);
 
 		const duplicateComponents =
-					recCompTable
+					jsRecCompTable
 		.mergeUpdatedRows()
-		.filter(r => recCompTable.hasContent(r))
+		.filter(r => jsRecCompTable.hasContent(r))
 		.map((r, index) => ({
 			...r,
 			id: null,
 			recipe_id: 0,
 			line_no: index + 1,
 			draft_row_id:
-			recCompTable.makeDraftId()
+			jsRecCompTable.makeDraftId()
 		}));
 
 		await storeValue(
@@ -442,7 +442,7 @@ export default {
 			0
 		);
 
-		await recCompTable.setRows(
+		await jsRecCompTable.setRows(
 			duplicateComponents
 		);
 
@@ -540,7 +540,7 @@ export default {
 				"mdlRecDeleteConfirm"
 			);
 
-			await recCompTable.clearDraftRows();
+			await jsRecCompTable.clearDraftRows();
 
 			await storeValue(
 				"current_recipe_id",
@@ -641,7 +641,7 @@ export default {
 			"Recipe_duplicate_diet_tags"
 		);
 
-		await recCompTable.clearDraftRows();
+		await jsRecCompTable.clearDraftRows();
 
 		await this.safeReset("inpRecName");
 		await this.safeReset("selRecCategory");
@@ -657,7 +657,7 @@ export default {
 	},
 
 	async addRecipe() {
-		await recCompTable.syncFromTable();
+		await jsRecCompTable.syncFromTable();
 
 		if (this.isDirty()) {
 			await storeValue(

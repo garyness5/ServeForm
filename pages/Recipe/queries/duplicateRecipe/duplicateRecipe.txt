@@ -1,4 +1,0 @@
-select *
-from public.duplicate_recipe(
-  {{ Number(appsmith.store.current_recipe_id || 0) }}
-);

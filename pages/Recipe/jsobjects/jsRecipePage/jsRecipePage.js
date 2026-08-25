@@ -6,6 +6,6 @@ export default {
 
 		await qryRecGetComponents.run();
 
-		await recCompTable.loadFromQuery();
+		await jsRecCompTable.loadFromQuery();
 	}
 }
