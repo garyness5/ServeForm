@@ -12,17 +12,11 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -30,22 +24,21 @@
       "key": "onClick"
     }
   ],
-  "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\nappsmith.store.IngForm_mode !== \"edit\" ||\n!appsmith.store.IngForm_edit_id\n}}",
+  "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
-  "key": "o01hoigeqy",
-  "leftColumn": 29,
+  "key": "bv6gv3416k",
+  "leftColumn": 27,
   "minWidth": 120,
-  "mobileBottomRow": 8,
-  "mobileLeftColumn": 6,
-  "mobileRightColumn": 22,
-  "mobileTopRow": 4,
+  "mobileBottomRow": 5,
+  "mobileLeftColumn": 2,
+  "mobileRightColumn": 18,
+  "mobileTopRow": 1,
   "needsErrorInfo": false,
-  "onClick": "{{ jsIngForm.openDeleteConfirm() }}",
-  "parentColumnSpace": 10.609375,
-  "parentId": "x4fcnqb4yv",
+  "onClick": "{{ jsRecIngForm.openAdd() }}",
+  "parentColumnSpace": 19.5,
+  "parentId": "ipoua5qx1i",
   "parentRowSpace": 10,
   "placement": "CENTER",
   "recaptchaType": "V3",
@@ -53,11 +46,10 @@
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
   "rightColumn": 34,
-  "text": "Delete",
-  "tooltip": "Delete ingredient",
+  "text": "Add Ingredient",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "woyhpkdpgg",
-  "widgetName": "btnAddIngDelete"
+  "widgetId": "zzkgh1bzrf",
+  "widgetName": "btnRecAddIng"
 }
