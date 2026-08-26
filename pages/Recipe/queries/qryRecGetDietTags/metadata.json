@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  id,\n  name\nfrom public.helper_list_items\nwhere client_id = {{ appsmith.store.current_client_id }}\n  and list_id = 5\n  and active = true\norder by name;",
+      "body": "select *\nfrom public.get_diet_tags(\n    '{{ appsmith.store.current_client_id }}'::uuid\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -29,7 +29,7 @@
     ],
     "name": "qryRecGetDietTags",
     "pageId": "Recipe",
-    "runBehaviour": "MANUAL",
+    "runBehaviour": "AUTOMATIC",
     "userSetOnLoad": true
   }
 }

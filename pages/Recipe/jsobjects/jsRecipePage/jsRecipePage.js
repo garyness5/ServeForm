@@ -9,20 +9,6 @@ export default {
 
 		await jsRecipeWorkspace.clear();
 
-		/*
-			Main Recipe reference data.
-			These queries feed the parent selects,
-			component picklists and costing.
-		*/
-		await Promise.all([
-			qryRecGetCategories.run(),
-			qryRecGetDietTagsHeader.run(),
-			qryRecGetUnits.run(),
-			qryRecGetComponentUnits.run(),
-			qryRecGetComponentItems.run(),
-			qryRecGetIngCategories.run()
-		]);
-
 		if (mode === "add") {
 			await jsRecipeWorkspace.initializeNew();
 			await jsRecipeCompTable.clearRows();
