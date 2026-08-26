@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "shouldTruncate": false,
-  "text": "{{\n  \"Cost per \" +\n  (selRecYieldUnit.selectedOptionLabel || \"Unit\") +\n  \":  \" +\n  (\n    jsRecCompTable.costPerYieldUnit() == null\n      ? \"\"\n      : jsFmt.currency(jsRecCompTable.costPerYieldUnit())\n  )\n}}",
+  "text": "{{\n  \"Cost per \" +\n  (selRecYieldUnit.selectedOptionLabel || \"Unit\") +\n  \":  \" +\n  (\n    jsRecipeCompTable.costPerYieldUnit() == null\n      ? \"\"\n      : jsFmt.currency(jsRecipeCompTable.costPerYieldUnit())\n  )\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 21,

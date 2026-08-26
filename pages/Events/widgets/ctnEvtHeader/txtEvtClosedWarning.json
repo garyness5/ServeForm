@@ -3,7 +3,7 @@
   "borderColor": "#7f1d1d",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 23,
+  "bottomRow": 29,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -53,7 +53,7 @@
   "text": "\nThis Event is Closed. You can review the Event and linked profiles, but changes cannot be saved while Closed. Uncheck Closed to reopen the Event before making changes.\n\n",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 13,
+  "topRow": 19,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

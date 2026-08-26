@@ -68,42 +68,90 @@ export default {
 			return false;
 		}
 
-		try {
-			const result =
-						await qryRecListDuplicate.run();
+		const source =
+					tblRecipeList.selectedRow;
 
-			const newId =
-						Number(result?.[0]?.id || 0);
+		const sourceId =
+					Number(source?.id || 0);
 
-			if (!newId) {
-				showAlert(
-					"Recipe duplicate failed.",
-					"error"
-				);
-
-				return false;
-			}
-
-			await qryRecListGetRecipes.run();
-
-			showAlert(
-				"Recipe duplicated.",
-				"success"
-			);
-
-			return true;
-
-		} catch (error) {
-			showAlert(
-				error?.message ||
-				"Recipe could not be duplicated.",
-				"error"
-			);
-
+		if (!sourceId) {
 			return false;
 		}
-	},
 
+		const sourceName =
+					String(source?.name || "").trim();
+
+		const names =
+					(qryRecListGetRecipes.data || [])
+		.map(r =>
+				 String(r.name || "").trim()
+				)
+		.filter(Boolean);
+
+		const escaped =
+					sourceName.replace(
+						/[.*+?^${}()|[\]\\]/g,
+						"\\$&"
+					);
+
+		const regex =
+					new RegExp(
+						`^${escaped} - copy(?: (\\d+))?$`,
+						"i"
+					);
+
+		const usedNumbers =
+					names
+		.map(name => {
+			const match =
+						name.match(regex);
+
+			if (!match) return 0;
+
+			return match[1]
+				? Number(match[1])
+			: 1;
+		})
+		.filter(n => n > 0);
+
+		const nextNumber =
+					usedNumbers.length === 0
+		? 1
+		: Math.max(...usedNumbers) + 1;
+
+		const duplicateName =
+					nextNumber === 1
+		? `${sourceName} - copy`
+		: `${sourceName} - copy ${nextNumber}`;
+
+		await storeValue(
+			"Recipe_duplicate_source_id",
+			sourceId
+		);
+
+		await storeValue(
+			"Recipe_duplicate_name",
+			duplicateName
+		);
+
+		await storeValue(
+			"current_recipe_id",
+			sourceId
+		);
+
+		await storeValue(
+			"Recipe_mode",
+			"duplicate_from_list"
+		);
+
+		await removeValue(
+			"rec_components_local_rows"
+		);
+
+		navigateTo("Recipe");
+
+		return true;
+	},
 	async deleteSelectedRecipeStart() {
 		if (!this.hasSelection()) {
 			showAlert(

@@ -1,6 +1,6 @@
 export default {
 	rows() {
-		return jsRecCompTable.rowsForSave();
+		return jsRecipeCompTable.rowsForSave();
 	},
 
   list() {

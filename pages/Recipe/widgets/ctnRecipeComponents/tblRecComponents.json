@@ -64,9 +64,9 @@
     "created_at",
     "updated_at"
   ],
-  "columnUpdatedAt": 1787693273391,
+  "columnUpdatedAt": 1787704782533,
   "columnWidthMap": {
-    "active": 60,
+    "active": 104,
     "allergen_names": 110,
     "apply_wastage": 130,
     "component_category": 108,
@@ -111,9 +111,6 @@
     },
     {
       "key": "tableData"
-    },
-    {
-      "key": "primaryColumns.customColumn1.buttonColor"
     },
     {
       "key": "primaryColumns.customColumn1.borderRadius"
@@ -212,6 +209,9 @@
       "key": "primaryColumns.unit_abbreviation.selectOptions"
     },
     {
+      "key": "primaryColumns.customColumn1.isCellVisible"
+    },
+    {
       "key": "primaryColumns.created_at.computedValue"
     },
     {
@@ -224,9 +224,6 @@
     },
     {
       "key": "primaryColumns.customColumn1.onClick"
-    },
-    {
-      "key": "primaryColumns.customColumn1.buttonColor"
     },
     {
       "key": "primaryColumns.apply_wastage.isCellVisible"
@@ -245,6 +242,9 @@
     },
     {
       "key": "primaryColumns.unit_abbreviation.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.customColumn1.isCellVisible"
     }
   ],
   "dynamicTriggerPathList": [
@@ -305,7 +305,7 @@
       "id": "active",
       "index": 14,
       "isCellEditable": true,
-      "isCellVisible": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n!!(\n\tcurrentRow?.ingredient_id ||\n\tcurrentRow?.child_recipe_id\n)\n)) : \n!!(\n\tcurrentRow?.ingredient_id ||\n\tcurrentRow?.child_recipe_id\n)\n })()}}",
+      "isCellVisible": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsRecipeCompTable.showRowActions(currentRow) )) :  jsRecipeCompTable.showRowActions(currentRow)  })()}}",
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
@@ -373,7 +373,7 @@
       "id": "apply_wastage",
       "index": 13,
       "isCellEditable": true,
-      "isCellVisible": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n!!(\n\tcurrentRow?.ingredient_id ||\n\tcurrentRow?.child_recipe_id\n)\n)) : \n!!(\n\tcurrentRow?.ingredient_id ||\n\tcurrentRow?.child_recipe_id\n)\n })()}}",
+      "isCellVisible": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsRecipeCompTable.showRowActions(currentRow) )) :  jsRecipeCompTable.showRowActions(currentRow)  })()}}",
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
@@ -518,9 +518,9 @@
       "isVisible": true,
       "label": "Category",
       "notation": "standard",
-      "onOptionChange": "{{\njsRecCompTable.onCategoryChange(\n\ttblRecComponents.updatedRow\n)\n}}",
+      "onOptionChange": "{{\njsRecipeCompTable.onCategoryChange(\n\ttblRecComponents.updatedRow\n)\n}}",
       "originalId": "component_category",
-      "selectOptions": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsRecCompTable.categoryOptions(currentRow) )) :  jsRecCompTable.categoryOptions(currentRow)  })()}}",
+      "selectOptions": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsRecipeCompTable.categoryOptions(currentRow) )) :  jsRecipeCompTable.categoryOptions(currentRow)  })()}}",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
@@ -554,9 +554,9 @@
       "isVisible": true,
       "label": "Name",
       "notation": "standard",
-      "onOptionChange": "{{\njsRecCompTable.onItemChange(\n\ttblRecComponents.updatedRow\n)\n}}",
+      "onOptionChange": "{{\njsRecipeCompTable.onItemChange(\n\ttblRecComponents.updatedRow\n)\n}}",
       "originalId": "component_name",
-      "selectOptions": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsRecCompTable.itemOptions(currentRow) )) :  jsRecCompTable.itemOptions(currentRow)  })()}}",
+      "selectOptions": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsRecipeCompTable.itemOptions(currentRow) )) :  jsRecipeCompTable.itemOptions(currentRow)  })()}}",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
@@ -637,14 +637,12 @@
       "alias": "created_at",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
-      "cellBackground": "",
       "columnType": "text",
       "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"created_at\"])) : created_at })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
-      "fontStyle": "",
       "horizontalAlignment": "LEFT",
       "id": "created_at",
       "index": 28,
@@ -660,7 +658,6 @@
       "notation": "standard",
       "originalId": "created_at",
       "sticky": "",
-      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},
@@ -673,7 +670,7 @@
       "allowSameOptionsInNewRow": true,
       "borderRadius": "{{tblRecComponents.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.borderRadius.appBorderRadius)))}}",
       "boxShadow": "{{tblRecComponents.processedTableData.map((currentRow, currentIndex) => ( \"none\"))}}",
-      "buttonColor": "{{tblRecComponents.processedTableData.map((currentRow, currentIndex) => ( (appsmith.theme.colors.primaryColor)))}}",
+      "buttonColor": "#71717a",
       "buttonLabel": "Delete",
       "buttonStyle": "rgb(3, 179, 101)",
       "buttonVariant": "SECONDARY",
@@ -688,6 +685,7 @@
       "id": "customColumn1",
       "index": 10,
       "isCellEditable": false,
+      "isCellVisible": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsRecipeCompTable.showRowActions(currentRow) )) :  jsRecipeCompTable.showRowActions(currentRow)  })()}}",
       "isDerived": true,
       "isDisabled": false,
       "isDiscardVisible": true,
@@ -697,7 +695,7 @@
       "label": "Delete",
       "labelColor": "#FFFFFF",
       "notation": "standard",
-      "onClick": "{{ jsRecCompTable.deleteRow(tblRecComponents.triggeredRow) }}",
+      "onClick": "{{ jsRecipeCompTable.deleteRow(tblRecComponents.triggeredRow) }}",
       "originalId": "customColumn1",
       "sticky": "",
       "textSize": "0.875rem",
@@ -898,7 +896,7 @@
       "isVisible": true,
       "label": "Type",
       "notation": "standard",
-      "onOptionChange": "{{\njsRecCompTable.onItemTypeChange(\n\ttblRecComponents.updatedRow\n)\n}}",
+      "onOptionChange": "{{\njsRecipeCompTable.onItemTypeChange(\n\ttblRecComponents.updatedRow\n)\n}}",
       "originalId": "item_type",
       "selectOptions": "[\n\t{ \"label\": \"Ingredient\", \"value\": \"ingredient\" },\n\t{ \"label\": \"Recipe\", \"value\": \"recipe\" }\n]",
       "sticky": "",
@@ -915,7 +913,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsFmt.currency(jsRecCompTable.lineCost(currentRow)) )) :  jsFmt.currency(jsRecCompTable.lineCost(currentRow))  })()}}",
+      "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsFmt.currency(jsRecipeCompTable.lineCost(currentRow)) )) :  jsFmt.currency(jsRecipeCompTable.lineCost(currentRow))  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -980,7 +978,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsFmt.currency(jsRecCompTable.costPerSelectedUnit(currentRow)) )) :  jsFmt.currency(jsRecCompTable.costPerSelectedUnit(currentRow))  })()}}",
+      "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsFmt.currency(jsRecipeCompTable.costPerSelectedUnit(currentRow)) )) :  jsFmt.currency(jsRecipeCompTable.costPerSelectedUnit(currentRow))  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -1200,9 +1198,9 @@
       "isVisible": true,
       "label": "Unit",
       "notation": "standard",
-      "onOptionChange": "{{\njsRecCompTable.syncFromTable()\n}}",
+      "onOptionChange": "{{\njsRecipeCompTable.syncFromTable()\n}}",
       "originalId": "unit_abbreviation",
-      "selectOptions": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsRecCompTable.unitOptions(currentRow) )) :  jsRecCompTable.unitOptions(currentRow)  })()}}",
+      "selectOptions": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsRecipeCompTable.unitOptions(currentRow) )) :  jsRecipeCompTable.unitOptions(currentRow)  })()}}",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
@@ -1283,14 +1281,12 @@
       "alias": "updated_at",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
-      "cellBackground": "",
       "columnType": "text",
       "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"updated_at\"])) : updated_at })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
-      "fontStyle": "",
       "horizontalAlignment": "LEFT",
       "id": "updated_at",
       "index": 29,
@@ -1306,7 +1302,6 @@
       "notation": "standard",
       "originalId": "updated_at",
       "sticky": "",
-      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},
@@ -1353,7 +1348,7 @@
   "rightColumn": 64,
   "searchKey": "",
   "showInlineEditingOptionDropdown": true,
-  "tableData": "{{ jsRecCompTable.getRows() }}",
+  "tableData": "{{ jsRecipeCompTable.getRows() }}",
   "textSize": "0.875rem",
   "topRow": 0,
   "totalRecordsCount": 0,

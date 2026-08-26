@@ -39,7 +39,7 @@
   "parentId": "8uevqmxa6a",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 41,
+  "rightColumn": 55,
   "shouldTruncate": false,
   "text": "{{ \"Delete \" + tblRecipeList.selectedRow.name }}",
   "textAlign": "LEFT",

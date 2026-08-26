@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "shouldTruncate": false,
-  "text": "{{ \"Sub-total:  \" + jsFmt.currency(jsRecCompTable.subtotal()) }}",
+  "text": "{{ \"Sub-total:  \" + jsFmt.currency(jsRecipeCompTable.subtotal()) }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 13,

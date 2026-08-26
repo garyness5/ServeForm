@@ -2,7 +2,7 @@
   "accentColor": "{{appsmith.theme.colors.primaryColor}}",
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 19,
+  "bottomRow": 16,
   "boxShadow": "none",
   "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \nappsmith.store.Recipe_mode === \"duplicate\"\n? appsmith.store.Recipe_duplicate_diet_tags || []\n: Number(appsmith.store.current_recipe_id || 0) === 0\n? []\n: (qryRecGetSelectedDietTags.data || []).map(x => String(x.value))\n))(msRecDietTags.options, msRecDietTags.serverSideFiltering) }}",
   "dynamicBindingPathList": [
