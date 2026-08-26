@@ -39,7 +39,6 @@
     "unit_abbreviation",
     "wastage_percent",
     "apply_wastage",
-    "price_per_unit",
     "line_cost",
     "diet_tag_names",
     "allergen_names",
@@ -62,9 +61,10 @@
     "saved_unit_id",
     "saved_unit_abbreviation",
     "created_at",
-    "updated_at"
+    "updated_at",
+    "price_per_unit"
   ],
-  "columnUpdatedAt": 1787704782533,
+  "columnUpdatedAt": 1787707692688,
   "columnWidthMap": {
     "active": 104,
     "allergen_names": 110,
@@ -158,9 +158,6 @@
       "key": "primaryColumns.wastage_percent.computedValue"
     },
     {
-      "key": "primaryColumns.price_per_unit.computedValue"
-    },
-    {
       "key": "primaryColumns.cost_per_base_unit.computedValue"
     },
     {
@@ -216,6 +213,9 @@
     },
     {
       "key": "primaryColumns.updated_at.computedValue"
+    },
+    {
+      "key": "primaryColumns.price_per_unit.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -637,15 +637,17 @@
       "alias": "created_at",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
       "columnType": "text",
       "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"created_at\"])) : created_at })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
+      "fontStyle": "",
       "horizontalAlignment": "LEFT",
       "id": "created_at",
-      "index": 28,
+      "index": 12,
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
@@ -658,6 +660,7 @@
       "notation": "standard",
       "originalId": "created_at",
       "sticky": "",
+      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},
@@ -978,13 +981,13 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsFmt.currency(jsRecipeCompTable.costPerSelectedUnit(currentRow)) )) :  jsFmt.currency(jsRecipeCompTable.costPerSelectedUnit(currentRow))  })()}}",
+      "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"price_per_unit\"])) : price_per_unit })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "RIGHT",
+      "horizontalAlignment": "LEFT",
       "id": "price_per_unit",
       "index": 16,
       "isCellEditable": false,
@@ -995,7 +998,7 @@
       "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Cost/Unit",
+      "label": "price_per_unit",
       "notation": "standard",
       "originalId": "price_per_unit",
       "sticky": "",
@@ -1281,15 +1284,17 @@
       "alias": "updated_at",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
       "columnType": "text",
       "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"updated_at\"])) : updated_at })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
+      "fontStyle": "",
       "horizontalAlignment": "LEFT",
       "id": "updated_at",
-      "index": 29,
+      "index": 13,
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
@@ -1302,6 +1307,7 @@
       "notation": "standard",
       "originalId": "updated_at",
       "sticky": "",
+      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},

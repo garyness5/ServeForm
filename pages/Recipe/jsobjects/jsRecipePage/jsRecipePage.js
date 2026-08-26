@@ -34,17 +34,6 @@ export default {
 
 		await jsRecipeWorkspace.initializeFromSaved();
 
-		/*
-		 * Transitional bridge:
-		 * Components still use the existing
-		 * jsRecipeCompTable/local-row path.
-		 * We remove this after Components move
-		 * into recipe_workspace.
-		 */
-		await jsRecipeCompTable.setRows(
-			jsRecipeWorkspace.current().components
-		);
-
 		return true;
 	}
 }

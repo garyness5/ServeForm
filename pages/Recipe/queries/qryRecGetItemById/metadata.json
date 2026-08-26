@@ -29,7 +29,7 @@
     ],
     "name": "qryRecGetItemById",
     "pageId": "Recipe",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }

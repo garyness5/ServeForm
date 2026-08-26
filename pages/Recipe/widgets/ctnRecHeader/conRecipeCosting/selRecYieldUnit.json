@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 8,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \nNumber(appsmith.store.current_recipe_id || 0) === 0\n? \"\"\n: qryRecGetItemById.data?.[0]?.yield_unit_id || \"\"\n))(selRecYieldUnit.options, selRecYieldUnit.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \njsRecipeWorkspace.current().header.yield_unit_id ?? null\n))(selRecYieldUnit.options, selRecYieldUnit.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -23,9 +23,16 @@
   "dynamicPropertyPathList": [
     {
       "key": "sourceData"
+    },
+    {
+      "key": "onOptionChange"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onOptionChange"
+    }
+  ],
   "isDisabled": false,
   "isFilterable": true,
   "isLoading": false,
@@ -48,7 +55,7 @@
   "mobileTopRow": 13,
   "needsErrorInfo": false,
   "onFilterUpdate": "",
-  "onOptionChange": "{{}}",
+  "onOptionChange": "{{\njsRecipeWorkspace.patchHeader({\n\tyield_unit_id:\n\tselRecYieldUnit.selectedOptionValue\n\t? Number(selRecYieldUnit.selectedOptionValue)\n\t: null\n})\n}}",
   "optionLabel": "abbreviation",
   "optionValue": "id",
   "parentColumnSpace": 4.5625,

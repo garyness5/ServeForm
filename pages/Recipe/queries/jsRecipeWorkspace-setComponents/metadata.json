@@ -1,12 +1,16 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_720d76ff-9d64-4462-8010-bef0df9a601b",
-  "id": "Recipe_jsRecipeWorkspace.initializeNew",
+  "gitSyncId": "6a0a1bde3214f344228346e7_a6ac8598-f63e-4b9b-aca5-000bebe323e7",
+  "id": "Recipe_jsRecipeWorkspace.setComponents",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
     "actionConfiguration": {
       "encodeParamsToggle": true,
-      "jsArguments": [],
+      "jsArguments": [
+        {
+          "name": "rows"
+        }
+      ],
       "paginationType": "NONE",
       "timeoutInMillisecond": 10000
     },
@@ -22,8 +26,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "jsRecipeWorkspace.initializeNew",
-    "name": "initializeNew",
+    "fullyQualifiedName": "jsRecipeWorkspace.setComponents",
+    "name": "setComponents",
     "pageId": "Recipe",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

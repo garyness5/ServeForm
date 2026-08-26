@@ -1,12 +1,16 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_9677a1a3-2942-4ef6-824f-b9f1eb677f34",
-  "id": "Recipe_jsRecipeWorkspace.emptyWorkspace",
+  "gitSyncId": "6a0a1bde3214f344228346e7_f52efbd4-3b8a-4292-a7ce-b3a3f14b3049",
+  "id": "Recipe_jsRecipeWorkspace.patchHeader",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
     "actionConfiguration": {
       "encodeParamsToggle": true,
-      "jsArguments": [],
+      "jsArguments": [
+        {
+          "name": "patch"
+        }
+      ],
       "paginationType": "NONE",
       "timeoutInMillisecond": 10000
     },
@@ -22,8 +26,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "jsRecipeWorkspace.emptyWorkspace",
-    "name": "emptyWorkspace",
+    "fullyQualifiedName": "jsRecipeWorkspace.patchHeader",
+    "name": "patchHeader",
     "pageId": "Recipe",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

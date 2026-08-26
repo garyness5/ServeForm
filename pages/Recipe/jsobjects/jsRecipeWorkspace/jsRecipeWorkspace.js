@@ -20,40 +20,74 @@ export default {
 		};
 	},
 
-	current() {
-		const workspace =
-					appsmith.store.recipe_workspace;
+	normalize(workspace) {
+		const source = workspace || {};
 
-		if (
-			workspace &&
-			typeof workspace === "object"
-		) {
-			return workspace;
-		}
-
-		return this.emptyWorkspace();
-	},
-
-	async set(workspace) {
-		const value = {
-			...this.emptyWorkspace(),
-			...(workspace || {}),
+		return {
+			id:
+			Number(source.id || 0),
 
 			header: {
 				...this.emptyHeader(),
-				...(workspace?.header || {})
+				...(source.header || {})
 			},
 
 			diet_tags:
-			Array.isArray(workspace?.diet_tags)
-			? workspace.diet_tags
+			Array.isArray(source.diet_tags)
+			? [...source.diet_tags]
 			: [],
 
 			components:
-			Array.isArray(workspace?.components)
-			? workspace.components
+			Array.isArray(source.components)
+			? source.components.map(row => ({ ...row }))
 			: []
 		};
+	},
+
+	current() {
+		return this.normalize(
+			appsmith.store.recipe_workspace
+		);
+	},
+
+	saved() {
+		return this.normalize(
+			appsmith.store.recipe_workspace_saved
+		);
+	},
+
+	async setCurrent(workspace) {
+		const value =
+					this.normalize(workspace);
+
+		await storeValue(
+			"recipe_workspace",
+			value
+		);
+
+		return value;
+	},
+
+	async setSaved(workspace) {
+		const value =
+					this.normalize(workspace);
+
+		await storeValue(
+			"recipe_workspace_saved",
+			value
+		);
+
+		return value;
+	},
+
+	async setBoth(workspace) {
+		const value =
+					this.normalize(workspace);
+
+		await storeValue(
+			"recipe_workspace_saved",
+			value
+		);
 
 		await storeValue(
 			"recipe_workspace",
@@ -66,6 +100,10 @@ export default {
 	async clear() {
 		await removeValue(
 			"recipe_workspace"
+		);
+
+		await removeValue(
+			"recipe_workspace_saved"
 		);
 
 		return true;
@@ -125,7 +163,8 @@ export default {
 			.map(row =>
 					 Number(row.value || 0)
 					)
-			.filter(Boolean);
+			.filter(Boolean)
+			.sort((a, b) => a - b);
 	},
 
 	componentsFromSaved() {
@@ -144,14 +183,12 @@ export default {
 		}));
 	},
 
-	async initializeFromSaved() {
-		const id =
-					Number(
-						appsmith.store.current_recipe_id || 0
-					);
-
-		return await this.set({
-			id,
+	savedTruth() {
+		return this.normalize({
+			id:
+			Number(
+				appsmith.store.current_recipe_id || 0
+			),
 
 			header:
 			this.headerFromSaved(),
@@ -164,9 +201,63 @@ export default {
 		});
 	},
 
-	async initializeNew() {
-		return await this.set(
-			this.emptyWorkspace()
+	async initializeFromSaved() {
+		return await this.setBoth(
+			this.savedTruth()
 		);
 	},
+
+	async initializeNew() {
+		const value =
+					this.emptyWorkspace();
+
+		return await this.setBoth(
+			value
+		);
+	},
+
+	async patchHeader(patch) {
+		const workspace =
+					this.current();
+
+		return await this.setCurrent({
+			...workspace,
+
+			header: {
+				...workspace.header,
+				...(patch || {})
+			}
+		});
+	},
+
+	async setDietTags(values) {
+		const tags =
+					(values || [])
+		.map(Number)
+		.filter(Boolean)
+		.sort((a, b) => a - b);
+
+		return await this.setCurrent({
+			...this.current(),
+			diet_tags: tags
+		});
+	},
+
+	async setComponents(rows) {
+		return await this.setCurrent({
+			...this.current(),
+
+			components:
+			Array.isArray(rows)
+			? rows.map(row => ({ ...row }))
+			: []
+		});
+	},
+
+	isDirty() {
+		return (
+			JSON.stringify(this.current()) !==
+			JSON.stringify(this.saved())
+		);
+	}
 };

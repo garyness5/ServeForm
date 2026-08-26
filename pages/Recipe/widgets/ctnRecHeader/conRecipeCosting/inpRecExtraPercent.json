@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 13,
   "boxShadow": "none",
-  "defaultText": "{{ Number(appsmith.store.current_recipe_id || 0) === 0 ? 0 : qryRecGetItemById.data?.[0]?.extra_percent ?? 0 }}",
+  "defaultText": "{{\njsRecipeWorkspace.current().header.extra_percent == null\n? \"0\"\n: String(jsRecipeWorkspace.current().header.extra_percent)\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -18,7 +18,16 @@
     }
   ],
   "dynamicHeight": "FIXED",
-  "dynamicTriggerPathList": [],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onTextChanged"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onTextChanged"
+    }
+  ],
   "iconAlign": "left",
   "inputType": "TEXT",
   "isDisabled": false,
@@ -41,6 +50,7 @@
   "mobileRightColumn": 23,
   "mobileTopRow": 10,
   "needsErrorInfo": false,
+  "onTextChanged": "{{\njsRecipeWorkspace.patchHeader({\n\textra_percent:\n\tinpRecExtraPercent.text === \"\" ||\n\tinpRecExtraPercent.text == null\n\t? 0\n\t: Number(inpRecExtraPercent.text)\n})\n}}",
   "parentColumnSpace": 4.5625,
   "parentId": "o4uwuew4ll",
   "parentRowSpace": 10,

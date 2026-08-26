@@ -90,43 +90,40 @@ export default {
 	},
 
 	async setRows(rows) {
-		const normalized = this.normalizeRows(rows);
-		await storeValue("rec_components_local_rows", normalized);
+		const normalized =
+					this.normalizeRows(rows);
+
+		await jsRecipeWorkspace.setComponents(
+			normalized
+		);
+
 		return normalized;
 	},
 
 	getRows() {
-		const rows = appsmith.store.rec_components_local_rows;
-		const currentRecipeId = Number(appsmith.store.current_recipe_id || 0);
+		const rows =
+					jsRecipeWorkspace
+		.current()
+		.components || [];
 
-		if (Array.isArray(rows) && rows.length > 0) {
-			const contentRows = rows.filter(r => this.hasContent(r));
+		const currentRecipeId =
+					Number(
+						appsmith.store.current_recipe_id || 0
+					);
 
-			const contentRecipeIds = contentRows
-			.map(r => Number(r.recipe_id || 0))
-			.filter(id => id > 0);
-
-			if (currentRecipeId > 0) {
-				const belongsToCurrentRecipe =
-							contentRecipeIds.length === 0 ||
-							contentRecipeIds.every(id => id === currentRecipeId);
-
-				if (belongsToCurrentRecipe) {
-					return rows.map((r, index) => ({
-						...r,
-						recipe_id: currentRecipeId,
-						line_no: index + 1
-					}));
-				}
-			}
-
-			if (currentRecipeId === 0 && contentRecipeIds.length === 0) {
-				return rows.map((r, index) => ({
+		if (
+			Array.isArray(rows) &&
+			rows.length > 0
+		) {
+			return rows.map(
+				(r, index) => ({
 					...r,
-					recipe_id: 0,
-					line_no: index + 1
-				}));
-			}
+					recipe_id:
+					currentRecipeId,
+					line_no:
+					index + 1
+				})
+			);
 		}
 
 		return this.normalizeRows([]);
@@ -253,7 +250,11 @@ export default {
 	},
 
 	async clearRows() {
-		await removeValue("rec_components_local_rows");
+		await jsRecipeWorkspace.setComponents(
+			[]
+		);
+
+		return true;
 	},
 
 	itemKey(row) {
@@ -357,7 +358,6 @@ export default {
 	},
 
 	async clearDraftRows() {
-		await removeValue("rec_components_local_rows");
 		return await this.setRows([]);
 	},
 

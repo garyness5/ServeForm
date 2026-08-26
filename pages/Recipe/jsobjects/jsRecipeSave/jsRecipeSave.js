@@ -36,42 +36,13 @@ export default {
 
 	headerPayload() {
 		return {
-			name:
-			String(inpRecName.text || "").trim(),
-
-			category_id:
-			selRecCategory.selectedOptionValue
-			? Number(selRecCategory.selectedOptionValue)
-			: null,
-
-			yield_qty:
-			inpRecYieldQty.text !== "" &&
-			inpRecYieldQty.text != null
-			? Number(inpRecYieldQty.text)
-			: null,
-
-			yield_unit_id:
-			selRecYieldUnit.selectedOptionValue
-			? Number(selRecYieldUnit.selectedOptionValue)
-			: null,
-
-			extra_percent:
-			inpRecExtraPercent.text !== "" &&
-			inpRecExtraPercent.text != null
-			? Number(inpRecExtraPercent.text)
-			: 0,
-
-			notes:
-			rteRecNotes.text || null,
-
-			active:
-			chkRecActive.isChecked !== false
+			...jsRecipeWorkspace.current().header
 		};
 	},
 
 	dietTagsPayload() {
 		return (
-			msRecDietTags.selectedOptionValues || []
+			jsRecipeWorkspace.current().diet_tags || []
 		).map(id => ({
 			tag_id: Number(id)
 		}));
@@ -293,12 +264,18 @@ export default {
 	},
 
 	isDirty() {
-		if (this.isNewBlankRecipe()) return false;
+		if (
+			Number(appsmith.store.current_recipe_id || 0) === 0 &&
+			!jsRecipeWorkspace.isDirty() &&
+			jsRecipeCompTable.rowsForSave().length === 0
+		) {
+			return false;
+		}
 
 		return (
-			JSON.stringify(this.headerSnapshotFromPage()) !== JSON.stringify(this.headerSnapshotFromSaved()) ||
-			JSON.stringify(this.currentComponentSnapshot()) !== JSON.stringify(this.savedComponentSnapshot()) ||
-			JSON.stringify(this.dietTagSnapshotFromPage()) !== JSON.stringify(this.dietTagSnapshotFromSaved())
+			jsRecipeWorkspace.isDirty() ||
+			JSON.stringify(this.currentComponentSnapshot()) !==
+			JSON.stringify(this.savedComponentSnapshot())
 		);
 	},
 
@@ -306,12 +283,21 @@ export default {
 		await jsRecipeCompTable.syncFromTable();
 
 		if (this.isDirty()) {
-			await storeValue("pendingRecipeAction", "close");
-			showModal("mdlRecUnsavedChanges");
+			await storeValue(
+				"pendingRecipeAction",
+				"close"
+			);
+
+			showModal(
+				"mdlRecUnsavedChanges"
+			);
+
 			return;
 		}
 
-		navigateTo("RecipeList");
+		navigateTo(
+			"RecipeList"
+		);
 	},
 
 	async saveAndCloseRecipe() {

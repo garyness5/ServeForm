@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 8,
   "boxShadow": "none",
-  "defaultText": "{{ Number(appsmith.store.current_recipe_id || 0) === 0 ? \"\" : qryRecGetItemById.data?.[0]?.yield_qty || \"\" }}",
+  "defaultText": "{{\njsRecipeWorkspace.current().header.yield_qty == null\n? \"\"\n: String(jsRecipeWorkspace.current().header.yield_qty)\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -18,7 +18,16 @@
     }
   ],
   "dynamicHeight": "FIXED",
-  "dynamicTriggerPathList": [],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onTextChanged"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onTextChanged"
+    }
+  ],
   "iconAlign": "left",
   "inputType": "TEXT",
   "isDisabled": false,
@@ -41,6 +50,7 @@
   "mobileRightColumn": 26,
   "mobileTopRow": 1,
   "needsErrorInfo": false,
+  "onTextChanged": "{{\njsRecipeWorkspace.patchHeader({\n\tyield_qty:\n\tinpRecYieldQty.text === \"\" ||\n\tinpRecYieldQty.text == null\n\t? null\n\t: Number(inpRecYieldQty.text)\n})\n}}",
   "parentColumnSpace": 4.5625,
   "parentId": "o4uwuew4ll",
   "parentRowSpace": 10,

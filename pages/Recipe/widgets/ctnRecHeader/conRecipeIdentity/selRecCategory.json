@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 12,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \nappsmith.store.Recipe_mode === \"duplicate\"\n? String(appsmith.store.Recipe_duplicate_header?.category_id || \"\")\n: Number(appsmith.store.current_recipe_id || 0) === 0\n? \"\"\n: String(qryRecGetItemById.data?.[0]?.category_id || \"\")\n))(selRecCategory.options, selRecCategory.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n\tjsRecipeWorkspace.current().header.category_id == null\n\t\t? \"\"\n\t\t: String(jsRecipeWorkspace.current().header.category_id)\n))(selRecCategory.options, selRecCategory.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -23,9 +23,16 @@
   "dynamicPropertyPathList": [
     {
       "key": "sourceData"
+    },
+    {
+      "key": "onOptionChange"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onOptionChange"
+    }
+  ],
   "isDisabled": false,
   "isFilterable": true,
   "isLoading": false,
@@ -47,6 +54,7 @@
   "mobileRightColumn": 19,
   "mobileTopRow": 9,
   "needsErrorInfo": false,
+  "onOptionChange": "{{\njsRecipeWorkspace.patchHeader({\n\tcategory_id:\n\tselRecCategory.selectedOptionValue\n\t? Number(selRecCategory.selectedOptionValue)\n\t: null\n})\n}}",
   "optionLabel": "label",
   "optionValue": "value",
   "parentColumnSpace": 6.6953125,

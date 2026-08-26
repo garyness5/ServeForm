@@ -3,7 +3,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 26,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
-  "defaultText": "{{ Number(appsmith.store.current_recipe_id || 0) === 0 ? \"\" : qryRecGetItemById.data?.[0]?.notes || \"\" }}",
+  "defaultText": "{{ jsRecipeWorkspace.current().header.notes || \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "borderRadius"
@@ -16,7 +16,16 @@
     }
   ],
   "dynamicHeight": "FIXED",
-  "dynamicTriggerPathList": [],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onTextChange"
+    }
+  ],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onTextChange"
+    }
+  ],
   "flexVerticalAlignment": "start",
   "inputType": "html",
   "isDefaultClickDisabled": true,
@@ -40,6 +49,7 @@
   "mobileRightColumn": 27,
   "mobileTopRow": 3,
   "needsErrorInfo": false,
+  "onTextChange": "{{\njsRecipeWorkspace.patchHeader({\n\tnotes: rteRecNotes.text || null\n})\n}}",
   "parentColumnSpace": 19.5,
   "parentId": "3x0od467lh",
   "parentRowSpace": 10,
