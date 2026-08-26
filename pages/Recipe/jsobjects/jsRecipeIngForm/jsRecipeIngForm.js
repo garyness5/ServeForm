@@ -1,15 +1,5 @@
 export default {
 	async openAdd() {
-		await storeValue(
-			"RecIngForm_mode",
-			"add"
-		);
-
-		await storeValue(
-			"RecIngForm_saved_id",
-			null
-		);
-
 		await resetWidget(
 			"mdlRecIngAddIng",
 			true
@@ -24,7 +14,9 @@ export default {
 
 	validate() {
 		const name =
-					String(inpRecIngIngredient.text || "").trim();
+					String(
+						inpRecIngIngredient.text || ""
+					).trim();
 
 		if (!name) {
 			showAlert(
@@ -38,7 +30,7 @@ export default {
 		return true;
 	},
 
-	async save(closeAfterSave = true) {
+	async save() {
 		if (!this.validate()) {
 			return false;
 		}
@@ -61,34 +53,15 @@ export default {
 				return false;
 			}
 
-			await storeValue(
-				"RecIngForm_saved_id",
-				savedId
-			);
-
 			await qryRecGetComponentItems.run();
+
+			closeModal(
+				"mdlRecIngAddIng"
+			);
 
 			showAlert(
 				"Ingredient saved.",
 				"success"
-			);
-
-			if (closeAfterSave) {
-				closeModal(
-					"mdlRecIngAddIng"
-				);
-
-				return true;
-			}
-
-			await storeValue(
-				"RecIngForm_saved_id",
-				null
-			);
-
-			resetWidget(
-				"mdlRecIngAddIng",
-				true
 			);
 
 			return true;
@@ -105,6 +78,10 @@ export default {
 	},
 
 	cancel() {
-		closeModal("mdlRecIngAddIng");
+		closeModal(
+			"mdlRecIngAddIng"
+		);
+
+		return true;
 	}
-}
+};

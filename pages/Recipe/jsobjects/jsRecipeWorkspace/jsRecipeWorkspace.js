@@ -339,10 +339,6 @@ export default {
 			"recipe_baseline"
 		);
 
-		await removeValue(
-			"recipe_initial"
-		);
-
 		return true;
 	}
 };

@@ -28,13 +28,9 @@ export default {
 			active: true,
 
 			wastage_percent: null,
-			price_per_unit: null,
-			cost_per_base_unit: null,
-			factor_to_base: null,
 
 			allergen_names: null,
 			diet_tag_names: null,
-			line_cost: null,
 
 			child_active: true,
 			child_deleted: false,
@@ -191,13 +187,9 @@ export default {
 			unit_type: null,
 
 			wastage_percent: null,
-			price_per_unit: null,
-			cost_per_base_unit: null,
-			factor_to_base: null,
 
 			allergen_names: null,
 			diet_tag_names: null,
-			line_cost: null,
 
 			child_active: true,
 			child_deleted: false,
@@ -210,32 +202,14 @@ export default {
 
 	clearAfterCategory(row) {
 		return {
-			component_category: row.component_category || null,
-			component_name: null,
+			...this.clearAfterItemType({
+				...row,
+				item_type: row.item_type
+			}),
 
-			ingredient_id: null,
-			child_recipe_id: null,
-
-			qty: null,
-			unit_id: null,
-			unit_abbreviation: null,
-			unit_type: null,
-
-			wastage_percent: null,
-			price_per_unit: null,
-			cost_per_base_unit: null,
-			factor_to_base: null,
-
-			allergen_names: null,
-			diet_tag_names: null,
-			line_cost: null,
-
-			child_active: true,
-			child_deleted: false,
-			component_status: "active",
-
-			apply_wastage: true,
-			active: true
+			item_type: row.item_type || null,
+			component_category:
+			row.component_category || null
 		};
 	},
 
@@ -312,19 +286,14 @@ export default {
 		const itemType = row?.item_type;
 		if (!itemType) return [];
 
-		const currentRecipeId =
-					Number(appsmith.store.current_recipe_id || 0);
-
 		const categories =
 					(qryRecGetComponentItems.data || [])
-		.filter(i => i.item_type === itemType)
 		.filter(i =>
-						!(
-			itemType === "recipe" &&
-			Number(i.id) === currentRecipeId
-		)
+						i.item_type === itemType
 					 )
-		.map(i => i.category_name)
+		.map(i =>
+				 i.category_name
+				)
 		.filter(Boolean);
 
 		return [...new Set(categories)]
@@ -340,26 +309,24 @@ export default {
 		if (!itemType) return [];
 
 		const used = this.usedItemKeys(row);
-		const currentRecipeId =
-					Number(appsmith.store.current_recipe_id || 0);
 
 		return (qryRecGetComponentItems.data || [])
-			.filter(i => i.item_type === itemType)
 			.filter(i =>
-							!(
-			itemType === "recipe" &&
-			Number(i.id) === currentRecipeId
-		)
+							i.item_type === itemType
 						 )
 			.filter(i =>
 							!row?.component_category ||
 							i.category_name === row.component_category
 						 )
 			.filter(i =>
-							!used.includes(`${i.item_type}:${i.id}`)
+							!used.includes(
+			`${i.item_type}:${i.id}`
+		)
 						 )
 			.sort((a, b) =>
-						String(a.name).localeCompare(String(b.name))
+						String(a.name).localeCompare(
+			String(b.name)
+		)
 					 )
 			.map(i => ({
 			label: i.name,
@@ -430,15 +397,6 @@ export default {
 				wastage_percent:
 				item.wastage_percent,
 
-				price_per_unit:
-				item.price_per_unit,
-
-				cost_per_base_unit:
-				item.cost_per_base_unit,
-
-				factor_to_base:
-				item.factor_to_base,
-
 				allergen_names:
 				item.allergen_names,
 
@@ -458,16 +416,9 @@ export default {
 				true,
 
 				active:
-				true,
-
-				line_cost:
-				null
+				true
 			}
 		);
-	},
-
-	async clearDraftRows() {
-		return await this.setRows([]);
 	},
 
 	async deleteRow(row) {
@@ -595,26 +546,6 @@ export default {
 		});
 	},
 
-	categoryOptionsForType(itemType) {
-		if (itemType === "ingredient") {
-			return (qryRecGetIngCategories.data || [])
-				.map(x => ({
-				label: x.name,
-				value: String(x.id)
-			}));
-		}
-
-		if (itemType === "recipe") {
-			return (qryRecGetCategories.data || [])
-				.map(x => ({
-				label: x.name,
-				value: String(x.id)
-			}));
-		}
-
-		return [];
-	},
-
 	unitOptions(row) {
 		const unitType = row?.unit_type;
 		if (!unitType) return [];
@@ -629,12 +560,20 @@ export default {
 		}));
 	},
 
-	costPerSelectedUnit(row) {
+	showUseWaste(row) {
+		return !!(
+			row?.item_type === "ingredient" &&
+			this.showRowActions(row)
+		);
+	},
+
+	pricePerUnit(row) {
 		if (
 			!row ||
 			row.active === false ||
 			row.child_active === false ||
-			row.child_deleted === true
+			row.child_deleted === true ||
+			!row.item_type
 		) {
 			return null;
 		}
@@ -644,7 +583,9 @@ export default {
 		? Number(row.ingredient_id || 0)
 		: Number(row.child_recipe_id || 0);
 
-		if (!itemId) return null;
+		if (!itemId) {
+			return null;
+		}
 
 		const item =
 					(qryRecGetComponentItems.data || [])
@@ -656,7 +597,6 @@ export default {
 		const unit =
 					(qryRecGetComponentUnits.data || [])
 		.find(u =>
-					Number(u.id) === Number(row.unit_id || 0) ||
 					u.abbreviation === row.unit_abbreviation
 				 );
 
@@ -682,62 +622,30 @@ export default {
 				Number(item.wastage_percent || 0) / 100;
 		}
 
-		return cost;
+		return Math.round(cost * 10000) / 10000;
 	},
 
 	lineCost(row) {
 		if (
 			!row ||
-			row.active === false ||
-			row.child_active === false ||
-			row.child_deleted === true ||
 			row.qty === "" ||
-			row.qty == null ||
-			!row.unit_abbreviation ||
-			!row.item_type ||
-			!row.component_name
+			row.qty == null
 		) {
 			return null;
 		}
 
-		const item =
-					(qryRecGetComponentItems.data || [])
-		.find(i =>
-					i.item_type === row.item_type &&
-					Number(i.id) ===
-					Number(
-			row.item_type === "ingredient"
-			? row.ingredient_id
-			: row.child_recipe_id
-		)
-				 );
+		const pricePerUnit =
+					this.pricePerUnit(row);
 
-		const unit =
-					(qryRecGetComponentUnits.data || [])
-		.find(u =>
-					u.abbreviation === row.unit_abbreviation
-				 );
-
-		if (
-			!item ||
-			!unit ||
-			item.cost_per_base_unit == null
-		) {
+		if (pricePerUnit == null) {
 			return null;
 		}
 
-		let cost =
-				Number(row.qty) *
-				Number(unit.factor_to_base || 0) *
-				Number(item.cost_per_base_unit || 0);
-
-		if (row.apply_wastage === false) {
-			cost *=
-				1 -
-				Number(item.wastage_percent || 0) / 100;
-		}
-
-		return Math.round(cost * 100) / 100;
+		return Math.round(
+			Number(row.qty) *
+			Number(pricePerUnit) *
+			100
+		) / 100;
 	},
 
 	subtotal() {
