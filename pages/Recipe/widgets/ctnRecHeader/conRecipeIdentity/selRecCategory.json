@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 12,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n\tjsRecipeWorkspace.current().header.category_id == null\n\t\t? \"\"\n\t\t: String(jsRecipeWorkspace.current().header.category_id)\n))(selRecCategory.options, selRecCategory.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \njsRecipeWorkspace.initialHeader().category_id == null\n? \"\"\n: String(jsRecipeWorkspace.initialHeader().category_id)\n))(selRecCategory.options, selRecCategory.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -23,16 +23,9 @@
   "dynamicPropertyPathList": [
     {
       "key": "sourceData"
-    },
-    {
-      "key": "onOptionChange"
     }
   ],
-  "dynamicTriggerPathList": [
-    {
-      "key": "onOptionChange"
-    }
-  ],
+  "dynamicTriggerPathList": [],
   "isDisabled": false,
   "isFilterable": true,
   "isLoading": false,
@@ -54,7 +47,7 @@
   "mobileRightColumn": 19,
   "mobileTopRow": 9,
   "needsErrorInfo": false,
-  "onOptionChange": "{{\njsRecipeWorkspace.patchHeader({\n\tcategory_id:\n\tselRecCategory.selectedOptionValue\n\t? Number(selRecCategory.selectedOptionValue)\n\t: null\n})\n}}",
+  "onOptionChange": "",
   "optionLabel": "label",
   "optionValue": "value",
   "parentColumnSpace": 6.6953125,
@@ -65,7 +58,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 62,
   "serverSideFiltering": false,
-  "sourceData": "{{ qryRecGetCategories.data.map(x => ({\n  label: x.name,\n  value: String(x.id)\n})) }}",
+  "sourceData": "{{\n(qryRecGetCategories.data || []).map(x => ({\n\tlabel: x.name,\n\tvalue: String(x.id)\n}))\n}}",
   "topRow": 8,
   "type": "SELECT_WIDGET",
   "version": 1,

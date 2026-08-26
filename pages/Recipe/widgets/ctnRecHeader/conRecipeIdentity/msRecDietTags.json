@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 16,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n(jsRecipeWorkspace.current().diet_tags || [])\n.map(String)\n))(msRecDietTags.options, msRecDietTags.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  jsRecipeWorkspace.initialDietTags().map(String) ))(msRecDietTags.options, msRecDietTags.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -23,16 +23,9 @@
   "dynamicPropertyPathList": [
     {
       "key": "sourceData"
-    },
-    {
-      "key": "onOptionChange"
     }
   ],
-  "dynamicTriggerPathList": [
-    {
-      "key": "onOptionChange"
-    }
-  ],
+  "dynamicTriggerPathList": [],
   "isDisabled": false,
   "isFilterable": true,
   "isLoading": false,
@@ -54,7 +47,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onOptionChange": "{{\njsRecipeWorkspace.setDietTags(\n\tmsRecDietTags.selectedOptionValues\n)\n}}",
+  "onOptionChange": "",
   "optionLabel": "label",
   "optionValue": "value",
   "parentColumnSpace": 6.6953125,

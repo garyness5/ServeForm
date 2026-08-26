@@ -4,7 +4,7 @@
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 25,
-  "defaultCheckedState": "{{ jsRecipeWorkspace.current().header.active !== false }}",
+  "defaultCheckedState": "{{ jsRecipeWorkspace.initialHeader().active !== false }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -20,16 +20,9 @@
   "dynamicPropertyPathList": [
     {
       "key": "defaultCheckedState"
-    },
-    {
-      "key": "onCheckChange"
     }
   ],
-  "dynamicTriggerPathList": [
-    {
-      "key": "onCheckChange"
-    }
-  ],
+  "dynamicTriggerPathList": [],
   "isDisabled": false,
   "isLoading": false,
   "isRequired": false,
@@ -48,7 +41,7 @@
   "mobileRightColumn": 13,
   "mobileTopRow": 28,
   "needsErrorInfo": false,
-  "onCheckChange": "{{\njsRecipeWorkspace.patchHeader({\n\tactive: chkRecActive.isChecked !== false\n})\n}}",
+  "onCheckChange": "",
   "originalBottomRow": 29,
   "originalTopRow": 25,
   "parentColumnSpace": 6.6953125,

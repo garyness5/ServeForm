@@ -7,51 +7,31 @@ export default {
 		}
 	},
 
-	requiredSaveMessage() {
-		const missing = [];
-
-		if (!String(inpRecName.text || "").trim()) {
-			missing.push("Recipe name");
-		}
-
-		if (!selRecCategory.selectedOptionValue) {
-			missing.push("Category");
-		}
-
-		if (!missing.length) return null;
-
-		return `You need to have a ${missing.join(" and a ")} selected before you can save.`;
-	},
-
-	validateBeforeSave() {
-		const message = this.requiredSaveMessage();
-
-		if (message) {
-			showAlert(message, "warning");
-			return false;
-		}
-
-		return true;
+	saveSnapshot() {
+		return (
+			appsmith.store.recipe_save_snapshot ||
+			jsRecipeWorkspace.current()
+		);
 	},
 
 	headerPayload() {
 		return {
-			...jsRecipeWorkspace.current().header
+			...this.saveSnapshot().header
 		};
 	},
 
 	dietTagsPayload() {
 		return (
-			jsRecipeWorkspace.current().diet_tags || []
+			this.saveSnapshot().diet_tags || []
 		).map(id => ({
 			tag_id: Number(id)
 		}));
 	},
 
 	componentsPayload() {
-		return jsRecipeCompTable
-			.rowsForSave()
-			.map(row => ({
+		return (
+			this.saveSnapshot().components || []
+		).map(row => ({
 			item_type:
 			row.item_type || null,
 
@@ -66,15 +46,14 @@ export default {
 			: null,
 
 			qty:
-			row.qty !== "" &&
-			row.qty != null
-			? Number(row.qty)
-			: null,
+			row.qty == null
+			? null
+			: Number(row.qty),
 
 			unit_id:
-			row.unit_id
-			? Number(row.unit_id)
-			: null,
+			row.unit_id == null
+			? null
+			: Number(row.unit_id),
 
 			apply_wastage:
 			row.apply_wastage !== false,
@@ -84,13 +63,57 @@ export default {
 		}));
 	},
 
-	async saveRecipe() {
-		if (!this.validateBeforeSave()) {
+	requiredSaveMessage(snapshot) {
+		const name =
+					String(
+						snapshot?.header?.name || ""
+					).trim();
+
+		return name
+			? null
+		: "Recipe Name is required before you can save.";
+	},
+
+	validateBeforeSave(snapshot) {
+		const message =
+					this.requiredSaveMessage(snapshot);
+
+		if (message) {
+			showAlert(
+				message,
+				"warning"
+			);
+
 			return false;
 		}
 
+		return true;
+	},
+
+	isDirty() {
+		return jsRecipeWorkspace.isDirty();
+	},
+
+	async saveRecipe() {
 		try {
 			await jsRecipeCompTable.syncFromTable();
+
+			const snapshot =
+						jsRecipeWorkspace.current();
+
+			if (!this.validateBeforeSave(snapshot)) {
+				return false;
+			}
+
+			/*
+				Freeze ONE exact Recipe snapshot.
+				qrySaveRecipe reads all three payloads
+				from this same object.
+			*/
+			await storeValue(
+				"recipe_save_snapshot",
+				snapshot
+			);
 
 			const result =
 						await qrySaveRecipe.run();
@@ -114,11 +137,20 @@ export default {
 				savedId
 			);
 
-			await qryRecGetItemById.run();
-			await qryRecGetSelectedDietTags.run();
-			await qryRecGetComponents.run();
+			await Promise.all([
+				qryRecGetItemById.run(),
+				qryRecGetSelectedDietTags.run(),
+				qryRecGetComponents.run()
+			]);
 
 			await jsRecipeCompTable.loadFromQuery();
+
+			await jsRecipeWorkspace
+				.initializeFromSaved();
+
+			await removeValue(
+				"recipe_save_snapshot"
+			);
 
 			showAlert(
 				"Recipe saved.",
@@ -128,6 +160,10 @@ export default {
 			return true;
 
 		} catch (error) {
+			await removeValue(
+				"recipe_save_snapshot"
+			);
+
 			showAlert(
 				error?.message ||
 				"Recipe could not be saved.",
@@ -136,147 +172,6 @@ export default {
 
 			return false;
 		}
-	},
-
-	clean(value) {
-		if (value === undefined || value === "") return null;
-		if (typeof value === "number") return Number(value);
-		if (!isNaN(value) && value !== null && value !== true && value !== false) return Number(value);
-		return value;
-	},
-
-	textClean(value) {
-		const text = String(value || "").trim();
-		return text || null;
-	},
-
-	headerSnapshotFromPage() {
-		return {
-			name: this.textClean(inpRecName.text),
-			category_id: this.clean(selRecCategory.selectedOptionValue),
-			active: chkRecActive.isChecked === false ? false : true,
-			yield_qty: this.clean(inpRecYieldQty.text),
-			yield_unit_id: this.clean(selRecYieldUnit.selectedOptionValue),
-			extra_percent: this.clean(inpRecExtraPercent.text),
-			notes: this.textClean(rteRecNotes.text)
-		};
-	},
-
-	headerSnapshotFromSaved() {
-		if (
-			Number(appsmith.store.current_recipe_id || 0) === 0
-		) {
-			return {
-				name: null,
-				category_id: null,
-				active: true,
-				yield_qty: null,
-				yield_unit_id: null,
-				extra_percent: 0,
-				notes: null
-			};
-		}
-
-		const r =
-					Array.isArray(qryRecGetItemById.data)
-		? qryRecGetItemById.data[0]
-		: qryRecGetItemById.data;
-
-		if (!r) {
-			return {
-				name: null,
-				category_id: null,
-				active: true,
-				yield_qty: null,
-				yield_unit_id: null,
-				extra_percent: 0,
-				notes: null
-			};
-		}
-
-		return {
-			name: this.textClean(r.name),
-			category_id: this.clean(r.category_id),
-			active: r.active === false ? false : true,
-			yield_qty: this.clean(r.yield_qty),
-			yield_unit_id: this.clean(r.yield_unit_id),
-			extra_percent: this.clean(r.extra_percent),
-			notes: this.textClean(r.notes)
-		};
-	},
-
-	componentSnapshot(rows) {
-		return (rows || [])
-			.filter(r => r.item_type && (r.ingredient_id || r.child_recipe_id))
-			.map((r, index) => ({
-			line_no: index + 1,
-			item_type: r.item_type || null,
-			ingredient_id: r.item_type === "ingredient" ? this.clean(r.ingredient_id) : null,
-			child_recipe_id: r.item_type === "recipe" ? this.clean(r.child_recipe_id) : null,
-			qty: this.clean(r.saved_qty ?? r.qty),
-			unit_id: this.clean(r.saved_unit_id ?? r.unit_id),
-			apply_wastage: r.apply_wastage === false ? false : true,
-			active: r.active === false ? false : true
-		}));
-	},
-
-	currentComponentSnapshot() {
-		return this.componentSnapshot(jsRecipeCompTable.rowsForSave());
-	},
-
-	savedComponentSnapshot() {
-		if (
-			Number(appsmith.store.current_recipe_id || 0) === 0
-		) {
-			return [];
-		}
-
-		return this.componentSnapshot(
-			qryRecGetComponents.data || []
-		);
-	},
-
-	isNewBlankRecipe() {
-		return Number(appsmith.store.current_recipe_id || 0) === 0 &&
-			!this.headerSnapshotFromPage().name &&
-			!this.headerSnapshotFromPage().category_id &&
-			this.currentComponentSnapshot().length === 0;
-	},
-
-	dietTagSnapshotFromPage() {
-		return (msRecDietTags.selectedOptionValues || [])
-			.map(x => Number(x))
-			.filter(x => x)
-			.sort((a, b) => a - b);
-	},
-
-	dietTagSnapshotFromSaved() {
-		if (
-			Number(appsmith.store.current_recipe_id || 0) === 0
-		) {
-			return [];
-		}
-
-		return (qryRecGetSelectedDietTags.data || [])
-			.map(r => Number(r.value))
-			.filter(x => x)
-			.sort((a, b) => a - b);
-	},
-
-	isDirty() {
-		if (
-			Number(appsmith.store.current_recipe_id || 0) === 0 &&
-			!jsRecipeWorkspace.isDirty() &&
-			jsRecipeCompTable.rowsForSave().length === 0
-		) {
-			return false;
-		}
-
-		return (
-			jsRecipeWorkspace.isDirty() ||
-			JSON.stringify(this.currentComponentSnapshot()) !==
-			JSON.stringify(this.savedComponentSnapshot())
-		);
 	},
 
 	async closeRecipe() {
@@ -292,446 +187,42 @@ export default {
 				"mdlRecUnsavedChanges"
 			);
 
-			return;
+			return false;
 		}
+
+		navigateTo("RecipeList");
+		return true;
+	},
+
+	async saveAndCloseRecipe() {
+		const saved =
+					await this.saveRecipe();
+
+		if (!saved) {
+			return false;
+		}
+
+		closeModal(
+			"mdlRecUnsavedChanges"
+		);
 
 		navigateTo(
 			"RecipeList"
 		);
-	},
 
-	async saveAndCloseRecipe() {
-		const result = await this.saveRecipe();
-		if (!result) return null;
-
-		closeModal("mdlRecUnsavedChanges");
-		navigateTo("RecipeList");
+		return true;
 	},
 
 	async closeWithoutSaving() {
-		closeModal("mdlRecUnsavedChanges");
-		await jsRecipeCompTable.clearDraftRows();
-		navigateTo("RecipeList");
-	},
-
-	async duplicateRecipe() {
-		await jsRecipeCompTable.syncFromTable();
-
-		const sourceId =
-					Number(appsmith.store.current_recipe_id || 0);
-
-		if (!sourceId) {
-			showAlert(
-				"This Recipe has not been saved yet.",
-				"warning"
-			);
-			return false;
-		}
-
-		const header =
-					this.headerSnapshotFromPage();
-
-		const currentName =
-					String(header.name || "").trim();
-
-		const savedName =
-					String(
-						qryRecGetItemById.data?.[0]?.name || ""
-					).trim();
-
-		const nameChanged =
-					currentName !== savedName;
-
-		const allNames = [];
-
-		let duplicateName =
-				currentName || savedName;
-
-		if (!nameChanged) {
-			const escapedName =
-						savedName.replace(
-							/[.*+?^${}()|[\]\\]/g,
-							"\\$&"
-						);
-
-			const copyRegex =
-						new RegExp(
-							`^${escapedName} - Copy(?: (\\d+))?$`
-						);
-
-			const usedNumbers =
-						allNames
-			.map(name => {
-				const match =
-							name.match(copyRegex);
-
-				if (!match) {
-					return 0;
-				}
-
-				return match[1]
-					? Number(match[1])
-				: 1;
-			})
-			.filter(n => n > 0);
-
-			const nextNumber =
-						usedNumbers.length === 0
-			? 1
-			: Math.max(...usedNumbers) + 1;
-
-			duplicateName =
-				nextNumber === 1
-				? `${savedName} - Copy`
-			: `${savedName} - Copy ${nextNumber}`;
-		}
-
-		const duplicateHeader = {
-			...header,
-			name: duplicateName
-		};
-
-		const duplicateDietTags =
-					this.dietTagSnapshotFromPage()
-		.map(String);
-
-		const duplicateComponents =
-					jsRecipeCompTable
-		.mergeUpdatedRows()
-		.filter(r => jsRecipeCompTable.hasContent(r))
-		.map((r, index) => ({
-			...r,
-			id: null,
-			recipe_id: 0,
-			line_no: index + 1,
-			draft_row_id:
-			jsRecipeCompTable.makeDraftId()
-		}));
-
-		await storeValue(
-			"Recipe_duplicate_header",
-			duplicateHeader
+		closeModal(
+			"mdlRecUnsavedChanges"
 		);
 
-		await storeValue(
-			"Recipe_duplicate_diet_tags",
-			duplicateDietTags
-		);
-
-		await storeValue(
-			"Recipe_mode",
-			"duplicate"
-		);
-
-		await storeValue(
-			"current_recipe_id",
-			0
-		);
-
-		await jsRecipeCompTable.setRows(
-			duplicateComponents
-		);
-
-		await resetWidget(
-			"inpRecName",
-			true
-		);
-
-		await resetWidget(
-			"selRecCategory",
-			true
-		);
-
-		await resetWidget(
-			"chkRecActive",
-			true
-		);
-
-		await resetWidget(
-			"inpRecYieldQty",
-			true
-		);
-
-		await resetWidget(
-			"selRecYieldUnit",
-			true
-		);
-
-		await resetWidget(
-			"inpRecExtraPercent",
-			true
-		);
-
-		await resetWidget(
-			"msRecDietTags",
-			true
-		);
-
-		await resetWidget(
-			"rteRecNotes",
-			true
-		);
-
-		await resetWidget(
-			"tblRecComponents",
-			true
-		);
-
-		showAlert(
-			"Recipe duplicated.",
-			"success"
+		navigateTo(
+			"RecipeList"
 		);
 
 		return true;
-	},
-
-	async openListDuplicate() {
-		const sourceId =
-					Number(
-						appsmith.store
-						.Recipe_duplicate_source_id || 0
-					);
-
-		if (!sourceId) {
-			showAlert(
-				"Recipe duplicate source could not be loaded.",
-				"error"
-			);
-
-			return false;
-		}
-
-		const source =
-					Array.isArray(qryRecGetItemById.data)
-		? qryRecGetItemById.data[0]
-		: qryRecGetItemById.data;
-
-		if (!source) {
-			showAlert(
-				"Recipe duplicate source could not be loaded.",
-				"error"
-			);
-
-			return false;
-		}
-
-		const duplicateHeader = {
-			name:
-			String(
-				appsmith.store
-				.Recipe_duplicate_name ||
-				`${source.name} - copy`
-			).trim(),
-
-			category_id:
-			source.category_id ?? null,
-
-			active:
-			source.active === false
-			? false
-			: true,
-
-			yield_qty:
-			source.yield_qty ?? null,
-
-			yield_unit_id:
-			source.yield_unit_id ?? null,
-
-			extra_percent:
-			source.extra_percent ?? 0,
-
-			notes:
-			source.notes || null
-		};
-
-		const duplicateDietTags =
-					(qryRecGetSelectedDietTags.data || [])
-		.map(r => String(r.value))
-		.filter(Boolean);
-
-		const duplicateComponents =
-					(qryRecGetComponents.data || [])
-		.map((row, index) => ({
-			...row,
-
-			id: null,
-			recipe_id: 0,
-			line_no: index + 1,
-
-			draft_row_id:
-			jsRecipeCompTable.makeDraftId()
-		}));
-
-		await storeValue(
-			"Recipe_duplicate_header",
-			duplicateHeader
-		);
-
-		await storeValue(
-			"Recipe_duplicate_diet_tags",
-			duplicateDietTags
-		);
-
-		await storeValue(
-			"Recipe_mode",
-			"duplicate"
-		);
-
-		await storeValue(
-			"current_recipe_id",
-			0
-		);
-
-		await jsRecipeCompTable.setRows(
-			duplicateComponents
-		);
-
-		await removeValue(
-			"Recipe_duplicate_source_id"
-		);
-
-		await removeValue(
-			"Recipe_duplicate_name"
-		);
-
-		await this.safeReset("inpRecName");
-		await this.safeReset("selRecCategory");
-		await this.safeReset("chkRecActive");
-		await this.safeReset("inpRecYieldQty");
-		await this.safeReset("selRecYieldUnit");
-		await this.safeReset("inpRecExtraPercent");
-		await this.safeReset("msRecDietTags");
-		await this.safeReset("rteRecNotes");
-
-		showAlert(
-			"Recipe duplicated. Save to create it.",
-			"success"
-		);
-
-		return true;
-	},
-
-	async deleteRecipeStart() {
-		if (this.isDirty()) {
-			await storeValue("pendingRecipeAction", "delete");
-			showModal("mdlRecUnsavedChanges");
-			return false;
-		}
-
-		await qryRecGetImpactCount.run();
-		showModal("mdlRecDeleteConfirm");
-		return true;
-	},
-
-	async deleteRecipeConfirm() {
-		try {
-			const result =
-						await qryDeleteRecipe.run();
-
-			const deletedId =
-						Number(result?.[0]?.id || 0);
-
-			const currentId =
-						Number(
-							appsmith.store.current_recipe_id || 0
-						);
-
-			if (
-				!deletedId ||
-				deletedId !== currentId
-			) {
-				showAlert(
-					"Recipe was not deleted.",
-					"error"
-				);
-
-				return false;
-			}
-
-			closeModal(
-				"mdlRecDeleteConfirm"
-			);
-
-			await jsRecipeCompTable.clearDraftRows();
-
-			await storeValue(
-				"current_recipe_id",
-				0
-			);
-
-			showAlert(
-				"Recipe deleted.",
-				"success"
-			);
-
-			navigateTo(
-				"RecipeList"
-			);
-
-			return true;
-
-		} catch (error) {
-			showAlert(
-				error?.message ||
-				"Recipe could not be deleted.",
-				"error"
-			);
-
-			return false;
-		}
-	},
-
-	async saveAndDeleteRecipe() {
-		const saved = await this.saveRecipe();
-		if (!saved) return false;
-
-		closeModal("mdlRecUnsavedChanges");
-
-		await qryRecGetImpactCount.run();
-		showModal("mdlRecDeleteConfirm");
-
-		return true;
-	},
-
-	async deleteWithoutSaving() {
-		closeModal("mdlRecUnsavedChanges");
-
-		await qryRecGetImpactCount.run();
-		showModal("mdlRecDeleteConfirm");
-
-		return true;
-	},
-
-	async unsavedYes() {
-		switch (appsmith.store.pendingRecipeAction) {
-			case "close":
-				return await this.saveAndCloseRecipe();
-
-			case "add":
-				return await this.saveAndAddRecipe();
-
-			case "delete":
-				return await this.saveAndDeleteRecipe();
-
-			default:
-				return false;
-		}
-	},
-
-	async unsavedNo() {
-		switch (appsmith.store.pendingRecipeAction) {
-			case "close":
-				return await this.closeWithoutSaving();
-
-			case "add":
-				return await this.addWithoutSaving();
-
-			case "delete":
-				return await this.deleteWithoutSaving();
-
-			default:
-				return false;
-		}
 	},
 
 	async startNewRecipe() {
@@ -740,20 +231,17 @@ export default {
 			0
 		);
 
+		await qryRecGetComponentItems.run();
+
 		await storeValue(
 			"Recipe_mode",
 			"add"
 		);
 
-		await removeValue(
-			"Recipe_duplicate_header"
-		);
+		await jsRecipeCompTable.clearRows();
 
-		await removeValue(
-			"Recipe_duplicate_diet_tags"
-		);
-
-		await jsRecipeCompTable.clearDraftRows();
+		await jsRecipeWorkspace
+			.initializeNew();
 
 		await this.safeReset("inpRecName");
 		await this.safeReset("selRecCategory");
@@ -810,4 +298,240 @@ export default {
 		return await this.startNewRecipe();
 	},
 
-}
+	async duplicateRecipe() {
+		await jsRecipeCompTable.syncFromTable();
+
+		const source =
+					jsRecipeWorkspace.current();
+
+		const sourceId =
+					Number(
+						appsmith.store.current_recipe_id || 0
+					);
+
+		if (!sourceId) {
+			showAlert(
+				"This Recipe has not been saved yet.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		const savedName =
+					String(
+						qryRecGetItemById.data?.[0]?.name ||
+						source.header.name ||
+						""
+					).trim();
+
+		const duplicate = {
+			header: {
+				...source.header,
+				name:
+				`${savedName} - Copy`
+			},
+
+			diet_tags: [
+				...(source.diet_tags || [])
+			],
+
+			components: (
+				source.components || []
+			).map(row => ({
+				...row
+			}))
+		};
+
+		await storeValue(
+			"current_recipe_id",
+			0
+		);
+
+		await storeValue(
+			"Recipe_mode",
+			"duplicate"
+		);
+
+		await jsRecipeWorkspace
+			.initializeDuplicate(
+			duplicate
+		);
+
+		await jsRecipeCompTable.setRows(
+			duplicate.components
+		);
+
+		await this.safeReset("inpRecName");
+		await this.safeReset("selRecCategory");
+		await this.safeReset("chkRecActive");
+		await this.safeReset("inpRecYieldQty");
+		await this.safeReset("selRecYieldUnit");
+		await this.safeReset("inpRecExtraPercent");
+		await this.safeReset("msRecDietTags");
+		await this.safeReset("rteRecNotes");
+		await this.safeReset("tblRecComponents");
+
+		showAlert(
+			"Recipe duplicated. Save to create it.",
+			"success"
+		);
+
+		return true;
+	},
+
+	async deleteRecipeStart() {
+		if (this.isDirty()) {
+			await storeValue(
+				"pendingRecipeAction",
+				"delete"
+			);
+
+			showModal(
+				"mdlRecUnsavedChanges"
+			);
+
+			return false;
+		}
+
+		await qryRecGetImpactCount.run();
+
+		showModal(
+			"mdlRecDeleteConfirm"
+		);
+
+		return true;
+	},
+
+	async deleteRecipeConfirm() {
+		try {
+			const result =
+						await qryDeleteRecipe.run();
+
+			const deletedId =
+						Number(
+							result?.[0]?.id || 0
+						);
+
+			const currentId =
+						Number(
+							appsmith.store.current_recipe_id || 0
+						);
+
+			if (
+				!deletedId ||
+				deletedId !== currentId
+			) {
+				showAlert(
+					"Recipe was not deleted.",
+					"error"
+				);
+
+				return false;
+			}
+
+			closeModal(
+				"mdlRecDeleteConfirm"
+			);
+
+			await storeValue(
+				"current_recipe_id",
+				0
+			);
+
+			await jsRecipeCompTable.clearRows();
+			await jsRecipeWorkspace.clear();
+
+			showAlert(
+				"Recipe deleted.",
+				"success"
+			);
+
+			navigateTo(
+				"RecipeList"
+			);
+
+			return true;
+
+		} catch (error) {
+			showAlert(
+				error?.message ||
+				"Recipe could not be deleted.",
+				"error"
+			);
+
+			return false;
+		}
+	},
+
+	async saveAndDeleteRecipe() {
+		const saved =
+					await this.saveRecipe();
+
+		if (!saved) {
+			return false;
+		}
+
+		closeModal(
+			"mdlRecUnsavedChanges"
+		);
+
+		await qryRecGetImpactCount.run();
+
+		showModal(
+			"mdlRecDeleteConfirm"
+		);
+
+		return true;
+	},
+
+	async deleteWithoutSaving() {
+		closeModal(
+			"mdlRecUnsavedChanges"
+		);
+
+		await qryRecGetImpactCount.run();
+
+		showModal(
+			"mdlRecDeleteConfirm"
+		);
+
+		return true;
+	},
+
+	async unsavedYes() {
+		switch (
+			appsmith.store.pendingRecipeAction
+		) {
+			case "close":
+				return await this.saveAndCloseRecipe();
+
+			case "add":
+				return await this.saveAndAddRecipe();
+
+			case "delete":
+				return await this.saveAndDeleteRecipe();
+
+			default:
+				return false;
+		}
+	},
+
+	async unsavedNo() {
+		switch (
+			appsmith.store.pendingRecipeAction
+		) {
+			case "close":
+				return await this.closeWithoutSaving();
+
+			case "add":
+				return await this.addWithoutSaving();
+
+			case "delete":
+				return await this.deleteWithoutSaving();
+
+			default:
+				return false;
+		}
+	}
+};

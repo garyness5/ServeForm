@@ -11,105 +11,234 @@ export default {
 		};
 	},
 
-	emptyWorkspace() {
+	emptySnapshot() {
 		return {
-			id: 0,
 			header: this.emptyHeader(),
 			diet_tags: [],
 			components: []
 		};
 	},
 
-	normalize(workspace) {
-		const source = workspace || {};
+	clean(value) {
+		if (
+			value === undefined ||
+			value === null ||
+			value === ""
+		) {
+			return null;
+		}
 
+		if (
+			typeof value === "number"
+		) {
+			return Number(value);
+		}
+
+		if (
+			value !== true &&
+			value !== false &&
+			!isNaN(value)
+		) {
+			return Number(value);
+		}
+
+		return value;
+	},
+
+	textClean(value) {
+		const text =
+					String(value || "").trim();
+
+		return text || null;
+	},
+
+	normalizeHeader(header = {}) {
 		return {
-			id:
-			Number(source.id || 0),
+			name:
+			this.textClean(header.name),
 
-			header: {
-				...this.emptyHeader(),
-				...(source.header || {})
-			},
+			category_id:
+			this.clean(header.category_id),
 
-			diet_tags:
-			Array.isArray(source.diet_tags)
-			? [...source.diet_tags]
-			: [],
+			active:
+			header.active === false
+			? false
+			: true,
 
-			components:
-			Array.isArray(source.components)
-			? source.components.map(row => ({ ...row }))
-			: []
+			yield_qty:
+			this.clean(header.yield_qty),
+
+			yield_unit_id:
+			this.clean(header.yield_unit_id),
+
+			extra_percent:
+			header.extra_percent == null ||
+			header.extra_percent === ""
+			? 0
+			: Number(header.extra_percent),
+
+			notes:
+			this.textClean(header.notes)
 		};
 	},
 
+	normalizeDietTags(values = []) {
+		return (values || [])
+			.map(value => {
+			if (
+				typeof value === "object" &&
+				value !== null
+			) {
+				return Number(
+					value.tag_id ??
+					value.value ??
+					value.helper_list_item_id ??
+					0
+				);
+			}
+
+			return Number(value || 0);
+		})
+			.filter(Boolean)
+			.sort((a, b) => a - b);
+	},
+
+	normalizeComponents(rows = []) {
+		return (rows || [])
+			.filter(row =>
+							row &&
+							row.item_type &&
+							(
+			row.ingredient_id ||
+			row.child_recipe_id
+		)
+						 )
+			.map((row, index) => ({
+			line_no:
+			index + 1,
+
+			item_type:
+			row.item_type || null,
+
+			ingredient_id:
+			row.item_type === "ingredient"
+			? this.clean(row.ingredient_id)
+			: null,
+
+			child_recipe_id:
+			row.item_type === "recipe"
+			? this.clean(row.child_recipe_id)
+			: null,
+
+			qty:
+			this.clean(
+				row.saved_qty ??
+				row.qty
+			),
+
+			unit_id:
+			this.clean(
+				row.saved_unit_id ??
+				row.unit_id
+			),
+
+			apply_wastage:
+			row.apply_wastage === false
+			? false
+			: true,
+
+			active:
+			row.active === false
+			? false
+			: true
+		}));
+	},
+
+	normalizeSnapshot(snapshot = {}) {
+		return {
+			header:
+			this.normalizeHeader(
+				snapshot.header || {}
+			),
+
+			diet_tags:
+			this.normalizeDietTags(
+				snapshot.diet_tags || []
+			),
+
+			components:
+			this.normalizeComponents(
+				snapshot.components || []
+			)
+		};
+	},
+
+	baseline() {
+		return this.normalizeSnapshot(
+			appsmith.store.recipe_baseline ||
+			this.emptySnapshot()
+		);
+	},
+
+	initialHeader() {
+		return this.baseline().header;
+	},
+
+	initialDietTags() {
+		return this.baseline().diet_tags;
+	},
+
+	currentHeader() {
+		return this.normalizeHeader({
+			name:
+			inpRecName.text,
+
+			category_id:
+			selRecCategory.selectedOptionValue,
+
+			active:
+			chkRecActive.isChecked,
+
+			yield_qty:
+			inpRecYieldQty.text,
+
+			yield_unit_id:
+			selRecYieldUnit.selectedOptionValue,
+
+			extra_percent:
+			inpRecExtraPercent.text,
+
+			notes:
+			rteRecNotes.text
+		});
+	},
+
+	currentDietTags() {
+		return this.normalizeDietTags(
+			msRecDietTags.selectedOptionValues || []
+		);
+	},
+
+	currentComponents() {
+		return this.normalizeComponents(
+			jsRecipeCompTable.rowsForSave()
+		);
+	},
+
 	current() {
-		return this.normalize(
-			appsmith.store.recipe_workspace
-		);
+		return this.normalizeSnapshot({
+			header:
+			this.currentHeader(),
+
+			diet_tags:
+			this.currentDietTags(),
+
+			components:
+			this.currentComponents()
+		});
 	},
 
-	saved() {
-		return this.normalize(
-			appsmith.store.recipe_workspace_saved
-		);
-	},
-
-	async setCurrent(workspace) {
-		const value =
-					this.normalize(workspace);
-
-		await storeValue(
-			"recipe_workspace",
-			value
-		);
-
-		return value;
-	},
-
-	async setSaved(workspace) {
-		const value =
-					this.normalize(workspace);
-
-		await storeValue(
-			"recipe_workspace_saved",
-			value
-		);
-
-		return value;
-	},
-
-	async setBoth(workspace) {
-		const value =
-					this.normalize(workspace);
-
-		await storeValue(
-			"recipe_workspace_saved",
-			value
-		);
-
-		await storeValue(
-			"recipe_workspace",
-			value
-		);
-
-		return value;
-	},
-
-	async clear() {
-		await removeValue(
-			"recipe_workspace"
-		);
-
-		await removeValue(
-			"recipe_workspace_saved"
-		);
-
-		return true;
-	},
-
-	headerFromSaved() {
+	savedHeaderFromQuery() {
 		const row =
 					Array.isArray(qryRecGetItemById.data)
 		? qryRecGetItemById.data[0]
@@ -119,145 +248,101 @@ export default {
 			return this.emptyHeader();
 		}
 
-		return {
+		return this.normalizeHeader({
 			name:
-			String(row.name || "").trim() ||
-			null,
+			row.name,
 
 			category_id:
-			row.category_id == null
-			? null
-			: Number(row.category_id),
+			row.category_id,
 
 			active:
-			row.active === false
-			? false
-			: true,
+			row.active,
 
 			yield_qty:
-			row.yield_qty == null ||
-			row.yield_qty === ""
-			? null
-			: Number(row.yield_qty),
+			row.yield_qty,
 
 			yield_unit_id:
-			row.yield_unit_id == null
-			? null
-			: Number(row.yield_unit_id),
+			row.yield_unit_id,
 
 			extra_percent:
-			row.extra_percent == null ||
-			row.extra_percent === ""
-			? 0
-			: Number(row.extra_percent),
+			row.extra_percent,
 
 			notes:
-			row.notes || null
-		};
-	},
-
-	dietTagsFromSaved() {
-		return (
-			qryRecGetSelectedDietTags.data || []
-		)
-			.map(row =>
-					 Number(row.value || 0)
-					)
-			.filter(Boolean)
-			.sort((a, b) => a - b);
-	},
-
-	componentsFromSaved() {
-		return (
-			qryRecGetComponents.data || []
-		)
-			.map((row, index) => ({
-			...row,
-
-			draft_row_id:
-			row.draft_row_id ||
-			jsRecipeCompTable.makeDraftId(),
-
-			line_no:
-			index + 1
-		}));
-	},
-
-	savedTruth() {
-		return this.normalize({
-			id:
-			Number(
-				appsmith.store.current_recipe_id || 0
-			),
-
-			header:
-			this.headerFromSaved(),
-
-			diet_tags:
-			this.dietTagsFromSaved(),
-
-			components:
-			this.componentsFromSaved()
+			row.notes
 		});
 	},
 
+	savedDietTagsFromQuery() {
+		return this.normalizeDietTags(
+			qryRecGetSelectedDietTags.data || []
+		);
+	},
+
+	savedComponentsFromQuery() {
+		return this.normalizeComponents(
+			qryRecGetComponents.data || []
+		);
+	},
+
+	savedTruth() {
+		return this.normalizeSnapshot({
+			header:
+			this.savedHeaderFromQuery(),
+
+			diet_tags:
+			this.savedDietTagsFromQuery(),
+
+			components:
+			this.savedComponentsFromQuery()
+		});
+	},
+
+	async setBaseline(snapshot) {
+		const value =
+					this.normalizeSnapshot(snapshot);
+
+		await storeValue(
+			"recipe_baseline",
+			value
+		);
+
+		return value;
+	},
+
 	async initializeFromSaved() {
-		return await this.setBoth(
+		return await this.setBaseline(
 			this.savedTruth()
 		);
 	},
 
 	async initializeNew() {
-		const value =
-					this.emptyWorkspace();
-
-		return await this.setBoth(
-			value
+		return await this.setBaseline(
+			this.emptySnapshot()
 		);
 	},
 
-	async patchHeader(patch) {
-		const workspace =
-					this.current();
-
-		return await this.setCurrent({
-			...workspace,
-
-			header: {
-				...workspace.header,
-				...(patch || {})
-			}
-		});
-	},
-
-	async setDietTags(values) {
-		const tags =
-					(values || [])
-		.map(Number)
-		.filter(Boolean)
-		.sort((a, b) => a - b);
-
-		return await this.setCurrent({
-			...this.current(),
-			diet_tags: tags
-		});
-	},
-
-	async setComponents(rows) {
-		return await this.setCurrent({
-			...this.current(),
-
-			components:
-			Array.isArray(rows)
-			? rows.map(row => ({ ...row }))
-			: []
-		});
+	async initializeDuplicate(snapshot) {
+		return await this.setBaseline(
+			this.normalizeSnapshot(snapshot)
+		);
 	},
 
 	isDirty() {
 		return (
 			JSON.stringify(this.current()) !==
-			JSON.stringify(this.saved())
+			JSON.stringify(this.baseline())
 		);
+	},
+
+	async clear() {
+		await removeValue(
+			"recipe_baseline"
+		);
+
+		await removeValue(
+			"recipe_initial"
+		);
+
+		return true;
 	}
 };

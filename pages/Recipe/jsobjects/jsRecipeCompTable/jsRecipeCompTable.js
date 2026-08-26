@@ -90,10 +90,10 @@ export default {
 	},
 
 	async setRows(rows) {
-		const normalized =
-					this.normalizeRows(rows);
+		const normalized = this.normalizeRows(rows);
 
-		await jsRecipeWorkspace.setComponents(
+		await storeValue(
+			"rec_components_local_rows",
 			normalized
 		);
 
@@ -102,28 +102,20 @@ export default {
 
 	getRows() {
 		const rows =
-					jsRecipeWorkspace
-		.current()
-		.components || [];
+					appsmith.store.rec_components_local_rows || [];
 
 		const currentRecipeId =
-					Number(
-						appsmith.store.current_recipe_id || 0
-					);
+					Number(appsmith.store.current_recipe_id || 0);
 
 		if (
 			Array.isArray(rows) &&
 			rows.length > 0
 		) {
-			return rows.map(
-				(r, index) => ({
-					...r,
-					recipe_id:
-					currentRecipeId,
-					line_no:
-					index + 1
-				})
-			);
+			return rows.map((r, index) => ({
+				...r,
+				recipe_id: currentRecipeId,
+				line_no: index + 1
+			}));
 		}
 
 		return this.normalizeRows([]);
@@ -161,7 +153,13 @@ export default {
 
 	async syncFromTable() {
 		const merged = this.mergeUpdatedRows();
-		return await this.setRows(merged);
+
+		await storeValue(
+			"rec_components_local_rows",
+			merged
+		);
+
+		return merged;
 	},
 
 	async patchRow(row, patch) {
@@ -241,20 +239,51 @@ export default {
 		};
 	},
 
+	editRow(row) {
+		if (!row) return null;
+
+		return {
+			...(row.allFields || {}),
+			...(row.updatedFields || {}),
+			...(
+				!row.allFields &&
+				!row.updatedFields
+				? row
+				: {}
+			)
+		};
+	},
+
 	async onItemTypeChange(row) {
-		return await this.patchRow(row, this.clearAfterItemType(row));
+		const editRow =
+					this.editRow(row);
+
+		if (!editRow?.draft_row_id) {
+			return false;
+		}
+
+		return await this.patchRow(
+			editRow,
+			this.clearAfterItemType(editRow)
+		);
 	},
 
 	async onCategoryChange(row) {
-		return await this.patchRow(row, this.clearAfterCategory(row));
+		const editRow =
+					this.editRow(row);
+
+		if (!editRow?.draft_row_id) {
+			return false;
+		}
+
+		return await this.patchRow(
+			editRow,
+			this.clearAfterCategory(editRow)
+		);
 	},
 
 	async clearRows() {
-		await jsRecipeWorkspace.setComponents(
-			[]
-		);
-
-		return true;
+		return await this.setRows([]);
 	},
 
 	itemKey(row) {
@@ -272,26 +301,38 @@ export default {
 
 	usedItemKeys(currentRow) {
 		return this.getRows()
-			.filter(r => r.draft_row_id !== currentRow?.draft_row_id)
+			.filter(r =>
+							r.draft_row_id !== currentRow?.draft_row_id
+						 )
 			.map(r => this.itemKey(r))
-			.filter(x => x);
+			.filter(Boolean);
 	},
 
 	categoryOptions(row) {
 		const itemType = row?.item_type;
 		if (!itemType) return [];
 
-		const currentRecipeId = Number(appsmith.store.current_recipe_id || 0);
+		const currentRecipeId =
+					Number(appsmith.store.current_recipe_id || 0);
 
-		const categories = (qryRecGetComponentItems.data || [])
+		const categories =
+					(qryRecGetComponentItems.data || [])
 		.filter(i => i.item_type === itemType)
-		.filter(i => !(itemType === "recipe" && Number(i.id) === currentRecipeId))
+		.filter(i =>
+						!(
+			itemType === "recipe" &&
+			Number(i.id) === currentRecipeId
+		)
+					 )
 		.map(i => i.category_name)
-		.filter(x => x);
+		.filter(Boolean);
 
 		return [...new Set(categories)]
 			.sort()
-			.map(x => ({ label: x, value: x }));
+			.map(x => ({
+			label: x,
+			value: x
+		}));
 	},
 
 	itemOptions(row) {
@@ -299,14 +340,27 @@ export default {
 		if (!itemType) return [];
 
 		const used = this.usedItemKeys(row);
-		const currentRecipeId = Number(appsmith.store.current_recipe_id || 0);
+		const currentRecipeId =
+					Number(appsmith.store.current_recipe_id || 0);
 
 		return (qryRecGetComponentItems.data || [])
 			.filter(i => i.item_type === itemType)
-			.filter(i => !(itemType === "recipe" && Number(i.id) === currentRecipeId))
-			.filter(i => !row?.component_category || i.category_name === row.component_category)
-			.filter(i => !used.includes(`${i.item_type}:${i.id}`))
-			.sort((a, b) => String(a.name).localeCompare(String(b.name)))
+			.filter(i =>
+							!(
+			itemType === "recipe" &&
+			Number(i.id) === currentRecipeId
+		)
+						 )
+			.filter(i =>
+							!row?.component_category ||
+							i.category_name === row.component_category
+						 )
+			.filter(i =>
+							!used.includes(`${i.item_type}:${i.id}`)
+						 )
+			.sort((a, b) =>
+						String(a.name).localeCompare(String(b.name))
+					 )
 			.map(i => ({
 			label: i.name,
 			value: i.name
@@ -314,47 +368,102 @@ export default {
 	},
 
 	async onItemChange(row) {
-		if (!row?.draft_row_id) return;
+		const editRow =
+					this.editRow(row);
+
+		if (!editRow?.draft_row_id) {
+			return false;
+		}
 
 		await this.syncFromTable();
 
-		const freshRow = this.getRows().find(r => r.draft_row_id === row.draft_row_id) || row;
+		const freshRow =
+					this.getRows().find(r =>
+															r.draft_row_id ===
+															editRow.draft_row_id
+														 ) || editRow;
 
-		const item = (qryRecGetComponentItems.data || []).find(i =>
-																													 i.item_type === freshRow.item_type &&
-																													 i.name === freshRow.component_name
-																													);
+		const item =
+					(qryRecGetComponentItems.data || [])
+		.find(i =>
+					i.item_type ===
+					freshRow.item_type &&
+					i.name ===
+					freshRow.component_name
+				 );
 
-		if (!item) return;
+		if (!item) {
+			return false;
+		}
 
-		return await this.patchRow(freshRow, {
-			item_type: item.item_type,
-			component_category: item.category_name,
-			component_name: item.name,
+		return await this.patchRow(
+			freshRow,
+			{
+				item_type:
+				item.item_type,
 
-			ingredient_id: item.item_type === "ingredient" ? item.id : null,
-			child_recipe_id: item.item_type === "recipe" ? item.id : null,
+				component_category:
+				item.category_name,
 
-			unit_id: item.default_unit_id,
-			unit_abbreviation: item.default_unit,
-			unit_type: item.unit_type,
+				component_name:
+				item.name,
 
-			wastage_percent: item.wastage_percent,
-			price_per_unit: item.price_per_unit,
-			cost_per_base_unit: item.cost_per_base_unit,
-			factor_to_base: item.factor_to_base,
+				ingredient_id:
+				item.item_type === "ingredient"
+				? item.id
+				: null,
 
-			allergen_names: item.allergen_names,
-			diet_tag_names: item.diet_tag_names,
+				child_recipe_id:
+				item.item_type === "recipe"
+				? item.id
+				: null,
 
-			child_deleted: false,
-			child_active: true,
-			component_status: "active",
+				unit_id:
+				item.default_unit_id,
 
-			apply_wastage: true,
-			active: true,
-			line_cost: null
-		});
+				unit_abbreviation:
+				item.default_unit,
+
+				unit_type:
+				item.unit_type,
+
+				wastage_percent:
+				item.wastage_percent,
+
+				price_per_unit:
+				item.price_per_unit,
+
+				cost_per_base_unit:
+				item.cost_per_base_unit,
+
+				factor_to_base:
+				item.factor_to_base,
+
+				allergen_names:
+				item.allergen_names,
+
+				diet_tag_names:
+				item.diet_tag_names,
+
+				child_deleted:
+				false,
+
+				child_active:
+				true,
+
+				component_status:
+				"active",
+
+				apply_wastage:
+				true,
+
+				active:
+				true,
+
+				line_cost:
+				null
+			}
+		);
 	},
 
 	async clearDraftRows() {
@@ -364,9 +473,10 @@ export default {
 	async deleteRow(row) {
 		await this.syncFromTable();
 
-		const remaining = this.getRows().filter(r =>
-																						r.draft_row_id !== row.draft_row_id
-																					 );
+		const remaining =
+					this.getRows().filter(r =>
+																r.draft_row_id !== row.draft_row_id
+															 );
 
 		return await this.setRows(remaining);
 	},
@@ -411,19 +521,13 @@ export default {
 					: Number(r.saved_qty),
 
 					unit_id:
-					Number(
-						r.saved_unit_id || 0
-					) || null,
+					Number(r.saved_unit_id || 0) || null,
 
 					apply_wastage:
-					r.apply_wastage === false
-					? false
-					: true,
+					r.apply_wastage !== false,
 
 					active:
-					r.active === false
-					? false
-					: true
+					r.active !== false
 				};
 			}
 
@@ -483,14 +587,10 @@ export default {
 				null,
 
 				apply_wastage:
-				r.apply_wastage === false
-				? false
-				: true,
+				r.apply_wastage !== false,
 
 				active:
-				r.active === false
-				? false
-				: true
+				r.active !== false
 			};
 		});
 	},
@@ -520,7 +620,9 @@ export default {
 		if (!unitType) return [];
 
 		return (qryRecGetComponentUnits.data || [])
-			.filter(u => u.unit_type === unitType)
+			.filter(u =>
+							u.unit_type === unitType
+						 )
 			.map(u => ({
 			label: u.abbreviation,
 			value: u.abbreviation
@@ -575,12 +677,9 @@ export default {
 			row.item_type === "ingredient" &&
 			row.apply_wastage === false
 		) {
-			cost =
-				cost *
-				(
+			cost *=
 				1 -
-				Number(item.wastage_percent || 0) / 100
-			);
+				Number(item.wastage_percent || 0) / 100;
 		}
 
 		return cost;
@@ -597,18 +696,35 @@ export default {
 			!row.unit_abbreviation ||
 			!row.item_type ||
 			!row.component_name
-		) return null;
+		) {
+			return null;
+		}
 
-		const item = (qryRecGetComponentItems.data || []).find(i =>
-																													 i.item_type === row.item_type &&
-																													 Number(i.id) === Number(row.item_type === "ingredient" ? row.ingredient_id : row.child_recipe_id)
-																													);
+		const item =
+					(qryRecGetComponentItems.data || [])
+		.find(i =>
+					i.item_type === row.item_type &&
+					Number(i.id) ===
+					Number(
+			row.item_type === "ingredient"
+			? row.ingredient_id
+			: row.child_recipe_id
+		)
+				 );
 
-		const unit = (qryRecGetComponentUnits.data || []).find(u =>
-																													 u.abbreviation === row.unit_abbreviation
-																													);
+		const unit =
+					(qryRecGetComponentUnits.data || [])
+		.find(u =>
+					u.abbreviation === row.unit_abbreviation
+				 );
 
-		if (!item || !unit || item.cost_per_base_unit == null) return null;
+		if (
+			!item ||
+			!unit ||
+			item.cost_per_base_unit == null
+		) {
+			return null;
+		}
 
 		let cost =
 				Number(row.qty) *
@@ -616,7 +732,9 @@ export default {
 				Number(item.cost_per_base_unit || 0);
 
 		if (row.apply_wastage === false) {
-			cost = cost * (1 - Number(item.wastage_percent || 0) / 100);
+			cost *=
+				1 -
+				Number(item.wastage_percent || 0) / 100;
 		}
 
 		return Math.round(cost * 100) / 100;
@@ -625,26 +743,35 @@ export default {
 	subtotal() {
 		const rows = this.mergeUpdatedRows();
 
-		return rows.reduce((sum, row) => {
-			const cost = this.lineCost(row);
-			return sum + (cost || 0);
-		}, 0);
+		return rows.reduce(
+			(sum, row) =>
+			sum + (this.lineCost(row) || 0),
+			0
+		);
 	},
 
 	totalCost() {
 		const subtotal = this.subtotal();
-		const extra = Number(inpRecExtraPercent.text || 0);
+		const extra =
+					Number(inpRecExtraPercent.text || 0);
 
-		return Math.round((subtotal * (1 + extra / 100)) * 100) / 100;
+		return Math.round(
+			subtotal *
+			(1 + extra / 100) *
+			100
+		) / 100;
 	},
 
 	costPerYieldUnit() {
 		const total = this.totalCost();
-		const yieldQty = Number(inpRecYieldQty.text || 0);
+		const yieldQty =
+					Number(inpRecYieldQty.text || 0);
 
 		if (!yieldQty) return null;
 
-		return Math.round((total / yieldQty) * 100) / 100;
+		return Math.round(
+			(total / yieldQty) * 100
+		) / 100;
 	},
 
 	uniqueTextList(value) {
@@ -653,27 +780,33 @@ export default {
 		return String(value)
 			.split(",")
 			.map(x => x.trim())
-			.filter(x => x);
+			.filter(Boolean);
 	},
 
 	componentAllergenSummary() {
 		const rows = this.mergeUpdatedRows();
 
-		const items = rows.flatMap(r =>
-															 this.uniqueTextList(r.allergen_names)
-															);
+		const items =
+					rows.flatMap(r =>
+											 this.uniqueTextList(r.allergen_names)
+											);
 
-		return [...new Set(items)].sort().join(", ");
+		return [...new Set(items)]
+			.sort()
+			.join(", ");
 	},
 
 	componentDietTagSummary() {
 		const rows = this.mergeUpdatedRows();
 
-		const items = rows.flatMap(r =>
-															 this.uniqueTextList(r.diet_tag_names)
-															);
+		const items =
+					rows.flatMap(r =>
+											 this.uniqueTextList(r.diet_tag_names)
+											);
 
-		return [...new Set(items)].sort().join(", ");
+		return [...new Set(items)]
+			.sort()
+			.join(", ");
 	},
 
 	showRowActions(row) {
@@ -682,5 +815,5 @@ export default {
 			row?.child_recipe_id ||
 			row?.component_name
 		);
-	},
-}
+	}
+};

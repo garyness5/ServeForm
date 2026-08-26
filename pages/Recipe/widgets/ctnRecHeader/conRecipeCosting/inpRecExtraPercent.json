@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 13,
   "boxShadow": "none",
-  "defaultText": "{{\njsRecipeWorkspace.current().header.extra_percent == null\n? \"0\"\n: String(jsRecipeWorkspace.current().header.extra_percent)\n}}",
+  "defaultText": "{{ String(jsRecipeWorkspace.initialHeader().extra_percent ?? 0) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -18,16 +18,8 @@
     }
   ],
   "dynamicHeight": "FIXED",
-  "dynamicPropertyPathList": [
-    {
-      "key": "onTextChanged"
-    }
-  ],
-  "dynamicTriggerPathList": [
-    {
-      "key": "onTextChanged"
-    }
-  ],
+  "dynamicPropertyPathList": [],
+  "dynamicTriggerPathList": [],
   "iconAlign": "left",
   "inputType": "TEXT",
   "isDisabled": false,
@@ -50,7 +42,7 @@
   "mobileRightColumn": 23,
   "mobileTopRow": 10,
   "needsErrorInfo": false,
-  "onTextChanged": "{{\njsRecipeWorkspace.patchHeader({\n\textra_percent:\n\tinpRecExtraPercent.text === \"\" ||\n\tinpRecExtraPercent.text == null\n\t? 0\n\t: Number(inpRecExtraPercent.text)\n})\n}}",
+  "onTextChanged": "",
   "parentColumnSpace": 4.5625,
   "parentId": "o4uwuew4ll",
   "parentRowSpace": 10,
