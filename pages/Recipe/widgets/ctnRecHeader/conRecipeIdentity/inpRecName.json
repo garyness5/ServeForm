@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 8,
   "boxShadow": "none",
-  "defaultText": "{{ jsRecipeWorkspace.initialHeader().name || \"\" }}",
+  "defaultText": "{{ jsRecipeWorkspace.get().header.name || \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -18,16 +18,8 @@
     }
   ],
   "dynamicHeight": "FIXED",
-  "dynamicPropertyPathList": [
-    {
-      "key": "onTextChanged"
-    }
-  ],
-  "dynamicTriggerPathList": [
-    {
-      "key": "onTextChanged"
-    }
-  ],
+  "dynamicPropertyPathList": [],
+  "dynamicTriggerPathList": [],
   "iconAlign": "left",
   "inputType": "TEXT",
   "isDisabled": false,
@@ -50,7 +42,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 1,
   "needsErrorInfo": false,
-  "onTextChanged": "{{2}}",
+  "onTextChanged": "{{}}",
   "parentColumnSpace": 6.6953125,
   "parentId": "de2lqw9wp0",
   "parentRowSpace": 10,

@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 8,
   "boxShadow": "none",
-  "defaultText": "{{\njsRecipeWorkspace.initialHeader().yield_qty == null\n? \"\"\n: String(jsRecipeWorkspace.initialHeader().yield_qty)\n}}",
+  "defaultText": "{{ jsRecipeWorkspace.get().header.yield_qty ?? \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

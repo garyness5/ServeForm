@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 12,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \njsRecipeWorkspace.initialHeader().category_id == null\n? \"\"\n: String(jsRecipeWorkspace.initialHeader().category_id)\n))(selRecCategory.options, selRecCategory.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n\tjsRecipeWorkspace.get().header.category_id == null\n\t\t? \"\"\n\t\t: String(jsRecipeWorkspace.get().header.category_id)\n))(selRecCategory.options, selRecCategory.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -53,7 +53,7 @@
   "parentColumnSpace": 6.6953125,
   "parentId": "de2lqw9wp0",
   "parentRowSpace": 10,
-  "placeholderText": "Select option",
+  "placeholderText": "Select category",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
   "rightColumn": 62,

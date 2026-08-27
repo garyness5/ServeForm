@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  storeValue(\"pendingRecipeAction\", null);\n  closeModal(\"mdlRecUnsavedChanges\");\n}}",
+  "onClick": "{{\njsRecipeSave.pendingAction = null;\ncloseModal(\"mdlRecUnsavedChanges\");\n}}",
   "originalBottomRow": 24,
   "originalTopRow": 20,
   "parentId": "qtesy6qkrq",

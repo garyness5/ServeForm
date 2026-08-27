@@ -28,9 +28,7 @@ export default {
 			return null;
 		}
 
-		if (
-			typeof value === "number"
-		) {
+		if (typeof value === "number") {
 			return Number(value);
 		}
 
@@ -52,123 +50,146 @@ export default {
 		return text || null;
 	},
 
-	normalizeHeader(header = {}) {
+	normalizeHeader(header) {
+		const h =
+					header || {};
+
 		return {
 			name:
-			this.textClean(header.name),
+			this.textClean(h.name),
 
 			category_id:
-			this.clean(header.category_id),
+			this.clean(h.category_id),
 
 			active:
-			header.active === false
+			h.active === false
 			? false
 			: true,
 
 			yield_qty:
-			this.clean(header.yield_qty),
+			this.clean(h.yield_qty),
 
 			yield_unit_id:
-			this.clean(header.yield_unit_id),
+			this.clean(h.yield_unit_id),
 
 			extra_percent:
-			header.extra_percent == null ||
-			header.extra_percent === ""
-			? 0
-			: Number(header.extra_percent),
+			this.clean(h.extra_percent) ?? 0,
 
 			notes:
-			this.textClean(header.notes)
+			this.textClean(h.notes)
 		};
 	},
 
-	normalizeDietTags(values = []) {
+	normalizeDietTags(values) {
 		return (values || [])
-			.map(value => {
-			if (
-				typeof value === "object" &&
-				value !== null
-			) {
-				return Number(
-					value.tag_id ??
-					value.value ??
-					value.helper_list_item_id ??
-					0
-				);
-			}
-
-			return Number(value || 0);
-		})
+			.map(x =>
+					 typeof x === "object"
+					 ? x.value
+					 : x
+					)
+			.map(Number)
 			.filter(Boolean)
 			.sort((a, b) => a - b);
 	},
 
-	normalizeComponents(rows = []) {
+	normalizeComponents(rows) {
 		return (rows || [])
-			.filter(row =>
-							row &&
-							row.item_type &&
+			.filter(r =>
+							r &&
 							(
-			row.ingredient_id ||
-			row.child_recipe_id
+			r.ingredient_id ||
+			r.child_recipe_id ||
+			r.component_name
 		)
 						 )
-			.map((row, index) => ({
-			line_no:
-			index + 1,
+			.map(r => ({
+			...r,
 
 			item_type:
-			row.item_type || null,
+			r.item_type || null,
 
 			ingredient_id:
-			row.item_type === "ingredient"
-			? this.clean(row.ingredient_id)
+			r.item_type === "ingredient"
+			? Number(r.ingredient_id || 0) || null
 			: null,
 
 			child_recipe_id:
-			row.item_type === "recipe"
-			? this.clean(row.child_recipe_id)
+			r.item_type === "recipe"
+			? Number(r.child_recipe_id || 0) || null
 			: null,
 
 			qty:
-			this.clean(
-				row.saved_qty ??
-				row.qty
-			),
+			r.qty === "" ||
+			r.qty == null
+			? null
+			: Number(r.qty),
 
 			unit_id:
-			this.clean(
-				row.saved_unit_id ??
-				row.unit_id
-			),
+			r.unit_id == null
+			? null
+			: Number(r.unit_id),
 
 			apply_wastage:
-			row.apply_wastage === false
-			? false
-			: true,
+			r.apply_wastage !== false,
 
 			active:
-			row.active === false
-			? false
-			: true
+			r.active !== false
 		}));
 	},
 
-	normalizeSnapshot(snapshot = {}) {
+	componentsForCompare(rows) {
+		return (rows || [])
+			.map(r => ({
+			item_type:
+			r.item_type || null,
+
+			ingredient_id:
+			r.item_type === "ingredient"
+			? Number(r.ingredient_id || 0) || null
+			: null,
+
+			child_recipe_id:
+			r.item_type === "recipe"
+			? Number(r.child_recipe_id || 0) || null
+			: null,
+
+			qty:
+			r.qty === "" ||
+			r.qty == null
+			? null
+			: Number(r.qty),
+
+			unit_id:
+			r.unit_id == null
+			? null
+			: Number(r.unit_id),
+
+			apply_wastage:
+			r.apply_wastage !== false,
+
+			active:
+			r.active !== false
+		}));
+	},
+
+	normalizeSnapshot(snapshot) {
+		const s =
+					snapshot || {};
+
 		return {
 			header:
 			this.normalizeHeader(
-				snapshot.header || {}
+				s.header
 			),
 
 			diet_tags:
 			this.normalizeDietTags(
-				snapshot.diet_tags || []
+				s.diet_tags
 			),
 
 			components:
 			this.normalizeComponents(
-				snapshot.components || []
+				s.components
 			)
 		};
 	},
@@ -180,15 +201,14 @@ export default {
 		);
 	},
 
-	initialHeader() {
-		return this.baseline().header;
+	get() {
+		return this.normalizeSnapshot(
+			appsmith.store.recipe_workspace ||
+			this.baseline()
+		);
 	},
 
-	initialDietTags() {
-		return this.baseline().diet_tags;
-	},
-
-	currentHeader() {
+	currentHeaderFromPage() {
 		return this.normalizeHeader({
 			name:
 			inpRecName.text,
@@ -213,7 +233,7 @@ export default {
 		});
 	},
 
-	currentDietTags() {
+	currentDietTagsFromPage() {
 		return this.normalizeDietTags(
 			msRecDietTags.selectedOptionValues || []
 		);
@@ -221,21 +241,42 @@ export default {
 
 	currentComponents() {
 		return this.normalizeComponents(
-			jsRecipeCompTable.rowsForSave()
+			jsRecipeCompTable.mergeUpdatedRows()
 		);
 	},
 
 	current() {
 		return this.normalizeSnapshot({
 			header:
-			this.currentHeader(),
+			this.currentHeaderFromPage(),
 
 			diet_tags:
-			this.currentDietTags(),
+			this.currentDietTagsFromPage(),
 
 			components:
 			this.currentComponents()
 		});
+	},
+
+	async setWorkspace(snapshot) {
+		const value =
+					this.normalizeSnapshot(snapshot);
+
+		await storeValue(
+			"recipe_workspace",
+			value
+		);
+
+		return value;
+	},
+
+	async capture() {
+		const value =
+					this.current();
+
+		await this.setWorkspace(value);
+
+		return value;
 	},
 
 	savedHeaderFromQuery() {
@@ -310,31 +351,76 @@ export default {
 	},
 
 	async initializeFromSaved() {
-		return await this.setBaseline(
-			this.savedTruth()
-		);
+		const saved =
+					this.savedTruth();
+
+		await this.setBaseline(saved);
+		await this.setWorkspace(saved);
+
+		return saved;
 	},
 
 	async initializeNew() {
-		return await this.setBaseline(
-			this.emptySnapshot()
-		);
+		const empty =
+					this.emptySnapshot();
+
+		await this.setBaseline(empty);
+		await this.setWorkspace(empty);
+
+		return empty;
 	},
 
 	async initializeDuplicate(snapshot) {
-		return await this.setBaseline(
-			this.normalizeSnapshot(snapshot)
+		const value =
+					this.normalizeSnapshot(snapshot);
+
+		await this.setBaseline(
+			this.emptySnapshot()
 		);
+
+		await this.setWorkspace(value);
+
+		return value;
 	},
 
 	isDirty() {
+		const current =
+					this.current();
+
+		const baseline =
+					this.baseline();
+
 		return (
-			JSON.stringify(this.current()) !==
-			JSON.stringify(this.baseline())
+			JSON.stringify({
+				header: current.header,
+				diet_tags: current.diet_tags,
+				components:
+				this.componentsForCompare(
+					current.components
+				)
+			}) !==
+			JSON.stringify({
+				header: baseline.header,
+				diet_tags: baseline.diet_tags,
+				components:
+				this.componentsForCompare(
+					baseline.components
+				)
+			})
+		);
+	},
+
+	async discard() {
+		return await this.setWorkspace(
+			this.baseline()
 		);
 	},
 
 	async clear() {
+		await removeValue(
+			"recipe_workspace"
+		);
+
 		await removeValue(
 			"recipe_baseline"
 		);

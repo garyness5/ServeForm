@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 16,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  jsRecipeWorkspace.initialDietTags().map(String) ))(msRecDietTags.options, msRecDietTags.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  jsRecipeWorkspace.get().diet_tags.map(String) ))(msRecDietTags.options, msRecDietTags.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

@@ -3,7 +3,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 26,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
-  "defaultText": "{{ jsRecipeWorkspace.initialHeader().notes || \"\" }}",
+  "defaultText": "{{ jsRecipeWorkspace.get().header.notes || \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "borderRadius"

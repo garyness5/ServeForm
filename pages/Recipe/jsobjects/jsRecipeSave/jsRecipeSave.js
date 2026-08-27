@@ -1,4 +1,6 @@
 export default {
+	pendingAction: null,
+
 	async safeReset(widgetName) {
 		try {
 			await resetWidget(widgetName, true);
@@ -96,6 +98,11 @@ export default {
 
 	async saveRecipe() {
 		try {
+			const wasNew =
+						Number(
+							appsmith.store.current_recipe_id || 0
+						) === 0;
+
 			await jsRecipeCompTable.syncFromTable();
 
 			const snapshot =
@@ -137,6 +144,10 @@ export default {
 				savedId
 			);
 
+			if (wasNew) {
+				await qryRecGetComponentItems.run();
+			}
+
 			await Promise.all([
 				qryRecGetItemById.run(),
 				qryRecGetSelectedDietTags.run(),
@@ -174,13 +185,10 @@ export default {
 	},
 
 	async closeRecipe() {
-		await jsRecipeCompTable.syncFromTable();
+		await jsRecipeWorkspace.capture();
 
 		if (this.isDirty()) {
-			await storeValue(
-				"pendingRecipeAction",
-				"close"
-			);
+			this.pendingAction = "close";
 
 			showModal(
 				"mdlRecUnsavedChanges"
@@ -230,8 +238,6 @@ export default {
 			0
 		);
 
-		await qryRecGetComponentItems.run();
-
 		await storeValue(
 			"Recipe_mode",
 			"add"
@@ -256,13 +262,10 @@ export default {
 	},
 
 	async addRecipe() {
-		await jsRecipeCompTable.syncFromTable();
+		await jsRecipeWorkspace.capture();
 
 		if (this.isDirty()) {
-			await storeValue(
-				"pendingRecipeAction",
-				"add"
-			);
+			this.pendingAction = "add";
 
 			showModal(
 				"mdlRecUnsavedChanges"
@@ -298,11 +301,6 @@ export default {
 	},
 
 	async duplicateRecipe() {
-		await jsRecipeCompTable.syncFromTable();
-
-		const source =
-					jsRecipeWorkspace.current();
-
 		const sourceId =
 					Number(
 						appsmith.store.current_recipe_id || 0
@@ -317,28 +315,45 @@ export default {
 			return false;
 		}
 
-		const savedName =
+		/*
+	Capture exactly what is currently
+	in front of the user.
+	*/
+		const source =
+					await jsRecipeWorkspace.capture();
+
+		const currentName =
 					String(
-						qryRecGetItemById.data?.[0]?.name ||
-						source.header.name ||
-						""
+						source.header.name || ""
 					).trim();
+
+		const duplicateName =
+					`${currentName} - Copy`;
 
 		const duplicate = {
 			header: {
 				...source.header,
 				name:
-				`${savedName} - Copy`
+				duplicateName
 			},
 
 			diet_tags: [
 				...(source.diet_tags || [])
 			],
 
-			components: (
-				source.components || []
-			).map(row => ({
-				...row
+			components:
+			(source.components || [])
+			.map(row => ({
+				...row,
+
+				id:
+				null,
+
+				recipe_id:
+				0,
+
+				draft_row_id:
+				jsRecipeCompTable.makeDraftId()
 			}))
 		};
 
@@ -372,7 +387,7 @@ export default {
 		await this.safeReset("tblRecComponents");
 
 		showAlert(
-			"Recipe duplicated. Save to create it.",
+			"Recipe duplicated. Save it before making changes to enable all Recipe features.",
 			"success"
 		);
 
@@ -380,24 +395,11 @@ export default {
 	},
 
 	async deleteRecipeStart() {
-		if (this.isDirty()) {
-			await storeValue(
-				"pendingRecipeAction",
-				"delete"
-			);
-
-			showModal(
-				"mdlRecUnsavedChanges"
-			);
-
-			return false;
-		}
+		await jsRecipeWorkspace.capture();
 
 		await qryRecGetImpactCount.run();
 
-		showModal(
-			"mdlRecDeleteConfirm"
-		);
+		showModal("mdlRecDeleteConfirm");
 
 		return true;
 	},
@@ -462,53 +464,13 @@ export default {
 		}
 	},
 
-	async saveAndDeleteRecipe() {
-		const saved =
-					await this.saveRecipe();
-
-		if (!saved) {
-			return false;
-		}
-
-		closeModal(
-			"mdlRecUnsavedChanges"
-		);
-
-		await qryRecGetImpactCount.run();
-
-		showModal(
-			"mdlRecDeleteConfirm"
-		);
-
-		return true;
-	},
-
-	async deleteWithoutSaving() {
-		closeModal(
-			"mdlRecUnsavedChanges"
-		);
-
-		await qryRecGetImpactCount.run();
-
-		showModal(
-			"mdlRecDeleteConfirm"
-		);
-
-		return true;
-	},
-
 	async unsavedYes() {
-		switch (
-			appsmith.store.pendingRecipeAction
-		) {
+		switch (this.pendingAction) {
 			case "close":
 				return await this.saveAndCloseRecipe();
 
 			case "add":
 				return await this.saveAndAddRecipe();
-
-			case "delete":
-				return await this.saveAndDeleteRecipe();
 
 			default:
 				return false;
@@ -516,17 +478,12 @@ export default {
 	},
 
 	async unsavedNo() {
-		switch (
-			appsmith.store.pendingRecipeAction
-		) {
+		switch (this.pendingAction) {
 			case "close":
 				return await this.closeWithoutSaving();
 
 			case "add":
 				return await this.addWithoutSaving();
-
-			case "delete":
-				return await this.deleteWithoutSaving();
 
 			default:
 				return false;

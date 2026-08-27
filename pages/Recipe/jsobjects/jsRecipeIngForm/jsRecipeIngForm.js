@@ -30,7 +30,7 @@ export default {
 		return true;
 	},
 
-	async save() {
+	async save(closeAfter = true) {
 		if (!this.validate()) {
 			return false;
 		}
@@ -55,9 +55,16 @@ export default {
 
 			await qryRecGetComponentItems.run();
 
-			closeModal(
-				"mdlRecIngAddIng"
-			);
+			if (closeAfter) {
+				closeModal(
+					"mdlRecIngAddIng"
+				);
+			} else {
+				await resetWidget(
+					"mdlRecIngAddIng",
+					true
+				);
+			}
 
 			showAlert(
 				"Ingredient saved.",
@@ -68,8 +75,7 @@ export default {
 
 		} catch (error) {
 			showAlert(
-				error?.message ||
-				"Ingredient could not be saved.",
+				jsUserErrors.friendly(error),
 				"error"
 			);
 
