@@ -27,6 +27,11 @@ export default {
 			apply_wastage: true,
 			active: true,
 
+			cost_per_base_unit: null,
+			factor_to_base: null,
+			line_cost: null,
+
+
 			wastage_percent: null,
 
 			allergen_names: null,
@@ -35,6 +40,9 @@ export default {
 			child_active: true,
 			child_deleted: false,
 			component_status: "active",
+
+			created_at: null,
+			updated_at: null,
 
 			saved_qty: null,
 			saved_unit_id: null,
@@ -187,6 +195,9 @@ export default {
 			unit_type: null,
 
 			wastage_percent: null,
+			cost_per_base_unit: null,
+			factor_to_base: null,
+			line_cost: null,
 
 			allergen_names: null,
 			diet_tag_names: null,
@@ -201,15 +212,15 @@ export default {
 	},
 
 	clearAfterCategory(row) {
-		return {
-			...this.clearAfterItemType({
-				...row,
-				item_type: row.item_type
-			}),
+		const cleared =
+					this.clearAfterItemType(row);
 
-			item_type: row.item_type || null,
+		return {
+			...cleared,
+			item_type:
+			row?.item_type || null,
 			component_category:
-			row.component_category || null
+			row?.component_category || null
 		};
 	},
 
@@ -385,6 +396,9 @@ export default {
 				? item.id
 				: null,
 
+				qty:
+				null,
+
 				unit_id:
 				item.default_unit_id,
 
@@ -421,15 +435,60 @@ export default {
 		);
 	},
 
+	itemBackground(row) {
+		if (
+			row?.child_deleted === true ||
+			row?.component_status === "child_deleted"
+		) {
+			return "#FFE6E6";
+		}
+
+		if (
+			row?.child_active === false ||
+			row?.component_status === "inactive"
+		) {
+			return "#FFF3CD";
+		}
+
+		return "";
+	},
+
 	async deleteRow(row) {
-		await this.syncFromTable();
+		const target =
+					this.editRow(row);
+
+		if (!target) {
+			return false;
+		}
+
+		const rows =
+					this.mergeUpdatedRows();
 
 		const remaining =
-					this.getRows().filter(r =>
-																r.draft_row_id !== row.draft_row_id
-															 );
+					rows.filter(r => {
+						if (target.draft_row_id) {
+							return (
+								r.draft_row_id !==
+								target.draft_row_id
+							);
+						}
 
-		return await this.setRows(remaining);
+						if (target.id) {
+							return (
+								Number(r.id || 0) !==
+								Number(target.id)
+							);
+						}
+
+						return (
+							Number(r.line_no || 0) !==
+							Number(target.line_no || 0)
+						);
+					});
+
+		await this.setRows(remaining);
+
+		return true;
 	},
 
 	rowsForSave() {

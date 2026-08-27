@@ -165,8 +165,7 @@ export default {
 			);
 
 			showAlert(
-				error?.message ||
-				"Recipe could not be saved.",
+				jsUserErrors.friendly(error),
 				"error"
 			);
 
@@ -455,8 +454,7 @@ export default {
 
 		} catch (error) {
 			showAlert(
-				error?.message ||
-				"Recipe could not be deleted.",
+				jsUserErrors.friendly(error),
 				"error"
 			);
 

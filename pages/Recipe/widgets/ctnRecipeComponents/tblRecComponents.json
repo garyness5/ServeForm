@@ -41,13 +41,11 @@
     "apply_wastage",
     "customColumn2",
     "line_cost",
+    "active",
+    "customColumn1",
     "diet_tag_names",
     "allergen_names",
     "id",
-    "active",
-    "customColumn1",
-    "created_at",
-    "updated_at",
     "line_no",
     "draft_row_id",
     "recipe_id",
@@ -55,31 +53,33 @@
     "child_recipe_id",
     "unit_id",
     "unit_type",
-    "cost_per_base_unit",
-    "factor_to_base",
     "child_active",
     "child_deleted",
     "component_status",
     "saved_qty",
     "saved_unit_id",
-    "saved_unit_abbreviation"
+    "saved_unit_abbreviation",
+    "created_at",
+    "updated_at",
+    "factor_to_base",
+    "cost_per_base_unit"
   ],
-  "columnUpdatedAt": 1787779738454,
+  "columnUpdatedAt": 1787790586236,
   "columnWidthMap": {
     "active": 104,
     "allergen_names": 110,
-    "apply_wastage": 131,
+    "apply_wastage": 81,
     "component_category": 108,
-    "component_name": 165,
+    "component_name": 129,
     "customColumn1": 101,
-    "customColumn2": 112,
-    "diet_tag_names": 99,
+    "customColumn2": 76,
+    "diet_tag_names": 89,
     "id": 60,
     "item_type": 109,
     "line_cost": 89,
     "price_per_unit": 128,
     "qty": 77,
-    "unit_abbreviation": 86,
+    "unit_abbreviation": 60,
     "wastage_percent": 95
   },
   "compactMode": "SHORT",
@@ -159,19 +159,10 @@
       "key": "primaryColumns.wastage_percent.computedValue"
     },
     {
-      "key": "primaryColumns.cost_per_base_unit.computedValue"
-    },
-    {
-      "key": "primaryColumns.factor_to_base.computedValue"
-    },
-    {
       "key": "primaryColumns.allergen_names.computedValue"
     },
     {
       "key": "primaryColumns.diet_tag_names.computedValue"
-    },
-    {
-      "key": "primaryColumns.line_cost.computedValue"
     },
     {
       "key": "primaryColumns.child_active.computedValue"
@@ -210,16 +201,28 @@
       "key": "primaryColumns.customColumn1.isCellVisible"
     },
     {
+      "key": "primaryColumns.wastage_percent.isCellVisible"
+    },
+    {
+      "key": "primaryColumns.customColumn2.computedValue"
+    },
+    {
+      "key": "primaryColumns.component_name.cellBackground"
+    },
+    {
       "key": "primaryColumns.created_at.computedValue"
     },
     {
       "key": "primaryColumns.updated_at.computedValue"
     },
     {
-      "key": "primaryColumns.wastage_percent.isCellVisible"
+      "key": "primaryColumns.factor_to_base.computedValue"
     },
     {
-      "key": "primaryColumns.customColumn2.computedValue"
+      "key": "primaryColumns.cost_per_base_unit.computedValue"
+    },
+    {
+      "key": "primaryColumns.line_cost.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -252,6 +255,9 @@
     },
     {
       "key": "primaryColumns.wastage_percent.isCellVisible"
+    },
+    {
+      "key": "primaryColumns.component_name.cellBackground"
     }
   ],
   "dynamicTriggerPathList": [
@@ -540,7 +546,7 @@
       "alias": "component_name",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
-      "cellBackground": "",
+      "cellBackground": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsRecipeCompTable.itemBackground(currentRow) )) :  jsRecipeCompTable.itemBackground(currentRow)  })()}}",
       "columnType": "select",
       "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"component_name\"])) : component_name })()}}",
       "currencyCode": "USD",
@@ -611,7 +617,7 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "text",
+      "columnType": "number",
       "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"cost_per_base_unit\"])) : cost_per_base_unit })()}}",
       "currencyCode": "USD",
       "decimals": 0,
@@ -620,7 +626,7 @@
       "fontStyle": "",
       "horizontalAlignment": "LEFT",
       "id": "cost_per_base_unit",
-      "index": 17,
+      "index": 27,
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
@@ -654,7 +660,7 @@
       "fontStyle": "",
       "horizontalAlignment": "LEFT",
       "id": "created_at",
-      "index": 28,
+      "index": 24,
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
@@ -662,7 +668,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": true,
+      "isVisible": false,
       "label": "created_at",
       "notation": "standard",
       "originalId": "created_at",
@@ -817,7 +823,7 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "text",
+      "columnType": "number",
       "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"factor_to_base\"])) : factor_to_base })()}}",
       "currencyCode": "USD",
       "decimals": 0,
@@ -826,7 +832,7 @@
       "fontStyle": "",
       "horizontalAlignment": "LEFT",
       "id": "factor_to_base",
-      "index": 18,
+      "index": 26,
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
@@ -955,7 +961,7 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "text",
+      "columnType": "number",
       "computedValue": "{{(() => { const tableData = tblRecComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( jsFmt.currency(jsRecipeCompTable.lineCost(currentRow)) )) :  jsFmt.currency(jsRecipeCompTable.lineCost(currentRow))  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
@@ -964,7 +970,7 @@
       "fontStyle": "",
       "horizontalAlignment": "RIGHT",
       "id": "line_cost",
-      "index": 21,
+      "index": 28,
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
@@ -973,7 +979,7 @@
       "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Total",
+      "label": "Line Cost",
       "notation": "standard",
       "originalId": "line_cost",
       "sticky": "",
@@ -1300,7 +1306,7 @@
       "fontStyle": "",
       "horizontalAlignment": "LEFT",
       "id": "updated_at",
-      "index": 29,
+      "index": 25,
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
@@ -1308,7 +1314,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": true,
+      "isVisible": false,
       "label": "updated_at",
       "notation": "standard",
       "originalId": "updated_at",
