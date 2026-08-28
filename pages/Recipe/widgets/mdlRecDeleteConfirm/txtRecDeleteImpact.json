@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 24,
+  "bottomRow": 23,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -30,7 +30,7 @@
   "fontSize": "0.875rem",
   "fontStyle": "",
   "isLoading": false,
-  "isVisible": "{{\n  (qryRecGetImpactCount.data?.[0]?.recipe_count || 0) > 0 ||\n  (qryRecGetImpactCount.data?.[0]?.dish_count || 0) > 0 ||\n  (qryRecGetImpactCount.data?.[0]?.menu_count || 0) > 0\n}}",
+  "isVisible": "{{\nappsmith.store.recipe_impact_mode !== \"unit_change\" &&\n(\n\t(qryRecGetImpactCount.data?.[0]?.recipe_count || 0) > 0 ||\n\t(qryRecGetImpactCount.data?.[0]?.dish_count || 0) > 0 ||\n\t(qryRecGetImpactCount.data?.[0]?.menu_count || 0) > 0\n)\n}}",
   "key": "h29kmo3jn9",
   "leftColumn": 3,
   "maxDynamicHeight": 9000,
@@ -41,8 +41,8 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 38,
   "needsErrorInfo": false,
-  "originalBottomRow": 24,
-  "originalTopRow": 16,
+  "originalBottomRow": 25,
+  "originalTopRow": 17,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
   "parentId": "yddgge3wef",
@@ -54,7 +54,7 @@
   "text": "{{\n`This will impact\n    Recipes: ${qryRecGetImpactCount.data?.[0]?.recipe_count || 0}\n    Dishes: ${qryRecGetImpactCount.data?.[0]?.dish_count || 0}\n    Menus: ${qryRecGetImpactCount.data?.[0]?.menu_count || 0}`\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 16,
+  "topRow": 15,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

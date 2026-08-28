@@ -68,90 +68,45 @@ export default {
 			return false;
 		}
 
-		const source =
-					tblRecipeList.selectedRow;
-
-		const sourceId =
-					Number(source?.id || 0);
-
-		if (!sourceId) {
-			return false;
-		}
-
-		const sourceName =
-					String(source?.name || "").trim();
-
-		const names =
-					(qryRecListGetRecipes.data || [])
-		.map(r =>
-				 String(r.name || "").trim()
-				)
-		.filter(Boolean);
-
-		const escaped =
-					sourceName.replace(
-						/[.*+?^${}()|[\]\\]/g,
-						"\\$&"
-					);
-
-		const regex =
-					new RegExp(
-						`^${escaped} - copy(?: (\\d+))?$`,
-						"i"
-					);
-
-		const usedNumbers =
-					names
-		.map(name => {
-			const match =
-						name.match(regex);
-
-			if (!match) return 0;
-
-			return match[1]
-				? Number(match[1])
-			: 1;
-		})
-		.filter(n => n > 0);
-
-		const nextNumber =
-					usedNumbers.length === 0
-		? 1
-		: Math.max(...usedNumbers) + 1;
-
-		const duplicateName =
-					nextNumber === 1
-		? `${sourceName} - copy`
-		: `${sourceName} - copy ${nextNumber}`;
-
-		await storeValue(
-			"Recipe_duplicate_source_id",
-			sourceId
+		/*
+	 * Clear stale Recipe-page Working State.
+	 */
+		await removeValue(
+			"recipe_workspace"
 		);
 
-		await storeValue(
-			"Recipe_duplicate_name",
-			duplicateName
-		);
-
-		await storeValue(
-			"current_recipe_id",
-			sourceId
-		);
-
-		await storeValue(
-			"Recipe_mode",
-			"duplicate_from_list"
+		await removeValue(
+			"recipe_baseline"
 		);
 
 		await removeValue(
 			"rec_components_local_rows"
 		);
 
-		navigateTo("Recipe");
+		/*
+	 * Open the selected saved Recipe first.
+	 *
+	 * Recipe owns the actual Duplicate / Save As logic.
+	 */
+		await storeValue(
+			"current_recipe_id",
+			this.selectedRecipeId()
+		);
+
+		await storeValue(
+			"Recipe_mode",
+			"duplicate"
+		);
+
+		navigateTo(
+			"Recipe",
+			{},
+			"SAME_WINDOW"
+		);
 
 		return true;
 	},
+
 	async deleteSelectedRecipeStart() {
 		if (!this.hasSelection()) {
 			showAlert(
@@ -257,21 +212,21 @@ export default {
 		}
 	},
 
-	async setCategory(row, categoryId) {
-		const recipeId =
-					Number(row?.id || 0);
+	async setCategory(recipeId, newCategoryId) {
+		const id =
+					Number(recipeId || 0);
 
-		const newCategoryId =
-					Number(categoryId || 0);
+		const categoryId =
+					Number(newCategoryId || 0) || null;
 
-		if (!recipeId || !newCategoryId) {
+		if (!id) {
 			return false;
 		}
 
 		try {
 			await qryRecListSetCategory.run({
-				recipe_id: recipeId,
-				category_id: newCategoryId
+				recipe_id: id,
+				category_id: categoryId
 			});
 
 			await qryRecListGetRecipes.run();
@@ -290,7 +245,6 @@ export default {
 			return false;
 		}
 	},
-
 	searchText() {
 		return String(
 			inpRecListSearch.text || ""

@@ -96,6 +96,82 @@ export default {
 		return jsRecipeWorkspace.isDirty();
 	},
 
+	yieldUnitChanged(snapshot) {
+		const baseline =
+					jsRecipeWorkspace.baseline();
+
+		const oldUnitId =
+					Number(
+						baseline?.header?.yield_unit_id || 0
+					);
+
+		const newUnitId =
+					Number(
+						snapshot?.header?.yield_unit_id || 0
+					);
+
+		return oldUnitId !== newUnitId;
+	},
+
+	impactCount() {
+		const impact =
+					qryRecGetImpactCount.data?.[0] || {};
+
+		return (
+			Number(impact.recipe_count || 0) +
+			Number(impact.dish_count || 0) +
+			Number(impact.menu_count || 0)
+		);
+	},
+
+	async checkYieldUnitChange(snapshot) {
+		const recipeId =
+					Number(
+						appsmith.store.current_recipe_id || 0
+					);
+
+		if (!recipeId) {
+			return false;
+		}
+
+		if (!this.yieldUnitChanged(snapshot)) {
+			return false;
+		}
+
+		/*
+	 * Preserve the exact current Recipe state
+	 * before running the impact query.
+	 *
+	 * The query can cause Appsmith widgets to
+	 * re-evaluate their defaults.
+	 */
+		await jsRecipeWorkspace.setWorkspace(
+			snapshot
+		);
+
+		await storeValue(
+			"recipe_save_snapshot",
+			snapshot
+		);
+
+		await qryRecGetImpactCount.run();
+
+		if (this.impactCount() === 0) {
+			return false;
+		}
+
+		await storeValue(
+			"recipe_impact_mode",
+			"unit_change"
+		);
+
+		showModal(
+			"mdlRecDeleteConfirm"
+		);
+
+		return true;
+	},
+
 	async saveRecipe() {
 		try {
 			const wasNew =
@@ -113,10 +189,25 @@ export default {
 			}
 
 			/*
-				Freeze ONE exact Recipe snapshot.
-				qrySaveRecipe reads all three payloads
-				from this same object.
-			*/
+		 * Before saving an existing Recipe,
+		 * check whether its Yield Unit changed.
+		 *
+		 * If the Recipe has downstream impact,
+		 * checkYieldUnitChange() opens the warning
+		 * modal and pauses this Save.
+		 */
+			if (
+				!appsmith.store.recipe_unit_change_confirmed &&
+				await this.checkYieldUnitChange(snapshot)
+			) {
+				return false;
+			}
+
+			/*
+		 * Freeze ONE exact Recipe snapshot.
+		 * qrySaveRecipe reads all three payloads
+		 * from this same object.
+		 */
 			await storeValue(
 				"recipe_save_snapshot",
 				snapshot
@@ -163,6 +254,18 @@ export default {
 				"recipe_save_snapshot"
 			);
 
+			/*
+		 * Clear any completed Unit-change
+		 * confirmation state.
+		 */
+			await removeValue(
+				"recipe_unit_change_confirmed"
+			);
+
+			await removeValue(
+				"recipe_impact_mode"
+			);
+
 			showAlert(
 				"Recipe saved.",
 				"success"
@@ -173,6 +276,10 @@ export default {
 		} catch (error) {
 			await removeValue(
 				"recipe_save_snapshot"
+			);
+
+			await removeValue(
+				"recipe_unit_change_confirmed"
 			);
 
 			showAlert(
@@ -397,11 +504,38 @@ export default {
 	async deleteRecipeStart() {
 		await jsRecipeWorkspace.capture();
 
+		await storeValue(
+			"recipe_impact_mode",
+			"delete"
+		);
+
 		await qryRecGetImpactCount.run();
 
 		showModal("mdlRecDeleteConfirm");
 
 		return true;
+	},
+
+	async confirmImpactAction() {
+		const mode =
+					String(
+						appsmith.store.recipe_impact_mode || "delete"
+					);
+
+		if (mode === "unit_change") {
+			await storeValue(
+				"recipe_unit_change_confirmed",
+				true
+			);
+
+			closeModal(
+				"mdlRecDeleteConfirm"
+			);
+
+			return await this.saveRecipe();
+		}
+
+		return await this.deleteRecipeConfirm();
 	},
 
 	async deleteRecipeConfirm() {

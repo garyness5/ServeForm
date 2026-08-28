@@ -304,7 +304,7 @@
       "isVisible": true,
       "label": "Category",
       "notation": "standard",
-      "onOptionChange": "{{\njsRecListActions.setCategory(\n\ttblRecipeList.updatedRow,\n\ttblRecipeList.updatedRow.category_id\n)\n}}",
+      "onOptionChange": "{{\njsRecListActions.setCategory(\n\tcurrentRow.id,\n\tcurrentRow.category_name\n)\n}}",
       "originalId": "category_name",
       "selectOptions": "{{(() => { const tableData = tblRecipeList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n\t(qryRecListGetCategories.data || []).map(x => ({\n\t\tlabel: x.name,\n\t\tvalue: String(x.id)\n\t}))\n)) : \n\t(qryRecListGetCategories.data || []).map(x => ({\n\t\tlabel: x.name,\n\t\tvalue: String(x.id)\n\t}))\n })()}}",
       "sticky": "left",

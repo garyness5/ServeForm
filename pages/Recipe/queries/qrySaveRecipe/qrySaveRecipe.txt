@@ -4,5 +4,6 @@ from public.save_recipe(
 	'{{ appsmith.store.current_client_id }}'::uuid,
 	'{{ JSON.stringify(jsRecipeSave.headerPayload()).replaceAll("'", "''") }}'::jsonb,
 	'{{ JSON.stringify(jsRecipeSave.dietTagsPayload()).replaceAll("'", "''") }}'::jsonb,
-	'{{ JSON.stringify(jsRecipeSave.componentsPayload()).replaceAll("'", "''") }}'::jsonb
+	'{{ JSON.stringify(jsRecipeSave.componentsPayload()).replaceAll("'", "''") }}'::jsonb,
+	{{ appsmith.store.recipe_unit_change_confirmed === true }}
 );

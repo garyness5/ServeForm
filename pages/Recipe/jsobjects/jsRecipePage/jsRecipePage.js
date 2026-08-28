@@ -29,8 +29,8 @@ export default {
 		}
 
 		/*
-			Published Recipe truth.
-		*/
+		 * Load selected saved Recipe truth.
+		 */
 		await Promise.all([
 			qryRecGetItemById.run(),
 			qryRecGetSelectedDietTags.run(),
@@ -40,6 +40,36 @@ export default {
 		await jsRecipeWorkspace.initializeFromSaved();
 
 		await jsRecipeCompTable.loadFromQuery();
+
+		/*
+		 * ==========================================
+		 * RECIPELIST DUPLICATE HANDOFF
+		 *
+		 * RecipeList only identifies the saved
+		 * source Recipe. Recipe owns duplication.
+		 * ==========================================
+		 */
+		if (mode === "duplicate") {
+			await resetWidget("inpRecName", true);
+			await resetWidget("selRecCategory", true);
+			await resetWidget("chkRecActive", true);
+			await resetWidget("inpRecYieldQty", true);
+			await resetWidget("selRecYieldUnit", true);
+			await resetWidget("inpRecExtraPercent", true);
+			await resetWidget("msRecDietTags", true);
+			await resetWidget("rteRecNotes", true);
+
+			return await jsRecipeSave.duplicateRecipe();
+		}
+
+		await removeValue(
+			"Recipe_open_mode"
+		);
+
+		await storeValue(
+			"Recipe_mode",
+			"edit"
+		);
 
 		return true;
 	}

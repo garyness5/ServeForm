@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 54,
   "shouldTruncate": false,
-  "text": "{{ \"Delete: \" + (inpRecName.text || \"\") }}",
+  "text": "{{\nappsmith.store.recipe_impact_mode === \"unit_change\"\n\t? \"Change Recipe Unit?\"\n\t: \"Delete Recipe?\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,

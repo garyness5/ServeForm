@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_recipe(\n\t{{ Number(appsmith.store.current_recipe_id || 0) || null }},\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t'{{ JSON.stringify(jsRecipeSave.headerPayload()).replaceAll(\"'\", \"''\") }}'::jsonb,\n\t'{{ JSON.stringify(jsRecipeSave.dietTagsPayload()).replaceAll(\"'\", \"''\") }}'::jsonb,\n\t'{{ JSON.stringify(jsRecipeSave.componentsPayload()).replaceAll(\"'\", \"''\") }}'::jsonb\n);",
+      "body": "select *\nfrom public.save_recipe(\n\t{{ Number(appsmith.store.current_recipe_id || 0) || null }},\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t'{{ JSON.stringify(jsRecipeSave.headerPayload()).replaceAll(\"'\", \"''\") }}'::jsonb,\n\t'{{ JSON.stringify(jsRecipeSave.dietTagsPayload()).replaceAll(\"'\", \"''\") }}'::jsonb,\n\t'{{ JSON.stringify(jsRecipeSave.componentsPayload()).replaceAll(\"'\", \"''\") }}'::jsonb,\n\t{{ appsmith.store.recipe_unit_change_confirmed === true }}\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

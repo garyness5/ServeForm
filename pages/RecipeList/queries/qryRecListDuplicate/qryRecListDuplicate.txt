@@ -1,4 +1,0 @@
-select *
-from public.duplicate_recipe(
-  {{ Number(tblRecipeList.selectedRow?.id || 0) }}
-);
