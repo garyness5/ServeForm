@@ -2,7 +2,7 @@
   "animateLoading": true,
   "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 26,
+  "bottomRow": 28,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -44,7 +44,7 @@
   "text": "Replace:\n   Replace this name everywhere it is currently used.\n   Diet tags cannot be replaced because they represent specific food classifications. They can only be deleted.\n\nDelete:\n   Leave replacement blank to delete this item completely.\n\n   Or, select a replacement item to replace this name everywhere it is currently used, then delete the original item.",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 6,
+  "topRow": 8,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,

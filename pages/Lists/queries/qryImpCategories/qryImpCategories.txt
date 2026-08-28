@@ -1,0 +1,12 @@
+select
+    hli.id,
+    hli.name
+from public.helper_list_items hli
+join public.helper_lists hl
+    on hl.id = hli.list_id
+where hl.list_code = 'ingredient_category'
+  and hli.client_id = '1315144c-801a-4371-aae4-52f2a78873d1'
+  and hli.active = true
+  and coalesce(hli.deleted, false) = false
+  and nullif(trim(hli.name), '') is not null
+order by hli.name;

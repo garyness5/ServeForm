@@ -32,7 +32,6 @@ export default {
 			const sourceRows = XLSX.utils.sheet_to_json(sheet, {
 				defval: null
 			});
-
 			// ------------------------------------------------------------
 			// Temporary GFS mapping
 			// Later replaced by frontend column mapping.
@@ -96,13 +95,16 @@ export default {
 			// ------------------------------------------------------------
 
 			const stageResult = await qryImpStageRows.run();
-
 			const stagedCount = stageResult?.[0]?.staged_count ?? 0;
+
+			await qryImpMappings.run();
 
 			showAlert(
 				`Loaded ${stagedCount} rows from "${sheetName}"`,
 				"success"
 			);
+
+			showModal(mdlImpMappings.name);
 
 			return stageResult;
 
@@ -112,5 +114,22 @@ export default {
 				"error"
 			);
 		}
-	}
+	},
+
+	mappingOptions(row) {
+		const isCategory = row?.mapping_type === "category";
+
+		const data = isCategory
+		? qryImpCategories.data
+		: qryImpUnits.data;
+
+		const rows = Array.isArray(data) ? data : [];
+
+		return rows.map(x => ({
+			label: isCategory
+			? x.name
+			: `${x.abbreviation} - ${x.name}`,
+			value: String(x.id)
+		}));
+	},
 }

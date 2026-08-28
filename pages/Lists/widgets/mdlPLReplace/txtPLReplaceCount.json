@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 57,
+  "bottomRow": 59,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -33,7 +33,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 38,
   "needsErrorInfo": false,
-  "originalBottomRow": 59,
+  "originalBottomRow": 57,
   "originalTopRow": 46,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
@@ -46,7 +46,7 @@
   "text": "{{\n`This will impact\n    Ingredients: ${jsPicklistRules.ingredientCount()}\n    Recipes: ${jsPicklistRules.recipeCount()}\n    Dishes: ${jsPicklistRules.dishCount()}\n    Menus: ${jsPicklistRules.menuCount()}\n    Events: ${jsPicklistRules.eventCount()}`\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 46,
+  "topRow": 48,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
