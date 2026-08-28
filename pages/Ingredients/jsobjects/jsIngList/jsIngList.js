@@ -133,7 +133,7 @@ export default {
 	},
 
 	async saveCategoryInline(ingredientId, newCategoryId) {
-		if (!ingredientId || !newCategoryId) {
+		if (!ingredientId) {
 			showAlert(
 				"Ingredient Category could not be identified.",
 				"error"

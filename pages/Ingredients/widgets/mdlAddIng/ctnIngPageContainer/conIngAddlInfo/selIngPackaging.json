@@ -59,7 +59,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 60,
   "serverSideFiltering": false,
-  "sourceData": "{{\n  getPackaging.data.map((obj) => {\n    return {\n      label: obj.name,\n      value: String(obj.id)\n    }\n  })\n}}",
+  "sourceData": "{{\n  qryGetPackaging.data.map((obj) => {\n    return {\n      label: obj.name,\n      value: String(obj.id)\n    }\n  })\n}}",
   "topRow": 17,
   "type": "SELECT_WIDGET",
   "version": 1,
