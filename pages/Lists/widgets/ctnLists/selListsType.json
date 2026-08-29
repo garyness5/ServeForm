@@ -67,7 +67,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "serverSideFiltering": false,
-  "sourceData": "{{\n  (getHelperLists.data || []).map(x => ({\n    label: x.list_name,\n    value: String(x.id),\n    list_code: x.list_code,\n    behavior: x.behavior\n  }))\n}}",
+  "sourceData": "{{\n  (qryGetHelperLists.data || []).map(x => ({\n    label: x.list_name,\n    value: String(x.id),\n    list_code: x.list_code,\n    behavior: x.behavior\n  }))\n}}",
   "topRow": 15,
   "type": "SELECT_WIDGET",
   "version": 1,

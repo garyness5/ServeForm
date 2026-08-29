@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  id,\n  name,\n  active,\n  is_system\nfrom public.helper_list_items\nwhere list_id = {{ Number(selListsType.selectedOptionValue || 0) }}\n  and coalesce(deleted, false) = false\n  and (\n    client_id = '{{ appsmith.store.current_client_id }}'::uuid\n    or is_system = true\n  )\norder by lower(name);",
+      "body": "select\n  id,\n  name,\n  active,\n  is_system\nfrom public.helper_list_items\nwhere list_id = {{\nNumber(\n\tthis.params.list_id ||\n\tselListsType.selectedOptionValue ||\n\t0\n)\n}}\n  and coalesce(deleted, false) = false\n  and (\n\t\tclient_id = '{{ appsmith.store.current_client_id }}'::uuid\n\t\tor is_system = true\n\t)\norder by lower(name);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

@@ -1,6 +1,6 @@
 select *
 from public.add_helper_item(
 	'{{ appsmith.store.current_client_id }}'::uuid,
-	{{ Number(selListsType.selectedOptionValue) }},
+	{{ Number(this.params.list_id) }},
 	{{ inpPLAddName.text }}
 );

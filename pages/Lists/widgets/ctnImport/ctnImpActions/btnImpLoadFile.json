@@ -51,7 +51,7 @@
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 31,
+  "rightColumn": 33,
   "text": "Import",
   "tooltip": "Import list",
   "topRow": 2,

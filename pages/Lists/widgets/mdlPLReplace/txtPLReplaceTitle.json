@@ -33,7 +33,7 @@
   "mobileRightColumn": 41,
   "mobileTopRow": 1,
   "needsErrorInfo": false,
-  "originalBottomRow": 5,
+  "originalBottomRow": 7,
   "originalTopRow": 1,
   "overflow": "NONE",
   "parentId": "7hgaofawbt",
@@ -49,5 +49,5 @@
   "type": "TEXT_WIDGET",
   "version": 1,
   "widgetId": "ly9q2riare",
-  "widgetName": "titPLReplace"
+  "widgetName": "txtPLReplaceTitle"
 }

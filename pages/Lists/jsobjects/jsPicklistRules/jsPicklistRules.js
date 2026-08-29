@@ -3,7 +3,7 @@ export default {
 	listCode() {
 		return (
 			qryGetListItemImpact.data?.[0]?.list_code ||
-			getHelperLists.data?.find(
+			qryGetHelperLists.data?.find(
 				x =>
 				String(x.id) ===
 				String(selListsType.selectedOptionValue)

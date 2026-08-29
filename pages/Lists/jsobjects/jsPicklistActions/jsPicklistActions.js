@@ -8,7 +8,6 @@ export default {
 			.toLowerCase();
 	},
 
-
 	async openAdd() {
 		resetWidget("inpPLAddName");
 		showModal("mdlPLAdd");
@@ -18,34 +17,63 @@ export default {
 
 
 	async saveAdd() {
-		const newName =
-					(inpPLAddName.text || "").trim();
+		const newName = (inpPLAddName.text || "").trim();
 
 		if (!newName) {
 			return false;
 		}
 
-		const exists =
-					(qryGetPicklistItems.data || [])
-		.some(
+		const fromImport =
+					appsmith.store.plAddContext === "ingredientImport";
+
+		let listId;
+
+		if (fromImport) {
+			const supplierList = (qryGetHelperLists.data || []).find(
+				x => x.list_code === "supplier"
+			);
+			if (!supplierList) {
+				showAlert("Supplier list could not be found.", "error");
+				return false;
+			}
+
+			listId = supplierList.id;
+		} else {
+			listId = selListsType.selectedOptionValue;
+		}
+
+		const picklistItems = await qryGetPicklistItems.run({
+			list_id: listId
+		});
+
+		const exists = (picklistItems || []).some(
 			item =>
 			item.name &&
-			this.norm(item.name) ===
-			this.norm(newName)
+			this.norm(item.name) === this.norm(newName)
 		);
 
 		if (exists) {
-			showAlert(
-				"Name already exists in this list",
-				"warning"
-			);
-
+			showAlert("Name already exists in this list", "warning");
 			return false;
 		}
 
-		await qryAddListItem.run();
+		const addedItem = await qryAddListItem.run({
+			list_id: listId
+		});
 
-		await qryGetPicklistItems.run();
+		await qryGetPicklistItems.run({
+			list_id: listId
+		});
+
+		if (fromImport) {
+			await qryImpSuppliers.run();
+
+			const newSupplier = addedItem?.[0];
+
+			if (newSupplier?.id) {
+				await storeValue("impSelectedSupplierId", String(newSupplier.id));
+			}
+		}
 
 		resetWidget("inpPLAddName");
 
@@ -53,7 +81,6 @@ export default {
 
 		return true;
 	},
-
 
 	async openRename() {
 		if (!jsPicklistRules.hasSelection()) {
@@ -75,7 +102,6 @@ export default {
 
 		return true;
 	},
-
 
 	async saveRename() {
 		const newName =
@@ -121,9 +147,8 @@ export default {
 		return true;
 	},
 
-
 	async cleanupBlankRows() {
-		await cleanupBlankHelperItems.run();
+		await qryCleanupBlankHelperItems.run();
 
 		await qryGetPicklistItems.run();
 
@@ -134,7 +159,6 @@ export default {
 
 		return true;
 	},
-
 
 	async openReplaceDelete() {
 		if (!jsPicklistRules.hasSelection()) {
@@ -203,7 +227,6 @@ export default {
 
 		return await this.confirmReplaceDelete();
 	},
-
 
 	async confirmReplaceDelete() {
 		await qryReplaceDeleteListItem.run();
