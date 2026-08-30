@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n    u.id,\n    u.name,\n    u.abbreviation\nfrom public.units u\nwhere u.active = true\norder by\n    u.unit_type,\n    u.base_value,\n    u.name;",
+      "body": "select\n    u.id,\n    u.name,\n    u.abbreviation\nfrom public.units u\nwhere u.active = true\norder by\n    u.unit_type,\n    u.name;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -25,7 +25,7 @@
     "dynamicBindingPathList": [],
     "name": "qryImpUnits",
     "pageId": "Lists",
-    "runBehaviour": "MANUAL",
+    "runBehaviour": "AUTOMATIC",
     "userSetOnLoad": false
   }
 }

@@ -1,0 +1,24 @@
+select public.save_ingredient_import_header_profile(
+	{{ appsmith.store.current_client_id }}::uuid,
+
+	{{
+	selImportListSupplier.selectedOptionValue === "__NO_SUPPLIER__"
+	? null
+	: Number(selImportListSupplier.selectedOptionValue)
+	}},
+
+	{{
+	appsmith.store.impAppliedHeaderSignature
+	}},
+
+	{{
+	JSON.stringify(
+		(appsmith.store.impAppliedHeaderMapRows || [])
+		.filter(row => row["Map To"])
+		.map(row => ({
+			source_header: row["Imported Data"],
+			target_field: row["Map To"]
+		}))
+	)
+	}}::jsonb
+) as profile_id;

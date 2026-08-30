@@ -35,7 +35,7 @@
     "Imported_Data",
     "Map_To"
   ],
-  "columnUpdatedAt": 1788044769359,
+  "columnUpdatedAt": 1788050673466,
   "columnWidthMap": {
     "Imported_Data": 270,
     "active": 103,
@@ -52,7 +52,7 @@
   "customIsLoading": false,
   "customIsLoadingValue": "",
   "defaultPageSize": 0,
-  "defaultSelectedRowIndex": "{{\njsProposalData.hasSelectedProposal()\n? jsProposalActions.selectedProposalIndex()\n: -1\n}}",
+  "defaultSelectedRowIndex": "",
   "defaultSelectedRowIndices": [
     0
   ],
@@ -69,9 +69,6 @@
     },
     {
       "key": "tableData"
-    },
-    {
-      "key": "defaultSelectedRowIndex"
     },
     {
       "key": "primaryColumns.Imported_Data.computedValue"
@@ -95,9 +92,6 @@
     }
   ],
   "dynamicTriggerPathList": [
-    {
-      "key": "onRowSelected"
-    },
     {
       "key": "primaryColumns.Map_To.onOptionChange"
     }
@@ -123,7 +117,7 @@
   "mobileRightColumn": 12,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onRowSelected": "{{\ntblImportMapHeaders.selectedRow?.id\n? jsProposalSelector.selectProposal(\n\ttblImportMapHeaders.selectedRow\n)\n: jsProposalSelector.clearSelection()\n}}",
+  "onRowSelected": "",
   "originalBottomRow": 38,
   "originalTopRow": 11,
   "parentColumnSpace": 18.890625,
@@ -136,7 +130,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblImportMapHeaders.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"Imported Data\"])) : Imported Data })()}}",
+      "computedValue": "{{(() => { const tableData = tblImportMapHeaders.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow[\"Imported Data\"] )) :  currentRow[\"Imported Data\"]  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -170,7 +164,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "select",
-      "computedValue": "{{(() => { const tableData = tblImportMapHeaders.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow[\"Map To\"] )) :  currentRow[\"Map To\"]  })()}}",
+      "computedValue": "{{(() => { const tableData = tblImportMapHeaders.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow?.[\"Map To\"] || \"\" )) :  currentRow?.[\"Map To\"] || \"\"  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
