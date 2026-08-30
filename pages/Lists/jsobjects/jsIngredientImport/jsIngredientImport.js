@@ -1,129 +1,244 @@
 export default {
-	async readWorkbook() {
-		const file = filImpPriceList.files?.[0];
 
-		if (!file?.data) {
-			showAlert("Please choose an Excel file.", "warning");
-			return;
+	// ============================================================
+	// Header Mapping
+	// ============================================================
+
+	mapToOptions() {
+		return [
+			{ label: "Code", value: "item_number" },
+			{ label: "Category", value: "category" },
+			{ label: "Ingredient", value: "ingredient" },
+			{ label: "Qty", value: "qty" },
+			{ label: "Unit", value: "unit" },
+			{ label: "Cost", value: "cost" }
+		];
+	},
+
+	suggestHeaderMap(header) {
+		const value = String(header || "")
+		.trim()
+		.toLowerCase();
+
+		const suggestions = {
+			"item number": "item_number",
+			"item #": "item_number",
+			"item no": "item_number",
+			"code": "item_number",
+
+			"category": "category",
+
+			"ingredient": "ingredient",
+			"item description": "ingredient",
+			"description": "ingredient",
+
+			"qty": "qty",
+			"quantity": "qty",
+			"total qty": "qty",
+
+			"unit": "unit",
+			"uom": "unit",
+
+			"cost": "cost",
+			"case price": "cost",
+			"price": "cost"
+		};
+
+		return suggestions[value] || "";
+	},
+
+	async applyHeaderMapEdit() {
+		const edits = tblImportMapHeaders.updatedRows || [];
+
+		if (!edits.length) {
+			return false;
 		}
 
-		if (!selImpSupplier.selectedOptionValue) {
-			showAlert("Please select a Supplier.", "warning");
-			return;
+		const edit = edits[edits.length - 1];
+
+		const importedHeader =
+					edit?.allFields?.["Imported Data"];
+
+		const targetField =
+					edit?.updatedFields?.["Map To"];
+
+		if (!importedHeader) {
+			return false;
+		}
+
+		const rows = (appsmith.store.impHeaderMapRows || [])
+		.map(row => ({ ...row }));
+
+		// New assignment wins.
+		// Remove the same Savveyra target from every other row.
+		if (targetField) {
+			rows.forEach(row => {
+				if (
+					row["Imported Data"] !== importedHeader &&
+					row["Map To"] === targetField
+				) {
+					row["Map To"] = "";
+				}
+			});
+		}
+
+		// Apply the new assignment.
+		const row = rows.find(
+			x => x["Imported Data"] === importedHeader
+		);
+
+		if (row) {
+			row["Map To"] = targetField || "";
+		}
+
+		await storeValue("impHeaderMapRows", rows);
+
+		// Clear Appsmith's temporary editable-table state
+		// and redraw from our working state.
+		resetWidget("tblImportMapHeaders");
+
+		return true;
+	},
+
+
+	// ============================================================
+	// File Loading
+	// ============================================================
+
+	async readWorkbook() {
+		const file = filImportListPriceList.files?.[0];
+
+		if (!file?.data) {
+			showAlert(
+				"Please choose an Excel file.",
+				"warning"
+			);
+			return false;
 		}
 
 		try {
-			// ------------------------------------------------------------
-			// Read workbook
-			// ------------------------------------------------------------
-
-			const workbook = XLSX.read(file.data, {
-				type: "binary"
-			});
+			const workbook = XLSX.read(
+				file.data,
+				{
+					type: "binary"
+				}
+			);
 
 			if (!workbook.SheetNames?.length) {
-				showAlert("No worksheets were found in this Excel file.", "error");
-				return;
+				showAlert(
+					"No worksheets were found in this file.",
+					"error"
+				);
+				return false;
 			}
 
-			const sheetName = workbook.SheetNames[0];
-			const sheet = workbook.Sheets[sheetName];
+			const sheetName =
+						workbook.SheetNames[0];
 
-			const sourceRows = XLSX.utils.sheet_to_json(sheet, {
-				defval: null
-			});
-			// ------------------------------------------------------------
-			// Temporary GFS mapping
-			// Later replaced by frontend column mapping.
-			// ------------------------------------------------------------
+			const sheet =
+						workbook.Sheets[sheetName];
 
-			const rows = sourceRows.map((row, index) => ({
-				source_row_no: index + 2,
+			const sourceRows =
+						XLSX.utils.sheet_to_json(
+							sheet,
+							{
+								defval: null
+							}
+						);
 
-				"Item number":
-				row["Item Number"] == null
-				? null
-				: String(row["Item Number"]).trim(),
-
-				"Category":
-				row["Category"] == null
-				? null
-				: String(row["Category"]).trim(),
-
-				"Ingredient":
-				row["Item Description"] == null
-				? null
-				: String(row["Item Description"]).trim(),
-
-				"Qty":
-				row["Total qty"] == null
-				? null
-				: Number(row["Total qty"]),
-
-				"Unit":
-				row["Unit"] == null
-				? null
-				: String(row["Unit"]).trim(),
-
-				"Cost":
-				row["Case price"] == null
-				? null
-				: Number(
-					String(row["Case price"])
-					.replace(/[$,\s]/g, "")
-				)
-			}));
-
-			await storeValue("impParsedRows", rows);
-
-			// ------------------------------------------------------------
-			// Create import batch
-			// ------------------------------------------------------------
-
-			const batchResult = await qryImpCreateBatch.run();
-
-			const batchId = batchResult?.[0]?.batch_id;
-
-			if (!batchId) {
-				throw new Error("Import batch could not be created.");
+			if (!sourceRows.length) {
+				showAlert(
+					"No data rows were found in this file.",
+					"warning"
+				);
+				return false;
 			}
 
-			await storeValue("impBatchId", batchId);
+			const sourceHeaders =
+						Object.keys(sourceRows[0]);
 
-			// ------------------------------------------------------------
-			// Stage parsed rows
-			// ------------------------------------------------------------
+			// ----------------------------------------------------
+			// Raw import working state
+			// ----------------------------------------------------
 
-			const stageResult = await qryImpStageRows.run();
-			const stagedCount = stageResult?.[0]?.staged_count ?? 0;
+			await storeValue(
+				"impSourceHeaders",
+				sourceHeaders
+			);
 
-			await qryImpMappings.run();
+			await storeValue(
+				"impSourceRows",
+				sourceRows
+			);
+
+			// ----------------------------------------------------
+			// Initial Header Mapping working state
+			// Suggestions are applied once here.
+			// ----------------------------------------------------
+
+			const headerMapRows =
+						sourceHeaders.map(header => ({
+							"Imported Data": header,
+							"Map To":
+							this.suggestHeaderMap(header)
+						}));
+
+			await storeValue(
+				"impHeaderMapRows",
+				headerMapRows
+			);
+
+			// ----------------------------------------------------
+			// Clear downstream state from any previous file
+			// ----------------------------------------------------
+
+			await removeValue(
+				"impParsedRows"
+			);
+
+			await removeValue(
+				"impBatchId"
+			);
 
 			showAlert(
-				`Loaded ${stagedCount} rows from "${sheetName}"`,
+				`Loaded ${sourceRows.length} rows from "${sheetName}"`,
 				"success"
 			);
 
-			showModal(mdlImpMappings.name);
-
-			return stageResult;
+			return {
+				sheetName,
+				rowCount: sourceRows.length,
+				headers: sourceHeaders
+			};
 
 		} catch (error) {
 			showAlert(
-				error?.message || "The price list could not be loaded.",
+				error?.message ||
+				"The file could not be loaded.",
 				"error"
 			);
+
+			return false;
 		}
 	},
 
+
+	// ============================================================
+	// Category / Unit Mapping
+	// ============================================================
+
 	mappingOptions(row) {
-		const isCategory = row?.mapping_type === "category";
+		const isCategory =
+					row?.mapping_type === "category";
 
 		const data = isCategory
 		? qryImpCategories.data
 		: qryImpUnits.data;
 
-		const rows = Array.isArray(data) ? data : [];
+		const rows =
+					Array.isArray(data)
+		? data
+		: [];
 
 		return rows.map(x => ({
 			label: isCategory
@@ -131,5 +246,6 @@ export default {
 			: `${x.abbreviation} - ${x.name}`,
 			value: String(x.id)
 		}));
-	},
+	}
+
 }

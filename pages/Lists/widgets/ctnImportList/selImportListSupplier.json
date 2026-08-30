@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 22,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  appsmith.store.impSelectedSupplierId || \"\" ))(selImpSupplier.options, selImpSupplier.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  appsmith.store.impSelectedSupplierId || \"\" ))(selImportListSupplier.options, selImportListSupplier.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -44,6 +44,7 @@
   "labelStyle": "BOLD",
   "labelText": "Select Supplier",
   "labelTextSize": "1rem",
+  "labelTooltip": "Supplier is required ",
   "labelWidth": 5,
   "leftColumn": 1,
   "maxDynamicHeight": 9000,
@@ -72,5 +73,5 @@
   "type": "SELECT_WIDGET",
   "version": 1,
   "widgetId": "bpufm8bwfc",
-  "widgetName": "selImpSupplier"
+  "widgetName": "selImportListSupplier"
 }

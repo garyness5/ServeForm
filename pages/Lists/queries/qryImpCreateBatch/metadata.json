@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.create_ingredient_import_batch(\n    '1315144c-801a-4371-aae4-52f2a78873d1',\n    {{ selImpSupplier.selectedOptionValue }},\n    {{ filImpPriceList.files[0]?.name || null }}\n);",
+      "body": "select *\nfrom public.create_ingredient_import_batch(\n    '1315144c-801a-4371-aae4-52f2a78873d1',\n    {{ selImportListSupplier.selectedOptionValue }},\n    {{ filImportListPriceList.files[0]?.name || null }}\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

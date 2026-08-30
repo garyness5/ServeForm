@@ -1,6 +1,6 @@
 select *
 from public.create_ingredient_import_batch(
     '1315144c-801a-4371-aae4-52f2a78873d1',
-    {{ selImpSupplier.selectedOptionValue }},
-    {{ filImpPriceList.files[0]?.name || null }}
+    {{ selImportListSupplier.selectedOptionValue }},
+    {{ filImportListPriceList.files[0]?.name || null }}
 );

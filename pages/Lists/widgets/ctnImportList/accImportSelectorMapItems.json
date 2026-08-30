@@ -1,28 +1,25 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 6,
+  "bottomRow": 65,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
-  "buttonVariant": "PRIMARY",
+  "buttonVariant": "TERTIARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
     {
       "key": "borderRadius"
     },
     {
-      "key": "buttonColor"
+      "key": "text"
     },
     {
-      "key": "isDisabled"
+      "key": "buttonColor"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -31,32 +28,33 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\n  !selImpSupplier.selectedOptionValue ||\n  !filImpPriceList.files?.length ||\n  !filImpPriceList.files[0].name?.toLowerCase().endsWith(\".xlsx\")\n}}",
+  "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
-  "key": "ve73w085th",
-  "leftColumn": 20,
+  "key": "iu27lzhy00",
+  "leftColumn": 0,
   "minWidth": 120,
-  "mobileBottomRow": 17,
-  "mobileLeftColumn": 4,
-  "mobileRightColumn": 20,
-  "mobileTopRow": 13,
+  "mobileBottomRow": 19,
+  "mobileLeftColumn": 0,
+  "mobileRightColumn": 16,
+  "mobileTopRow": 15,
   "needsErrorInfo": false,
-  "onClick": "{{ jsIngredientImport.readWorkbook() }}",
-  "parentColumnSpace": 11.005859375,
-  "parentId": "512524lb2s",
+  "onClick": "{{\nstoreValue(\n\t\"accImportMapItems\",\n\t!appsmith.store.accImportMapItems\n)\n}}",
+  "originalBottomRow": 65,
+  "originalTopRow": 61,
+  "parentColumnSpace": 17.9375,
+  "parentId": "h3qxav0gki",
   "parentRowSpace": 10,
   "placement": "CENTER",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 33,
-  "text": "Import",
-  "tooltip": "Import list",
-  "topRow": 2,
+  "rightColumn": 5,
+  "text": "{{\nappsmith.store.accImportMapItems\n? \"▲\"\n: \"▼\"\n}}",
+  "topRow": 61,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "bwwrwfd2v8",
-  "widgetName": "btnImpLoadFile"
+  "widgetId": "g67wucugr5",
+  "widgetName": "accImportSelectorMapItems"
 }

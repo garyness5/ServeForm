@@ -1,6 +1,6 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_3db2a087-eb48-44a6-ac1c-ddd8e5af0bf4",
-  "id": "Lists_jsIngredientImport.mappingOptions",
+  "gitSyncId": "6a0a1bde3214f344228346e7_28db9aba-0e69-4d84-bdd4-ab72a773ba76",
+  "id": "Lists_jsIngredientImport.suggestHeaderMap",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
@@ -8,7 +8,7 @@
       "encodeParamsToggle": true,
       "jsArguments": [
         {
-          "name": "row"
+          "name": "header"
         }
       ],
       "paginationType": "NONE",
@@ -26,8 +26,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "jsIngredientImport.mappingOptions",
-    "name": "mappingOptions",
+    "fullyQualifiedName": "jsIngredientImport.suggestHeaderMap",
+    "name": "suggestHeaderMap",
     "pageId": "Lists",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

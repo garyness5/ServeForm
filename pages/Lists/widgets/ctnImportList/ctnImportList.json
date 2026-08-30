@@ -4,12 +4,12 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 74,
+  "bottomRow": 112,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "children": [
     {
       "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-      "bottomRow": 630,
+      "bottomRow": 1010,
       "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
       "canExtend": false,
       "containerStyle": "none",
@@ -59,7 +59,7 @@
       "key": "boxShadow"
     }
   ],
-  "dynamicHeight": "FIXED",
+  "dynamicHeight": "AUTO_HEIGHT",
   "dynamicTriggerPathList": [],
   "flexVerticalAlignment": "stretch",
   "isCanvas": true,
@@ -75,7 +75,7 @@
   "mobileRightColumn": 60,
   "mobileTopRow": 13,
   "needsErrorInfo": false,
-  "originalBottomRow": 74,
+  "originalBottomRow": 112,
   "originalTopRow": 11,
   "parentColumnSpace": 19.8125,
   "parentId": "0",
@@ -88,5 +88,5 @@
   "type": "CONTAINER_WIDGET",
   "version": 1,
   "widgetId": "gjgbnrysx2",
-  "widgetName": "ctnImport"
+  "widgetName": "ctnImportList"
 }
