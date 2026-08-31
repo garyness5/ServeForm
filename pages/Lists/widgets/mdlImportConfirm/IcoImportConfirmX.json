@@ -13,6 +13,11 @@
       "key": "borderRadius"
     }
   ],
+  "dynamicPropertyPathList": [
+    {
+      "key": "onClick"
+    }
+  ],
   "dynamicTriggerPathList": [
     {
       "key": "onClick"
@@ -23,7 +28,7 @@
   "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
-  "key": "jfk5chhj5v",
+  "key": "gshmixm7n1",
   "leftColumn": 58,
   "minWidth": 50,
   "mobileBottomRow": 4,
@@ -31,14 +36,14 @@
   "mobileRightColumn": 64,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onClick": "{{closeModal(mdlImpMappings.name);}}",
-  "parentId": "aldfjk9hgh",
+  "onClick": "{{ closeModal(mdlImportConfirm.name) }}",
+  "parentId": "y9tj5liga2",
   "renderMode": "CANVAS",
   "responsiveBehavior": "hug",
   "rightColumn": 64,
   "topRow": 0,
   "type": "ICON_BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "nyxnhoipxv",
-  "widgetName": "icoImpMappingsX"
+  "widgetId": "oywoco2jgp",
+  "widgetName": "IcoImportConfirmX"
 }

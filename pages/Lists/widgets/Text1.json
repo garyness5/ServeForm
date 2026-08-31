@@ -11,9 +11,6 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -33,7 +30,7 @@
   "mobileRightColumn": 18,
   "mobileTopRow": 89,
   "needsErrorInfo": false,
-  "originalBottomRow": 102,
+  "originalBottomRow": 93,
   "originalTopRow": 89,
   "overflow": "NONE",
   "parentColumnSpace": 19.8125,
@@ -43,7 +40,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 18,
   "shouldTruncate": false,
-  "text": "{{ jsIngredientImport.buildValueMapRows() }}",
+  "text": "1",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 89,

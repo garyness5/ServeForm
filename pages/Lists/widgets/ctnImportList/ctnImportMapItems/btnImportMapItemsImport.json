@@ -13,9 +13,6 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
@@ -32,7 +29,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ jsPicklistRules.replaceSaveDisabled() }}",
+  "isDisabled": "",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -43,7 +40,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsPicklistActions.saveReplaceDelete() }}",
+  "onClick": "{{ jsIngredientImport.openImportConfirm() }}",
   "originalBottomRow": 62,
   "originalTopRow": 58,
   "parentId": "atxu37edx9",

@@ -32,12 +32,18 @@
     }
   },
   "columnOrder": [
-    "Type",
-    "Imported_Data",
-    "Map_To"
+    "type",
+    "imported_data",
+    "map_to",
+    "options"
   ],
-  "columnUpdatedAt": 1788116240560,
-  "columnWidthMap": {},
+  "columnUpdatedAt": 1788131372319,
+  "columnWidthMap": {
+    "Imported_Data": 235,
+    "Type": 117,
+    "imported_data": 220,
+    "type": 102
+  },
   "customIsLoading": false,
   "customIsLoadingValue": "",
   "defaultPageSize": 0,
@@ -60,16 +66,19 @@
       "key": "tableData"
     },
     {
-      "key": "primaryColumns.Type.computedValue"
+      "key": "primaryColumns.type.computedValue"
     },
     {
-      "key": "primaryColumns.Imported_Data.computedValue"
+      "key": "primaryColumns.imported_data.computedValue"
     },
     {
-      "key": "primaryColumns.Map_To.computedValue"
+      "key": "primaryColumns.map_to.computedValue"
     },
     {
-      "key": "primaryColumns.Map_To.selectOptions"
+      "key": "primaryColumns.options.computedValue"
+    },
+    {
+      "key": "primaryColumns.map_to.selectOptions"
     }
   ],
   "dynamicPropertyPathList": [
@@ -77,12 +86,12 @@
       "key": "tableData"
     },
     {
-      "key": "primaryColumns.Map_To.onOptionChange"
+      "key": "primaryColumns.map_to.onOptionChange"
     }
   ],
   "dynamicTriggerPathList": [
     {
-      "key": "primaryColumns.Map_To.onOptionChange"
+      "key": "primaryColumns.map_to.onOptionChange"
     }
   ],
   "enableClientSideSearch": true,
@@ -95,9 +104,9 @@
   "isVisible": true,
   "isVisibleDownload": true,
   "isVisibleFilters": false,
-  "isVisiblePagination": true,
+  "isVisiblePagination": false,
   "isVisibleSearch": true,
-  "key": "pjrtzchu0j",
+  "key": "m10fm0b3zt",
   "label": "Data",
   "leftColumn": 0,
   "minWidth": 450,
@@ -110,18 +119,20 @@
   "parentId": "atxu37edx9",
   "parentRowSpace": 10,
   "primaryColumns": {
-    "Imported_Data": {
-      "alias": "Imported Data",
+    "imported_data": {
+      "alias": "imported_data",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblImportMapItems.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  (tblImportMapItems.processedTableData || [])\n    .map(currentRow => currentRow[\"Imported Data\"])\n)) : \n  (tblImportMapItems.processedTableData || [])\n    .map(currentRow => currentRow[\"Imported Data\"])\n })()}}",
+      "computedValue": "{{(() => { const tableData = tblImportMapItems.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.imported_data )) :  currentRow.imported_data  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
+      "fontStyle": "",
       "horizontalAlignment": "LEFT",
-      "id": "Imported_Data",
+      "id": "imported_data",
       "index": 1,
       "isCellEditable": false,
       "isCellVisible": true,
@@ -133,26 +144,29 @@
       "isVisible": true,
       "label": "Imported Data",
       "notation": "standard",
-      "originalId": "Imported Data",
+      "originalId": "imported_data",
       "sticky": "",
+      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},
       "verticalAlignment": "CENTER",
       "width": 150
     },
-    "Map_To": {
-      "alias": "Map To",
+    "map_to": {
+      "alias": "map_to",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
       "columnType": "select",
-      "computedValue": "{{(() => { const tableData = tblImportMapItems.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n(tblImportMapItems.processedTableData || [])\n.map(currentRow => currentRow[\"Map To\"] || \"\")\n)) : \n(tblImportMapItems.processedTableData || [])\n.map(currentRow => currentRow[\"Map To\"] || \"\")\n })()}}",
+      "computedValue": "{{(() => { const tableData = tblImportMapItems.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.map_to || \"\" )) :  currentRow.map_to || \"\"  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
+      "fontStyle": "",
       "horizontalAlignment": "LEFT",
-      "id": "Map_To",
+      "id": "map_to",
       "index": 2,
       "isCellEditable": true,
       "isCellVisible": true,
@@ -162,30 +176,68 @@
       "isEditable": true,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Map To",
+      "label": "Map to",
       "notation": "standard",
       "onOptionChange": "{{ jsIngredientImport.applyValueMapEdit() }}",
-      "originalId": "Map To",
-      "selectOptions": "{{(() => { const tableData = tblImportMapItems.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n(tblImportMapItems.processedTableData || [])\n.map(currentRow => currentRow[\"Options\"] || [])\n)) : \n(tblImportMapItems.processedTableData || [])\n.map(currentRow => currentRow[\"Options\"] || [])\n })()}}",
+      "originalId": "map_to",
+      "selectOptions": "{{(() => { const tableData = tblImportMapItems.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.options || [] )) :  currentRow.options || []  })()}}",
+      "sortBy": "label",
       "sticky": "",
+      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},
       "verticalAlignment": "CENTER",
       "width": 150
     },
-    "Type": {
-      "alias": "Type",
+    "options": {
+      "alias": "options",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblImportMapItems.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( appsmith.store.impValueMapRows || [] )) :  appsmith.store.impValueMapRows || []  })()}}",
+      "computedValue": "{{(() => { const tableData = tblImportMapItems.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"options\"])) : options })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
+      "fontStyle": "",
       "horizontalAlignment": "LEFT",
-      "id": "Type",
+      "id": "options",
+      "index": 3,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": false,
+      "label": "options",
+      "notation": "standard",
+      "originalId": "options",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "type": {
+      "alias": "type",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblImportMapItems.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.type )) :  currentRow.type  })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "type",
       "index": 0,
       "isCellEditable": false,
       "isCellVisible": true,
@@ -197,8 +249,9 @@
       "isVisible": true,
       "label": "Type",
       "notation": "standard",
-      "originalId": "Type",
+      "originalId": "type",
       "sticky": "",
+      "textColor": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,
       "validation": {},
@@ -210,6 +263,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "searchKey": "",
+  "serverSidePaginationEnabled": true,
   "showInlineEditingOptionDropdown": true,
   "tableData": "{{ appsmith.store.impValueMapRows || [] }}",
   "textSize": "0.875rem",
@@ -218,6 +272,6 @@
   "type": "TABLE_WIDGET_V2",
   "version": 2,
   "verticalAlignment": "CENTER",
-  "widgetId": "4sgg3vjupx",
+  "widgetId": "dtcr1peu1m",
   "widgetName": "tblImportMapItems"
 }

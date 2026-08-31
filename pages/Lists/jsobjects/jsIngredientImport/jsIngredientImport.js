@@ -48,44 +48,49 @@ export default {
 	},
 
 	async applyHeaderMapEdit() {
-		const edits = tblImportMapHeaders.updatedRows || [];
+		const edits =
+					tblImportMapHeaders.updatedRows || [];
 
 		if (!edits.length) {
 			return false;
 		}
 
-		const edit = edits[edits.length - 1];
+		const edit =
+					edits[edits.length - 1];
 
 		const importedHeader =
-					edit?.allFields?.["Imported Data"];
+					edit?.allFields?.imported_data;
 
 		const targetField =
-					edit?.updatedFields?.["Map To"];
+					edit?.updatedFields?.map_to;
 
 		if (!importedHeader) {
 			return false;
 		}
 
-		const rows = (appsmith.store.impHeaderMapRows || [])
+		const rows =
+					(appsmith.store.impHeaderMapRows || [])
 		.map(row => ({ ...row }));
 
+		// Header targets are one-to-one.
+		// The newest assignment wins.
 		if (targetField) {
 			rows.forEach(row => {
 				if (
-					row["Imported Data"] !== importedHeader &&
-					row["Map To"] === targetField
+					row.imported_data !== importedHeader &&
+					row.map_to === targetField
 				) {
-					row["Map To"] = "";
+					row.map_to = "";
 				}
 			});
 		}
 
 		const row = rows.find(
-			x => x["Imported Data"] === importedHeader
+			x => x.imported_data === importedHeader
 		);
 
 		if (row) {
-			row["Map To"] = targetField || "";
+			row.map_to = targetField || "";
 		}
 
 		await storeValue(
@@ -97,6 +102,10 @@ export default {
 
 		return true;
 	},
+
+	// ============================================================
+	// Import Workspace
+	// ============================================================
 
 	async discardImport() {
 		await removeValue("impSelectedSupplierId");
@@ -135,7 +144,8 @@ export default {
 	// ============================================================
 
 	async readWorkbook() {
-		const file = filImportListPriceList.files?.[0];
+		const file =
+					filImportListPriceList.files?.[0];
 
 		if (!file?.data) {
 			showAlert(
@@ -161,15 +171,19 @@ export default {
 				return false;
 			}
 
-			const sheetName = workbook.SheetNames[0];
-			const sheet = workbook.Sheets[sheetName];
+			const sheetName =
+						workbook.SheetNames[0];
 
-			const sourceRows = XLSX.utils.sheet_to_json(
-				sheet,
-				{
-					defval: null
-				}
-			);
+			const sheet =
+						workbook.Sheets[sheetName];
+
+			const sourceRows =
+						XLSX.utils.sheet_to_json(
+							sheet,
+							{
+								defval: null
+							}
+						);
 
 			if (!sourceRows.length) {
 				showAlert(
@@ -179,10 +193,17 @@ export default {
 				return false;
 			}
 
-			const sourceHeaders = Object.keys(sourceRows[0]);
+			const sourceHeaders =
+						Object.keys(sourceRows[0]);
 
-			const headerSignature = sourceHeaders
-			.map(h => String(h || "").trim().toLowerCase())
+			const headerSignature =
+						sourceHeaders
+			.map(
+				h =>
+				String(h || "")
+				.trim()
+				.toLowerCase()
+			)
 			.join("|");
 
 			await storeValue(
@@ -220,10 +241,13 @@ export default {
 				"impBatchId"
 			);
 
-			let headerMapRows = sourceHeaders.map(header => ({
-				"Imported Data": header,
-				"Map To": this.suggestHeaderMap(header)
-			}));
+			let headerMapRows =
+					sourceHeaders.map(
+						header => ({
+							imported_data: header,
+							map_to: this.suggestHeaderMap(header)
+						})
+					);
 
 			const supplierValue =
 						selImportListSupplier.selectedOptionValue;
@@ -233,17 +257,21 @@ export default {
 							await qryImpSavedMappings.run();
 
 				const savedHeaderMappings =
-							(savedMappings || []).filter(
-								row =>
-								row.mapping_scope === "header"
-							);
+							(savedMappings || [])
+				.filter(
+					row =>
+					row.mapping_scope === "header"
+				);
 
 				if (savedHeaderMappings.length) {
-					headerMapRows = sourceHeaders.map(header => {
+					headerMapRows =
+						sourceHeaders.map(header => {
 						const saved =
 									savedHeaderMappings.find(
 										row =>
-										String(row.source_value || "")
+										String(
+											row.source_value || ""
+										)
 										.trim()
 										.toLowerCase() ===
 										String(header || "")
@@ -252,8 +280,9 @@ export default {
 									);
 
 						return {
-							"Imported Data": header,
-							"Map To": saved?.target_value || ""
+							imported_data: header,
+							map_to:
+							saved?.target_value || ""
 						};
 					});
 
@@ -264,9 +293,9 @@ export default {
 
 					await storeValue(
 						"impAppliedHeaderMapRows",
-						headerMapRows.map(row => ({
-							...row
-						}))
+						headerMapRows.map(
+							row => ({ ...row })
+						)
 					);
 
 					await storeValue(
@@ -319,12 +348,15 @@ export default {
 	},
 
 	async applyHeaderMapping() {
-		const rows = (appsmith.store.impHeaderMapRows || [])
+		const rows =
+					(appsmith.store.impHeaderMapRows || [])
 		.map(row => ({ ...row }));
 
-		const ingredientMapping = rows.find(
-			row => row["Map To"] === "ingredient"
-		);
+		const ingredientMapping =
+					rows.find(
+						row =>
+						row.map_to === "ingredient"
+					);
 
 		if (!ingredientMapping) {
 			showAlert(
@@ -376,11 +408,12 @@ export default {
 			? qryImpCategories.data
 			: [];
 
-			const match = rows.find(
-				x =>
-				normalise(x.name) ===
-				normalise(value)
-			);
+			const match =
+						rows.find(
+							x =>
+							normalise(x.name) ===
+							normalise(value)
+						);
 
 			return match
 				? String(match.id)
@@ -393,11 +426,12 @@ export default {
 			? qryImpUnits.data
 			: [];
 
-			const match = rows.find(
-				x =>
-				normalise(x.abbreviation) ===
-				normalise(value)
-			);
+			const match =
+						rows.find(
+							x =>
+							normalise(x.abbreviation) ===
+							normalise(value)
+						);
 
 			return match
 				? String(match.id)
@@ -414,13 +448,17 @@ export default {
 		const headerMapRows =
 					appsmith.store.impHeaderMapRows || [];
 
-		const categoryHeader = headerMapRows.find(
-			row => row["Map To"] === "category"
-		)?.["Imported Data"];
+		const categoryHeader =
+					headerMapRows.find(
+						row =>
+						row.map_to === "category"
+					)?.imported_data;
 
-		const unitHeader = headerMapRows.find(
-			row => row["Map To"] === "unit"
-		)?.["Imported Data"];
+		const unitHeader =
+					headerMapRows.find(
+						row =>
+						row.map_to === "unit"
+					)?.imported_data;
 
 		const rows = [];
 
@@ -428,14 +466,20 @@ export default {
 			const categories = [
 				...new Set(
 					sourceRows
-					.map(row => row[categoryHeader])
+					.map(
+						row =>
+						row[categoryHeader]
+					)
 					.filter(
 						value =>
 						value !== null &&
 						value !== undefined &&
 						String(value).trim() !== ""
 					)
-					.map(value => String(value).trim())
+					.map(
+						value =>
+						String(value).trim()
+					)
 				)
 			];
 
@@ -444,22 +488,27 @@ export default {
 					label: "",
 					value: ""
 				},
-				...(qryImpCategories.data || []).map(x => ({
+				...(qryImpCategories.data || [])
+				.map(x => ({
 					label: x.name,
 					value: String(x.id)
 				})),
 				{
-					label: "+ Add New Category",
+					label: "+ Add to list",
 					value: "__ADD_NEW_CATEGORY__"
 				}
 			];
 
 			categories.forEach(value => {
 				rows.push({
-					"Type": "Category",
-					"Imported Data": value,
-					"Map To": "",
-					"Options": categoryOptions
+					type: "Category",
+					imported_data: value,
+					map_to:
+					this.suggestValueMap(
+						"Category",
+						value
+					),
+					options: categoryOptions
 				});
 			});
 		}
@@ -468,28 +517,46 @@ export default {
 			const units = [
 				...new Set(
 					sourceRows
-					.map(row => row[unitHeader])
+					.map(
+						row =>
+						row[unitHeader]
+					)
 					.filter(
 						value =>
 						value !== null &&
 						value !== undefined &&
 						String(value).trim() !== ""
 					)
-					.map(value => String(value).trim())
+					.map(
+						value =>
+						String(value).trim()
+					)
 				)
 			];
 
-			const unitOptions = (qryImpUnits.data || []).map(x => ({
-				label: `${x.abbreviation} (${x.name})`,
-				value: String(x.id)
-			}));
+			const unitOptions = [
+				{
+					label: "",
+					value: ""
+				},
+				...(qryImpUnits.data || [])
+				.map(x => ({
+					label:
+					`${x.abbreviation} (${x.name})`,
+					value: String(x.id)
+				}))
+			];
 
 			units.forEach(value => {
 				rows.push({
-					"Type": "Unit",
-					"Imported Data": value,
-					"Map To": "",
-					"Options": unitOptions
+					type: "Unit",
+					imported_data: value,
+					map_to:
+					this.suggestValueMap(
+						"Unit",
+						value
+					),
+					options: unitOptions
 				});
 			});
 		}
@@ -498,6 +565,11 @@ export default {
 	},
 
 	async initialiseValueMapRows() {
+		await Promise.all([
+			qryImpCategories.run(),
+			qryImpUnits.run()
+		]);
+
 		const rows =
 					this.buildValueMapRows();
 
@@ -506,90 +578,383 @@ export default {
 			rows
 		);
 
-		resetWidget("tblImportMapItems");
+		resetWidget(
+			"tblImportMapItems"
+		);
 
 		return true;
 	},
 
-		mappingOptions(row) {
-			const isCategory =
-						row?.mapping_type === "category" ||
-						row?.["Type"] === "Category";
+	buildMappedImportRows() {
+		const sourceRows =
+					appsmith.store.impSourceRows || [];
 
-			if (isCategory) {
-				const rows =
-							Array.isArray(qryImpCategories.data)
-				? qryImpCategories.data
-				: [];
+		const headerMapRows =
+					appsmith.store.impAppliedHeaderMapRows || [];
 
-				return [
-					{ label: "", value: "" },
-					...rows.map(x => ({
-						label: x.name,
-						value: String(x.id)
-					})),
-					{
-						label: "+ Add New Category",
-						value: "__ADD_NEW_CATEGORY__"
-					}
-				];
+		const valueMapRows =
+					appsmith.store.impValueMapRows || [];
+
+		const sourceHeader = target =>
+		headerMapRows.find(
+			row => row.map_to === target
+		)?.imported_data || null;
+
+		const headers = {
+			code: sourceHeader("item_number"),
+			category: sourceHeader("category"),
+			ingredient: sourceHeader("ingredient"),
+			qty: sourceHeader("qty"),
+			unit: sourceHeader("unit"),
+			cost: sourceHeader("cost")
+		};
+
+		const clean = value => {
+			if (
+				value === null ||
+				value === undefined
+			) {
+				return "";
 			}
 
-			const rows =
-						Array.isArray(qryImpUnits.data)
-			? qryImpUnits.data
-			: [];
+			return String(value).trim();
+		};
 
-			return rows.map(x => ({
-				label: `${x.abbreviation} (${x.name})`,
-				value: String(x.id)
-			}));
-		},
+		const mappedValue = (type, sourceValue) => {
+			const source =
+						clean(sourceValue);
 
-			async applyValueMapEdit() {
-				const edits =
-							tblImportMapItems.updatedRows || [];
+			if (!source) {
+				return "";
+			}
 
-				if (!edits.length) {
-					return false;
-				}
+			const match =
+						valueMapRows.find(
+							row =>
+							row.type === type &&
+							clean(row.imported_data) === source
+						);
 
-				const edit =
-							edits[edits.length - 1];
+			return match?.map_to || "";
+		};
 
-				const type =
-							edit?.allFields?.["Type"];
+		return sourceRows.map((sourceRow, index) => {
+			const sourceCategory =
+						headers.category
+			? clean(sourceRow[headers.category])
+			: "";
 
-				const importedValue =
-							edit?.allFields?.["Imported Data"];
+			const sourceUnit =
+						headers.unit
+			? clean(sourceRow[headers.unit])
+			: "";
 
-				const targetId =
-							edit?.updatedFields?.["Map To"];
+			return {
+				source_row_number: index + 2,
 
-				if (!type || !importedValue) {
-					return false;
-				}
+				code:
+				headers.code
+				? clean(sourceRow[headers.code])
+				: "",
 
-				const rows =
-							(appsmith.store.impValueMapRows || [])
-				.map(row => ({ ...row }));
+				ingredient:
+				headers.ingredient
+				? clean(sourceRow[headers.ingredient])
+				: "",
 
-				const row = rows.find(
-					x =>
-					x["Type"] === type &&
-					x["Imported Data"] === importedValue
-				);
+				source_category: sourceCategory,
 
-				if (row) {
-					row["Map To"] =
-						targetId || "";
-				}
+				category_id:
+				mappedValue(
+					"Category",
+					sourceCategory
+				),
 
-				await storeValue(
-					"impValueMapRows",
-					rows
-				);
+				source_unit: sourceUnit,
 
-				return true;
-			},
+				unit_id:
+				mappedValue(
+					"Unit",
+					sourceUnit
+				),
+
+				qty:
+				headers.qty
+				? sourceRow[headers.qty]
+				: null,
+
+				cost:
+				headers.cost
+				? sourceRow[headers.cost]
+				: null
+			};
+		});
+	},
+
+	buildImportImpact() {
+		const rows =
+					this.buildMappedImportRows();
+
+		const existingIngredients =
+					Array.isArray(qryImpExistingIngredients.data)
+		? qryImpExistingIngredients.data
+		: [];
+
+		const existingSupplierItems =
+					Array.isArray(qryImpExistingSupplierItems.data)
+		? qryImpExistingSupplierItems.data
+		: [];
+
+		const normaliseName = value =>
+		String(value || "")
+		.trim()
+		.toLowerCase();
+
+		const normaliseCode = value =>
+		String(value || "")
+		.trim()
+		.toLowerCase();
+
+		const validRows =
+					rows.filter(
+						row =>
+						normaliseName(row.ingredient)
+					);
+
+		const missingIngredientName =
+					rows.length - validRows.length;
+
+		const missingIngredientsCategory =
+					validRows.filter(
+						row =>
+						!row.category_id
+					).length;
+
+		const unmappedUnits =
+					validRows.filter(
+						row =>
+						row.source_unit &&
+						!row.unit_id
+					).length;
+
+		// ------------------------------------------------------------
+		// Existing Ingredient names
+		// Exact normalized-name match only.
+		// ------------------------------------------------------------
+
+		const existingNameSet =
+					new Set(
+						existingIngredients
+						.map(
+							row =>
+							normaliseName(
+								row.name_norm || row.name
+							)
+						)
+						.filter(Boolean)
+					);
+
+		// ------------------------------------------------------------
+		// Duplicate names inside the import file
+		// ------------------------------------------------------------
+
+		const importNameCounts = {};
+
+		validRows.forEach(row => {
+			const name =
+						normaliseName(
+							row.ingredient
+						);
+
+			importNameCounts[name] =
+				(importNameCounts[name] || 0) + 1;
+		});
+
+		const duplicateNameRows =
+					new Set();
+
+		validRows.forEach((row, index) => {
+			const name =
+						normaliseName(
+							row.ingredient
+						);
+
+			if (
+				existingNameSet.has(name) ||
+				importNameCounts[name] > 1
+			) {
+				duplicateNameRows.add(index);
+			}
+		});
+
+		// ------------------------------------------------------------
+		// Supplier recurrence
+		//
+		// Code match first.
+		// If Code is blank, use exact normalized Ingredient name.
+		// ------------------------------------------------------------
+
+		const supplierCodeSet =
+					new Set(
+						existingSupplierItems
+						.map(
+							row =>
+							normaliseCode(
+								row.item_code
+							)
+						)
+						.filter(Boolean)
+					);
+
+		const supplierNameSet =
+					new Set(
+						existingSupplierItems
+						.map(
+							row =>
+							normaliseName(
+								row.name_norm ||
+								row.supplier_name
+							)
+						)
+						.filter(Boolean)
+					);
+
+		let updatedIngredients = 0;
+		let newIngredients = 0;
+
+		validRows.forEach(row => {
+			const code =
+						normaliseCode(
+							row.code
+						);
+
+			const name =
+						normaliseName(
+							row.ingredient
+						);
+
+			const isUpdate =
+						code
+			? supplierCodeSet.has(code)
+			: supplierNameSet.has(name);
+
+			if (isUpdate) {
+				updatedIngredients += 1;
+			} else {
+				newIngredients += 1;
+			}
+		});
+
+		return {
+			total_rows:
+			rows.length,
+
+			importable_rows:
+			validRows.length,
+
+			new_ingredients:
+			newIngredients,
+
+			updated_ingredients:
+			updatedIngredients,
+
+			duplicate_names:
+			duplicateNameRows.size,
+
+			missing_ingredients_category:
+			missingIngredientsCategory,
+
+			unmapped_units:
+			unmappedUnits,
+
+			missing_ingredient_name:
+			missingIngredientName
+		};
+	},
+
+	async openImportConfirm() {
+		await Promise.all([
+			qryImpExistingIngredients.run(),
+			qryImpExistingSupplierItems.run()
+		]);
+
+		const impact =
+					this.buildImportImpact();
+
+		await storeValue(
+			"impImpact",
+			impact
+		);
+
+		showModal(
+			mdlImportConfirm.name
+		);
+
+		return true;
+	},
+
+	importConfirmQuestion() {
+		const impact =
+					appsmith.store.impImpact || {};
+
+		const supplier =
+					selImportListSupplier.selectedOptionLabel ||
+					"No Supplier";
+
+		return `Do you want to import ${impact.importable_rows || 0} Ingredients to ${supplier}?`;
+	},
+
+	async applyValueMapEdit() {
+		const edits =
+					tblImportMapItems.updatedRows || [];
+
+		if (!edits.length) {
+			return false;
+		}
+
+		const edit =
+					edits[edits.length - 1];
+
+		const type =
+					edit?.allFields?.type;
+
+		const importedValue =
+					edit?.allFields?.imported_data;
+
+		const targetId =
+					edit?.updatedFields?.map_to;
+
+		if (!type || !importedValue) {
+			return false;
+		}
+
+		const rows =
+					(appsmith.store.impValueMapRows || [])
+		.map(row => ({ ...row }));
+
+		const row =
+					rows.find(
+						x =>
+						x.type === type &&
+						x.imported_data === importedValue
+					);
+
+		if (row) {
+			// Value mappings are many-to-one.
+			// Do not clear another row using the same target.
+			row.map_to =
+				targetId || "";
+		}
+
+		await storeValue(
+			"impValueMapRows",
+			rows
+		);
+
+		resetWidget(
+			"tblImportMapItems"
+		);
+
+		return true;
+	}
 }

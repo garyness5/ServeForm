@@ -2,7 +2,7 @@
   "accentColor": "{{appsmith.theme.colors.primaryColor}}",
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 43,
+  "bottomRow": 41,
   "boxShadow": "none",
   "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  \"\" ))(selPLReplaceWith.options, selPLReplaceWith.serverSideFiltering) }}",
   "dynamicBindingPathList": [
@@ -66,7 +66,7 @@
   "rightColumn": 61,
   "serverSideFiltering": false,
   "sourceData": "{{ jsPicklistRules.replacementOptions() }}",
-  "topRow": 39,
+  "topRow": 37,
   "type": "SELECT_WIDGET",
   "version": 1,
   "widgetId": "a1ok262ncd",
