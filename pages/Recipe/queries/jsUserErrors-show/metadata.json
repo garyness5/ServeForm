@@ -1,6 +1,6 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_5a8dc070-0b7d-47b9-8da5-5bdcd0e1f19f",
-  "id": "Recipe_jsUserErrors.friendly",
+  "gitSyncId": "6a0a1bde3214f344228346e7_5c39dde5-24f7-4319-a4f9-c692eb5048da",
+  "id": "Recipe_jsUserErrors.show",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
@@ -30,8 +30,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "jsUserErrors.friendly",
-    "name": "friendly",
+    "fullyQualifiedName": "jsUserErrors.show",
+    "name": "show",
     "pageId": "Recipe",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

@@ -314,10 +314,9 @@ export default {
 			return true;
 
 		} catch (error) {
-			showAlert(
-				error?.message ||
-				"Ingredient could not be saved.",
-				"error"
+			jsUserErrors.show(
+				error,
+				"Ingredient could not be saved."
 			);
 
 			return false;
@@ -495,11 +494,10 @@ export default {
 
 			return true;
 
-		} catch (e) {
-			showAlert(
-				e?.message ||
-				"Ingredient could not be deleted.",
-				"error"
+		} catch (error) {
+			jsUserErrors.show(
+				error,
+				"Ingredient could not be deleted."
 			);
 
 			return false;

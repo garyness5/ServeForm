@@ -265,7 +265,7 @@
   "searchKey": "",
   "serverSidePaginationEnabled": true,
   "showInlineEditingOptionDropdown": true,
-  "tableData": "{{ appsmith.store.impValueMapRows || [] }}",
+  "tableData": "{{\n\t(appsmith.store.impValueMapRows || []).length\n\t\t? appsmith.store.impValueMapRows\n\t\t: [\n\t\t\t{\n\t\t\t\ttype: \"\",\n\t\t\t\timported_data: \"\",\n\t\t\t\tmap_to: \"\",\n\t\t\t\toptions: []\n\t\t\t}\n\t\t]\n}}",
   "textSize": "0.875rem",
   "topRow": 0,
   "totalRecordsCount": 0,

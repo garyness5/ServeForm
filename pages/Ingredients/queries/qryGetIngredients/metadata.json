@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  *\nfrom public.vw_ing_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\norder by name;",
+      "body": "select\n    v.*,\n    (\n\t\t\tcount(*) over (\n\t\t\t\tpartition by v.name_norm\n\t\t\t) > 1\n\t\t) as duplicate_name\nfrom public.vw_ing_items v\nwhere v.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(v.deleted, false) = false\norder by v.name;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

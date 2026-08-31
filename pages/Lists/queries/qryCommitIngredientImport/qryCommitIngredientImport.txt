@@ -1,0 +1,35 @@
+SELECT public.commit_ingredient_import(
+	{{ appsmith.store.current_client_id }}::uuid,
+
+	{{
+	selImportListSupplier.selectedOptionValue === "__NO_SUPPLIER__"
+	? null
+	: Number(selImportListSupplier.selectedOptionValue)
+	}}::bigint,
+
+	{{
+	selImportListSupplier.selectedOptionValue === "__NO_SUPPLIER__"
+	}}::boolean,
+
+	{{
+	appsmith.store.impHeaderSignature || ""
+	}}::text,
+
+	{{
+	JSON.stringify(
+		appsmith.store.impAppliedHeaderMapRows || []
+	)
+	}}::jsonb,
+
+	{{
+	JSON.stringify(
+		appsmith.store.impValueMapRows || []
+	)
+	}}::jsonb,
+
+	{{
+	JSON.stringify(
+		jsIngredientImport.buildMappedImportRows()
+	)
+	}}::jsonb
+) AS result;

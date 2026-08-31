@@ -65,9 +65,10 @@
     "yield_base_qty",
     "base_unit",
     "deleted",
-    "created_at"
+    "created_at",
+    "duplicate_name"
   ],
-  "columnUpdatedAt": 1787583817835,
+  "columnUpdatedAt": 1788201096317,
   "columnWidthMap": {
     "active": 95,
     "allergen_names": 60,
@@ -244,6 +245,12 @@
     },
     {
       "key": "primaryColumns.yield_unit.selectOptions"
+    },
+    {
+      "key": "primaryColumns.duplicate_name.computedValue"
+    },
+    {
+      "key": "primaryColumns.name.cellBackground"
     }
   ],
   "dynamicPropertyPathList": [
@@ -279,6 +286,9 @@
     },
     {
       "key": "primaryColumns.item_code.onSubmit"
+    },
+    {
+      "key": "primaryColumns.name.cellBackground"
     }
   ],
   "dynamicTriggerPathList": [
@@ -682,6 +692,40 @@
       "verticalAlignment": "CENTER",
       "width": 150
     },
+    "duplicate_name": {
+      "alias": "duplicate_name",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "checkbox",
+      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"duplicate_name\"])) : duplicate_name })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "RIGHT",
+      "id": "duplicate_name",
+      "index": 33,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "duplicate_name",
+      "notation": "standard",
+      "originalId": "duplicate_name",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
     "factor_to_base": {
       "alias": "factor_to_base",
       "allowCellWrapping": false,
@@ -786,7 +830,7 @@
       "alias": "name",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
-      "cellBackground": "",
+      "cellBackground": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.duplicate_name === true ? \"#FFE6E6\" : \"\" )) :  currentRow.duplicate_name === true ? \"#FFE6E6\" : \"\"  })()}}",
       "columnType": "text",
       "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"name\"])) : name })()}}",
       "currencyCode": "USD",

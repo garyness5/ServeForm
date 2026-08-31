@@ -123,6 +123,8 @@ export default {
 		await removeValue("impParsedRows");
 		await removeValue("impBatchId");
 
+		await removeValue("impImpact");
+
 		await removeValue("accImportMapHeaders");
 		await removeValue("accImportMapItems");
 
@@ -448,6 +450,26 @@ export default {
 		const headerMapRows =
 					appsmith.store.impHeaderMapRows || [];
 
+		const normalise = value =>
+		String(value || "")
+		.trim()
+		.toLowerCase();
+
+		const uniqueValues = values => {
+			const seen = new Set();
+
+			return values.filter(value => {
+				const key = normalise(value);
+
+				if (!key || seen.has(key)) {
+					return false;
+				}
+
+				seen.add(key);
+				return true;
+			});
+		};
+
 		const categoryHeader =
 					headerMapRows.find(
 						row =>
@@ -463,25 +485,24 @@ export default {
 		const rows = [];
 
 		if (categoryHeader) {
-			const categories = [
-				...new Set(
-					sourceRows
-					.map(
-						row =>
-						row[categoryHeader]
-					)
-					.filter(
-						value =>
-						value !== null &&
-						value !== undefined &&
-						String(value).trim() !== ""
-					)
-					.map(
-						value =>
-						String(value).trim()
-					)
-				)
-			];
+			const categories =
+						uniqueValues(
+							sourceRows
+							.map(
+								row =>
+								row[categoryHeader]
+							)
+							.filter(
+								value =>
+								value !== null &&
+								value !== undefined &&
+								String(value).trim() !== ""
+							)
+							.map(
+								value =>
+								String(value).trim()
+							)
+						);
 
 			const categoryOptions = [
 				{
@@ -514,25 +535,24 @@ export default {
 		}
 
 		if (unitHeader) {
-			const units = [
-				...new Set(
-					sourceRows
-					.map(
-						row =>
-						row[unitHeader]
-					)
-					.filter(
-						value =>
-						value !== null &&
-						value !== undefined &&
-						String(value).trim() !== ""
-					)
-					.map(
-						value =>
-						String(value).trim()
-					)
-				)
-			];
+			const units =
+						uniqueValues(
+							sourceRows
+							.map(
+								row =>
+								row[unitHeader]
+							)
+							.filter(
+								value =>
+								value !== null &&
+								value !== undefined &&
+								String(value).trim() !== ""
+							)
+							.map(
+								value =>
+								String(value).trim()
+							)
+						);
 
 			const unitOptions = [
 				{
@@ -585,6 +605,91 @@ export default {
 		return true;
 	},
 
+	async supplierChanged() {
+		const supplierValue =
+					selImportListSupplier.selectedOptionValue;
+
+		await storeValue(
+			"impSelectedSupplierId",
+			supplierValue || ""
+		);
+
+		const hasFile =
+					(appsmith.store.impSourceRows || []).length > 0;
+
+		const headerApplied =
+					(appsmith.store.impAppliedHeaderMapRows || []).length > 0;
+
+		if (!hasFile || !headerApplied || !supplierValue) {
+			return true;
+		}
+
+		try {
+			const savedMappings =
+						await qryImpSavedMappings.run();
+
+			await Promise.all([
+				qryImpCategories.run(),
+				qryImpUnits.run()
+			]);
+
+			let rows =
+					this.buildValueMapRows();
+
+			const savedValueMappings =
+						(savedMappings || [])
+			.filter(
+				row =>
+				row.mapping_scope === "value"
+			);
+
+			const normalise = value =>
+			String(value || "")
+			.trim()
+			.normalize("NFD")
+			.replace(/[\u0300-\u036f]/g, "")
+			.toLowerCase();
+
+			rows = rows.map(row => {
+				const mappingType =
+							row.type === "Category"
+				? "category"
+				: "unit";
+
+				const saved =
+							savedValueMappings.find(
+								x =>
+								x.mapping_type === mappingType &&
+								normalise(x.source_value) ===
+								normalise(row.imported_data)
+							);
+
+				return {
+					...row,
+					map_to:
+					saved?.target_id
+					? String(saved.target_id)
+					: row.map_to
+				};
+			});
+
+			await storeValue(
+				"impValueMapRows",
+				rows
+			);
+
+
+
+			return true;
+
+		} catch (error) {
+			return jsUserErrors.show(
+				error,
+				"Supplier mappings could not be loaded."
+			);
+		}
+	},
+
 	buildMappedImportRows() {
 		const sourceRows =
 					appsmith.store.impSourceRows || [];
@@ -622,7 +727,8 @@ export default {
 
 		const mappedValue = (type, sourceValue) => {
 			const source =
-						clean(sourceValue);
+						clean(sourceValue)
+			.toLowerCase();
 
 			if (!source) {
 				return "";
@@ -632,7 +738,8 @@ export default {
 						valueMapRows.find(
 							row =>
 							row.type === type &&
-							clean(row.imported_data) === source
+							clean(row.imported_data)
+							.toLowerCase() === source
 						);
 
 			return match?.map_to || "";
@@ -693,181 +800,302 @@ export default {
 
 	buildImportImpact() {
 		const rows =
-					this.buildMappedImportRows();
+					this.buildMappedImportRows() || [];
 
 		const existingIngredients =
-					Array.isArray(qryImpExistingIngredients.data)
-		? qryImpExistingIngredients.data
-		: [];
+					qryImpExistingIngredients.data || [];
 
-		const existingSupplierItems =
-					Array.isArray(qryImpExistingSupplierItems.data)
-		? qryImpExistingSupplierItems.data
-		: [];
+		const supplierRows =
+					qryImpExistingSupplierItems.data || [];
 
-		const normaliseName = value =>
+		const supplierSelected =
+					selImportListSupplier.selectedOptionValue &&
+					selImportListSupplier.selectedOptionValue !== "__NO_SUPPLIER__";
+
+		const normalize = value =>
 		String(value || "")
 		.trim()
 		.toLowerCase();
 
-		const normaliseCode = value =>
-		String(value || "")
-		.trim()
-		.toLowerCase();
+		const codeNorm = value =>
+		normalize(value);
 
-		const validRows =
-					rows.filter(
-						row =>
-						normaliseName(row.ingredient)
+		// ----------------------------------------------------------
+		// Existing live Ingredient names
+		// ----------------------------------------------------------
+
+		const existingByName = new Map();
+
+		existingIngredients.forEach(item => {
+			const name =
+						normalize(
+							item.name_norm ||
+							item.name
+						);
+
+			if (!name) return;
+
+			if (!existingByName.has(name)) {
+				existingByName.set(name, []);
+			}
+
+			existingByName.get(name).push(item);
+		});
+
+
+		// ----------------------------------------------------------
+		// Current Supplier recurrence lookup
+		// ----------------------------------------------------------
+
+		const supplierByCode = new Map();
+		const supplierByName = new Map();
+
+		if (supplierSelected) {
+			supplierRows.forEach(item => {
+				const code =
+							codeNorm(item.item_code);
+
+				const name =
+							normalize(
+								item.name_norm ||
+								item.supplier_name ||
+								item.name
+							);
+
+				if (code) {
+					supplierByCode.set(code, item);
+				}
+
+				if (name) {
+					supplierByName.set(name, item);
+				}
+			});
+		}
+
+
+		// ----------------------------------------------------------
+		// First classify every incoming row by recurrence identity
+		// ----------------------------------------------------------
+
+		const classified = rows.map((row, index) => {
+			const name =
+						normalize(row.ingredient);
+
+			const code =
+						codeNorm(row.code);
+
+			let recurrence = null;
+
+			/*
+		 * Recurrence contract:
+		 *
+		 * Supplier + Code
+		 *     -> Supplier + Code
+		 *
+		 * Supplier + no Code
+		 *     -> Supplier + normalized Ingredient Name
+		 *
+		 * No Supplier
+		 *     -> never automatic recurrence
+		 */
+
+			if (supplierSelected) {
+				if (code) {
+					recurrence =
+						supplierByCode.get(code) || null;
+				} else if (name) {
+					recurrence =
+						supplierByName.get(name) || null;
+				}
+			}
+
+			return {
+				index,
+				row,
+				name,
+				code,
+				recurrence,
+				isUpdate: !!recurrence,
+				isCreate: !recurrence
+			};
+		});
+
+
+		// ----------------------------------------------------------
+		// New / Updated
+		// ----------------------------------------------------------
+
+		const updatedIngredients =
+					classified.filter(x =>
+														x.name && x.isUpdate
+													 ).length;
+
+		const newIngredients =
+					classified.filter(x =>
+														x.name && x.isCreate
+													 ).length;
+
+
+		// ----------------------------------------------------------
+		// Duplicate-name warnings
+		//
+		// A recurrence update is NOT a duplicate.
+		//
+		// Warn only where the incoming row represents a different
+		// Ingredient identity but has an existing/imported exact
+		// normalized name.
+		// ----------------------------------------------------------
+
+		const duplicateIndexes = new Set();
+
+
+		// Existing database name collisions
+		classified.forEach(item => {
+			if (!item.name || item.isUpdate) {
+				return;
+			}
+
+			const existingMatches =
+						existingByName.get(item.name) || [];
+
+			if (existingMatches.length > 0) {
+				duplicateIndexes.add(item.index);
+			}
+		});
+
+
+		// ----------------------------------------------------------
+		// Same-name rows inside this Import
+		//
+		// Do not flag rows merely because multiple rows resolve to
+		// the same recurrence identity.
+		// ----------------------------------------------------------
+
+		const importByName = new Map();
+
+		classified.forEach(item => {
+			if (!item.name) return;
+
+			if (!importByName.has(item.name)) {
+				importByName.set(item.name, []);
+			}
+
+			importByName.get(item.name).push(item);
+		});
+
+
+		importByName.forEach(group => {
+			if (group.length < 2) {
+				return;
+			}
+
+			/*
+		 * Build the effective identity for comparison.
+		 *
+		 * Recurring supplier row:
+		 *     use Ingredient ID / recurrence row identity.
+		 *
+		 * New row:
+		 *     each separate incoming recurrence key is its own
+		 *     potential Ingredient identity.
+		 */
+
+			const identities = new Set();
+
+			group.forEach(item => {
+				if (item.recurrence) {
+					const ingredientId =
+								item.recurrence.ingredient_id ||
+								item.recurrence.id;
+
+					identities.add(
+						`existing:${ingredientId}`
 					);
+
+					return;
+				}
+
+				if (supplierSelected && item.code) {
+					identities.add(
+						`supplier-code:${item.code}`
+					);
+					return;
+				}
+
+				if (supplierSelected && !item.code) {
+					/*
+				 * Same Supplier + no Code + same normalized Name
+				 * is one recurrence identity.
+				 */
+					identities.add(
+						`supplier-name:${item.name}`
+					);
+					return;
+				}
+
+				/*
+			 * No Supplier has no recurrence identity.
+			 * Two same-name rows therefore represent separate
+			 * potential Ingredients and should be warned.
+			 */
+				identities.add(
+					`no-supplier-row:${item.index}`
+				);
+			});
+
+
+			if (identities.size > 1) {
+				group.forEach(item => {
+					/*
+				 * Do not warn an established recurrence update
+				 * merely because another separate row has the
+				 * same name.
+				 *
+				 * Warn the row that would create the additional
+				 * Ingredient identity.
+				 */
+					if (item.isCreate) {
+						duplicateIndexes.add(item.index);
+					}
+				});
+			}
+		});
+
+
+		// ----------------------------------------------------------
+		// Other impact counts
+		// ----------------------------------------------------------
 
 		const missingIngredientName =
-					rows.length - validRows.length;
+					rows.filter(row =>
+											!normalize(row.ingredient)
+										 ).length;
 
-		const missingIngredientsCategory =
-					validRows.filter(
-						row =>
-						!row.category_id
-					).length;
+		const missingIngredientCategory =
+					rows.filter(row =>
+											normalize(row.ingredient) &&
+											!String(row.category_id || "").trim()
+										 ).length;
 
 		const unmappedUnits =
-					validRows.filter(
-						row =>
-						row.source_unit &&
-						!row.unit_id
-					).length;
+					rows.filter(row =>
+											normalize(row.ingredient) &&
+											String(row.source_unit || "").trim() &&
+											!String(row.unit_id || "").trim()
+										 ).length;
 
-		// ------------------------------------------------------------
-		// Existing Ingredient names
-		// Exact normalized-name match only.
-		// ------------------------------------------------------------
-
-		const existingNameSet =
-					new Set(
-						existingIngredients
-						.map(
-							row =>
-							normaliseName(
-								row.name_norm || row.name
-							)
-						)
-						.filter(Boolean)
-					);
-
-		// ------------------------------------------------------------
-		// Duplicate names inside the import file
-		// ------------------------------------------------------------
-
-		const importNameCounts = {};
-
-		validRows.forEach(row => {
-			const name =
-						normaliseName(
-							row.ingredient
-						);
-
-			importNameCounts[name] =
-				(importNameCounts[name] || 0) + 1;
-		});
-
-		const duplicateNameRows =
-					new Set();
-
-		validRows.forEach((row, index) => {
-			const name =
-						normaliseName(
-							row.ingredient
-						);
-
-			if (
-				existingNameSet.has(name) ||
-				importNameCounts[name] > 1
-			) {
-				duplicateNameRows.add(index);
-			}
-		});
-
-		// ------------------------------------------------------------
-		// Supplier recurrence
-		//
-		// Code match first.
-		// If Code is blank, use exact normalized Ingredient name.
-		// ------------------------------------------------------------
-
-		const supplierCodeSet =
-					new Set(
-						existingSupplierItems
-						.map(
-							row =>
-							normaliseCode(
-								row.item_code
-							)
-						)
-						.filter(Boolean)
-					);
-
-		const supplierNameSet =
-					new Set(
-						existingSupplierItems
-						.map(
-							row =>
-							normaliseName(
-								row.name_norm ||
-								row.supplier_name
-							)
-						)
-						.filter(Boolean)
-					);
-
-		let updatedIngredients = 0;
-		let newIngredients = 0;
-
-		validRows.forEach(row => {
-			const code =
-						normaliseCode(
-							row.code
-						);
-
-			const name =
-						normaliseName(
-							row.ingredient
-						);
-
-			const isUpdate =
-						code
-			? supplierCodeSet.has(code)
-			: supplierNameSet.has(name);
-
-			if (isUpdate) {
-				updatedIngredients += 1;
-			} else {
-				newIngredients += 1;
-			}
-		});
 
 		return {
-			total_rows:
-			rows.length,
+			totalIngredients: rows.length,
 
-			importable_rows:
-			validRows.length,
-
-			new_ingredients:
 			newIngredients,
-
-			updated_ingredients:
 			updatedIngredients,
 
-			duplicate_names:
-			duplicateNameRows.size,
+			duplicateNames:
+			duplicateIndexes.size,
 
-			missing_ingredients_category:
-			missingIngredientsCategory,
-
-			unmapped_units:
+			missingIngredientCategory,
 			unmappedUnits,
-
-			missing_ingredient_name:
 			missingIngredientName
 		};
 	},
@@ -894,14 +1122,13 @@ export default {
 	},
 
 	importConfirmQuestion() {
-		const impact =
-					appsmith.store.impImpact || {};
+		const count =
+					appsmith.store.impImpact?.totalIngredients || 0;
 
 		const supplier =
-					selImportListSupplier.selectedOptionLabel ||
-					"No Supplier";
+					selImportListSupplier.selectedOptionLabel || "No Supplier";
 
-		return `Do you want to import ${impact.importable_rows || 0} Ingredients to ${supplier}?`;
+		return `Do you want to import ${count} Ingredients to ${supplier}?`;
 	},
 
 	async applyValueMapEdit() {
@@ -956,5 +1183,29 @@ export default {
 		);
 
 		return true;
-	}
+	},
+
+	async confirmImport() {
+		try {
+			const data = await qryCommitIngredientImport.run();
+			const result = data?.[0]?.result || {};
+
+			closeModal("mdlImportConfirm");
+
+			showAlert(
+				`${result.created_ingredients || 0} Ingredients added, ${result.updated_ingredients || 0} updated.`,
+				"success"
+			);
+
+			await this.discardImport();
+
+			return true;
+
+		} catch (error) {
+			return jsUserErrors.show(
+				error,
+				"Ingredient list could not be imported."
+			);
+		}
+	},
 }

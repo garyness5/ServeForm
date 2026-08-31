@@ -55,7 +55,7 @@
   "mobileRightColumn": 21,
   "mobileTopRow": 15,
   "needsErrorInfo": false,
-  "onOptionChange": "{{\nstoreValue(\n\t\"impSelectedSupplierId\",\tselImportListSupplier.selectedOptionValue\n)\n}}",
+  "onOptionChange": "{{ jsIngredientImport.supplierChanged() }}",
   "optionLabel": "label",
   "optionValue": "value",
   "originalBottomRow": 22,

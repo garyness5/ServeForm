@@ -1,6 +1,11 @@
 select
-  *
-from public.vw_ing_items
-where client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and coalesce(deleted, false) = false
-order by name;
+    v.*,
+    (
+			count(*) over (
+				partition by v.name_norm
+			) > 1
+		) as duplicate_name
+from public.vw_ing_items v
+where v.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and coalesce(v.deleted, false) = false
+order by v.name;

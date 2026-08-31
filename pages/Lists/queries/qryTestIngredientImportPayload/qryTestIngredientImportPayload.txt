@@ -1,0 +1,14 @@
+SELECT
+    jsonb_array_length(
+        {{
+            JSON.stringify(
+                jsIngredientImport.buildMappedImportRows()
+            )
+        }}::jsonb
+    ) AS row_count,
+
+    {{
+        JSON.stringify(
+            jsIngredientImport.buildMappedImportRows()
+        )
+    }}::jsonb AS rows;
