@@ -25,7 +25,7 @@
     "dynamicBindingPathList": [],
     "name": "qryImpUnits",
     "pageId": "Lists",
-    "runBehaviour": "MANUAL",
+    "runBehaviour": "AUTOMATIC",
     "userSetOnLoad": false
   }
 }

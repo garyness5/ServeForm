@@ -45,7 +45,7 @@
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 63,
+  "rightColumn": 62,
   "text": "Add Supplier",
   "tooltip": "Import list",
   "topRow": 2,

@@ -33,9 +33,10 @@
   },
   "columnOrder": [
     "imported_data",
-    "map_to"
+    "map_to",
+    "id"
   ],
-  "columnUpdatedAt": 1788131154932,
+  "columnUpdatedAt": 1788218807819,
   "columnWidthMap": {
     "Imported_Data": 270,
     "active": 103,
@@ -79,6 +80,9 @@
     },
     {
       "key": "primaryColumns.map_to.selectOptions"
+    },
+    {
+      "key": "primaryColumns.id.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -125,6 +129,40 @@
   "parentId": "pf96s5rnca",
   "parentRowSpace": 10,
   "primaryColumns": {
+    "id": {
+      "alias": "id",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "text",
+      "computedValue": "{{(() => { const tableData = tblImportMapHeaders.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"id\"])) : id })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "id",
+      "index": 0,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "id",
+      "notation": "standard",
+      "originalId": "id",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
     "imported_data": {
       "alias": "imported_data",
       "allowCellWrapping": false,
