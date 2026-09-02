@@ -42,7 +42,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 13,
   "needsErrorInfo": false,
-  "onClick": "{{ jsIngredientImportRebuild.loadFile() }}",
+  "onClick": "{{ jsIngredientImport.loadFile() }}",
   "parentColumnSpace": 11.005859375,
   "parentId": "512524lb2s",
   "parentRowSpace": 10,

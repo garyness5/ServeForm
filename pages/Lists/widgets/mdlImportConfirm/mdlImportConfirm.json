@@ -1,14 +1,14 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 42,
+  "bottomRow": 51,
   "boxShadow": "none",
   "canEscapeKeyClose": true,
   "canOutsideClickClose": true,
   "children": [
     {
       "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-      "bottomRow": 420,
+      "bottomRow": 510,
       "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
       "canExtend": true,
       "detachFromLayout": true,
@@ -29,7 +29,7 @@
       "leftColumn": 0,
       "maxDynamicHeight": 9000,
       "minDynamicHeight": 4,
-      "minHeight": 660,
+      "minHeight": 430,
       "minWidth": 450,
       "mobileBottomRow": 240,
       "mobileLeftColumn": 0,
@@ -58,14 +58,14 @@
   ],
   "dynamicHeight": "AUTO_HEIGHT",
   "dynamicTriggerPathList": [],
-  "height": 420,
+  "height": 510,
   "isCanvas": true,
   "isLoading": false,
   "key": "gtauilfv7z",
   "leftColumn": 32,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 10,
-  "minHeight": 420,
+  "minHeight": 510,
   "mobileBottomRow": 28,
   "mobileLeftColumn": 32,
   "mobileRightColumn": 56,
@@ -84,5 +84,5 @@
   "version": 2,
   "widgetId": "vi5o44pnxi",
   "widgetName": "mdlImportConfirm",
-  "width": 456
+  "width": 594
 }
