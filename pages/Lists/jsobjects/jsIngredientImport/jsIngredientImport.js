@@ -522,6 +522,7 @@ export default {
 
 			categories.forEach(value => {
 				rows.push({
+					list_id: `Category:${normalise(value)}`,
 					type: "Category",
 					imported_data: value,
 					map_to:
@@ -569,6 +570,7 @@ export default {
 
 			units.forEach(value => {
 				rows.push({
+					list_id: `Unit:${normalise(value)}`,
 					type: "Unit",
 					imported_data: value,
 					map_to:
@@ -601,6 +603,30 @@ export default {
 		resetWidget(
 			"tblImportMapItems"
 		);
+
+		return true;
+	},
+
+	async updateValueMapping(rowId, selectedValue) {
+		const rows =
+					appsmith.store.impValueMapRows || [];
+
+		const updatedRows =
+					rows.map(row =>
+									 row.list_id === rowId
+									 ? {
+						...row,
+						map_to: selectedValue || ""
+					}
+									 : row
+									);
+
+		await storeValue(
+			"impValueMapRows",
+			updatedRows
+		);
+
+		await removeValue("impImpact");
 
 		return true;
 	},

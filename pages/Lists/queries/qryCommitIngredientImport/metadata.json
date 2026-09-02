@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT public.commit_ingredient_import(\n\t{{ appsmith.store.current_client_id }}::uuid,\n\n\t{{\n\tselImportListSupplier.selectedOptionValue === \"__NO_SUPPLIER__\"\n\t? null\n\t: Number(selImportListSupplier.selectedOptionValue)\n\t}}::bigint,\n\n\t{{\n\tselImportListSupplier.selectedOptionValue === \"__NO_SUPPLIER__\"\n\t}}::boolean,\n\n\t{{\n\tappsmith.store.impHeaderSignature || \"\"\n\t}}::text,\n\n\t{{\n\tJSON.stringify(\n\t\tappsmith.store.impAppliedHeaderMapRows || []\n\t)\n\t}}::jsonb,\n\n\t{{\n\tJSON.stringify(\n\t\tappsmith.store.impValueMapRows || []\n\t)\n\t}}::jsonb,\n\n\t{{\n\tJSON.stringify(\n\t\tjsIngredientImport.buildMappedImportRows()\n\t)\n\t}}::jsonb\n) AS result;",
+      "body": "SELECT public.commit_ingredient_import(\n\t{{ appsmith.store.current_client_id }}::uuid,\n\n\t{{\n\tappsmith.store.impReviewSnapshot?.supplier_id === \"__NO_SUPPLIER__\"\n\t? null\n\t: Number(appsmith.store.impReviewSnapshot?.supplier_id)\n\t}}::bigint,\n\n\t{{\n\tappsmith.store.impReviewSnapshot?.supplier_id === \"__NO_SUPPLIER__\"\n\t}}::boolean,\n\n\t{{\n\tappsmith.store.impReviewSnapshot?.header_signature || \"\"\n\t}}::text,\n\n\t{{\n\tJSON.stringify(\n\t\tappsmith.store.impReviewSnapshot?.header_mappings || []\n\t)\n\t}}::jsonb,\n\n\t{{\n\tJSON.stringify(\n\t\tappsmith.store.impReviewSnapshot?.value_mappings || []\n\t)\n\t}}::jsonb,\n\n\t{{\n\tJSON.stringify(\n\t\tappsmith.store.impReviewSnapshot?.rows || []\n\t)\n\t}}::jsonb\n) AS result;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

@@ -2,34 +2,34 @@ SELECT public.commit_ingredient_import(
 	{{ appsmith.store.current_client_id }}::uuid,
 
 	{{
-	selImportListSupplier.selectedOptionValue === "__NO_SUPPLIER__"
+	appsmith.store.impReviewSnapshot?.supplier_id === "__NO_SUPPLIER__"
 	? null
-	: Number(selImportListSupplier.selectedOptionValue)
+	: Number(appsmith.store.impReviewSnapshot?.supplier_id)
 	}}::bigint,
 
 	{{
-	selImportListSupplier.selectedOptionValue === "__NO_SUPPLIER__"
+	appsmith.store.impReviewSnapshot?.supplier_id === "__NO_SUPPLIER__"
 	}}::boolean,
 
 	{{
-	appsmith.store.impHeaderSignature || ""
+	appsmith.store.impReviewSnapshot?.header_signature || ""
 	}}::text,
 
 	{{
 	JSON.stringify(
-		appsmith.store.impAppliedHeaderMapRows || []
+		appsmith.store.impReviewSnapshot?.header_mappings || []
 	)
 	}}::jsonb,
 
 	{{
 	JSON.stringify(
-		appsmith.store.impValueMapRows || []
+		appsmith.store.impReviewSnapshot?.value_mappings || []
 	)
 	}}::jsonb,
 
 	{{
 	JSON.stringify(
-		jsIngredientImport.buildMappedImportRows()
+		appsmith.store.impReviewSnapshot?.rows || []
 	)
 	}}::jsonb
 ) AS result;

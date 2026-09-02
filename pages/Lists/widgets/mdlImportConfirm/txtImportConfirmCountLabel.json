@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 32,
+  "bottomRow": 30,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -21,7 +21,7 @@
   "isLoading": false,
   "isVisible": true,
   "key": "h29kmo3jn9",
-  "leftColumn": 12,
+  "leftColumn": 10,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
@@ -30,7 +30,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 38,
   "needsErrorInfo": false,
-  "originalBottomRow": 32,
+  "originalBottomRow": 30,
   "originalTopRow": 17,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
@@ -38,7 +38,7 @@
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 61,
+  "rightColumn": 63,
   "shouldTruncate": false,
   "text": "New Ingredients\nUpdated Ingredients\nDuplicate Names - Will Be Flagged\nMissing Ingredients Category    \nUnmapped Units - Unit Will Be Blank\nMissing Ingredient Name - Will Not Be Imported",
   "textAlign": "LEFT",

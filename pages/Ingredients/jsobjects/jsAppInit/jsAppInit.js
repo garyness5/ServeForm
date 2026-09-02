@@ -1,30 +1,29 @@
 export default {
-	async initClient() {
-		const rows = await qryGetCurrentUserContext.run();
-		const user = rows?.[0];
+	async init() {
+		await removeValue("current_client_id");
+		await removeValue("current_user_id");
+		await removeValue("current_client_name");
+		await removeValue("current_user_name");
 
-		if (!user?.client_id) {
-			await removeValue("current_client_id");
-			await removeValue("current_operation_name");
+		const rows = await qryResolveSavveyraUser.run();
 
+		if (!rows || !rows.length) {
 			showAlert(
-				"Your Savveyra account is not configured.",
-				"error"
+				"Your Savveyra account is not activated. Please contact the administrator.",
+				"warning"
 			);
-
 			return false;
 		}
 
-		await storeValue(
-			"current_client_id",
-			user.client_id
-		);
+		const user = rows[0];
 
-		await storeValue(
-			"current_operation_name",
-			user.client_name || ""
-		);
+		await storeValue("current_client_id", user.client_id);
+		await storeValue("current_user_id", user.user_id);
+		await storeValue("current_client_name", user.client_name);
+		await storeValue("current_user_name", user.display_name || user.email);
+
+		await qryGetIngredients.run();
 
 		return true;
 	}
-}
+};

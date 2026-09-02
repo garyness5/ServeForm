@@ -52,7 +52,7 @@
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
   "rightColumn": 33,
-  "text": "Import",
+  "text": "Load File",
   "tooltip": "Import list",
   "topRow": 2,
   "type": "BUTTON_WIDGET",

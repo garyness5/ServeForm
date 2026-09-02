@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsIngredientImport.confirmImport() }}",
+  "onClick": "{{ jsIngredientImportRebuild.confirmImport() }}",
   "originalBottomRow": 62,
   "originalTopRow": 58,
   "parentId": "el7rrrcdzp",
