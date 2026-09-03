@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 13,
   "boxShadow": "none",
-  "defaultText": "{{ Number(appsmith.store.current_dish_id || 0) === 0 ? 0 : getDshItemById.data?.[0]?.extra_percent ?? 0 }}",
+  "defaultText": "{{ jsDshWorkspace.get().header.extra_percent ?? 0 }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -29,7 +29,7 @@
   "label": "Extra %",
   "labelAlignment": "left",
   "labelPosition": "Left",
-  "labelStyle": "BOLD",
+  "labelStyle": "",
   "labelTextSize": "1rem",
   "labelWidth": "18",
   "leftColumn": 2,

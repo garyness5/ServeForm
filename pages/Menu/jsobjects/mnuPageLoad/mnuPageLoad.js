@@ -1,7 +1,7 @@
 export default {
 	load() {
 		return Promise.all([
-			getMnuCategories.run(),
+			qryGetMnuCategories.run(),
 			getMnuDietTags.run(),
 			getMnuUnits.run(),
 			getMnuComponentItems.run(),

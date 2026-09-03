@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 8,
   "boxShadow": "none",
-  "defaultText": "{{ Number(appsmith.store.current_dish_id || 0) === 0 ? \"\" : getDshItemById.data?.[0]?.yield_qty || \"\" }}",
+  "defaultText": "{{ jsDshWorkspace.get().header.yield_qty ?? \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -29,7 +29,7 @@
   "label": "Yield Quantity",
   "labelAlignment": "left",
   "labelPosition": "Top",
-  "labelStyle": "BOLD",
+  "labelStyle": "",
   "labelTextSize": "1rem",
   "labelWidth": 5,
   "leftColumn": 1,
@@ -47,7 +47,7 @@
   "renderMode": "CANVAS",
   "resetOnSubmit": true,
   "responsiveBehavior": "fill",
-  "rightColumn": 32,
+  "rightColumn": 31,
   "showStepArrows": false,
   "topRow": 1,
   "type": "INPUT_WIDGET_V2",

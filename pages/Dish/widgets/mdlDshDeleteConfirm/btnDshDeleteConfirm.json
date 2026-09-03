@@ -37,7 +37,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ dshSave.deleteDishConfirm() }}",
+  "onClick": "{{ jsDshSave.deleteDishConfirm() }}",
   "originalBottomRow": 31,
   "originalTopRow": 27,
   "parentId": "yddgge3wef",

@@ -3,7 +3,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 26,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
-  "defaultText": "{{ Number(appsmith.store.current_dish_id || 0) === 0 ? \"\" : getDshItemById.data?.[0]?.notes || \"\" }}",
+  "defaultText": "{{ jsDshWorkspace.get().header.notes || \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "borderRadius"

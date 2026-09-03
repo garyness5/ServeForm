@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  appsmith.store.pendingDishAction === \"duplicate\"\n    ? dshSave.duplicateWithoutSaving()\n    : appsmith.store.pendingDishAction === \"delete\"\n      ? dshSave.deleteWithoutSaving()\n      : dshSave.closeWithoutSaving()\n}}",
+  "onClick": "{{\n  appsmith.store.pendingDishAction === \"duplicate\"\n    ? jsDshSave.duplicateWithoutSaving()\n    : appsmith.store.pendingDishAction === \"delete\"\n      ? jsDshSave.deleteWithoutSaving()\n      : jsDshSave.closeWithoutSaving()\n}}",
   "originalBottomRow": 24,
   "originalTopRow": 20,
   "parentId": "qtesy6qkrq",

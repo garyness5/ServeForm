@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 8,
   "boxShadow": "none",
-  "defaultText": "{{ Number(appsmith.store.current_dish_id || 0) === 0 ? \"\" : getDshItemById.data?.[0]?.name || \"\" }}",
+  "defaultText": "{{ jsDshWorkspace.get().header.name || \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -29,7 +29,7 @@
   "label": "Dish name",
   "labelAlignment": "left",
   "labelPosition": "Top",
-  "labelStyle": "BOLD",
+  "labelStyle": "",
   "labelTextSize": "1rem",
   "labelWidth": 5,
   "leftColumn": 0,

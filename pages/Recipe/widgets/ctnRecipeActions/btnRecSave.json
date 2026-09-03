@@ -44,7 +44,7 @@
   "needsErrorInfo": false,
   "onClick": "{{ jsRecipeSave.saveRecipe() }}",
   "parentColumnSpace": 19.5,
-  "parentId": "ipoua5qx1i",
+  "parentId": "uxcwk5l4ib",
   "parentRowSpace": 10,
   "placement": "CENTER",
   "recaptchaType": "V3",
@@ -57,6 +57,6 @@
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "j448z41qld",
+  "widgetId": "gqbzipzai6",
   "widgetName": "btnRecSave"
 }

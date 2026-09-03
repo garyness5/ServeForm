@@ -65,7 +65,7 @@
     "saved_unit_id",
     "saved_unit_abbreviation"
   ],
-  "columnUpdatedAt": 1787878478287,
+  "columnUpdatedAt": 1788378326956,
   "columnWidthMap": {
     "active": 103,
     "allergen_names": 124,
@@ -900,7 +900,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblMnuComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  mnuCompTable.lineCost(currentRow) == null\n    ? \"\"\n    : fmt.currency(mnuCompTable.lineCost(currentRow))\n)) : \n  mnuCompTable.lineCost(currentRow) == null\n    ? \"\"\n    : fmt.currency(mnuCompTable.lineCost(currentRow))\n })()}}",
+      "computedValue": "{{(() => { const tableData = tblMnuComponents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  mnuCompTable.lineCost(currentRow) == null\n    ? \"\"\n    : jsFmt.currency(mnuCompTable.lineCost(currentRow))\n)) : \n  mnuCompTable.lineCost(currentRow) == null\n    ? \"\"\n    : jsFmt.currency(mnuCompTable.lineCost(currentRow))\n })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,

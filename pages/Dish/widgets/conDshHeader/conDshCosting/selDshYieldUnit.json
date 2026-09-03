@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 8,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  Number(appsmith.store.current_dish_id || 0) === 0 ? \"\" : getDshItemById.data?.[0]?.yield_unit_id || \"\" ))(selDshYieldUnit.options, selDshYieldUnit.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  jsDshWorkspace.get().header.yield_unit_id ))(selDshYieldUnit.options, selDshYieldUnit.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -34,11 +34,11 @@
   "key": "8p955rbhg5",
   "labelAlignment": "left",
   "labelPosition": "Top",
-  "labelStyle": "BOLD",
+  "labelStyle": "",
   "labelText": "Unit",
   "labelTextSize": "1rem",
   "labelWidth": 5,
-  "leftColumn": 35,
+  "leftColumn": 33,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
@@ -57,7 +57,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 62,
   "serverSideFiltering": false,
-  "sourceData": "{{ getDshComponentUnits.data }}",
+  "sourceData": "{{ qryGetDshComponentUnits.data }}",
   "topRow": 1,
   "type": "SELECT_WIDGET",
   "version": 1,

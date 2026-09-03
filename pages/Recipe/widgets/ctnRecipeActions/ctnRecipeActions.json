@@ -4,7 +4,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 10,
+  "bottomRow": 39,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "children": [
     {
@@ -38,7 +38,7 @@
       "mobileTopRow": 0,
       "needsErrorInfo": false,
       "parentColumnSpace": 1,
-      "parentId": "uw1p2o9cah",
+      "parentId": "ovlf7ppjdl",
       "parentRowSpace": 1,
       "renderMode": "CANVAS",
       "responsiveBehavior": "fill",
@@ -46,7 +46,7 @@
       "topRow": 0,
       "type": "CANVAS_WIDGET",
       "version": 1,
-      "widgetId": "ipoua5qx1i",
+      "widgetId": "uxcwk5l4ib",
       "widgetName": "Canvas2"
     }
   ],
@@ -75,8 +75,8 @@
   "mobileRightColumn": 12,
   "mobileTopRow": 27,
   "needsErrorInfo": false,
-  "originalBottomRow": 10,
-  "originalTopRow": 0,
+  "originalBottomRow": 39,
+  "originalTopRow": 29,
   "parentColumnSpace": 19.8125,
   "parentId": "0",
   "parentRowSpace": 10,
@@ -84,9 +84,9 @@
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "shouldScrollContents": true,
-  "topRow": 0,
+  "topRow": 29,
   "type": "CONTAINER_WIDGET",
   "version": 1,
-  "widgetId": "uw1p2o9cah",
+  "widgetId": "ovlf7ppjdl",
   "widgetName": "ctnRecipeActions"
 }

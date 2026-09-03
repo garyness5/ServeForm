@@ -57,7 +57,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "serverSideFiltering": false,
-  "sourceData": "{{ getMnuCategories.data.map(x => ({\n  label: x.name,\n  value: String(x.id)\n})) }}",
+  "sourceData": "{{ qryGetMnuCategories.data.map(x => ({\n  label: x.name,\n  value: String(x.id)\n})) }}",
   "topRow": 9,
   "type": "SELECT_WIDGET",
   "version": 1,

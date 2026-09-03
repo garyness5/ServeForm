@@ -38,7 +38,7 @@
   "needsErrorInfo": false,
   "onClick": "{{ jsRecipeSave.closeRecipe() }}",
   "parentColumnSpace": 19.5,
-  "parentId": "ipoua5qx1i",
+  "parentId": "uxcwk5l4ib",
   "parentRowSpace": 10,
   "placement": "CENTER",
   "recaptchaType": "V3",
@@ -51,6 +51,6 @@
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "lqzq520l0s",
+  "widgetId": "k0574dfh0l",
   "widgetName": "btnRecClose"
 }
