@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_eac9ff3f-8e72-4126-8e72-065bbf27b3a6",
+  "gitSyncId": "6a0a1bde3214f344228346e7_9b8dddc6-a38a-44b9-b4ee-604166802ec7",
   "id": "Dish_qryGetDshFormats",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  hli.id,\n  hli.name\nfrom public.helper_lists hl\njoin public.helper_list_items hli\n  on hli.list_id = hl.id\nwhere hl.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and hl.list_code = 'dish_serve_forms'\n  and hli.active = true\norder by hli.sort_order, hli.name;",
+      "body": "select\n  hli.id,\n  hli.name\nfrom public.helper_lists hl\njoin public.helper_list_items hli\n  on hli.list_id = hl.id\nwhere hl.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and hl.list_code = 'dish_serve_forms'\n  and hl.active = true\n  and hli.active = true\n  and coalesce(hli.deleted, false) = false\norder by hli.sort_order, hli.name;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

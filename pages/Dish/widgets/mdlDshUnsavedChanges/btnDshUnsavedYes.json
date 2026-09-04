@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\n  appsmith.store.pendingDishAction === \"duplicate\"\n    ? jsDshSave.saveAndDuplicateDish()\n    : appsmith.store.pendingDishAction === \"delete\"\n      ? jsDshSave.saveAndDeleteDish()\n      : jsDshSave.saveAndCloseDish()\n}}",
+  "onClick": "{{ jsDshSave.unsavedYes() }}",
   "originalBottomRow": 24,
   "originalTopRow": 20,
   "parentId": "qtesy6qkrq",

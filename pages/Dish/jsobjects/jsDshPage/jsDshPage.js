@@ -43,8 +43,7 @@ export default {
 			await resetWidget("selDshCategory", true);
 			await resetWidget("selDshFormat", true);
 			await resetWidget("chkDshActive", true);
-			await resetWidget("inpDshYieldQty", true);
-			await resetWidget("selDshYieldUnit", true);
+			await resetWidget("inpDshServes", true);
 			await resetWidget("inpDshExtraPercent", true);
 			await resetWidget("msDshDietTags", true);
 			await resetWidget("rteDshNotes", true);

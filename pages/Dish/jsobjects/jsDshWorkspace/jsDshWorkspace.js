@@ -6,7 +6,6 @@ export default {
 			serve_form_id: null,
 			active: true,
 			yield_qty: null,
-			yield_unit_id: null,
 			extra_percent: 0,
 			notes: null
 		};
@@ -46,7 +45,9 @@ export default {
 
 	textClean(value) {
 		const text =
-					String(value || "").trim();
+					String(
+						value || ""
+					).trim();
 
 		return text || null;
 	},
@@ -57,13 +58,19 @@ export default {
 
 		return {
 			name:
-			this.textClean(h.name),
+			this.textClean(
+				h.name
+			),
 
 			category_id:
-			this.clean(h.category_id),
+			this.clean(
+				h.category_id
+			),
 
 			serve_form_id:
-			this.clean(h.serve_form_id),
+			this.clean(
+				h.serve_form_id
+			),
 
 			active:
 			h.active === false
@@ -71,21 +78,26 @@ export default {
 			: true,
 
 			yield_qty:
-			this.clean(h.yield_qty),
-
-			yield_unit_id:
-			this.clean(h.yield_unit_id),
+			this.clean(
+				h.yield_qty
+			),
 
 			extra_percent:
-			this.clean(h.extra_percent) ?? 0,
+			this.clean(
+				h.extra_percent
+			) ?? 0,
 
 			notes:
-			this.textClean(h.notes)
+			this.textClean(
+				h.notes
+			)
 		};
 	},
 
 	normalizeDietTags(values) {
-		return (values || [])
+		return (
+			values || []
+		)
 			.map(x =>
 					 typeof x === "object"
 					 ? x.value
@@ -93,11 +105,16 @@ export default {
 					)
 			.map(Number)
 			.filter(Boolean)
-			.sort((a, b) => a - b);
+			.sort(
+			(a, b) =>
+			a - b
+		);
 	},
 
 	normalizeComponents(rows) {
-		return (rows || [])
+		return (
+			rows || []
+		)
 			.filter(r =>
 							r &&
 							(
@@ -110,69 +127,101 @@ export default {
 			...r,
 
 			item_type:
-			r.item_type || null,
+			r.item_type ||
+			null,
 
 			ingredient_id:
-			r.item_type === "ingredient"
-			? Number(r.ingredient_id || 0) || null
+			r.item_type ===
+			"ingredient"
+			? Number(
+				r.ingredient_id ||
+				0
+			) || null
 			: null,
 
 			child_recipe_id:
-			r.item_type === "recipe"
-			? Number(r.child_recipe_id || 0) || null
+			r.item_type ===
+			"recipe"
+			? Number(
+				r.child_recipe_id ||
+				0
+			) || null
 			: null,
 
 			qty:
 			r.qty === "" ||
 			r.qty == null
 			? null
-			: Number(r.qty),
+			: Number(
+				r.qty
+			),
 
 			unit_id:
 			r.unit_id == null
 			? null
-			: Number(r.unit_id),
+			: Number(
+				r.unit_id
+			),
 
 			apply_wastage:
-			r.apply_wastage !== false,
+			r.apply_wastage !==
+			false,
 
 			active:
-			r.active !== false
+			r.active !==
+			false
 		}));
 	},
 
 	componentsForCompare(rows) {
-		return (rows || [])
+		return (
+			rows || []
+		)
 			.map(r => ({
 			item_type:
-			r.item_type || null,
+			r.item_type ||
+			null,
 
 			ingredient_id:
-			r.item_type === "ingredient"
-			? Number(r.ingredient_id || 0) || null
+			r.item_type ===
+			"ingredient"
+			? Number(
+				r.ingredient_id ||
+				0
+			) || null
 			: null,
 
 			child_recipe_id:
-			r.item_type === "recipe"
-			? Number(r.child_recipe_id || 0) || null
+			r.item_type ===
+			"recipe"
+			? Number(
+				r.child_recipe_id ||
+				0
+			) || null
 			: null,
 
 			qty:
 			r.qty === "" ||
 			r.qty == null
 			? null
-			: Number(r.qty),
+			: Number(
+				r.qty
+			),
 
 			unit_id:
 			r.unit_id == null
 			? null
-			: Number(r.unit_id),
+			: Number(
+				r.unit_id
+			),
 
 			apply_wastage:
-			r.apply_wastage !== false,
+			r.apply_wastage !==
+			false,
 
 			active:
-			r.active !== false
+			r.active !==
+			false
 		}));
 	},
 
@@ -200,14 +249,16 @@ export default {
 
 	baseline() {
 		return this.normalizeSnapshot(
-			appsmith.store.dish_baseline ||
+			appsmith.store
+			.dish_baseline ||
 			this.emptySnapshot()
 		);
 	},
 
 	get() {
 		return this.normalizeSnapshot(
-			appsmith.store.dish_workspace ||
+			appsmith.store
+			.dish_workspace ||
 			this.baseline()
 		);
 	},
@@ -218,22 +269,23 @@ export default {
 			inpDshName.text,
 
 			category_id:
-			selDshCategory.selectedOptionValue,
+			selDshCategory
+			.selectedOptionValue,
 
 			serve_form_id:
-			selDshFormat.selectedOptionValue,
+			selDshFormat
+			.selectedOptionValue,
 
 			active:
-			chkDshActive.isChecked,
+			chkDshActive
+			.isChecked,
 
 			yield_qty:
-			inpDshYieldQty.text,
-
-			yield_unit_id:
-			selDshYieldUnit.selectedOptionValue,
+			inpDshServes.text,
 
 			extra_percent:
-			inpDshExtraPercent.text,
+			inpDshExtraPercent
+			.text,
 
 			notes:
 			rteDshNotes.text
@@ -242,13 +294,16 @@ export default {
 
 	currentDietTagsFromPage() {
 		return this.normalizeDietTags(
-			msDshDietTags.selectedOptionValues || []
+			msDshDietTags
+			.selectedOptionValues ||
+			[]
 		);
 	},
 
 	currentComponents() {
 		return this.normalizeComponents(
-			jsDshCompTable.mergeUpdatedRows()
+			jsDshCompTable
+			.mergeUpdatedRows()
 		);
 	},
 
@@ -267,7 +322,9 @@ export default {
 
 	async setWorkspace(snapshot) {
 		const value =
-					this.normalizeSnapshot(snapshot);
+					this.normalizeSnapshot(
+						snapshot
+					);
 
 		await storeValue(
 			"dish_workspace",
@@ -281,16 +338,22 @@ export default {
 		const value =
 					this.current();
 
-		await this.setWorkspace(value);
+		await this.setWorkspace(
+			value
+		);
 
 		return value;
 	},
 
 	savedHeaderFromQuery() {
 		const row =
-					Array.isArray(qryGetDshItemById.data)
-		? qryGetDshItemById.data[0]
-		: qryGetDshItemById.data;
+					Array.isArray(
+						qryGetDshItemById.data
+					)
+		? qryGetDshItemById
+		.data[0]
+		: qryGetDshItemById
+		.data;
 
 		if (!row) {
 			return this.emptyHeader();
@@ -312,9 +375,6 @@ export default {
 			yield_qty:
 			row.yield_qty,
 
-			yield_unit_id:
-			row.yield_unit_id,
-
 			extra_percent:
 			row.extra_percent,
 
@@ -325,13 +385,17 @@ export default {
 
 	savedDietTagsFromQuery() {
 		return this.normalizeDietTags(
-			qryGetSelectedDshDietTags.data || []
+			qryGetSelectedDshDietTags
+			.data ||
+			[]
 		);
 	},
 
 	savedComponentsFromQuery() {
 		return this.normalizeComponents(
-			qryGetDshComponents.data || []
+			qryGetDshComponents
+			.data ||
+			[]
 		);
 	},
 
@@ -350,7 +414,9 @@ export default {
 
 	async setBaseline(snapshot) {
 		const value =
-					this.normalizeSnapshot(snapshot);
+					this.normalizeSnapshot(
+						snapshot
+					);
 
 		await storeValue(
 			"dish_baseline",
@@ -364,8 +430,13 @@ export default {
 		const saved =
 					this.savedTruth();
 
-		await this.setBaseline(saved);
-		await this.setWorkspace(saved);
+		await this.setBaseline(
+			saved
+		);
+
+		await this.setWorkspace(
+			saved
+		);
 
 		return saved;
 	},
@@ -374,21 +445,30 @@ export default {
 		const empty =
 					this.emptySnapshot();
 
-		await this.setBaseline(empty);
-		await this.setWorkspace(empty);
+		await this.setBaseline(
+			empty
+		);
+
+		await this.setWorkspace(
+			empty
+		);
 
 		return empty;
 	},
 
 	async initializeDuplicate(snapshot) {
 		const value =
-					this.normalizeSnapshot(snapshot);
+					this.normalizeSnapshot(
+						snapshot
+					);
 
 		await this.setBaseline(
 			this.emptySnapshot()
 		);
 
-		await this.setWorkspace(value);
+		await this.setWorkspace(
+			value
+		);
 
 		return value;
 	},
@@ -402,16 +482,25 @@ export default {
 
 		return (
 			JSON.stringify({
-				header: current.header,
-				diet_tags: current.diet_tags,
+				header:
+				current.header,
+
+				diet_tags:
+				current.diet_tags,
+
 				components:
 				this.componentsForCompare(
 					current.components
 				)
 			}) !==
+
 			JSON.stringify({
-				header: baseline.header,
-				diet_tags: baseline.diet_tags,
+				header:
+				baseline.header,
+
+				diet_tags:
+				baseline.diet_tags,
+
 				components:
 				this.componentsForCompare(
 					baseline.components

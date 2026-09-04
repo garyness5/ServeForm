@@ -2,7 +2,7 @@
   "animateLoading": true,
   "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 13,
+  "bottomRow": 20,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -34,7 +34,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 6,
   "needsErrorInfo": false,
-  "originalBottomRow": 13,
+  "originalBottomRow": 20,
   "originalTopRow": 7,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
@@ -44,7 +44,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 59,
   "shouldTruncate": false,
-  "text": "{{ \"This ingredient will no longer be available for use. This action cannot be undone. It will show in red where it was present. \" }}",
+  "text": "{{\n`This Dish is currently used in ${qryGetDshImpactCount.data?.[0]?.menu_count || 0} Menu(s).\n\nDeleting it will not remove those Menu rows. The Dish name will remain visible with a red background so the affected rows can be reviewed and replaced or removed.\n\nDelete this Dish?`\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 7,

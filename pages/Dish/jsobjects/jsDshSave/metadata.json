@@ -6,6 +6,11 @@
     "pageId": "Dish",
     "pluginId": "js-plugin",
     "pluginType": "JS",
-    "variables": []
+    "variables": [
+      {
+        "name": "pendingAction",
+        "value": "null"
+      }
+    ]
   }
 }

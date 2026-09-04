@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 213,
+  "bottomRow": 118,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -11,9 +11,6 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -33,7 +30,7 @@
   "mobileRightColumn": 8,
   "mobileTopRow": 121,
   "needsErrorInfo": false,
-  "originalBottomRow": 163,
+  "originalBottomRow": 118,
   "originalTopRow": 114,
   "overflow": "NONE",
   "parentColumnSpace": 19.8125,
@@ -43,7 +40,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 21,
   "shouldTruncate": false,
-  "text": "{{\nJSON.stringify({\n\tcurrentHeader:\n\t\tjsDshWorkspace.current().header,\n\n\tbaselineHeader:\n\t\tjsDshWorkspace.baseline().header,\n\n\tcurrentDietTags:\n\t\tjsDshWorkspace.current().diet_tags,\n\n\tbaselineDietTags:\n\t\tjsDshWorkspace.baseline().diet_tags,\n\n\tcurrentComponents:\n\t\tjsDshWorkspace.componentsForCompare(\n\t\t\tjsDshWorkspace.current().components\n\t\t),\n\n\tbaselineComponents:\n\t\tjsDshWorkspace.componentsForCompare(\n\t\t\tjsDshWorkspace.baseline().components\n\t\t),\n\n\tisDirty:\n\t\tjsDshWorkspace.isDirty()\n}, null, 2)\n}}",
+  "text": "",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 114,

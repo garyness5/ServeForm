@@ -1,4 +1,6 @@
 export default {
+	pendingAction: null,
+
 	async safeReset(widgetName) {
 		try {
 			await resetWidget(widgetName, true);
@@ -7,414 +9,492 @@ export default {
 		}
 	},
 
-	requiredSaveMessage() {
-		const missing = [];
-
-		if (!String(inpDshName.text || "").trim()) {
-			missing.push("Dish name");
-		}
-
-		if (!selDshCategory.selectedOptionValue) {
-			missing.push("Category");
-		}
-
-		if (!missing.length) return null;
-
-		return `You need to have a ${missing.join(" and a ")} selected before you can save.`;
-	},
-
-	validateBeforeSave() {
-		const message = this.requiredSaveMessage();
-
-		if (message) {
-			showAlert(message, "warning");
-			return false;
-		}
-
-		return true;
-	},
-
-	async saveDish() {
-		if (!this.validateBeforeSave()) return false;
-
-		await jsDshCompTable.syncFromTable();
-
-		let dishId = Number(appsmith.store.current_dish_id || 0);
-		let result = null;
-
-		if (dishId > 0) {
-			result = await qryUpdDshItem.run();
-
-			if (!Array.isArray(result) || result.length === 0 || !result[0]?.id) {
-				showAlert("This Dish no longer exists. Reopen the Dish page before saving.", "error");
-				await storeValue("current_dish_id", 0);
-				return false;
-			}
-		} else {
-			const duplicate = await qryCheckDshNameExists.run();
-
-			if (Number(duplicate?.[0]?.match_count || 0) > 0) {
-				showAlert("A Dish with this name already exists.", "warning");
-				return false;
-			}
-
-			result = await qryAddDshItem.run();
-
-			dishId = Number(result?.[0]?.id || 0);
-
-			if (!dishId) {
-				showAlert("Dish save failed. No Dish ID was returned.", "error");
-				return false;
-			}
-
-			await storeValue("current_dish_id", dishId);
-			if (!dishId || dishId <= 0) {
-				showAlert("Cannot save Dish child records because no valid Dish ID exists.", "error");
-				return false;
-			}
-		}
-
-		await jsDshCompTable.syncFromTable();
-
-		await qrySaveDshDietTagsSnapshot.run();
-		await qrySaveDshComponentsSnapshot.run();
-
-		await qryGetDshItemById.run();
-		await qryGetSelectedDshDietTags.run();
-		await qryGetDshComponents.run();
-
-		await jsDshCompTable.loadFromQuery();
-
-		showAlert("Dish saved", "success");
-		return true;
-	},
-
-	async saveAndNew() {
-		const result = await this.saveDish();
-		if (!result) return null;
-
-		await storeValue("current_dish_id", 0);
-		await removeValue("dsh_components_local_rows");
-		await jsDshCompTable.clearDraftRows();
-
-		await storeValue("dsh_components_local_rows", jsDshCompTable.normalizeRows([]));
-
-		await this.safeReset("inpDshName");
-		await this.safeReset("selDshCategory");
-		await this.safeReset("selDshFormat");
-		await this.safeReset("chkDshActive");
-		await this.safeReset("inpDshYieldQty");
-		await this.safeReset("selDshYieldUnit");
-		await this.safeReset("inpDshExtraPercent");
-		await this.safeReset("msDshDietTags");
-		await this.safeReset("rteDshNotes");
-		// await this.safeReset("tblDshComponents");
-
-		await qryGetDshComponents.run();
-
-		showAlert("Saved. Ready for new dish.", "success");
-		return true;
-	},
-
-	clean(value) {
-		if (value === undefined || value === "") return null;
-		if (typeof value === "number") return Number(value);
-		if (!isNaN(value) && value !== null && value !== true && value !== false) return Number(value);
-		return value;
-	},
-
-	textClean(value) {
-		const text = String(value || "").trim();
-		return text || null;
-	},
-
-	headerSnapshotFromPage() {
-		return {
-			name: this.textClean(inpDshName.text),
-			category_id: this.clean(selDshCategory.selectedOptionValue),
-			serve_form_id: this.clean(selDshFormat.selectedOptionValue),
-			active: chkDshActive.isChecked === false ? false : true,
-			yield_qty: this.clean(inpDshYieldQty.text),
-			yield_unit_id: this.clean(selDshYieldUnit.selectedOptionValue),
-			extra_percent: this.clean(inpDshExtraPercent.text),
-			notes: this.textClean(rteDshNotes.value)
-		};
-	},
-
-	headerSnapshotFromSaved() {
-		const r = Array.isArray(qryGetDshItemById.data)
-			? qryGetDshItemById.data[0]
-			: qryGetDshItemById.data;
-
-		if (!r) {
-			return {
-				name: null,
-				category_id: null,
-				serve_form_id: null,
-				active: true,
-				yield_qty: null,
-				yield_unit_id: null,
-				extra_percent: 0,
-				notes: null
-			};
-		}
-
-		return {
-			name: this.textClean(r.name),
-			category_id: this.clean(r.category_id),
-			serve_form_id: this.clean(r.serve_form_id),
-			active: r.active === false ? false : true,
-			yield_qty: this.clean(r.yield_qty),
-			yield_unit_id: this.clean(r.yield_unit_id),
-			extra_percent: this.clean(r.extra_percent),
-			notes: this.textClean(r.notes)
-		};
-	},
-
-	componentSnapshot(rows) {
-		return (rows || [])
-			.filter(r => r.item_type && (r.ingredient_id || r.child_recipe_id))
-			.map((r, index) => ({
-				line_no: index + 1,
-				item_type: r.item_type || null,
-				ingredient_id: r.item_type === "ingredient" ? this.clean(r.ingredient_id) : null,
-				child_recipe_id: r.item_type === "recipe" ? this.clean(r.child_recipe_id) : null,
-				qty: this.clean(r.saved_qty ?? r.qty),
-				unit_id: this.clean(r.saved_unit_id ?? r.unit_id),
-				apply_wastage: r.apply_wastage === false ? false : true,
-				active: r.active === false ? false : true
-			}));
-	},
-
-	currentComponentSnapshot() {
-		return this.componentSnapshot(jsDshCompTable.rowsForSave());
-	},
-
-	savedComponentSnapshot() {
-		return this.componentSnapshot(qryGetDshComponents.data || []);
-	},
-
-	isNewBlankDish() {
-		return Number(appsmith.store.current_dish_id || 0) === 0 &&
-			!this.headerSnapshotFromPage().name &&
-			!this.headerSnapshotFromPage().category_id &&
-			!this.headerSnapshotFromPage().serve_form_id &&
-			this.currentComponentSnapshot().length === 0;
-	},
-
-	dietTagSnapshotFromPage() {
-		return (msDshDietTags.selectedOptionValues || [])
-			.map(x => Number(x))
-			.filter(x => x)
-			.sort((a, b) => a - b);
-	},
-
-	dietTagSnapshotFromSaved() {
-		return (qryGetSelectedDshDietTags.data || [])
-			.map(r => Number(r.value))
-			.filter(x => x)
-			.sort((a, b) => a - b);
-	},
-
-	isDirty() {
-		if (this.isNewBlankDish()) return false;
-
+	saveSnapshot() {
 		return (
-			JSON.stringify(this.headerSnapshotFromPage()) !== JSON.stringify(this.headerSnapshotFromSaved()) ||
-			JSON.stringify(this.currentComponentSnapshot()) !== JSON.stringify(this.savedComponentSnapshot()) ||
-			JSON.stringify(this.dietTagSnapshotFromPage()) !== JSON.stringify(this.dietTagSnapshotFromSaved())
+			appsmith.store.dish_save_snapshot ||
+			jsDshWorkspace.current()
 		);
 	},
 
-	async closeDish() {
-		await jsDshCompTable.syncFromTable();
-
-		if (this.isDirty()) {
-			await storeValue("pendingDishAction", "close");
-			showModal("mdlDshUnsavedChanges");
-			return;
-		}
-
-		await jsDshCompTable.clearDraftRows();
-		await storeValue("current_dish_id", 0);
-		await removeValue("dsh_components_local_rows");
-
-		await this.safeReset("inpDshName");
-		await this.safeReset("selDshCategory");
-		await this.safeReset("selDshFormat");
-		await this.safeReset("chkDshActive");
-		await this.safeReset("inpDshYieldQty");
-		await this.safeReset("selDshYieldUnit");
-		await this.safeReset("inpDshExtraPercent");
-		await this.safeReset("msDshDietTags");
-		await this.safeReset("rteDshNotes");
-		// await this.safeReset("tblDshComponents");
-
-		navigateTo("DishList");
+	headerPayload() {
+		return {
+			...this.saveSnapshot().header
+		};
 	},
 
-	async saveAndCloseDish() {
-		const result = await this.saveDish();
-		if (!result) return null;
-
-		closeModal("mdlDshUnsavedChanges");
-
-		await jsDshCompTable.clearDraftRows();
-		await storeValue("current_dish_id", 0);
-		await removeValue("dsh_components_local_rows");
-
-		await this.safeReset("inpDshName");
-		await this.safeReset("selDshCategory");
-		await this.safeReset("selDshFormat");
-		await this.safeReset("chkDshActive");
-		await this.safeReset("inpDshYieldQty");
-		await this.safeReset("selDshYieldUnit");
-		await this.safeReset("inpDshExtraPercent");
-		await this.safeReset("msDshDietTags");
-		await this.safeReset("rteDshNotes");
-		// await this.safeReset("tblDshComponents");
-
-		navigateTo("DishList");
+	dietTagsPayload() {
+		return (
+			this.saveSnapshot().diet_tags || []
+		).map(id => ({
+			tag_id: Number(id)
+		}));
 	},
 
-	async closeWithoutSaving() {
-		closeModal("mdlDshUnsavedChanges");
+	componentsPayload() {
+		return (
+			this.saveSnapshot().components || []
+		).map(row => ({
+			item_type:
+			row.item_type || null,
 
-		await jsDshCompTable.clearDraftRows();
-		await storeValue("current_dish_id", 0);
-		await removeValue("dsh_components_local_rows");
+			ingredient_id:
+			row.item_type === "ingredient"
+			? Number(row.ingredient_id) || null
+			: null,
 
-		await this.safeReset("inpDshName");
-		await this.safeReset("selDshCategory");
-		await this.safeReset("selDshFormat");
-		await this.safeReset("chkDshActive");
-		await this.safeReset("inpDshYieldQty");
-		await this.safeReset("selDshYieldUnit");
-		await this.safeReset("inpDshExtraPercent");
-		await this.safeReset("msDshDietTags");
-		await this.safeReset("rteDshNotes");
-		// await this.safeReset("tblDshComponents");
+			child_recipe_id:
+			row.item_type === "recipe"
+			? Number(row.child_recipe_id) || null
+			: null,
 
-		navigateTo("DishList");
+			qty:
+			row.qty == null
+			? null
+			: Number(row.qty),
+
+			unit_id:
+			row.unit_id == null
+			? null
+			: Number(row.unit_id),
+
+			apply_wastage:
+			row.apply_wastage !== false,
+
+			active:
+			row.active !== false
+		}));
 	},
-	
-	async duplicateDishSavedVersion() {
-		const result = await qryDuplicateDish.run();
-		const newId = result?.[0]?.new_id || result?.[0]?.id;
 
-		if (!newId) {
-			showAlert("Dish duplicate failed", "error");
+	requiredSaveMessage(snapshot) {
+		const name =
+					String(
+						snapshot?.header?.name || ""
+					).trim();
+
+		return name
+			? null
+		: "Dish Name is required before you can save.";
+	},
+
+	validateBeforeSave(snapshot) {
+		const message =
+					this.requiredSaveMessage(snapshot);
+
+		if (message) {
+			showAlert(
+				message,
+				"warning"
+			);
+
 			return false;
 		}
 
-		await storeValue("current_dish_id", newId);
-
-		await qryGetDshItemById.run();
-		await qryGetSelectedDshDietTags.run();
-		await qryGetDshComponents.run();
-		await jsDshCompTable.loadFromQuery();
-
-		showAlert("Dish duplicated", "success");
 		return true;
 	},
 
-	async duplicateDish() {
+	isDirty() {
+		return jsDshWorkspace.isDirty();
+	},
+
+	impactCount() {
+		const impact =
+					qryGetDshImpactCount.data?.[0] || {};
+
+		return Number(
+			impact.menu_count || 0
+		);
+	},
+
+	async saveDish() {
+		try {
+			await jsDshCompTable.syncFromTable();
+
+			const snapshot =
+						jsDshWorkspace.current();
+
+			if (!this.validateBeforeSave(snapshot)) {
+				return false;
+			}
+
+			await storeValue(
+				"dish_save_snapshot",
+				snapshot
+			);
+
+			const result =
+						await qrySaveDish.run();
+
+			const savedId =
+						Number(
+							result?.[0]?.dish_id || 0
+						);
+
+			if (!savedId) {
+				showAlert(
+					"Dish was not saved.",
+					"error"
+				);
+
+				return false;
+			}
+
+			await storeValue(
+				"current_dish_id",
+				savedId
+			);
+
+			await Promise.all([
+				qryGetDshItemById.run(),
+				qryGetSelectedDshDietTags.run(),
+				qryGetDshComponents.run()
+			]);
+
+			await jsDshCompTable.loadFromQuery();
+
+			await jsDshWorkspace.initializeFromSaved();
+
+			await removeValue(
+				"dish_save_snapshot"
+			);
+
+			await storeValue(
+				"Dish_mode",
+				"edit"
+			);
+
+			await removeValue(
+				"Dish_open_mode"
+			);
+
+			showAlert(
+				"Dish saved.",
+				"success"
+			);
+
+			return true;
+
+		} catch (error) {
+			await removeValue(
+				"dish_save_snapshot"
+			);
+
+			showAlert(
+				error?.message || "Dish was not saved.",
+				"error"
+			);
+
+			return false;
+		}
+	},
+
+	async closeDish() {
+		await jsDshWorkspace.capture();
+
 		if (this.isDirty()) {
-			await storeValue("pendingDishAction", "duplicate");
-			showModal("mdlDshUnsavedChanges");
+			this.pendingAction = "close";
+
+			showModal(
+				mdlDshUnsavedChanges.name
+			);
+
 			return false;
 		}
 
-		return await this.duplicateDishSavedVersion();
+		navigateTo(
+			"DishList"
+		);
+
+		return true;
 	},
 
-	async saveAndDuplicateDish() {
-		const saved = await this.saveDish();
-		if (!saved) return false;
+	async saveAndCloseDish() {
+		const saved =
+					await this.saveDish();
 
-		closeModal("mdlDshUnsavedChanges");
-		return await this.duplicateDishSavedVersion();
+		if (!saved) {
+			return false;
+		}
+
+		closeModal(
+			mdlDshUnsavedChanges
+		);
+
+		navigateTo(
+			"DishList"
+		);
+
+		return true;
 	},
 
-	async duplicateWithoutSaving() {
-		closeModal("mdlDshUnsavedChanges");
-		return await this.duplicateDishSavedVersion();
+	async closeWithoutSaving() {
+		closeModal(
+			mdlDshUnsavedChanges
+		);
+
+		navigateTo(
+			"DishList"
+		);
+
+		return true;
+	},
+
+	async startNewDish() {
+		await storeValue(
+			"current_dish_id",
+			0
+		);
+
+		await storeValue(
+			"Dish_mode",
+			"add"
+		);
+
+		await removeValue(
+			"Dish_open_mode"
+		);
+
+		await jsDshCompTable.clearRows();
+
+		await jsDshWorkspace.initializeNew();
+
+		await this.safeReset("inpDshName");
+		await this.safeReset("selDshCategory");
+		await this.safeReset("selDshFormat");
+		await this.safeReset("chkDshActive");
+		await this.safeReset("inpDshServes");
+		await this.safeReset("inpDshExtraPercent");
+		await this.safeReset("msDshDietTags");
+		await this.safeReset("rteDshNotes");
+		await this.safeReset("tblDshComponents");
+
+		return true;
+	},
+
+	async addDish() {
+		await jsDshWorkspace.capture();
+
+		if (this.isDirty()) {
+			this.pendingAction = "add";
+
+			showModal(
+				mdlDshUnsavedChanges.name
+			);
+
+			return false;
+		}
+
+		return await this.startNewDish();
+	},
+
+	async saveAndNew() {
+		const saved =
+					await this.saveDish();
+
+		if (!saved) {
+			return false;
+		}
+
+		closeModal(
+			mdlDshUnsavedChanges
+		);
+
+		return await this.startNewDish();
+	},
+
+	async addWithoutSaving() {
+		closeModal(
+			mdlDshUnsavedChanges
+		);
+
+		return await this.startNewDish();
+	},
+
+	async duplicateDish() {
+		const sourceId =
+					Number(
+						appsmith.store.current_dish_id || 0
+					);
+
+		if (!sourceId) {
+			showAlert(
+				"This Dish has not been saved yet.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		const source =
+					await jsDshWorkspace.capture();
+
+		const currentName =
+					String(
+						source.header.name || ""
+					).trim();
+
+		const duplicate = {
+			header: {
+				...source.header,
+				name: `${currentName} - Copy`
+			},
+
+			diet_tags: [
+				...(source.diet_tags || [])
+			],
+
+			components:
+			(source.components || [])
+			.map(row => ({
+				...row,
+				id: null,
+				dish_id: 0,
+				draft_row_id:
+				jsDshCompTable.makeDraftId()
+			}))
+		};
+
+		await storeValue(
+			"current_dish_id",
+			0
+		);
+
+		await storeValue(
+			"Dish_mode",
+			"duplicate"
+		);
+
+		await removeValue(
+			"Dish_open_mode"
+		);
+
+		await jsDshWorkspace.initializeDuplicate(
+			duplicate
+		);
+
+		await jsDshCompTable.setRows(
+			duplicate.components
+		);
+
+		await this.safeReset("inpDshName");
+		await this.safeReset("selDshCategory");
+		await this.safeReset("selDshFormat");
+		await this.safeReset("chkDshActive");
+		await this.safeReset("inpDshServes");
+		await this.safeReset("inpDshExtraPercent");
+		await this.safeReset("msDshDietTags");
+		await this.safeReset("rteDshNotes");
+		await this.safeReset("tblDshComponents");
+
+		showAlert(
+			"Dish duplicated. Save it before making changes to enable all Dish features.",
+			"success"
+		);
+
+		return true;
 	},
 
 	async deleteDishStart() {
-		if (this.isDirty()) {
-			await storeValue("pendingDishAction", "delete");
-			showModal("mdlDshUnsavedChanges");
-			return false;
-		}
+		await jsDshWorkspace.capture();
 
 		await qryGetDshImpactCount.run();
-		showModal("mdlDshDeleteConfirm");
+
+		const impact =
+					this.impactCount();
+
+		if (impact === 0) {
+			return await this.deleteDishConfirm();
+		}
+
+		showModal(
+			mdlDshDeleteConfirm.name
+		);
+
 		return true;
 	},
 
 	async deleteDishConfirm() {
-		await qryDeleteDish.run();
+		try {
+			const result =
+						await qryDeleteDish.run();
 
-		closeModal("mdlDshDeleteConfirm");
-		await jsDshCompTable.clearDraftRows();
-		await storeValue("current_dish_id", 0);
-		await removeValue("dsh_components_local_rows");
+			const deletedId =
+						Number(
+							result?.[0]?.id || 0
+						);
 
-		await this.safeReset("inpDshName");
-		await this.safeReset("selDshCategory");
-		await this.safeReset("selDshFormat");
-		await this.safeReset("chkDshActive");
-		await this.safeReset("inpDshYieldQty");
-		await this.safeReset("selDshYieldUnit");
-		await this.safeReset("inpDshExtraPercent");
-		await this.safeReset("msDshDietTags");
-		await this.safeReset("rteDshNotes");
+			const currentId =
+						Number(
+							appsmith.store.current_dish_id || 0
+						);
 
-		showAlert("Dish deleted", "success");
-		return true;
+			if (
+				!deletedId ||
+				deletedId !== currentId
+			) {
+				showAlert(
+					"Dish was not deleted.",
+					"error"
+				);
+
+				return false;
+			}
+
+			closeModal(
+				mdlDshDeleteConfirm
+			);
+
+			await storeValue(
+				"current_dish_id",
+				0
+			);
+
+			await jsDshCompTable.clearRows();
+			await jsDshWorkspace.clear();
+
+			showAlert(
+				"Dish deleted.",
+				"success"
+			);
+
+			navigateTo(
+				"DishList"
+			);
+
+			return true;
+
+		} catch (error) {
+			showAlert(
+				error?.message || "Dish was not deleted.",
+				"error"
+			);
+
+			return false;
+		}
 	},
 
-	async saveAndDeleteDish() {
-		const saved = await this.saveDish();
-		if (!saved) return false;
+	async unsavedYes() {
+		switch (this.pendingAction) {
+			case "close":
+				return await this.saveAndCloseDish();
 
-		closeModal("mdlDshUnsavedChanges");
+			case "add":
+				return await this.saveAndNew();
 
-		await qryGetDshImpactCount.run();
-		showModal("mdlDshDeleteConfirm");
-
-		return true;
+			default:
+				return false;
+		}
 	},
 
-	async deleteWithoutSaving() {
-		closeModal("mdlDshUnsavedChanges");
+	async unsavedNo() {
+		switch (this.pendingAction) {
+			case "close":
+				return await this.closeWithoutSaving();
 
-		await qryGetDshImpactCount.run();
-		showModal("mdlDshDeleteConfirm");
+			case "add":
+				return await this.addWithoutSaving();
 
-		return true;
-	},
-
-	testSaveData() {
-		return {
-			current_dish_id: appsmith.store.current_dish_id,
-			rowsForSave: jsDshCompTable.rowsForSave()
-		};
-	},
-
-	testDirtyData() {
-		return {
-			isDirty: this.isDirty(),
-
-			headerCurrent: this.headerSnapshotFromPage(),
-			headerSaved: this.headerSnapshotFromSaved(),
-
-			componentCurrent: this.currentComponentSnapshot(),
-			componentSaved: this.savedComponentSnapshot(),
-
-			dietTagsCurrent: this.dietTagSnapshotFromPage(),
-			dietTagsSaved: this.dietTagSnapshotFromSaved()
-		};
+			default:
+				return false;
+		}
 	}
-}
+};
