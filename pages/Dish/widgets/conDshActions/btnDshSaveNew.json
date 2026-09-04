@@ -12,17 +12,11 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -31,7 +25,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ !jsDshSave.isDirty() }}",
+  "isDisabled": false,
   "isLoading": false,
   "isVisible": true,
   "key": "bv6gv3416k",
@@ -42,7 +36,7 @@
   "mobileRightColumn": 18,
   "mobileTopRow": 1,
   "needsErrorInfo": false,
-  "onClick": "{{ jsDshSave.saveAndNew() }}",
+  "onClick": "{{ jsDshSave.addDish() }}",
   "parentColumnSpace": 19.5,
   "parentId": "v0yy3bish5",
   "parentRowSpace": 10,
@@ -51,8 +45,8 @@
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 13,
-  "text": "Save & New",
+  "rightColumn": 12,
+  "text": "Add",
   "tooltip": "Save and create another recipe",
   "topRow": 2,
   "type": "BUTTON_WIDGET",

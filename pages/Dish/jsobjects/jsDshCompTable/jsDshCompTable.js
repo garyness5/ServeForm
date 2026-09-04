@@ -8,44 +8,49 @@ export default {
 			Math.random().toString(36).slice(2, 8);
 	},
 
-	blankRow(lineNo) {
+	blankRow() {
 		return {
-			draft_row_id: this.makeDraftId(),
-			id: null,
-			dish_id: Number(appsmith.store.current_dish_id || 0),
-			line_no: lineNo,
-
+			// Visible columns
 			item_type: null,
 			component_category: null,
 			component_name: null,
+			qty: null,
+			unit_abbreviation: null,
+			wastage_percent: null,
+			apply_wastage: true,
+			price_per_unit: null,
+			line_cost: null,
+			active: true,
+			delete_action: "Delete",
+
+			// Hidden/internal columns
+			dish_id: null,
+			id: null,
 
 			ingredient_id: null,
 			child_recipe_id: null,
 
-			qty: null,
 			unit_id: null,
-			unit_abbreviation: null,
 			unit_type: null,
 
-			apply_wastage: true,
-			active: true,
-
-			wastage_percent: null,
-			price_per_unit: null,
 			cost_per_base_unit: null,
 			factor_to_base: null,
 
 			allergen_names: null,
 			diet_tag_names: null,
-			line_cost: null,
+
+			created_at: null,
+			updated_at: null,
 
 			child_active: true,
 			child_deleted: false,
-			component_status: "active",
+			component_status: null,
 
 			saved_qty: null,
 			saved_unit_id: null,
-			saved_unit_abbreviation: null
+			saved_unit_abbreviation: null,
+
+			draft_row_id: this.makeDraftId()
 		};
 	},
 
@@ -1053,6 +1058,16 @@ export default {
 			row?.ingredient_id ||
 			row?.child_recipe_id ||
 			row?.component_name
+		);
+	},
+
+	showUseWaste(row) {
+		return !!(
+			row?.ingredient_id ||
+			(
+				row?.item_type === "Ingredient" &&
+				row?.component_name
+			)
 		);
 	},
 

@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 21,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  Number(appsmith.store.current_dish_id || 0) === 0\n    ? []\n    : (qryGetSelectedDshDietTags.data || []).map(x => String(x.value))\n))(msDshDietTags.options, msDshDietTags.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  (jsDshWorkspace.get().diet_tags || []).map(x => String(x)) ))(msDshDietTags.options, msDshDietTags.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

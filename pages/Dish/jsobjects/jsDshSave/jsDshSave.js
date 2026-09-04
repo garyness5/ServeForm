@@ -216,7 +216,7 @@ export default {
 		}
 
 		closeModal(
-			mdlDshUnsavedChanges
+			mdlDshUnsavedChanges.name
 		);
 
 		navigateTo(
@@ -228,7 +228,7 @@ export default {
 
 	async closeWithoutSaving() {
 		closeModal(
-			mdlDshUnsavedChanges
+			mdlDshUnsavedChanges.name
 		);
 
 		navigateTo(
@@ -270,6 +270,21 @@ export default {
 		return true;
 	},
 
+	async saveAndAddDish() {
+		const saved =
+					await this.saveDish();
+
+		if (!saved) {
+			return false;
+		}
+
+		closeModal(
+			mdlDshUnsavedChanges.name
+		);
+
+		return await this.startNewDish();
+	},
+
 	async addDish() {
 		await jsDshWorkspace.capture();
 
@@ -286,24 +301,9 @@ export default {
 		return await this.startNewDish();
 	},
 
-	async saveAndNew() {
-		const saved =
-					await this.saveDish();
-
-		if (!saved) {
-			return false;
-		}
-
-		closeModal(
-			mdlDshUnsavedChanges
-		);
-
-		return await this.startNewDish();
-	},
-
 	async addWithoutSaving() {
 		closeModal(
-			mdlDshUnsavedChanges
+			mdlDshUnsavedChanges.name
 		);
 
 		return await this.startNewDish();
@@ -440,7 +440,7 @@ export default {
 			}
 
 			closeModal(
-				mdlDshDeleteConfirm
+				mdlDshDeleteConfirm.name
 			);
 
 			await storeValue(
@@ -478,7 +478,7 @@ export default {
 				return await this.saveAndCloseDish();
 
 			case "add":
-				return await this.saveAndNew();
+				return await this.saveAndAddDish();
 
 			default:
 				return false;

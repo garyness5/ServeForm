@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ closeModal(mdlDshUnsavedChanges) }}",
+  "onClick": "{{ closeModal(mdlDshUnsavedChanges.name) }}",
   "originalBottomRow": 24,
   "originalTopRow": 20,
   "parentId": "qtesy6qkrq",

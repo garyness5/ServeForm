@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ closeModal(\"mdlRecDeleteConfirm\") }}",
+  "onClick": "{{ closeModal(mdlDshDeleteConfirm.name) }}",
   "originalBottomRow": 38,
   "originalTopRow": 34,
   "parentId": "n18p8h1ijn",
