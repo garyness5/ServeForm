@@ -224,34 +224,65 @@ export default {
 		}
 	},
 
-		async setActive(row, active) {
-			const dishId =
-						Number(row?.id || 0);
+	async setActive(row, active) {
+		const dishId =
+					Number(row?.id || 0);
 
-			if (!dishId) {
-				return false;
-			}
+		if (!dishId) {
+			return false;
+		}
 
-			try {
-				await qryDshListSetActive.run({
-					dish_id: dishId,
-					active: active === true
-				});
+		try {
+			await qryDshListSetActive.run({
+				dish_id: dishId,
+				active: active === true
+			});
 
-				await qryGetDishList.run();
+			await qryGetDishList.run();
 
-				return true;
+			return true;
 
-			} catch (error) {
-				showAlert(
-					error?.message ||
-					"Dish Active status could not be changed.",
-					"error"
-				);
+		} catch (error) {
+			showAlert(
+				error?.message ||
+				"Dish Active status could not be changed.",
+				"error"
+			);
 
-				await qryGetDishList.run();
+			await qryGetDishList.run();
 
-				return false;
-			}
-		},
+			return false;
+		}
+	},
+
+	searchText() {
+		return (inpDishListSearch.text || "")
+			.trim()
+			.toLowerCase();
+	},
+
+	statusFilter() {
+		return selDishListFilter.selectedOptionValue || "all";
+	},
+
+	filteredRows() {
+		const rows = qryGetDishList.data || [];
+		const search = this.searchText();
+		const status = this.statusFilter();
+
+		return rows.filter(row => {
+			const matchesSearch =
+						!search ||
+						(row.name || "")
+			.toLowerCase()
+			.includes(search);
+
+			const matchesStatus =
+						status === "all" ||
+						(status === "active" && row.active === true) ||
+						(status === "inactive" && row.active === false);
+
+			return matchesSearch && matchesStatus;
+		});
+	},
 }

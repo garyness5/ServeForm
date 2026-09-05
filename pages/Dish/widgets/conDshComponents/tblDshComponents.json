@@ -65,12 +65,13 @@
     "delete_action",
     "line_no"
   ],
-  "columnUpdatedAt": 1788627339413,
+  "columnUpdatedAt": 1788628514707,
   "columnWidthMap": {
     "active": 103,
     "allergen_names": 124,
     "apply_wastage": 94,
-    "component_category": 130,
+    "component_category": 122,
+    "component_name": 168,
     "customColumn1": 105,
     "customColumn2": 95,
     "item_type": 119,

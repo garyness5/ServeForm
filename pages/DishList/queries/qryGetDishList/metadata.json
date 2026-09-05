@@ -29,7 +29,7 @@
     ],
     "name": "qryGetDishList",
     "pageId": "DishList",
-    "runBehaviour": "AUTOMATIC",
-    "userSetOnLoad": false
+    "runBehaviour": "MANUAL",
+    "userSetOnLoad": true
   }
 }

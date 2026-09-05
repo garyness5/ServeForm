@@ -552,7 +552,7 @@
   "searchKey": "",
   "serverSidePaginationEnabled": true,
   "showInlineEditingOptionDropdown": true,
-  "tableData": "{{ qryGetDishList.data || [] }}",
+  "tableData": "{{ jsDshListActions.filteredRows() }}",
   "textSize": "0.875rem",
   "topRow": 0,
   "totalRecordsCount": "300",
