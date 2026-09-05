@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_d1468d60-f88d-4d1e-ab4c-629baa9d93a8",
-  "id": "DishList_deleteDshFromList",
+  "gitSyncId": "6a0a1bde3214f344228346e7_30acbc6f-d700-40eb-af5b-2204f2ca19de",
+  "id": "DishList_qryGetAllergens",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.delete_dish(\n  {{ Number(tblDishList.selectedRow?.id || 0) }}\n);",
+      "body": "SELECT\n  hli.id,\n  hli.name\nFROM helper_list_items hli\nJOIN helper_lists hl\n  ON hl.id = hli.list_id\nWHERE hl.list_code = 'allergen'\n  AND hli.is_system = true\n  AND hli.active = true\nORDER BY hli.sort_order NULLS LAST, hli.name;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -22,12 +22,8 @@
       "name": "FoodCostingDB",
       "pluginId": "postgres-plugin"
     },
-    "dynamicBindingPathList": [
-      {
-        "key": "body"
-      }
-    ],
-    "name": "deleteDshFromList",
+    "dynamicBindingPathList": [],
+    "name": "qryGetAllergens",
     "pageId": "DishList",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

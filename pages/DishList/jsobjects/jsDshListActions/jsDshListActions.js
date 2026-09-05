@@ -49,7 +49,7 @@ export default {
 			return false;
 		}
 
-		const result = await duplicateDshFromList.run();
+		const result = await qryDuplicateDshFromList.run();
 		const newId = result?.[0]?.new_id || result?.[0]?.id;
 
 		if (!newId) {
@@ -69,7 +69,7 @@ export default {
 			return false;
 		}
 
-		await getDshListImpactCount.run();
+		await qryGetDshListImpactCount.run();
 		showModal("mdlDshListDeleteConfirm");
 
 		return true;
@@ -81,7 +81,7 @@ export default {
 			return false;
 		}
 
-		await deleteDshFromList.run();
+		await qryDeleteDshFromList.run();
 
 		closeModal("mdlDshListDeleteConfirm");
 

@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_30acbc6f-d700-40eb-af5b-2204f2ca19de",
-  "id": "DishList_getAllergens",
+  "gitSyncId": "6a0a1bde3214f344228346e7_cac5ed80-068c-44a0-af52-428c70853896",
+  "id": "DishList_qryToggleDishActive",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "SELECT\n  hli.id,\n  hli.name\nFROM helper_list_items hli\nJOIN helper_lists hl\n  ON hl.id = hli.list_id\nWHERE hl.list_code = 'allergen'\n  AND hli.is_system = true\n  AND hli.active = true\nORDER BY hli.sort_order NULLS LAST, hli.name;",
+      "body": "update public.dsh_items\nset\n  active = {{ tblDishList.updatedRow.active === false ? false : true }},\n  updated_at = now()\nwhere id = {{ Number(tblDishList.updatedRow.id || 0) }}\n  and client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\nreturning id, active;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -22,8 +22,12 @@
       "name": "FoodCostingDB",
       "pluginId": "postgres-plugin"
     },
-    "dynamicBindingPathList": [],
-    "name": "getAllergens",
+    "dynamicBindingPathList": [
+      {
+        "key": "body"
+      }
+    ],
+    "name": "qryToggleDishActive",
     "pageId": "DishList",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false
