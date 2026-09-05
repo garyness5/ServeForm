@@ -36,7 +36,7 @@
   "labelPosition": "Left",
   "labelStyle": "",
   "labelText": "Category",
-  "labelTextSize": "1rem",
+  "labelTextSize": "0.875rem",
   "labelWidth": "14",
   "leftColumn": 0,
   "maxDynamicHeight": 9000,

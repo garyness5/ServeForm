@@ -36,7 +36,7 @@
   "labelPosition": "Left",
   "labelStyle": "",
   "labelText": "Presentation",
-  "labelTextSize": "1rem",
+  "labelTextSize": "0.875rem",
   "labelWidth": "16",
   "leftColumn": 0,
   "maxDynamicHeight": 9000,

@@ -31,7 +31,7 @@
   "label": "Active\n",
   "labelPosition": "Left",
   "labelStyle": "",
-  "labelTextSize": "1rem",
+  "labelTextSize": "0.875rem",
   "leftColumn": 0,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
