@@ -36,7 +36,7 @@
   "mobileRightColumn": 18,
   "mobileTopRow": 118,
   "needsErrorInfo": false,
-  "onClick": "{{ mnuCompTable.clearRows() }}",
+  "onClick": "{{ jsMnuCompTable.clearRows() }}",
   "originalBottomRow": 117,
   "originalTopRow": 113,
   "parentColumnSpace": 17.9375,

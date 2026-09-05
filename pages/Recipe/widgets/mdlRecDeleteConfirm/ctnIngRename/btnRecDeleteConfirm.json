@@ -32,7 +32,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\nqryDeleteRecipe.isLoading ||\nqrySaveRecipe.isLoading\n}}",
+  "isDisabled": "{{\nqryRecDeleteRecipe.isLoading ||\nqryRecSaveRecipe.isLoading\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "db5p08m351",

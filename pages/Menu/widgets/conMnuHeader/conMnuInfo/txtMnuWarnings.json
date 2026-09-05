@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 18,
+  "bottomRow": 14,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -27,10 +27,10 @@
   ],
   "dynamicTriggerPathList": [],
   "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
-  "fontSize": "1rem",
+  "fontSize": "0.875rem",
   "fontStyle": "",
   "isLoading": false,
-  "isVisible": "{{\n  Number(appsmith.store.current_recipe_id || 0) > 0 &&\n  mnuWarnings.list().length > 0\n}}",
+  "isVisible": "{{\n  Number(appsmith.store.current_recipe_id || 0) > 0 &&\n  jsMnuWarnings.list().length > 0\n}}",
   "key": "or4p3qeldn",
   "leftColumn": 0,
   "maxDynamicHeight": 9000,
@@ -41,7 +41,7 @@
   "mobileRightColumn": 17,
   "mobileTopRow": 2,
   "needsErrorInfo": false,
-  "originalBottomRow": 18,
+  "originalBottomRow": 14,
   "originalTopRow": 9,
   "overflow": "NONE",
   "parentColumnSpace": 6.6953125,
@@ -51,7 +51,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "shouldTruncate": false,
-  "text": "{{ \"<b>Warnings:</b><br>\" + \"&nbsp;&nbsp;\" + mnuWarnings.text() }}",
+  "text": "{{ \"Warnings:</b><br>\" + \"&nbsp;&nbsp;\" + jsMnuWarnings.text() }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 9,

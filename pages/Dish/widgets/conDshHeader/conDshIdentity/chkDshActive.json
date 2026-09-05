@@ -4,7 +4,7 @@
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 25,
-  "defaultCheckedState": "{{ jsDshWorkspace.get().header.active }}",
+  "defaultCheckedState": "{{ jsDshWorkspace.get().header.active !== false }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

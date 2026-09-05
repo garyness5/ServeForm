@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 8,
   "boxShadow": "none",
-  "defaultText": "{{ Number(appsmith.store.current_menu_id || 0) === 0 ? \"\" : getMnuItemById.data?.[0]?.name || \"\" }}",
+  "defaultText": "{{ jsMnuWorkspace.get().header.name || \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -29,8 +29,8 @@
   "label": "Menu name",
   "labelAlignment": "left",
   "labelPosition": "Top",
-  "labelStyle": "BOLD",
-  "labelTextSize": "1rem",
+  "labelStyle": "",
+  "labelTextSize": "0.875rem",
   "labelWidth": 5,
   "leftColumn": 0,
   "maxDynamicHeight": 9000,

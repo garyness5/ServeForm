@@ -214,7 +214,7 @@ export default {
 			);
 
 			const result =
-						await qrySaveRecipe.run();
+						await qryRecSaveRecipe.run();
 
 			const savedId =
 						Number(
@@ -541,7 +541,7 @@ export default {
 	async deleteRecipeConfirm() {
 		try {
 			const result =
-						await qryDeleteRecipe.run();
+						await qryRecDeleteRecipe.run();
 
 			const deletedId =
 						Number(
