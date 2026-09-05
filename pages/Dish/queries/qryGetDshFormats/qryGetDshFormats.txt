@@ -4,9 +4,8 @@ select
 from public.helper_lists hl
 join public.helper_list_items hli
   on hli.list_id = hl.id
-where hl.client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and hl.list_code = 'dish_serve_forms'
-  and hl.active = true
+where hl.list_code = 'serve_form'
+  and hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and hli.active = true
   and coalesce(hli.deleted, false) = false
 order by hli.sort_order, hli.name;

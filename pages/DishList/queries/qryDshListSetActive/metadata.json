@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_9b8dddc6-a38a-44b9-b4ee-604166802ec7",
-  "id": "Dish_qryGetDshFormats",
+  "gitSyncId": "6a0a1bde3214f344228346e7_a62fdf51-d7d1-46bd-9cf0-c63ad0b3b791",
+  "id": "DishList_qryDshListSetActive",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  hli.id,\n  hli.name\nfrom public.helper_lists hl\njoin public.helper_list_items hli\n  on hli.list_id = hl.id\nwhere hl.list_code = 'serve_form'\n  and hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and hli.active = true\n  and coalesce(hli.deleted, false) = false\norder by hli.sort_order, hli.name;",
+      "body": "update public.dsh_items\nset\n  active = {{ this.params.active === true }},\n  updated_at = now()\nwhere id = {{ Number(this.params.dish_id || 0) }}\n  and client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\nreturning id, active;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,9 +27,9 @@
         "key": "body"
       }
     ],
-    "name": "qryGetDshFormats",
-    "pageId": "Dish",
-    "runBehaviour": "AUTOMATIC",
+    "name": "qryDshListSetActive",
+    "pageId": "DishList",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }

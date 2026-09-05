@@ -1,17 +1,12 @@
 select
-  (
-    select count(*)
-    from public.rec_components
-    where item_type = 'recipe'
-      and child_recipe_id = {{ Number(tblDishList.selectedRow?.id || 0) }}
-  ) as recipe_count,
+  0 as recipe_count,
+  0 as dish_count,
 
   (
-    select count(*)
-    from public.dsh_components
-    where item_type = 'recipe'
-      and child_recipe_id = {{ Number(tblDishList.selectedRow?.id || 0) }}
-  ) as dish_count,
+		select count(*)
+		from public.mnu_components
+		where item_type = 'dish'
+		and child_dish_id = {{ Number(tblDishList.selectedRow?.id || 0) }}
+	) as menu_count,
 
-  0 as menu_count,
   0 as event_count;

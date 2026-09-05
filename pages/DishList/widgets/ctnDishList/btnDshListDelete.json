@@ -3,8 +3,8 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 6,
   "boxShadow": "none",
-  "buttonColor": "#7f1d1d",
-  "buttonVariant": "SECONDARY",
+  "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonVariant": "PRIMARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
     {
@@ -12,6 +12,9 @@
     },
     {
       "key": "isDisabled"
+    },
+    {
+      "key": "buttonColor"
     }
   ],
   "dynamicPropertyPathList": [
@@ -29,7 +32,7 @@
   ],
   "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ !jsDshListActions.hasSelection() }}",
+  "isDisabled": "{{ !jsDshListActions.hasSelection() || qryDeleteDshFromList.isLoading }}",
   "isLoading": false,
   "isVisible": true,
   "key": "o01hoigeqy",
@@ -49,7 +52,7 @@
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 25,
+  "rightColumn": 24,
   "text": "Delete",
   "tooltip": "Delete selected recipe",
   "topRow": 2,
