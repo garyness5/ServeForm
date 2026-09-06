@@ -92,11 +92,21 @@ export default {
 		return (
 			values || []
 		)
-			.map(x =>
-					 typeof x === "object"
-					 ? x.value
-					 : x
-					)
+			.map(x => {
+			if (
+				x !== null &&
+				typeof x === "object"
+			) {
+				return (
+					x.value ??
+					x.helper_list_item_id ??
+					x.tag_id ??
+					null
+				);
+			}
+
+			return x;
+		})
 			.map(Number)
 			.filter(Boolean)
 			.sort(

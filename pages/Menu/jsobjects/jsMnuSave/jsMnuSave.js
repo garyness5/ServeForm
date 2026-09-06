@@ -200,52 +200,21 @@ export default {
 	},
 
 	async startNewMenu() {
-		await storeValue(
-			"Menu_mode",
-			"add"
-		);
+		await removeValue("current_menu_id");
 
-		await removeValue(
-			"current_menu_id"
-		);
+		await storeValue("Menu_mode", "add");
+		await storeValue("Menu_open_mode", "add");
 
 		await jsMnuWorkspace.initializeNew();
 		await jsMnuCompTable.clearRows();
 
-		await resetWidget(
-			"inpMnuName",
-			true
-		);
-
-		await resetWidget(
-			"selMnuCategory",
-			true
-		);
-
-		await resetWidget(
-			"chkMnuActive",
-			true
-		);
-
-		await resetWidget(
-			"inpMnuServes",
-			true
-		);
-
-		await resetWidget(
-			"inpMnuExtraPercent",
-			true
-		);
-
-		await resetWidget(
-			"msMnuDietTags",
-			true
-		);
-
-		await resetWidget(
-			"rteMnuNotes",
-			true
-		);
+		await resetWidget("inpMnuName", true);
+		await resetWidget("selMnuCategory", true);
+		await resetWidget("chkMnuActive", true);
+		await resetWidget("inpMnuServes", true);
+		await resetWidget("inpMnuExtraPercent", true);
+		await resetWidget("msMnuDietTags", true);
+		await resetWidget("rteMnuNotes", true);
 
 		return true;
 	},
@@ -257,16 +226,14 @@ export default {
 
 		this.pendingAction = "add";
 
-		showModal(
-			mdlMnuUnsavedChanges
-		);
+		showModal(mdlMnuUnsavedChanges.name);
 
 		return true;
 	},
 
 	async addWithoutSaving() {
 		closeModal(
-			mdlMnuUnsavedChanges
+			mdlMnuUnsavedChanges.name
 		);
 
 		this.pendingAction = null;
@@ -278,7 +245,7 @@ export default {
 
 	async saveAndAddMenu() {
 		closeModal(
-			mdlMnuUnsavedChanges
+			mdlMnuUnsavedChanges.name
 		);
 
 		const saved =
@@ -409,88 +376,145 @@ export default {
 		await jsMnuCompTable.syncFromTable();
 
 		if (this.isDirty()) {
-			await storeValue("pendingMenuAction", "close");
-			showModal("mdlMnuUnsavedChanges");
-			return;
+			this.pendingAction = "close";
+
+			showModal(
+				mdlMnuUnsavedChanges.name
+			);
+
+			return true;
 		}
 
 		navigateTo("MenuList");
+
+		return true;
 	},
 
 	async saveAndCloseMenu() {
-		const result = await this.saveMenu();
-		if (!result) return null;
+		const result =
+					await this.saveMenu();
 
-		closeModal("mdlMnuUnsavedChanges");
+		if (!result) return false;
+
+		this.pendingAction = null;
+
+		closeModal(
+			mdlMnuUnsavedChanges.name
+		);
+
 		navigateTo("MenuList");
+
+		return true;
 	},
 
 	async closeWithoutSaving() {
-		closeModal("mdlMnuUnsavedChanges");
+		this.pendingAction = null;
+
+		closeModal(
+			mdlMnuUnsavedChanges.name
+		);
+
 		await jsMnuCompTable.clearDraftRows();
+
 		navigateTo("MenuList");
-	},
 
-	async duplicateMenuSavedVersion() {
-		const result = await qryMnuDuplicateMenu.run();
-		const newId = result?.[0]?.new_id || result?.[0]?.id;
-
-		if (!newId) {
-			showAlert("Menu duplicate failed", "error");
-			return false;
-		}
-
-		await storeValue("current_menu_id", newId);
-
-		await qryMnuGetItemById.run();
-		await qryMnuGetSelectedDietTags.run();
-		await qryMnuGetComponents.run();
-		await jsMnuCompTable.loadFromQuery();
-
-		showAlert("Menu duplicated", "success");
 		return true;
 	},
 
 	async duplicateMenu() {
-		if (this.isDirty()) {
-			await storeValue("pendingMenuAction", "duplicate");
-			showModal("mdlMnuUnsavedChanges");
+		const sourceId =
+					Number(
+						appsmith.store.current_menu_id || 0
+					);
+
+		if (!sourceId) {
+			showAlert(
+				"This Menu has not been saved yet.",
+				"warning"
+			);
+
 			return false;
 		}
 
-		return await this.duplicateMenuSavedVersion();
-	},
+		const source =
+					await jsMnuWorkspace.capture();
 
-	async saveAndDuplicateMenu() {
-		const saved = await this.saveMenu();
-		if (!saved) return false;
+		const currentName =
+					String(
+						source.header.name || ""
+					).trim();
 
-		closeModal("mdlMnuUnsavedChanges");
-		return await this.duplicateMenuSavedVersion();
-	},
+		const duplicate = {
+			header: {
+				...source.header,
+				name: `${currentName} - Copy`
+			},
 
-	async duplicateWithoutSaving() {
-		closeModal("mdlMnuUnsavedChanges");
-		return await this.duplicateMenuSavedVersion();
+			diet_tags: [
+				...(source.diet_tags || [])
+			],
+
+			components:
+			(source.components || [])
+			.map(row => ({
+				...row,
+				id: null,
+				menu_id: 0,
+				draft_row_id:
+				jsMnuCompTable.makeDraftId()
+			}))
+		};
+
+		await storeValue(
+			"current_menu_id",
+			0
+		);
+
+		await storeValue(
+			"Menu_mode",
+			"duplicate"
+		);
+
+		await removeValue(
+			"Menu_open_mode"
+		);
+
+		await jsMnuWorkspace.initializeDuplicate(
+			duplicate
+		);
+
+		await jsMnuCompTable.setRows(
+			duplicate.components
+		);
+
+		await this.safeReset("inpMnuName");
+		await this.safeReset("selMnuCategory");
+		await this.safeReset("chkMnuActive");
+		await this.safeReset("inpMnuServes");
+		await this.safeReset("inpMnuExtraPercent");
+		await this.safeReset("rteMnuNotes");
+		await this.safeReset("tblMnuComponents");
+
+		return true;
 	},
 
 	async deleteMenuStart() {
 		if (this.isDirty()) {
 			await storeValue("pendingMenuAction", "delete");
-			showModal("mdlMnuUnsavedChanges");
+			showModal(mdlMnuUnsavedChanges.name);
 			return false;
 		}
 
 		await qryMnuGetImpactCount.run();
-		showModal("mdlMnuDelete");
+		showModal(mdlMnuDelete.name);
 		return true;
 	},
 
 	async deleteMenuConfirm() {
 		await qryMnuDeleteMenu.run();
 
-		closeModal("mdlMnuDelete");
-		closeModal("mdlMnuUnsavedChanges");
+		closeModal(mdlMnuDelete.name);
+		closeModal(mdlMnuUnsavedChanges.name);
 
 		await jsMnuCompTable.clearDraftRows();
 		await removeValue("mnu_components_local_rows");
@@ -506,43 +530,21 @@ export default {
 		const saved = await this.saveMenu();
 		if (!saved) return false;
 
-		closeModal("mdlMnuUnsavedChanges");
+		closeModal(mdlMnuUnsavedChanges.name);
 
 		await qryMnuGetImpactCount.run();
-		showModal("mdlMnuDelete");
+		showModal(mdlMnuDelete.name);
 
 		return true;
 	},
 
 	async deleteWithoutSaving() {
-		closeModal("mdlMnuUnsavedChanges");
+		closeModal(mdlMnuUnsavedChanges.name);
 
 		await qryMnuGetImpactCount.run();
-		showModal("mdlMnuDelete");
+		showModal(mdlMnuDelete.name);
 
 		return true;
-	},
-
-	testSaveData() {
-		return {
-			current_menu_id: appsmith.store.current_menu_id,
-			rowsForSave: jsMnuCompTable.rowsForSave()
-		};
-	},
-
-	testDirtyData() {
-		return {
-			isDirty: this.isDirty(),
-
-			headerCurrent: this.headerSnapshotFromPage(),
-			headerSaved: this.headerSnapshotFromSaved(),
-
-			componentCurrent: this.currentComponentSnapshot(),
-			componentSaved: this.savedComponentSnapshot(),
-
-			dietTagsCurrent: this.dietTagSnapshotFromPage(),
-			dietTagsSaved: this.dietTagSnapshotFromSaved()
-		};
 	},
 
 	async unsavedYes() {

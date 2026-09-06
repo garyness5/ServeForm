@@ -1,6 +1,6 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_2e11a6be-84be-45a3-92b7-e2fa1258d95d",
-  "id": "Menu_jsMnuSave.duplicateMenuSavedVersion",
+  "gitSyncId": "6a0a1bde3214f344228346e7_7d1d710e-14c5-49e9-8bbc-d4d905036c42",
+  "id": "Menu_jsMnuSave.headerSnapshotFromPage",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
@@ -22,8 +22,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "jsMnuSave.duplicateMenuSavedVersion",
-    "name": "duplicateMenuSavedVersion",
+    "fullyQualifiedName": "jsMnuSave.headerSnapshotFromPage",
+    "name": "headerSnapshotFromPage",
     "pageId": "Menu",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

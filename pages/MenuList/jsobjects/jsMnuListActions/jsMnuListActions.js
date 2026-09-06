@@ -9,19 +9,51 @@ export default {
 
 	async openSelectedMenu() {
 		if (!this.hasSelection()) {
-			showAlert("Select a menu first.", "warning");
+			showAlert(
+				"Select a menu first.",
+				"warning"
+			);
+
 			return false;
 		}
 
-		await storeValue("current_menu_id", this.selectedMenuId());
+		await storeValue(
+			"current_menu_id",
+			this.selectedMenuId()
+		);
+
+		await storeValue(
+			"Menu_open_mode",
+			"edit"
+		);
+
+		await storeValue(
+			"Menu_mode",
+			"edit"
+		);
+
 		navigateTo("Menu");
+
 		return true;
 	},
 
 	async addMenu() {
-		await storeValue("current_menu_id", 0);
-		await removeValue("mnu_components_local_rows");
+		await removeValue(
+			"current_menu_id"
+		);
+
+		await storeValue(
+			"Menu_open_mode",
+			"add"
+		);
+
+		await storeValue(
+			"Menu_mode",
+			"add"
+		);
+
 		navigateTo("Menu");
+
 		return true;
 	},
 
@@ -57,7 +89,7 @@ export default {
 
 		return true;
 	},
-	
+
 	async deleteSelectedMenuConfirm() {
 		if (!this.hasSelection()) {
 			showAlert("Select a menu first.", "warning");
