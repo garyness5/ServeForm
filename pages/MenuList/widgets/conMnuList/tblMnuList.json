@@ -34,8 +34,8 @@
     }
   },
   "columnOrder": [
-    "category_name",
     "name",
+    "category_name",
     "yield_qty",
     "yield_unit",
     "total_cost",
@@ -46,7 +46,7 @@
     "deleted",
     "category_id"
   ],
-  "columnUpdatedAt": 1782677615790,
+  "columnUpdatedAt": 1788701953119,
   "columnWidthMap": {
     "active": 75,
     "category_id": 118,
@@ -123,9 +123,6 @@
       "key": "oddRowColor"
     },
     {
-      "key": "headerTextColor"
-    },
-    {
       "key": "primaryColumns.category_id.computedValue"
     }
   ],
@@ -148,8 +145,8 @@
   "enableClientSideSearch": true,
   "endOfData": false,
   "flexVerticalAlignment": "start",
-  "headerRowColor": "#4e85a9",
-  "headerTextColor": "{{appsmith.theme.colors.backgroundColor}}",
+  "headerRowColor": "",
+  "headerTextColor": "",
   "horizontalAlignment": "LEFT",
   "infiniteScrollEnabled": false,
   "inlineEditingSaveOption": "CUSTOM",

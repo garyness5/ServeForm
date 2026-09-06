@@ -45,7 +45,7 @@
   "needsErrorInfo": false,
   "onClick": "{{ jsEventActionGuard.request(\"save\") }}",
   "parentColumnSpace": 10.609375,
-  "parentId": "joic71iyv8",
+  "parentId": "zcnk28pjax",
   "parentRowSpace": 10,
   "placement": "CENTER",
   "recaptchaType": "V3",
@@ -58,6 +58,6 @@
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "mwjea16tzy",
+  "widgetId": "69xyr7xu64",
   "widgetName": "btnEvtSave"
 }

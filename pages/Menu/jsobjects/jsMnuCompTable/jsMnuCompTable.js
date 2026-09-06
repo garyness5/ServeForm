@@ -400,6 +400,59 @@ export default {
 		});
 	},
 
+	showRowActions(row) {
+		return !!(
+			row &&
+			(
+				row.id ||
+				row.item_type ||
+				row.component_category ||
+				row.component_name ||
+				row.ingredient_id ||
+				row.child_recipe_id ||
+				row.child_dish_id
+			)
+		);
+	},
+
+	showUseWaste(row) {
+		return (
+			this.showRowActions(row) &&
+			row.item_type === "ingredient" &&
+			Number(row.wastage_percent || 0) > 0
+		);
+	},
+
+	wasteDisplay(row) {
+		const waste =
+					Number(row?.wastage_percent || 0);
+
+		if (
+			!row ||
+			row.item_type !== "ingredient" ||
+			waste <= 0
+		) {
+			return "";
+		}
+
+		return `${waste}%`;
+	},
+
+	itemBackground(row) {
+		if (
+			row?.child_deleted === true ||
+			row?.component_status === "Deleted"
+		) {
+			return "#FFE6E6";
+		}
+
+		if (row?.child_active === false) {
+			return "#FFF3CD";
+		}
+
+		return "";
+	},
+
 	unitOptions(row) {
 		const unitType = row?.unit_type;
 
@@ -413,6 +466,82 @@ export default {
 		}));
 	},
 
+	costPerSelectedUnit(row) {
+		if (
+			!row ||
+			row.active === false ||
+			row.child_active === false ||
+			row.child_deleted === true
+		) {
+			return null;
+		}
+
+		const componentId =
+					this.itemId(row);
+
+		if (!componentId) {
+			return null;
+		}
+
+		const item =
+					(qryMnuGetComponentItems.data || [])
+		.find(i =>
+					i.item_type === row.item_type &&
+					Number(i.id) === Number(componentId)
+				 );
+
+		if (!item) {
+			return null;
+		}
+
+		/*
+	 * Dish Qty is servings/persons.
+	 * price_per_unit means current cost per person.
+	 */
+		if (row.item_type === "dish") {
+			return item.price_per_unit == null
+				? null
+			: Number(item.price_per_unit);
+		}
+
+		const units =
+					qryMnuGetComponentUnits.data || [];
+
+		const unit =
+					units.find(u =>
+										 u.abbreviation === row.unit_abbreviation
+										) ||
+					units.find(u =>
+										 Number(u.id) === Number(row.unit_id || 0)
+										);
+
+		if (
+			!unit ||
+			item.cost_per_base_unit == null ||
+			unit.factor_to_base == null
+		) {
+			return null;
+		}
+
+		let cost =
+				Number(item.cost_per_base_unit) *
+				Number(unit.factor_to_base);
+
+		if (
+			row.item_type === "ingredient" &&
+			row.apply_wastage === true
+		) {
+			cost =
+				cost *
+				(
+				1 +
+				Number(item.wastage_percent || 0) / 100
+			);
+		}
+
+		return cost;
+	},
+
 	lineCost(row) {
 		if (
 			!row ||
@@ -421,34 +550,52 @@ export default {
 			row.child_deleted === true ||
 			row.qty === "" ||
 			row.qty == null ||
-			!row.unit_abbreviation ||
 			!row.item_type ||
 			!row.component_name
-		) return null;
-
-		const componentId = this.itemId(row);
-
-		const item = (qryMnuGetComponentItems.data || []).find(i =>
-																													 i.item_type === row.item_type &&
-																													 Number(i.id) === Number(componentId)
-																													);
-
-		const unit = (qryMnuGetComponentUnits.data || []).find(u =>
-																													 u.abbreviation === row.unit_abbreviation
-																													);
-
-		if (!item || !unit || item.cost_per_base_unit == null) return null;
-
-		let cost =
-				Number(row.qty) *
-				Number(unit.factor_to_base || 0) *
-				Number(item.cost_per_base_unit || 0);
-
-		if (row.item_type === "ingredient" && row.apply_wastage === true) {
-			cost = cost * (1 + Number(item.wastage_percent || 0) / 100);
+		) {
+			return null;
 		}
 
-		return Math.round(cost * 100) / 100;
+		/*
+	 * Dish:
+	 * Qty = servings/persons.
+	 * No physical Unit is required.
+	 */
+		if (row.item_type === "dish") {
+			const costPerPerson =
+						this.costPerSelectedUnit(row);
+
+			if (costPerPerson == null) {
+				return null;
+			}
+
+			return Math.round(
+				Number(row.qty) *
+				Number(costPerPerson) *
+				100
+			) / 100;
+		}
+
+		/*
+	 * Ingredient / Recipe still require
+	 * a selected physical Unit.
+	 */
+		if (!row.unit_abbreviation) {
+			return null;
+		}
+
+		const costPerUnit =
+					this.costPerSelectedUnit(row);
+
+		if (costPerUnit == null) {
+			return null;
+		}
+
+		return Math.round(
+			Number(row.qty) *
+			Number(costPerUnit) *
+			100
+		) / 100;
 	},
 
 	subtotal() {

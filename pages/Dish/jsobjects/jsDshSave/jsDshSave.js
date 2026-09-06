@@ -398,15 +398,8 @@ export default {
 
 		await qryGetDshImpactCount.run();
 
-		const impact =
-					this.impactCount();
-
-		if (impact === 0) {
-			return await this.deleteDishConfirm();
-		}
-
 		showModal(
-			mdlDshDeleteConfirm.name
+			mdlDshDelete.name
 		);
 
 		return true;
@@ -440,7 +433,7 @@ export default {
 			}
 
 			closeModal(
-				mdlDshDeleteConfirm.name
+				mdlDshDelete.name
 			);
 
 			await storeValue(
