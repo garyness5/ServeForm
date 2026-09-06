@@ -1,4 +1,0 @@
-select *
-from public.duplicate_menu(
-  {{ Number(appsmith.store.current_menu_id || 0) }}
-);

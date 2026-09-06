@@ -421,6 +421,39 @@ export default {
 		return true;
 	},
 
+	async nextDuplicateName(sourceName) {
+		const baseName =
+					String(sourceName || "").trim();
+
+		await qryMnuGetNames.run();
+
+		const existing =
+					new Set(
+						(qryMnuGetNames.data || [])
+						.map(x =>
+								 String(x.name || "")
+								 .trim()
+								 .toLowerCase()
+								)
+					);
+
+		let candidate =
+				`${baseName} - copy`;
+
+		let number = 2;
+
+		while (
+			existing.has(candidate.toLowerCase())
+		) {
+			candidate =
+				`${baseName} - copy ${number}`;
+
+			number++;
+		}
+
+		return candidate;
+	},
+
 	async duplicateMenu() {
 		const sourceId =
 					Number(
@@ -444,10 +477,13 @@ export default {
 						source.header.name || ""
 					).trim();
 
+		const duplicateName =
+					await this.nextDuplicateName(currentName);
+
 		const duplicate = {
 			header: {
 				...source.header,
-				name: `${currentName} - Copy`
+				name: duplicateName
 			},
 
 			diet_tags: [
