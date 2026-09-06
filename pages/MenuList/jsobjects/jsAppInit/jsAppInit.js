@@ -22,10 +22,25 @@ export default {
 
 		const user = rows[0];
 
-		await storeValue("current_client_id", user.client_id);
-		await storeValue("current_user_id", user.user_id);
-		await storeValue("current_client_name", user.client_name);
-		await storeValue("current_user_name", user.display_name || user.email);
+		await storeValue(
+			"current_client_id",
+			user.client_id
+		);
+
+		await storeValue(
+			"current_user_id",
+			user.user_id
+		);
+
+		await storeValue(
+			"current_client_name",
+			user.client_name
+		);
+
+		await storeValue(
+			"current_user_name",
+			user.display_name || user.email
+		);
 
 		return true;
 	}

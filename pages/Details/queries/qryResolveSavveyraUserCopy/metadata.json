@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_6f7eb903-d3a9-407f-ae38-b220df5625e5",
-  "id": "MenuList_qryMnuLstGetMnuCategories",
+  "gitSyncId": "6a0a1bde3214f344228346e7_9dfbeafb-fa2b-4b49-bd75-a994f04435de",
+  "id": "Details_qryResolveSavveyraUserCopy",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  hli.id,\n  hli.name\nfrom helper_list_items hli\njoin helper_lists hl\n  on hl.id = hli.list_id\nwhere hl.list_code = 'menu_category'\n  and hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and hli.active = true\norder by lower(hli.name);",
+      "body": "SELECT *\nFROM public.resolve_savveyra_user(\n\t{{ appsmith.user.email }}\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,9 +27,9 @@
         "key": "body"
       }
     ],
-    "name": "qryMnuLstGetMnuCategories",
-    "pageId": "MenuList",
+    "name": "qryResolveSavveyraUserCopy",
+    "pageId": "Details",
     "runBehaviour": "MANUAL",
-    "userSetOnLoad": true
+    "userSetOnLoad": false
   }
 }
