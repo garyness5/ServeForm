@@ -15,13 +15,13 @@ export default {
 			0
 		);
 
-		await removeValue(
-			"Recipe_open_mode"
-		);
-
 		await storeValue(
 			"Recipe_mode",
 			"add"
+		);
+
+		await removeValue(
+			"Recipe_open_mode"
 		);
 
 		await removeValue(
@@ -36,7 +36,11 @@ export default {
 			"rec_components_local_rows"
 		);
 
-		navigateTo("Recipe");
+		navigateTo(
+			"Recipe",
+			{},
+			"SAME_WINDOW"
+		);
 
 		return true;
 	},
@@ -56,13 +60,13 @@ export default {
 			this.selectedRecipeId()
 		);
 
-		await removeValue(
-			"Recipe_open_mode"
-		);
-
 		await storeValue(
 			"Recipe_mode",
 			"edit"
+		);
+
+		await removeValue(
+			"Recipe_open_mode"
 		);
 
 		await removeValue(
@@ -77,7 +81,11 @@ export default {
 			"rec_components_local_rows"
 		);
 
-		navigateTo("Recipe");
+		navigateTo(
+			"Recipe",
+			{},
+			"SAME_WINDOW"
+		);
 
 		return true;
 	},
@@ -104,13 +112,13 @@ export default {
 			"rec_components_local_rows"
 		);
 
+		await removeValue(
+			"Recipe_open_mode"
+		);
+
 		await storeValue(
 			"current_recipe_id",
 			this.selectedRecipeId()
-		);
-
-		await removeValue(
-			"Recipe_open_mode"
 		);
 
 		await storeValue(

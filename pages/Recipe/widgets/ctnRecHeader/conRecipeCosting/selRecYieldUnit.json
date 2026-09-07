@@ -36,7 +36,7 @@
   "labelPosition": "Top",
   "labelStyle": "",
   "labelText": "Unit",
-  "labelTextSize": "1rem",
+  "labelTextSize": "0.875rem",
   "labelWidth": 5,
   "leftColumn": 33,
   "maxDynamicHeight": 9000,
