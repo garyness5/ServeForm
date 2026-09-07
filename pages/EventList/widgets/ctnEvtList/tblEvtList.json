@@ -187,7 +187,7 @@
   "enableClientSideSearch": true,
   "endOfData": false,
   "flexVerticalAlignment": "start",
-  "headerRowColor": "#4e85a9",
+  "headerRowColor": "",
   "headerTextColor": "{{appsmith.theme.colors.backgroundColor}}",
   "horizontalAlignment": "LEFT",
   "infiniteScrollEnabled": false,

@@ -5,7 +5,7 @@
   "bottomRowBeforeCollapse": 6,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
-  "buttonVariant": "SECONDARY",
+  "buttonVariant": "PRIMARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
     {
@@ -54,7 +54,7 @@
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 39,
+  "rightColumn": 38,
   "text": "Replace/Delete",
   "tooltip": "Select an item to Replace or Delete first",
   "topRow": 2,

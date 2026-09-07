@@ -37,7 +37,6 @@
     "name",
     "category_name",
     "yield_qty",
-    "yield_unit",
     "total_cost",
     "cost_per_unit",
     "active",
@@ -46,7 +45,7 @@
     "deleted",
     "category_id"
   ],
-  "columnUpdatedAt": 1788701953119,
+  "columnUpdatedAt": 1788734223684,
   "columnWidthMap": {
     "active": 75,
     "category_id": 118,
@@ -97,9 +96,6 @@
     },
     {
       "key": "primaryColumns.yield_qty.computedValue"
-    },
-    {
-      "key": "primaryColumns.yield_unit.computedValue"
     },
     {
       "key": "primaryColumns.active.computedValue"
@@ -498,38 +494,6 @@
       "label": "Serves",
       "notation": "standard",
       "originalId": "yield_qty",
-      "sticky": "",
-      "textSize": "0.875rem",
-      "thousandSeparator": true,
-      "validation": {},
-      "verticalAlignment": "CENTER",
-      "width": 150
-    },
-    "yield_unit": {
-      "alias": "yield_unit",
-      "allowCellWrapping": false,
-      "allowSameOptionsInNewRow": true,
-      "cellBackground": "",
-      "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblMnuList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"yield_unit\"])) : yield_unit })()}}",
-      "currencyCode": "USD",
-      "decimals": 0,
-      "enableFilter": true,
-      "enableSort": true,
-      "horizontalAlignment": "LEFT",
-      "id": "yield_unit",
-      "index": 8,
-      "isCellEditable": false,
-      "isCellVisible": true,
-      "isDerived": false,
-      "isDisabled": false,
-      "isDiscardVisible": true,
-      "isEditable": false,
-      "isSaveVisible": true,
-      "isVisible": true,
-      "label": "Unit",
-      "notation": "standard",
-      "originalId": "yield_unit",
       "sticky": "",
       "textSize": "0.875rem",
       "thousandSeparator": true,

@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_a53e324c-71c3-44ed-a363-f7befac6a423",
-  "id": "Menu_qryMnuGetUnits",
+  "gitSyncId": "6a0a1bde3214f344228346e7_9d6febc0-d050-4e14-97fc-b882cb089fb9",
+  "id": "Dish_qryDshGetNames",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  id,\n  abbreviation,\n  name,\n  unit_type,\n  factor_to_base\nfrom public.units\nwhere active = true\norder by\n  case lower(unit_type)\n    when 'count' then 1\n    when 'weight' then 2\n    when 'volume' then 3\n    else 99\n  end,\n  sort_order,\n  abbreviation;",
+      "body": "select\n    id,\n    name\nfrom public.mnu_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\norder by name;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -22,10 +22,14 @@
       "name": "FoodCostingDB",
       "pluginId": "postgres-plugin"
     },
-    "dynamicBindingPathList": [],
-    "name": "qryMnuGetUnits",
-    "pageId": "Menu",
+    "dynamicBindingPathList": [
+      {
+        "key": "body"
+      }
+    ],
+    "name": "qryDshGetNames",
+    "pageId": "Dish",
     "runBehaviour": "MANUAL",
-    "userSetOnLoad": false
+    "userSetOnLoad": true
   }
 }

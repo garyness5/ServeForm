@@ -4,7 +4,7 @@
   "bottomRow": 6,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
-  "buttonVariant": "SECONDARY",
+  "buttonVariant": "PRIMARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
     {
@@ -45,7 +45,7 @@
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 58,
+  "rightColumn": 57,
   "text": "Clean blank rows",
   "tooltip": "Add  to list",
   "topRow": 2,

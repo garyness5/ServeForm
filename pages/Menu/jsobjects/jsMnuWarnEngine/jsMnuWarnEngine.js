@@ -37,29 +37,32 @@ export default {
 		}
 
 		const missingItemCount = this.count(rows, r =>
-			this.hasValue(r.item_type) &&
-			!this.hasItem(r)
-		);
+																				this.hasValue(r.item_type) &&
+																				!this.hasItem(r)
+																			 );
 
 		const noCostCount = this.count(rows, r =>
-			this.hasItem(r) &&
-			r.active !== false &&
+																	 this.hasItem(r) &&
+																	 r.active !== false &&
+																	 (
+			!this.hasValue(r.qty) ||
 			(
-				!this.hasValue(r.qty) ||
+				r.item_type !== "dish" &&
 				!this.hasValue(r.unit_id)
 			)
-		);
+		)
+																	);
 
 		const inactiveCount = this.count(rows, r =>
-			this.hasItem(r) &&
-			r.active === false
-		);
+																		 this.hasItem(r) &&
+																		 r.active === false
+																		);
 
 		const deletedCount = this.count(rows, r =>
-			r.child_deleted === true ||
-			r.deleted === true ||
-			r.component_status === "Deleted"
-		);
+																		r.child_deleted === true ||
+																		r.deleted === true ||
+																		r.component_status === "Deleted"
+																	 );
 
 		if (missingItemCount > 0) {
 			warnings.push(`${missingItemCount} ${this.plural(missingItemCount, "item is", "items are")} missing`);

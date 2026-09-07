@@ -156,14 +156,13 @@ export default {
 	},
 
 	async syncFromTable() {
+		await jsRecipeWorkspace.capture();
+
 		const merged = this.mergeUpdatedRows();
 
-		await storeValue(
-			"rec_components_local_rows",
+		return await this.setRows(
 			merged
 		);
-
-		return merged;
 	},
 
 	async patchRow(row, patch) {

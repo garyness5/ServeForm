@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_c67d4583-ba18-473d-8d0c-c2032a197f42",
-  "id": "Menu_qryMnuSaveComponentsSnapshot",
+  "gitSyncId": "6a0a1bde3214f344228346e7_ba0430ff-41ef-4ad5-8c51-8799dcb8e932",
+  "id": "Lists_qryResolveUser",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_mnu_components_snapshot(\n  {{ Number(appsmith.store.current_menu_id || 0) }},\n  '{{ JSON.stringify(jsMnuCompTable.rowsForSave()).replaceAll(\"'\", \"''\") }}'::jsonb\n);",
+      "body": "SELECT *\nFROM public.resolve_savveyra_user(\n\t{{ appsmith.user.email }}\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,8 +27,8 @@
         "key": "body"
       }
     ],
-    "name": "qryMnuSaveComponentsSnapshot",
-    "pageId": "Menu",
+    "name": "qryResolveUser",
+    "pageId": "Lists",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }

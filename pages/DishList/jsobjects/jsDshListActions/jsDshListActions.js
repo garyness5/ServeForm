@@ -28,10 +28,6 @@ export default {
 		);
 
 		await removeValue(
-			"Dish_open_mode"
-		);
-
-		await removeValue(
 			"dsh_components_local_rows"
 		);
 
@@ -49,10 +45,6 @@ export default {
 		await storeValue(
 			"Dish_mode",
 			"add"
-		);
-
-		await removeValue(
-			"Dish_open_mode"
 		);
 
 		await removeValue(
@@ -94,10 +86,6 @@ export default {
 		await storeValue(
 			"Dish_mode",
 			"duplicate"
-		);
-
-		await removeValue(
-			"Dish_open_mode"
 		);
 
 		navigateTo(

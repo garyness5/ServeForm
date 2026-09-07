@@ -309,6 +309,39 @@ export default {
 		return await this.startNewDish();
 	},
 
+	async nextDuplicateName(sourceName) {
+		const baseName =
+					String(sourceName || "").trim();
+
+		await qryDshGetNames.run();
+
+		const existing =
+					new Set(
+						(qryDshGetNames.data || [])
+						.map(x =>
+								 String(x.name || "")
+								 .trim()
+								 .toLowerCase()
+								)
+					);
+
+		let candidate =
+				`${baseName} - copy`;
+
+		let number = 2;
+
+		while (
+			existing.has(candidate.toLowerCase())
+		) {
+			candidate =
+				`${baseName} - copy ${number}`;
+
+			number++;
+		}
+
+		return candidate;
+	},
+
 	async duplicateDish() {
 		const sourceId =
 					Number(
@@ -332,10 +365,13 @@ export default {
 						source.header.name || ""
 					).trim();
 
+		const duplicateName =
+					await this.nextDuplicateName(currentName);
+
 		const duplicate = {
 			header: {
 				...source.header,
-				name: `${currentName} - Copy`
+				name: duplicateName
 			},
 
 			diet_tags: [
