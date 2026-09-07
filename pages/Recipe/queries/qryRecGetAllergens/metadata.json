@@ -25,7 +25,7 @@
     "dynamicBindingPathList": [],
     "name": "qryRecGetAllergens",
     "pageId": "Recipe",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": true
   }
 }

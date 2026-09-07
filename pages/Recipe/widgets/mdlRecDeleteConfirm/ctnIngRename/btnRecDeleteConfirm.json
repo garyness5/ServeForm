@@ -43,7 +43,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsRecipeSave.confirmImpactAction() }}",
+  "onClick": "{{ jsRecSave.confirmImpactAction() }}",
   "originalBottomRow": 43,
   "originalTopRow": 39,
   "parentId": "2le9if6hq5",

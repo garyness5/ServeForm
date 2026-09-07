@@ -31,7 +31,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ !jsRecipeSave.isDirty() }}",
+  "isDisabled": "{{ !jsRecSave.isDirty() }}",
   "isLoading": false,
   "isVisible": true,
   "key": "bv6gv3416k",
@@ -42,7 +42,7 @@
   "mobileRightColumn": 18,
   "mobileTopRow": 1,
   "needsErrorInfo": false,
-  "onClick": "{{ jsRecipeSave.saveRecipe() }}",
+  "onClick": "{{ jsRecSave.saveRecipe() }}",
   "parentColumnSpace": 19.5,
   "parentId": "uxcwk5l4ib",
   "parentRowSpace": 10,

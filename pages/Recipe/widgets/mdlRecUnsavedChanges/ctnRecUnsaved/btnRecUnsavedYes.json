@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsRecipeSave.unsavedYes() }}",
+  "onClick": "{{ jsRecSave.unsavedYes() }}",
   "originalBottomRow": 32,
   "originalTopRow": 28,
   "parentId": "qoct7lx8ir",

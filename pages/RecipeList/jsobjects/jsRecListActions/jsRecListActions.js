@@ -15,9 +15,21 @@ export default {
 			0
 		);
 
+		await removeValue(
+			"Recipe_open_mode"
+		);
+
 		await storeValue(
 			"Recipe_mode",
 			"add"
+		);
+
+		await removeValue(
+			"recipe_workspace"
+		);
+
+		await removeValue(
+			"recipe_baseline"
 		);
 
 		await removeValue(
@@ -44,9 +56,21 @@ export default {
 			this.selectedRecipeId()
 		);
 
+		await removeValue(
+			"Recipe_open_mode"
+		);
+
 		await storeValue(
 			"Recipe_mode",
 			"edit"
+		);
+
+		await removeValue(
+			"recipe_workspace"
+		);
+
+		await removeValue(
+			"recipe_baseline"
 		);
 
 		await removeValue(
@@ -68,9 +92,6 @@ export default {
 			return false;
 		}
 
-		/*
-	 * Clear stale Recipe-page Working State.
-	 */
 		await removeValue(
 			"recipe_workspace"
 		);
@@ -83,14 +104,13 @@ export default {
 			"rec_components_local_rows"
 		);
 
-		/*
-	 * Open the selected saved Recipe first.
-	 *
-	 * Recipe owns the actual Duplicate / Save As logic.
-	 */
 		await storeValue(
 			"current_recipe_id",
 			this.selectedRecipeId()
+		);
+
+		await removeValue(
+			"Recipe_open_mode"
 		);
 
 		await storeValue(
@@ -119,7 +139,9 @@ export default {
 
 		await qryRecListGetImpactCount.run();
 
-		showModal("mdlRecDelete");
+		showModal(
+			mdlRecDelete.name
+		);
 
 		return true;
 	},
@@ -139,7 +161,9 @@ export default {
 						await qryRecListDelete.run();
 
 			const deletedId =
-						Number(result?.[0]?.id || 0);
+						Number(
+							result?.[0]?.id || 0
+						);
 
 			if (
 				!deletedId ||
@@ -158,7 +182,7 @@ export default {
 			);
 
 			closeModal(
-				"mdlRecDelete"
+				mdlRecDelete.name
 			);
 
 			await qryRecListGetRecipes.run();
@@ -245,6 +269,7 @@ export default {
 			return false;
 		}
 	},
+
 	searchText() {
 		return String(
 			inpRecListSearch.text || ""
@@ -268,18 +293,26 @@ export default {
 
 		return (qryRecListGetRecipes.data || [])
 			.filter(row => {
-			if (status === "active" && row.active !== true) {
+			if (
+				status === "active" &&
+				row.active !== true
+			) {
 				return false;
 			}
 
-			if (status === "inactive" && row.active !== false) {
+			if (
+				status === "inactive" &&
+				row.active !== false
+			) {
 				return false;
 			}
 
 			return true;
 		})
 			.filter(row => {
-			if (!search) return true;
+			if (!search) {
+				return true;
+			}
 
 			const haystack = [
 				row.name,
@@ -288,10 +321,13 @@ export default {
 				row.diet_tag_names,
 				row.derived_allergens
 			]
-			.map(x => String(x || "").toLowerCase())
+			.map(x =>
+					 String(x || "")
+					 .toLowerCase()
+					)
 			.join(" ");
 
 			return haystack.includes(search);
 		});
-	},
-}
+	}
+};

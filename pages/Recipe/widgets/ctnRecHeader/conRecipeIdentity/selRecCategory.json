@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 12,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n\tjsRecipeWorkspace.get().header.category_id == null\n\t\t? \"\"\n\t\t: String(jsRecipeWorkspace.get().header.category_id)\n))(selRecCategory.options, selRecCategory.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n\tjsRecWorkspace.get().header.category_id == null\n\t\t? \"\"\n\t\t: String(jsRecWorkspace.get().header.category_id)\n))(selRecCategory.options, selRecCategory.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

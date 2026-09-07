@@ -29,7 +29,7 @@
     ],
     "name": "qryGetDshDietTags",
     "pageId": "Dish",
-    "runBehaviour": "AUTOMATIC",
-    "userSetOnLoad": false
+    "runBehaviour": "MANUAL",
+    "userSetOnLoad": true
   }
 }

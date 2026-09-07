@@ -1,5 +1,17 @@
 export default {
 	async load() {
+		const ok = await jsAppInit.init();
+
+		if (!ok) {
+			return false;
+		}
+
+		await Promise.all([
+			qryGetDshFormats.run(),
+			qryGetDshDietTags.run(),
+			qryGetDshComponentItems.run()
+		]);
+
 		const mode =
 					String(
 						appsmith.store.Dish_open_mode ||
@@ -51,14 +63,8 @@ export default {
 			return await jsDshSave.duplicateDish();
 		}
 
-		await removeValue(
-			"Dish_open_mode"
-		);
-
-		await storeValue(
-			"Dish_mode",
-			"edit"
-		);
+		await removeValue("Dish_open_mode");
+		await storeValue("Dish_mode", "edit");
 
 		return true;
 	}

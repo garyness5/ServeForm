@@ -43,7 +43,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ jsRecipeIngForm.save(true) }}",
+  "onClick": "{{ jsRecIngForm.save(true) }}",
   "parentColumnSpace": 10.609375,
   "parentId": "5gmb3hdjp0",
   "parentRowSpace": 10,

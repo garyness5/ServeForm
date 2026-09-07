@@ -1,6 +1,6 @@
 export default {
 	rows() {
-		return jsRecipeCompTable.mergeUpdatedRows();
+		return jsRecCompTable.mergeUpdatedRows();
 	},
 
 	list() {

@@ -4,7 +4,7 @@ export default {
 			return true;
 		}
 
-		const rows = await qryResolveSavveyraUser.run();
+		const rows = await qryResolveUser.run();
 
 		if (!rows || !rows.length) {
 			await removeValue("current_client_id");

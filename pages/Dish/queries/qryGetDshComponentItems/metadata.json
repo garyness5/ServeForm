@@ -29,7 +29,7 @@
     ],
     "name": "qryGetDshComponentItems",
     "pageId": "Dish",
-    "runBehaviour": "AUTOMATIC",
-    "userSetOnLoad": false
+    "runBehaviour": "MANUAL",
+    "userSetOnLoad": true
   }
 }
