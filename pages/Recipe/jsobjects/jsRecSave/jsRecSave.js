@@ -166,7 +166,7 @@ export default {
 		);
 
 		showModal(
-			"mdlRecDeleteConfirm"
+			mdlRecDeleteConfirm.name
 		);
 
 		return true;

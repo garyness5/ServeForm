@@ -9,42 +9,6 @@ export default {
 		}
 	},
 
-	requiredSaveMessage() {
-		const missing = [];
-
-		if (!String(inpMnuName.text || "").trim()) {
-			missing.push("Menu name");
-		}
-
-		if (!selMnuCategory.selectedOptionValue) {
-			missing.push("Category");
-		}
-
-		if (!missing.length) return null;
-
-		return `You need to have a ${missing.join(" and a ")} selected before you can save.`;
-	},
-
-	async validateBeforeSave() {
-		const message = this.requiredSaveMessage();
-
-		if (message) {
-			showAlert(message, "warning");
-			return false;
-		}
-
-		await qryMnuCheckNameExists.run();
-
-		const matchCount = Number(qryMnuCheckNameExists.data?.[0]?.match_count || 0);
-
-		if (matchCount > 0) {
-			showAlert("A menu with this name already exists.", "warning");
-			return false;
-		}
-
-		return true;
-	},
-
 	saveSnapshot() {
 		return (
 			appsmith.store.menu_save_snapshot ||

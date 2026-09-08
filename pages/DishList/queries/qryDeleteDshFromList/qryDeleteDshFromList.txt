@@ -1,4 +1,0 @@
-select *
-from public.delete_dish(
-	{{ Number(this.params.dish_id || 0) }}
-);

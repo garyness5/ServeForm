@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  helper_list_item_id::text as value\nfrom public.dsh_diet_tags\nwhere dish_id = {{ Number(appsmith.store.current_dish_id || 0) }}\norder by helper_list_item_id;",
+      "body": "select ddt.helper_list_item_id::text as value\nfrom public.dsh_diet_tags ddt\njoin public.dsh_items d\n  on d.id = ddt.dish_id\nwhere ddt.dish_id = {{ Number(appsmith.store.current_dish_id || 0) }}\n  and d.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(d.deleted, false) = false\norder by ddt.helper_list_item_id;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

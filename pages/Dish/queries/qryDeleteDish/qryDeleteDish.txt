@@ -1,4 +1,5 @@
 select *
 from public.delete_dish(
-  {{ Number(appsmith.store.current_dish_id || 0) }}
+	{{ Number(appsmith.store.current_dish_id || 0) }},
+	'{{ appsmith.store.current_client_id }}'::uuid
 );

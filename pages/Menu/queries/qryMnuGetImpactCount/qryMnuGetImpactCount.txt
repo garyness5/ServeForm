@@ -1,7 +1,16 @@
+with src as (
+	select id
+	from public.mnu_items
+	where id = {{ Number(appsmith.store.current_menu_id || 0) }}
+	and client_id = '{{ appsmith.store.current_client_id }}'::uuid
+	and coalesce(deleted, false) = false
+)
 select
-  count(distinct ec.event_id) as event_count
-from public.evt_components ec
+    count(distinct ec.event_id) as event_count
+from src s
+join public.evt_components ec
+  on ec.menu_id = s.id
 join public.evt_items e
   on e.id = ec.event_id
-where ec.menu_id = {{ Number(appsmith.store.current_menu_id || 0) }}
+where e.client_id = '{{ appsmith.store.current_client_id }}'::uuid
   and coalesce(e.deleted, false) = false;

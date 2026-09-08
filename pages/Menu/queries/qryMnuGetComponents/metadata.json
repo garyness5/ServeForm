@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.vw_mnu_components\nwhere menu_id = {{ Number(appsmith.store.current_menu_id || 0) }}\norder by line_no;",
+      "body": "select c.*\nfrom public.vw_mnu_components c\nwhere c.menu_id = {{ Number(appsmith.store.current_menu_id || 0) }}\n  and exists (\n\t\tselect 1\n\t\tfrom public.mnu_items m\n\t\twhere m.id = c.menu_id\n\t\tand m.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n\t\tand coalesce(m.deleted, false) = false\n\t)\norder by c.line_no;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

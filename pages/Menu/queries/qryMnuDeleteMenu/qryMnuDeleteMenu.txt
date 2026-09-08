@@ -1,3 +1,4 @@
 select public.delete_menu(
-  {{ Number(appsmith.store.current_menu_id || 0) }}
+	{{ Number(appsmith.store.current_menu_id || 0) }},
+	'{{ appsmith.store.current_client_id }}'::uuid
 );

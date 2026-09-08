@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  0 as recipe_count,\n  0 as dish_count,\n\n  (\n\t\tselect count(*)\n\t\tfrom public.mnu_components\n\t\twhere item_type = 'dish'\n\t\tand child_dish_id = {{ Number(tblDshList.selectedRow?.id || 0) }}\n\t) as menu_count,\n\n  0 as event_count;",
+      "body": "with src as (\n\tselect id\n\tfrom public.dsh_items\n\twhere id = {{ Number(tblDshList.selectedRow?.id || 0) }}\n\tand client_id = '{{ appsmith.store.current_client_id }}'::uuid\n\tand coalesce(deleted, false) = false\n)\nselect\n    0 as recipe_count,\n    0 as dish_count,\n\n    (\n\t\t\tselect count(*)\n\t\t\tfrom public.mnu_components mc\n\t\t\tjoin public.mnu_items parent\n\t\t\ton parent.id = mc.menu_id\n\t\t\tjoin src s\n\t\t\ton s.id = mc.child_dish_id\n\t\t\twhere mc.item_type = 'dish'\n\t\t\tand parent.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n\t\t\tand coalesce(parent.deleted, false) = false\n\t\t) as menu_count,\n\n    0 as event_count;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

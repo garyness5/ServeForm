@@ -131,7 +131,7 @@ export default {
 
 		try {
 			const result =
-						await qryDeleteDshFromList.run({
+						await qryDeleteDsh.run({
 							dish_id: dishId
 						});
 
@@ -178,19 +178,19 @@ export default {
 		}
 	},
 
-	impactEventCount() {
+	impactMenuCount() {
 		return Number(
-			qryGetDshListImpactCount.data?.[0]?.event_count || 0
+			qryGetDshListImpactCount.data?.[0]?.menu_count || 0
 		);
 	},
 
 	deleteImpactText() {
 		return `This will impact
-    Events: ${this.impactEventCount()}`;
+    Menus: ${this.impactMenuCount()}`;
 	},
 
 	showDeleteImpact() {
-		return this.impactEventCount() > 0;
+		return this.impactMenuCount() > 0;
 	},
 
 	async setCategory(dishId, newCategoryId) {

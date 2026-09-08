@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.vw_dsh_components\nwhere dish_id = {{ Number(appsmith.store.current_dish_id || 0) }}\norder by line_no;",
+      "body": "select c.*\nfrom public.vw_dsh_components c\nwhere c.dish_id = {{ Number(appsmith.store.current_dish_id || 0) }}\n  and exists (\n\t\tselect 1\n\t\tfrom public.dsh_items d\n\t\twhere d.id = c.dish_id\n\t\tand d.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n\t\tand coalesce(d.deleted, false) = false\n\t)\norder by c.line_no;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

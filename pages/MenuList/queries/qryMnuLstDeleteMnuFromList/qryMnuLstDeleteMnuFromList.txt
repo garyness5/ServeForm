@@ -1,3 +1,0 @@
-select public.delete_menu(
-  {{ Number(tblMnuList.selectedRow?.id || 0) }}
-);

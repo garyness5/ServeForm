@@ -131,11 +131,17 @@
     },
     {
       "key": "primaryColumns.active.onCheckChange"
+    },
+    {
+      "key": "primaryColumns.category_name.onOptionChange"
     }
   ],
   "dynamicTriggerPathList": [
     {
       "key": "primaryColumns.active.onCheckChange"
+    },
+    {
+      "key": "primaryColumns.category_name.onOptionChange"
     }
   ],
   "enableClientSideSearch": true,
@@ -193,7 +199,7 @@
       "isVisible": true,
       "label": "Active",
       "notation": "standard",
-      "onCheckChange": "{{ qryMnuLstToggleActive.run().then(() => qryMnuLstGetMnuList.run()) }}",
+      "onCheckChange": "{{ qryMnuLstSetActive.run().then(() => qryMnuLstGetMnuList.run()) }}",
       "originalId": "active",
       "sticky": "",
       "textSize": "0.875rem",
@@ -260,6 +266,7 @@
       "isVisible": true,
       "label": "Category",
       "notation": "standard",
+      "onOptionChange": "{{\njsMnuListActions.setActive(\n\tcurrentRow,\n\tcurrentRow.active\n)\n}}",
       "originalId": "category_name",
       "selectOptions": "{{(() => { const tableData = tblMnuList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n  (qryMnuLstGetMnuCategories.data || []).map(x => ({\n    label: x.name,\n    value: String(x.id)\n  }))\n)) : \n  (qryMnuLstGetMnuCategories.data || []).map(x => ({\n    label: x.name,\n    value: String(x.id)\n  }))\n })()}}",
       "sticky": "left",

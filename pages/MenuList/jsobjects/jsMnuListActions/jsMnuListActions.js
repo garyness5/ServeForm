@@ -110,7 +110,7 @@ export default {
 		}
 
 		await qryMnuLstGetImpactCount.run();
-		showModal("mdlMnuDelete");
+		showModal(mdlMnuDelete.name);
 
 		return true;
 	},
@@ -121,9 +121,9 @@ export default {
 			return false;
 		}
 
-		await qryMnuLstDeleteMnuFromList.run();
+		await qryMnuLstDeleteMnu.run();
 
-		closeModal("mdlMnuDelete");
+		closeModal(mdlMnuDelete.name);
 
 		await qryMnuLstGetMnuList.run();
 
@@ -175,5 +175,70 @@ export default {
 
 			return matchesSearch && matchesStatus;
 		});
+	},
+
+	async setCategory(menuId, newCategoryId) {
+		const id =
+					Number(menuId || 0);
+
+		const categoryId =
+					Number(newCategoryId || 0) || null;
+
+		if (!id) {
+			return false;
+		}
+
+		try {
+			await qryMnuLstSetCategory.run({
+				menu_id: id,
+				category_id: categoryId
+			});
+
+			await qryMnuLstGetMnuList.run();
+
+			return true;
+
+		} catch (error) {
+			showAlert(
+				error?.message ||
+				"Menu Category could not be changed.",
+				"error"
+			);
+
+			await qryMnuLstGetMnuList.run();
+
+			return false;
+		}
+	},
+
+	async setActive(row, active) {
+		const menuId =
+					Number(row?.id || 0);
+
+		if (!menuId) {
+			return false;
+		}
+
+		try {
+			await qryMnuLstSetActive.run({
+				menu_id: menuId,
+				active: active === true
+			});
+
+			await qryMnuLstGetMnuList.run();
+
+			return true;
+
+		} catch (error) {
+			showAlert(
+				error?.message ||
+				"Menu Active status could not be changed.",
+				"error"
+			);
+
+			await qryMnuLstGetMnuList.run();
+
+			return false;
+		}
 	},
 }
