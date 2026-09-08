@@ -640,6 +640,42 @@ export default {
 		}
 	},
 
+impactRecipeCount() {
+	return Number(
+		qryRecGetImpactCount.data?.[0]?.recipe_count || 0
+	);
+},
+
+impactDishCount() {
+	return Number(
+		qryRecGetImpactCount.data?.[0]?.dish_count || 0
+	);
+},
+
+impactMenuCount() {
+	return Number(
+		qryRecGetImpactCount.data?.[0]?.menu_count || 0
+	);
+},
+
+deleteImpactText() {
+	return `This will impact
+    Recipes: ${this.impactRecipeCount()}
+    Dishes: ${this.impactDishCount()}
+    Menus: ${this.impactMenuCount()}`;
+},
+
+showDeleteImpact() {
+	return (
+		appsmith.store.recipe_impact_mode !== "unit_change" &&
+		(
+			this.impactRecipeCount() +
+			this.impactDishCount() +
+			this.impactMenuCount()
+		) > 0
+	);
+},
+
 	async unsavedYes() {
 		switch (this.pendingAction) {
 			case "close":

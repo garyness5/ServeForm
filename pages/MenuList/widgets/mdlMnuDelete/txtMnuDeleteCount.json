@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 21,
+  "bottomRow": 20,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -30,7 +30,7 @@
   "fontSize": "0.875rem",
   "fontStyle": "",
   "isLoading": false,
-  "isVisible": "{{\n  (qryMnuLstGetImpactCount.data?.[0]?.event_count || 0) > 0\n}}",
+  "isVisible": "{{ jsMnuListActions.showDeleteImpact() }}",
   "key": "h29kmo3jn9",
   "leftColumn": 4,
   "maxDynamicHeight": 9000,
@@ -51,7 +51,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 24,
   "shouldTruncate": false,
-  "text": "{{\n`This will impact\n    Events: ${qryMnuLstGetImpactCount.data?.[0]?.event_count || 0}`\n}}",
+  "text": "{{ jsMnuListActions.deleteImpactText() }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 16,

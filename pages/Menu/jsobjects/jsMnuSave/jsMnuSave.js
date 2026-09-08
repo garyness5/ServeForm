@@ -562,6 +562,21 @@ export default {
 		return true;
 	},
 
+	impactEventCount() {
+		return Number(
+			qryMnuGetImpactCount.data?.[0]?.event_count || 0
+		);
+	},
+
+	deleteImpactText() {
+		return `This will impact
+    Events: ${this.impactEventCount()}`;
+	},
+
+	showDeleteImpact() {
+		return this.impactEventCount() > 0;
+	},
+
 	async saveAndDeleteMenu() {
 		const saved = await this.saveMenu();
 		if (!saved) return false;

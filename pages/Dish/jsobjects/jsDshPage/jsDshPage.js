@@ -25,6 +25,10 @@ export default {
 			await jsDshWorkspace.initializeNew();
 			await jsDshCompTable.clearRows();
 
+			await removeValue(
+				"Dish_open_mode"
+			);
+
 			return true;
 		}
 
@@ -36,6 +40,10 @@ export default {
 		if (!dishId) {
 			await jsDshWorkspace.initializeNew();
 			await jsDshCompTable.clearRows();
+
+			await removeValue(
+				"Dish_open_mode"
+			);
 
 			return true;
 		}
@@ -51,6 +59,10 @@ export default {
 		await jsDshCompTable.loadFromQuery();
 
 		if (mode === "duplicate") {
+			await removeValue(
+				"Dish_open_mode"
+			);
+
 			await resetWidget("inpDshName", true);
 			await resetWidget("selDshCategory", true);
 			await resetWidget("selDshFormat", true);
@@ -63,8 +75,14 @@ export default {
 			return await jsDshSave.duplicateDish();
 		}
 
-		await removeValue("Dish_open_mode");
-		await storeValue("Dish_mode", "edit");
+		await removeValue(
+			"Dish_open_mode"
+		);
+
+		await storeValue(
+			"Dish_mode",
+			"edit"
+		);
 
 		return true;
 	}

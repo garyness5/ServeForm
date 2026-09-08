@@ -35,50 +35,50 @@ export default {
 			this.saveSnapshot().components || []
 		).map(row => ({
 			item_type:
-				row.item_type || null,
+			row.item_type || null,
 
 			ingredient_id:
-				row.item_type === "ingredient"
-					? Number(row.ingredient_id) || null
-					: null,
+			row.item_type === "ingredient"
+			? Number(row.ingredient_id) || null
+			: null,
 
 			child_recipe_id:
-				row.item_type === "recipe"
-					? Number(row.child_recipe_id) || null
-					: null,
+			row.item_type === "recipe"
+			? Number(row.child_recipe_id) || null
+			: null,
 
 			qty:
-				row.qty == null
-					? null
-					: Number(row.qty),
+			row.qty == null
+			? null
+			: Number(row.qty),
 
 			unit_id:
-				row.unit_id == null
-					? null
-					: Number(row.unit_id),
+			row.unit_id == null
+			? null
+			: Number(row.unit_id),
 
 			apply_wastage:
-				row.apply_wastage !== false,
+			row.apply_wastage !== false,
 
 			active:
-				row.active !== false
+			row.active !== false
 		}));
 	},
 
 	requiredSaveMessage(snapshot) {
 		const name =
-			String(
-				snapshot?.header?.name || ""
-			).trim();
+					String(
+						snapshot?.header?.name || ""
+					).trim();
 
 		return name
 			? null
-			: "Dish Name is required before you can save.";
+		: "Dish Name is required before you can save.";
 	},
 
 	validateBeforeSave(snapshot) {
 		const message =
-			this.requiredSaveMessage(snapshot);
+					this.requiredSaveMessage(snapshot);
 
 		if (message) {
 			showAlert(
@@ -98,7 +98,7 @@ export default {
 
 	impactCount() {
 		const impact =
-			qryGetDshImpactCount.data?.[0] || {};
+					qryGetDshImpactCount.data?.[0] || {};
 
 		return Number(
 			impact.menu_count || 0
@@ -110,7 +110,7 @@ export default {
 			await jsDshCompTable.syncFromTable();
 
 			const snapshot =
-				jsDshWorkspace.current();
+						jsDshWorkspace.current();
 
 			if (!this.validateBeforeSave(snapshot)) {
 				return false;
@@ -122,12 +122,12 @@ export default {
 			);
 
 			const result =
-				await qrySaveDish.run();
+						await qrySaveDish.run();
 
 			const savedId =
-				Number(
-					result?.[0]?.dish_id || 0
-				);
+						Number(
+							result?.[0]?.dish_id || 0
+						);
 
 			if (!savedId) {
 				showAlert(
@@ -208,7 +208,7 @@ export default {
 
 	async saveAndCloseDish() {
 		const saved =
-			await this.saveDish();
+					await this.saveDish();
 
 		if (!saved) {
 			return false;
@@ -270,7 +270,7 @@ export default {
 
 	async saveAndAddDish() {
 		const saved =
-			await this.saveDish();
+					await this.saveDish();
 
 		if (!saved) {
 			return false;
@@ -309,22 +309,22 @@ export default {
 
 	async nextDuplicateName(sourceName) {
 		const baseName =
-			String(sourceName || "").trim();
+					String(sourceName || "").trim();
 
 		await qryDshGetNames.run();
 
 		const existing =
-			new Set(
-				(qryDshGetNames.data || [])
-					.map(x =>
-						String(x.name || "")
-							.trim()
-							.toLowerCase()
-					)
-			);
+					new Set(
+						(qryDshGetNames.data || [])
+						.map(x =>
+								 String(x.name || "")
+								 .trim()
+								 .toLowerCase()
+								)
+					);
 
 		let candidate =
-			`${baseName} - copy`;
+				`${baseName} - copy`;
 
 		let number = 2;
 
@@ -342,9 +342,9 @@ export default {
 
 	async duplicateDish() {
 		const sourceId =
-			Number(
-				appsmith.store.current_dish_id || 0
-			);
+					Number(
+						appsmith.store.current_dish_id || 0
+					);
 
 		if (!sourceId) {
 			showAlert(
@@ -356,15 +356,15 @@ export default {
 		}
 
 		const source =
-			await jsDshWorkspace.capture();
+					await jsDshWorkspace.capture();
 
 		const currentName =
-			String(
-				source.header.name || ""
-			).trim();
+					String(
+						source.header.name || ""
+					).trim();
 
 		const duplicateName =
-			await this.nextDuplicateName(currentName);
+					await this.nextDuplicateName(currentName);
 
 		const duplicate = {
 			header: {
@@ -377,14 +377,14 @@ export default {
 			],
 
 			components:
-				(source.components || [])
-					.map(row => ({
-						...row,
-						id: null,
-						dish_id: 0,
-						draft_row_id:
-							jsDshCompTable.makeDraftId()
-					}))
+			(source.components || [])
+			.map(row => ({
+				...row,
+				id: null,
+				dish_id: 0,
+				draft_row_id:
+				jsDshCompTable.makeDraftId()
+			}))
 		};
 
 		await storeValue(
@@ -442,17 +442,17 @@ export default {
 	async deleteDishConfirm() {
 		try {
 			const result =
-				await qryDeleteDish.run();
+						await qryDeleteDish.run();
 
 			const deletedId =
-				Number(
-					result?.[0]?.id || 0
-				);
+						Number(
+							result?.[0]?.id || 0
+						);
 
 			const currentId =
-				Number(
-					appsmith.store.current_dish_id || 0
-				);
+						Number(
+							appsmith.store.current_dish_id || 0
+						);
 
 			if (
 				!deletedId ||
@@ -497,6 +497,24 @@ export default {
 
 			return false;
 		}
+	},
+
+	impactMenuCount() {
+		return Number(
+			qryGetDshImpactCount.data?.[0]?.menu_count || 0
+		);
+	},
+
+	deleteImpactText() {
+		return `This will impact
+    Menus: ${this.impactMenuCount()}`;
+	},
+
+	showDeleteImpact() {
+		return (
+			appsmith.store.dish_impact_mode !== "unit_change" &&
+			this.impactMenuCount() > 0
+		);
 	},
 
 	async unsavedYes() {

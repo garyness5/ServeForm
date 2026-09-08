@@ -6,7 +6,7 @@ select
 		select count(*)
 		from public.mnu_components
 		where item_type = 'dish'
-		and child_dish_id = {{ Number(tblDishList.selectedRow?.id || 0) }}
+		and child_dish_id = {{ Number(tblDshList.selectedRow?.id || 0) }}
 	) as menu_count,
 
   0 as event_count;

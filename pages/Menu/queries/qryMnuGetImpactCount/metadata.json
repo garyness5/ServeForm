@@ -25,7 +25,7 @@
     "dynamicBindingPathList": [],
     "name": "qryMnuGetImpactCount",
     "pageId": "Menu",
-    "runBehaviour": "MANUAL",
+    "runBehaviour": "AUTOMATIC",
     "userSetOnLoad": false
   }
 }

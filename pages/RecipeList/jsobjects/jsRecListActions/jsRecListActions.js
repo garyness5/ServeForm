@@ -148,7 +148,7 @@ export default {
 		await qryRecListGetImpactCount.run();
 
 		showModal(
-			mdlRecDelete.name
+			mdlRecLstDelete.name
 		);
 
 		return true;
@@ -190,7 +190,7 @@ export default {
 			);
 
 			closeModal(
-				mdlRecDelete.name
+				mdlRecLstDelete.name
 			);
 
 			await qryRecListGetRecipes.run();
@@ -211,6 +211,45 @@ export default {
 
 			return false;
 		}
+	},
+
+	impactRecipeCount() {
+		return Number(
+			qryRecListGetImpactCount.data?.[0]?.recipe_count || 0
+		);
+	},
+
+	impactDishCount() {
+		return Number(
+			qryRecListGetImpactCount.data?.[0]?.dish_count || 0
+		);
+	},
+
+	impactMenuCount() {
+		return Number(
+			qryRecListGetImpactCount.data?.[0]?.menu_count || 0
+		);
+	},
+
+	impactEventCount() {
+		return Number(
+			qryRecListGetImpactCount.data?.[0]?.event_count || 0
+		);
+	},
+
+	deleteImpactText() {
+		return `This will impact
+    Recipes: ${this.impactRecipeCount()}
+    Dishes: ${this.impactDishCount()}
+    Menus: ${this.impactMenuCount()}`;
+	},
+
+	showDeleteImpact() {
+		return (
+			this.impactRecipeCount() +
+			this.impactDishCount() +
+			this.impactMenuCount()
+		) > 0;
 	},
 
 	async setActive(row, active) {
@@ -280,7 +319,7 @@ export default {
 
 	searchText() {
 		return String(
-			inpRecListSearch.text || ""
+			inpRecLstSearch.text || ""
 		)
 			.trim()
 			.toLowerCase();
@@ -288,7 +327,7 @@ export default {
 
 	statusFilter() {
 		return String(
-			selRecListFilter.selectedOptionValue || "all"
+			selRecLstFilter.selectedOptionValue || "all"
 		).toLowerCase();
 	},
 

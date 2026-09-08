@@ -601,6 +601,21 @@ export default {
 		);
 	},
 
+	itemBackground(row) {
+		if (
+			row?.child_deleted === true ||
+			row?.component_status === "Deleted"
+		) {
+			return "#FFE6E6";
+		}
+
+		if (row?.child_active === false) {
+			return "#FFF3CD";
+		}
+
+		return "";
+	},	
+
 	async clearDraftRows() {
 		return await this.setRows([]);
 	},

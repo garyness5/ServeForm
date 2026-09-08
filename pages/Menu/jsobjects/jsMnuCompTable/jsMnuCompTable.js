@@ -651,16 +651,4 @@ export default {
 
 		return [...new Set(items)].sort().join(", ");
 	},
-
-	testRowsForSave() {
-		return this.rowsForSave();
-	},
-
-	debugUpdatedRows() {
-		return {
-			localRows: this.getRows(),
-			updatedRows: tblMnuComponents.updatedRows || [],
-			tableData: tblMnuComponents.tableData || []
-		};
-	}
 }

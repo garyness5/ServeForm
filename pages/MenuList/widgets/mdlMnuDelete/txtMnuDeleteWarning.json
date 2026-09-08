@@ -44,7 +44,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 60,
   "shouldTruncate": false,
-  "text": "{{ \"This Menu will no longer be available for use. This action cannot be undone. <br><br> Do you want to delete the menu? \" }}",
+  "text": "{{\n\"This Menu will no longer be available for use. This action cannot be undone.\\n\\nDo you want to delete the Menu?\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 6,

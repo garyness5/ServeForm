@@ -2,7 +2,7 @@
   "animateLoading": true,
   "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 11,
+  "bottomRow": 14,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -44,7 +44,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 60,
   "shouldTruncate": false,
-  "text": "{{ \"This Event will no longer be available for use. This action cannot be undone. \" }}",
+  "text": "{{\n  \"This Event will no longer be available for use. This action cannot be undone.\\n\\nDo you want to delete the Event?\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 6,

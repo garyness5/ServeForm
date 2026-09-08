@@ -104,5 +104,20 @@ export default {
 
 		showAlert("Menu deleted.", "success");
 		return true;
-	}
+	},
+
+	impactEventCount() {
+		return Number(
+			qryMnuLstGetImpactCount.data?.[0]?.event_count || 0
+		);
+	},
+
+	deleteImpactText() {
+		return `This will impact
+    Events: ${this.impactEventCount()}`;
+	},
+
+	showDeleteImpact() {
+		return this.impactEventCount() > 0;
+	},
 }

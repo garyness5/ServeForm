@@ -1,6 +1,6 @@
 export default {
 	selectedDishId() {
-		return Number(tblDishList.selectedRow?.id || 0);
+		return Number(tblDshList.selectedRow?.id || 0);
 	},
 
 	hasSelection() {
@@ -178,6 +178,21 @@ export default {
 		}
 	},
 
+	impactEventCount() {
+		return Number(
+			qryGetDshListImpactCount.data?.[0]?.event_count || 0
+		);
+	},
+
+	deleteImpactText() {
+		return `This will impact
+    Events: ${this.impactEventCount()}`;
+	},
+
+	showDeleteImpact() {
+		return this.impactEventCount() > 0;
+	},
+
 	async setCategory(dishId, newCategoryId) {
 		const id =
 					Number(dishId || 0);
@@ -244,13 +259,13 @@ export default {
 	},
 
 	searchText() {
-		return (inpDishListSearch.text || "")
+		return (inpDishLstSearch.text || "")
 			.trim()
 			.toLowerCase();
 	},
 
 	statusFilter() {
-		return selDishListFilter.selectedOptionValue || "all";
+		return selDshLstFilter.selectedOptionValue || "all";
 	},
 
 	filteredRows() {
