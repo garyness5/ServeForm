@@ -1,7 +1,10 @@
 export default {
 	async load() {
 		const ok = await jsAppInit.init();
-		if (!ok) return false;
+
+		if (!ok) {
+			return false;
+		}
 
 		await Promise.all([
 			qryMnuGetCategories.run(),
@@ -10,27 +13,39 @@ export default {
 			qryMnuGetComponentUnits.run()
 		]);
 
-		const mode = String(
-			appsmith.store.Menu_open_mode ||
-			appsmith.store.Menu_mode ||
-			"edit"
-		);
+		const mode =
+					String(
+						appsmith.store.Menu_open_mode ||
+						appsmith.store.Menu_mode ||
+						"edit"
+					);
 
 		await jsMnuWorkspace.clear();
 
 		if (mode === "add") {
 			await jsMnuWorkspace.initializeNew();
 			await jsMnuCompTable.clearRows();
+
+			await removeValue(
+				"Menu_open_mode"
+			);
+
 			return true;
 		}
 
-		const menuId = Number(
-			appsmith.store.current_menu_id || 0
-		);
+		const menuId =
+					Number(
+						appsmith.store.current_menu_id || 0
+					);
 
 		if (!menuId) {
 			await jsMnuWorkspace.initializeNew();
 			await jsMnuCompTable.clearRows();
+
+			await removeValue(
+				"Menu_open_mode"
+			);
+
 			return true;
 		}
 
@@ -43,9 +58,32 @@ export default {
 		await jsMnuWorkspace.initializeFromSaved();
 		await jsMnuCompTable.loadFromQuery();
 
-		await removeValue("Menu_open_mode");
-		await storeValue("Menu_mode", "edit");
+		if (mode === "duplicate") {
+			await removeValue(
+				"Menu_open_mode"
+			);
 
-		return true;
-	}
+			await resetWidget("inpMnuName", true);
+			await resetWidget("selMnuCategory", true);
+			await resetWidget("chkMnuActive", true);
+			await resetWidget("inpMnuServes", true);
+			await resetWidget("inpMnuExtraPercent", true);
+			await resetWidget("msMnuDietTags", true);
+			await resetWidget("rteMnuNotes", true);
+
+			return await jsMnuSave.duplicateMenu();
+		}
+
+
+	await removeValue(
+	"Menu_open_mode"
+	);
+
+await storeValue(
+	"Menu_mode",
+	"edit"
+);
+
+return true;
+}
 };

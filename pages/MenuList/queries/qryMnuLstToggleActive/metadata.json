@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_24719e42-febd-44b5-88fe-6cc6e5d70702",
-  "id": "MenuList_qryMnuLstDuplicateMnuFromList",
+  "gitSyncId": "6a0a1bde3214f344228346e7_1373dba0-d7a3-4329-8cc1-cc3a7a3a4f3b",
+  "id": "MenuList_qryMnuLstToggleActive",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.duplicate_menu(\n  {{ Number(tblMnuList.selectedRow?.id || 0) }}\n);",
+      "body": "update public.mnu_items\nset\n  active = {{ tblMnuList.updatedRow.active === false ? false : true }},\n  updated_at = now()\nwhere id = {{ Number(tblMnuList.updatedRow.id || 0) }}\n  and client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\nreturning id, active;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,7 +27,7 @@
         "key": "body"
       }
     ],
-    "name": "qryMnuLstDuplicateMnuFromList",
+    "name": "qryMnuLstToggleActive",
     "pageId": "MenuList",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

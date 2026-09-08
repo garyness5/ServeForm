@@ -59,21 +59,46 @@ export default {
 
 	async duplicateSelectedMenu() {
 		if (!this.hasSelection()) {
-			showAlert("Select a menu first.", "warning");
+			showAlert(
+				"Select a menu first.",
+				"warning"
+			);
+
 			return false;
 		}
 
-		const result = await qryMnuLstDuplicateMnuFromList.run();
-		const newId = result?.[0]?.new_id || result?.[0]?.id;
+		await removeValue(
+			"menu_workspace"
+		);
 
-		if (!newId) {
-			showAlert("Menu duplicate failed.", "error");
-			return false;
-		}
+		await removeValue(
+			"menu_baseline"
+		);
 
-		await qryMnuLstGetMnuList.run();
+		await removeValue(
+			"mnu_components_local_rows"
+		);
 
-		showAlert("Menu duplicated.", "success");
+		await removeValue(
+			"Menu_open_mode"
+		);
+
+		await storeValue(
+			"current_menu_id",
+			this.selectedMenuId()
+		);
+
+		await storeValue(
+			"Menu_mode",
+			"duplicate"
+		);
+
+		navigateTo(
+			"Menu",
+			{},
+			"SAME_WINDOW"
+		);
+
 		return true;
 	},
 
@@ -119,5 +144,36 @@ export default {
 
 	showDeleteImpact() {
 		return this.impactEventCount() > 0;
+	},
+
+	searchText() {
+		return (inpMnuListSearch.text || "")
+			.trim()
+			.toLowerCase();
+	},
+
+	statusFilter() {
+		return selMnuListFilter.selectedOptionValue || "all";
+	},
+
+	filteredRows() {
+		const rows = qryMnuLstGetMnuList.data || [];
+		const search = this.searchText();
+		const status = this.statusFilter();
+
+		return rows.filter(row => {
+			const matchesSearch =
+						!search ||
+						(row.name || "")
+			.toLowerCase()
+			.includes(search);
+
+			const matchesStatus =
+						status === "all" ||
+						(status === "active" && row.active === true) ||
+						(status === "inactive" && row.active === false);
+
+			return matchesSearch && matchesStatus;
+		});
 	},
 }

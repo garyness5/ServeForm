@@ -110,7 +110,7 @@ export default {
 		await qryGetDshListImpactCount.run();
 
 		showModal(
-			mdlDshListDeleteConfirm.name
+			mdlDshListDelete.name
 		);
 
 		return true;
@@ -155,7 +155,7 @@ export default {
 			);
 
 			closeModal(
-				mdlDshListDeleteConfirm.name
+				mdlDshListDelete.name
 			);
 
 			await qryGetDishList.run();

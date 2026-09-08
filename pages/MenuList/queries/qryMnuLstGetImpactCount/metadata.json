@@ -29,7 +29,7 @@
     ],
     "name": "qryMnuLstGetImpactCount",
     "pageId": "MenuList",
-    "runBehaviour": "MANUAL",
+    "runBehaviour": "AUTOMATIC",
     "userSetOnLoad": false
   }
 }
