@@ -1,4 +1,5 @@
 select *
-from public.delete_event_proposal(
-	{{ Number(appsmith.store.proposal_delete_id || 0) }}
+from public.delete_event_proposal_secure(
+	{{ Number(appsmith.store.proposal_delete_id || 0) }},
+	'{{ appsmith.store.current_client_id }}'::uuid
 );

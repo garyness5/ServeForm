@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.delete_event_proposal(\n\t{{ Number(appsmith.store.proposal_delete_id || 0) }}\n);",
+      "body": "select *\nfrom public.delete_event_proposal_secure(\n\t{{ Number(appsmith.store.proposal_delete_id || 0) }},\n\t'{{ appsmith.store.current_client_id }}'::uuid\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
