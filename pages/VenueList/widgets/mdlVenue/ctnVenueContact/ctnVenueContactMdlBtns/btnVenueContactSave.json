@@ -32,7 +32,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\n!inpVenueContactName.text?.trim() ||\nsaveVenueContactMaster.isLoading\n}}",
+  "isDisabled": "{{\n!inpVenueContactName.text?.trim() ||\nqryVnuSaveContactMaster.isLoading\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -43,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ contactSave.save(false) }}",
+  "onClick": "{{ jsVnuSaveContact.save(false) }}",
   "originalBottomRow": 65,
   "originalTopRow": 61,
   "parentId": "aslbnmr7zh",

@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ venueSave.closeDuplicateWarning() }}",
+  "onClick": "{{ jsVnuSaveVenue.closeDuplicateWarning() }}",
   "originalBottomRow": 36,
   "originalTopRow": 32,
   "parentId": "exw251u08u",

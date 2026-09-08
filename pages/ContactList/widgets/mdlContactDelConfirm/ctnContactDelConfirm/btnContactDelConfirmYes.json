@@ -1,5 +1,5 @@
 {
-  "animateLoading": "{{ deleteContactMaster.isLoading }}",
+  "animateLoading": "{{ qryCtcDeleteMaster.isLoading }}",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 6,
   "boxShadow": "none",
@@ -38,7 +38,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ !tblContacts.selectedRow?.id || deleteContactMaster.isLoading }}",
+  "isDisabled": "{{ !tblContacts.selectedRow?.id || qryCtcDeleteMaster.isLoading }}",
   "isLoading": false,
   "isVisible": true,
   "key": "db5p08m351",

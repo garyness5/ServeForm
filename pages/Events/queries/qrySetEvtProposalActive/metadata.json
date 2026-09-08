@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.set_event_proposal_active(\n\t{{ Number(appsmith.store.proposal_active_id || 0) }},\n\t{{ appsmith.store.proposal_active_request === true }}\n);",
+      "body": "select *\nfrom public.set_event_proposal_active_secure(\n\t{{ Number(appsmith.store.proposal_active_id || 0) }},\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t{{ appsmith.store.proposal_active_request === true }}\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

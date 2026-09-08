@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 14,
   "boxShadow": "none",
-  "defaultText": "{{\nappsmith.store.customer_form_mode === \"edit\"\n    ? getCustomers.data.find(\n        row => Number(row.id) === Number(appsmith.store.current_customer_id)\n      )?.company ?? \"\"\n    : \"\"\n}}",
+  "defaultText": "{{\nappsmith.store.customer_form_mode === \"edit\"\n    ? qryCusGetCustomers.data.find(\n        row => Number(row.id) === Number(appsmith.store.current_customer_id)\n      )?.company ?? \"\"\n    : \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

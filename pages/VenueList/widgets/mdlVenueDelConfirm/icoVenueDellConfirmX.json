@@ -36,7 +36,7 @@
   "mobileRightColumn": 64,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onClick": "{{ venueSave.cancelDelete() }}",
+  "onClick": "{{ jsVnuSaveVenue.cancelDelete() }}",
   "parentId": "xgdk3fel3q",
   "renderMode": "CANVAS",
   "responsiveBehavior": "hug",

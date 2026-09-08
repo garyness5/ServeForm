@@ -32,7 +32,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\n  !inpContactName.text?.trim() ||\n  saveContactMaster.isLoading\n}}",
+  "isDisabled": "{{\n  !inpContactName.text?.trim() ||\n  qryCusSaveContactMaster.isLoading\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -43,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsCustomerContact.save(false) }}",
+  "onClick": "{{ jsCusContact.save(false) }}",
   "originalBottomRow": 65,
   "originalTopRow": 61,
   "parentId": "nv5nq6jc59",

@@ -23,8 +23,8 @@ export default {
 				}
 			}
 
-			await saveContactMaster.run();
-			await getContacts.run();
+			await qryCtcSaveMaster.run();
+			await qryCtcGetContacts.run();
 
 			closeModal("mdlContactDuplicateWarning");
 
@@ -91,7 +91,7 @@ export default {
 		}
 
 		try {
-			const result = await duplicateContact.run();
+			const result = await qryCtcDuplicateContact.run();
 			const newContactId = Number(
 				result?.[0]?.new_contact_id || 0
 			);
@@ -102,9 +102,9 @@ export default {
 				);
 			}
 
-			await getContacts.run();
+			await qryCtcGetContacts.run();
 
-			const newContact = (getContacts.data || []).find(
+			const newContact = (qryCtcGetContacts.data || []).find(
 				row => Number(row.id) === newContactId
 			);
 
@@ -161,7 +161,7 @@ export default {
 		}
 
 		try {
-			const result = await deleteContactMaster.run();
+			const result = await qryCtcDeleteMaster.run();
 			const deletedContact = result?.[0];
 
 			if (!deletedContact?.id) {
@@ -170,7 +170,7 @@ export default {
 
 			closeModal("mdlContactDelConfirm");
 
-			await getContacts.run();
+			await qryCtcGetContacts.run();
 
 			await removeValue("current_contact_id");
 			await removeValue("current_contact_record");

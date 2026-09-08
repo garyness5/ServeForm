@@ -5,7 +5,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 76,
   "boxShadow": "none",
-  "defaultText": "{{\nappsmith.store.venue_form_mode === \"edit\"\n? getVenues.data.find(\n\trow =>\n\tNumber(row.id) ===\n\tNumber(appsmith.store.current_venue_id)\n)?.mobile ?? \"\"\n: \"\"\n}}",
+  "defaultText": "{{\nappsmith.store.venue_form_mode === \"edit\"\n? qryVnuGetVenues.data.find(\n\trow =>\n\tNumber(row.id) ===\n\tNumber(appsmith.store.current_venue_id)\n)?.mobile ?? \"\"\n: \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

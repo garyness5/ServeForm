@@ -32,9 +32,9 @@ export default {
 
   async savePrint() {
     await saveGroPrintRows.run();
-    await getGroPrint.run();
+    await qryPrnGetPrint.run();
     await resetWidget("tblGroPrint", true);
-    await tblGroPrint.setData(getGroPrint.data);
+    await tblGroPrint.setData(qryPrnGetPrint.data);
     showAlert("Print saved.", "success");
     return true;
   }

@@ -4,7 +4,7 @@
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 92,
-  "defaultCheckedState": "{{\nappsmith.store.venue_form_mode === \"edit\"\n? getVenues.data.find(\n\trow => Number(row.id) === Number(appsmith.store.current_venue_id)\n)?.active ?? true\n: true\n}}",
+  "defaultCheckedState": "{{\nappsmith.store.venue_form_mode === \"edit\"\n? qryVnuGetVenues.data.find(\n\trow => Number(row.id) === Number(appsmith.store.current_venue_id)\n)?.active ?? true\n: true\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"

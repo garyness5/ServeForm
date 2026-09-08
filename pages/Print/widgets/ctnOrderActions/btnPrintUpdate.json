@@ -40,7 +40,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{\nsendGroOrderToPrint.run()\n.then(() => getGroPrint.run())\n.then(() => resetWidget(\"tblGroPrint\", true))\n.then(() => showAlert(\"Print refreshed.\", \"success\"))\n}}",
+  "onClick": "{{\nsendGroOrderToPrint.run()\n.then(() => qryPrnGetPrint.run())\n.then(() => resetWidget(\"tblGroPrint\", true))\n.then(() => showAlert(\"Print refreshed.\", \"success\"))\n}}",
   "parentColumnSpace": 10.609375,
   "parentId": "1pud0jjs2h",
   "parentRowSpace": 10,

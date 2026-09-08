@@ -36,7 +36,7 @@
   "mobileRightColumn": 64,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onClick": "{{ venueSave.close() }}",
+  "onClick": "{{ jsVnuSaveVenue.close() }}",
   "parentId": "oe9p0y2jt4",
   "renderMode": "CANVAS",
   "responsiveBehavior": "hug",

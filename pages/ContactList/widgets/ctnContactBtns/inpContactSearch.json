@@ -48,7 +48,7 @@
   "mobileRightColumn": 49,
   "mobileTopRow": 9,
   "needsErrorInfo": false,
-  "onTextChanged": "{{ getContacts.run() }}",
+  "onTextChanged": "{{ qryCtcGetContacts.run() }}",
   "parentColumnSpace": 17.625,
   "parentId": "m9kgzdtc6h",
   "parentRowSpace": 10,

@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{\nappsmith.store.customer_duplicate_entity === \"Contact\"\n? jsCustomerContact.confirmDuplicate()\n: jsCustomer.confirmDuplicate()\n}}",
+  "onClick": "{{\nappsmith.store.customer_duplicate_entity === \"Contact\"\n? jsCusContact.confirmDuplicate()\n: jsCustomer.confirmDuplicate()\n}}",
   "originalBottomRow": 36,
   "originalTopRow": 32,
   "parentId": "90xz4pfxuq",

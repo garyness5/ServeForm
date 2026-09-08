@@ -51,7 +51,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 25,
   "shouldTruncate": false,
-  "text": "{{\n`This will impact\n   Customers: ${getContactImpactCount.data?.[0]?.customer_count || 0}\n   Venues: ${getContactImpactCount.data?.[0]?.venue_count || 0}`\n}}",
+  "text": "{{\n`This will impact\n   Customers: ${qryCtcGetImpactCount.data?.[0]?.customer_count || 0}\n   Venues: ${qryCtcGetImpactCount.data?.[0]?.venue_count || 0}`\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 18,

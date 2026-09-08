@@ -23,9 +23,9 @@ export default {
 			row?.to_order === true
 		);
 
-		await qryUpdateGroQueueToOrder.run();
+		await qryGroUpdateQueueToOrder.run();
 
-		await qryGetGroQueue.run();
+		await qryGroGetQueue.run();
 
 		await removeValue(
 			"gro_queue_row_id"
@@ -45,17 +45,17 @@ export default {
          * Event + Ordered Proposal exists
          * in the Groceries queue.
          */
-		await qryEnsureGroQueueSources.run();
+		await qryGroEnsureQueueSources.run();
 
 
 		/*
          * Check whether an existing queue source
          * has become invalid upstream.
          */
-		await qryCheckGroQueueSources.run();
+		await qryGroCheckQueueSources.run();
 
 		const queueImpact =
-					qryCheckGroQueueSources.data?.[0] || {};
+					qryGroCheckQueueSources.data?.[0] || {};
 
 		const invalidSourceCount =
 					Number(
@@ -98,7 +98,7 @@ export default {
          * impact can be removed safely.
          */
 		if (invalidSourceCount > 0) {
-			await qryRemoveInvalidGroQueueSource.run();
+			await qryGroRemoveInvalidQueueSource.run();
 		}
 
 
@@ -106,10 +106,10 @@ export default {
          * Check whether the user changed Groceries
          * ToOrder participation since the last rebuild.
          */
-		await qryCheckGroParticipationImpact.run();
+		await qryGroCheckParticipationImpac.run();
 
 		const participationImpact =
-					qryCheckGroParticipationImpact
+					qryGroCheckParticipationImpac
 		.data?.[0] || {};
 
 		const addedCount =
@@ -175,25 +175,25 @@ export default {
          * Any invalid upstream source may now
          * be removed before rebuilding.
          */
-		await qryRemoveInvalidGroQueueSource.run();
+		await qryGroRemoveInvalidQueueSource.run();
 
 		await storeValue(
 			"gro_keep_manual",
 			keepManual === true
 		);
 
-		await qryRefreshGroDetails.run();
-		await qryRefreshGroOrder.run();
+		await qryGroRefreshDetails.run();
+		await qryGroRefreshOrder.run();
 
 		/*
          * Update All always invalidates Print.
          * Print is rebuilt only when the user
          * explicitly sends Order to Print.
          */
-		await qryClearGroPrint.run();
+		await qryGroClearPrint.run();
 
 
-		await qryGetGroQueue.run();
+		await qryGroGetQueue.run();
 
 		await resetWidget(
 			"tblGroEvents",
@@ -201,7 +201,7 @@ export default {
 		);
 
 		await tblGroEvents.setData(
-			qryGetGroQueue.data
+			qryGroGetQueue.data
 		);
 
 		await removeValue("gro_affected_event_names");
@@ -251,11 +251,11 @@ export default {
          * to the state represented by current Details.
          */
 		if (reason === "participation") {
-			await qryRestoreGroParticipation.run();
+			await qryGroRestoreParticipation.run();
 		}
 
 
-		await qryGetGroQueue.run();
+		await qryGroGetQueue.run();
 
 		await resetWidget(
 			"tblGroEvents",
@@ -263,7 +263,7 @@ export default {
 		);
 
 		await tblGroEvents.setData(
-			qryGetGroQueue.data
+			qryGroGetQueue.data
 		);
 
 		await removeValue("gro_affected_event_names");
@@ -301,7 +301,7 @@ export default {
 	filteredRows() {
 
 		const rows =
-					qryGetGroQueue.data || [];
+					qryGroGetQueue.data || [];
 
 		const filter =
 					selGroFilter.selectedOptionValue || "All";
@@ -377,10 +377,10 @@ export default {
 			[row.event_name || "Selected Event"]
 		);
 
-		await qryCheckGroRemoveImpact.run();
+		await qryGroCheckRemoveImpact.run();
 
 		const impact =
-					qryCheckGroRemoveImpact.data?.[0] || {};
+					qryGroCheckRemoveImpact.data?.[0] || {};
 
 		/*
 	 * Generated + manual purchasing values:
@@ -420,7 +420,7 @@ export default {
 			);
 
 			const result =
-						await qryUnorderPropFromGroceries.run();
+						await qryGroUnorderPropFrmGroceries.run();
 
 			const row =
 						result?.[0] || null;
@@ -434,7 +434,7 @@ export default {
 				return false;
 			}
 
-			await qryGetGroQueue.run();
+			await qryGroGetQueue.run();
 
 			await resetWidget(
 				"tblGroEvents",
@@ -491,7 +491,7 @@ export default {
 	 * Participation change.
 	 */
 		const impact =
-					qryCheckGroParticipationImpact.data?.[0] || {};
+					qryGroCheckParticipationImpac.data?.[0] || {};
 
 		const added =
 					Number(impact.added_count || 0);
@@ -544,7 +544,7 @@ export default {
 
 
 		const impact =
-					qryCheckGroParticipationImpact.data?.[0] || {};
+					qryGroCheckParticipationImpac.data?.[0] || {};
 
 		const added =
 					Number(impact.added_count || 0);

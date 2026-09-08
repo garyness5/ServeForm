@@ -1,5 +1,6 @@
 select *
-from public.set_event_proposal_active(
+from public.set_event_proposal_active_secure(
 	{{ Number(appsmith.store.proposal_active_id || 0) }},
+	'{{ appsmith.store.current_client_id }}'::uuid,
 	{{ appsmith.store.proposal_active_request === true }}
 );

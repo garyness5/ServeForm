@@ -51,7 +51,7 @@
   "mobileRightColumn": 6,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onOptionChange": "{{\n  storeValue(\"gro_print_sort\", selGroPrintSort.selectedOptionValue)\n    .then(() => getGroPrint.run())\n    .then(() => tblGroPrint.setData(getGroPrint.data))\n}}",
+  "onOptionChange": "{{\n  storeValue(\"gro_print_sort\", selGroPrintSort.selectedOptionValue)\n    .then(() => qryPrnGetPrint.run())\n    .then(() => tblGroPrint.setData(qryPrnGetPrint.data))\n}}",
   "optionLabel": "label",
   "optionValue": "value",
   "originalBottomRow": 24,

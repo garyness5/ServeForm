@@ -43,7 +43,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ venueSave.openEdit() }}",
+  "onClick": "{{ jsVnuSaveVenue.openEdit() }}",
   "parentColumnSpace": 10.609375,
   "parentId": "8i3nf8awq8",
   "parentRowSpace": 10,

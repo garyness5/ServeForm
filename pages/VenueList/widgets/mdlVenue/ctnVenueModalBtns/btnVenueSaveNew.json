@@ -32,7 +32,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\n  !inpVenueName.text?.trim() ||\n  saveVenueMaster.isLoading\n}}",
+  "isDisabled": "{{\n  !inpVenueName.text?.trim() ||\n  qryVnuSaveMaster.isLoading\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -43,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ venueSave.save(false) }}",
+  "onClick": "{{ jsVnuSaveVenue.save(false) }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "sx25znrcf9",

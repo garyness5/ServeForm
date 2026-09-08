@@ -44,7 +44,7 @@
   "mobileTopRow": 14,
   "mode": "SHOW_ALL",
   "needsErrorInfo": false,
-  "options": "{{ contactSave.getContactOptions() }}",
+  "options": "{{ jsVnuSaveContact.getContactOptions() }}",
   "parentColumnSpace": 7.53125,
   "parentId": "oe9p0y2jt4",
   "parentRowSpace": 10,

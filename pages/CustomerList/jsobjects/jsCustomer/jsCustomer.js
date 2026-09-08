@@ -48,7 +48,7 @@ export default {
 				}
 			}
 
-			const result = await saveCustomerMaster.run();
+			const result = await qryCusSaveMaster.run();
 
 			const savedCustomerId = Number(
 				result?.[0]?.customer_id ??
@@ -72,16 +72,16 @@ export default {
 				customerName
 			);
 
-			await deleteCustomerContactLinks.run();
+			await qryCusDeleteContactLinks.run();
 
 			if (
 				(msCustomerContacts.selectedOptionValues || [])
 				.length > 0
 			) {
-				await insertCustomerContactLinks.run();
+				await qryCusInsertContactLinks.run();
 			}
 
-			await getCustomers.run();
+			await qryCusGetCustomers.run();
 
 			closeModal("mdlCustomerDuplicateWarning");
 
@@ -190,10 +190,10 @@ export default {
 
 		await storeValue("customerAccordion", "");
 
-		await getCustomerContactLinks.run();
+		await qryCusGetContactLinks.run();
 
 		const contactIds = (
-			getCustomerContactLinks.data || []
+			qryCusGetContactLinks.data || []
 		).map(row => String(row.contact_id));
 
 		await storeValue(
@@ -221,7 +221,7 @@ export default {
 
 		try {
 			const result =
-						await duplicateCustomerMaster.run();
+						await qryCusDuplicateMaster.run();
 
 			const newCustomerId = Number(
 				result?.[0]?.customer_id ??
@@ -236,10 +236,10 @@ export default {
 				);
 			}
 
-			await getCustomers.run();
+			await qryCusGetCustomers.run();
 
 			const duplicatedCustomer = (
-				getCustomers.data || []
+				qryCusGetCustomers.data || []
 			).find(
 				row => Number(row.id) === newCustomerId
 			);
@@ -272,10 +272,10 @@ export default {
 
 			await storeValue("customerAccordion", "");
 
-			await getCustomerContactLinks.run();
+			await qryCusGetContactLinks.run();
 
 			const contactIds = (
-				getCustomerContactLinks.data || []
+				qryCusGetContactLinks.data || []
 			).map(row => String(row.contact_id));
 
 			await storeValue(
@@ -348,12 +348,12 @@ export default {
 					"Customer";
 
 		try {
-			const result = await delCustomer.run();
+			const result = await qryCusDelCustomer.run();
 
 			const deletedRow = Array.isArray(result)
 			? result[0]
-			: Array.isArray(delCustomer.data)
-			? delCustomer.data[0]
+			: Array.isArray(qryCusDelCustomer.data)
+			? qryCusDelCustomer.data[0]
 			: result;
 
 			const deletedCustomerId = Number(
@@ -372,7 +372,7 @@ export default {
 			closeModal("mdlCustomerDeleteConfirm");
 			closeModal("mdlCustomer");
 
-			await getCustomers.run();
+			await qryCusGetCustomers.run();
 			await this.clearState();
 
 			resetWidget("tblCustomers", true);

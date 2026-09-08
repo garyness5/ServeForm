@@ -37,7 +37,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ venueSave.close() }}",
+  "onClick": "{{ jsVnuSaveVenue.close() }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "sx25znrcf9",

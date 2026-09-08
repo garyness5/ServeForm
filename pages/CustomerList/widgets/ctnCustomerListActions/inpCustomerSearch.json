@@ -48,7 +48,7 @@
   "mobileRightColumn": 49,
   "mobileTopRow": 9,
   "needsErrorInfo": false,
-  "onTextChanged": "{{ getCustomers.run() }}",
+  "onTextChanged": "{{ qryCusGetCustomers.run() }}",
   "parentColumnSpace": 17.625,
   "parentId": "x5zq7t7lj0",
   "parentRowSpace": 10,

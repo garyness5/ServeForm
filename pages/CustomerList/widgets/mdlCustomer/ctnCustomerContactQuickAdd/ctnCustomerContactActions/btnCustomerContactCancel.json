@@ -37,7 +37,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsCustomerContact.closeQuickAdd() }}",
+  "onClick": "{{ jsCusContact.closeQuickAdd() }}",
   "originalBottomRow": 65,
   "originalTopRow": 61,
   "parentId": "nv5nq6jc59",

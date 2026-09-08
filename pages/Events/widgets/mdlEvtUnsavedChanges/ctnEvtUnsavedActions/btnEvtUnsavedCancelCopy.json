@@ -5,7 +5,7 @@
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
   "buttonStyle": "PRIMARY_BUTTON",
-  "buttonVariant": "SECONDARY",
+  "buttonVariant": "PRIMARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
     {
@@ -33,7 +33,7 @@
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
-  "leftColumn": 30,
+  "leftColumn": 34,
   "minWidth": 120,
   "mobileBottomRow": 22,
   "mobileLeftColumn": 47,
@@ -49,7 +49,7 @@
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 45,
+  "rightColumn": 47,
   "text": "Discard",
   "topRow": 2,
   "type": "BUTTON_WIDGET",

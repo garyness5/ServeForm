@@ -36,7 +36,7 @@
   "mobileRightColumn": 64,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onClick": "{{ contactSave.cancelDuplicate() }}",
+  "onClick": "{{ jsVnuSaveContact.cancelDuplicate() }}",
   "parentId": "6h2okmfd8s",
   "renderMode": "CANVAS",
   "responsiveBehavior": "hug",

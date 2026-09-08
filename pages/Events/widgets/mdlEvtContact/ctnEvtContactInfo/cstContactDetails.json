@@ -3,7 +3,7 @@
   "borderColor": "",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 28,
+  "bottomRow": 8,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "defaultModel": "{{\n{\n\tcontacts:\n\tjsEventAddressBook.selectedContactDetails()\n}\n}}",
   "dynamicBindingPathList": [
@@ -44,7 +44,7 @@
   "mobileTopRow": 15,
   "needsErrorInfo": false,
   "onResetClick": "{{showAlert('Successfully reset!!', '');}}",
-  "originalBottomRow": 14,
+  "originalBottomRow": 8,
   "originalTopRow": 4,
   "parentColumnSpace": 8.20849609375,
   "parentId": "ump0dn2ent",

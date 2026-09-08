@@ -40,7 +40,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ jsGroOrderTable.sendToPrint() }}",
+  "onClick": "{{ jsOrdOrderTable.sendToPrint() }}",
   "parentColumnSpace": 10.609375,
   "parentId": "vi2te728o0",
   "parentRowSpace": 10,
