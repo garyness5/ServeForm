@@ -7,14 +7,15 @@ export default {
 		}
 
 		await Promise.all([
-			qryGetIngredients.run(),
-			qryGetIngCategories.run(),
-			qryGetPackaging.run(),
-			qryGetSuppliers.run(),
-			qryGetAllergens.run(),
-			qryGetDietTags.run()
+			qryIngGetIngredients.run(),
+			qryIngGetCategories.run(),
+			qryIngGetSuppliers.run(),
+			qryIngGetPackaging.run(),
+			qryIngGetUnits.run(),
+			qryIngGetAllergens.run(),
+			qryIngGetDietTags.run()
 		]);
 
 		return true;
-	}
+	} 
 };

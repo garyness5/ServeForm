@@ -59,55 +59,73 @@ export default {
 	// OPEN EDIT
 	// ============================================================
 
-	async openEditFromIngredients() {
-		const row =
-					tblIngList.selectedRow;
+async openEditFromIngredients(row = null) {
+	const requestedId =
+				Number(
+					row?.id ||
+					tblIngList.selectedRow?.id ||
+					0
+				);
 
-		if (!row?.id) {
-			showAlert(
-				"Select an ingredient to edit.",
-				"warning"
-			);
-			return false;
-		}
-
-		await storeValue(
-			"IngForm_context",
-			this.CONTEXT_EDIT_INGREDIENTS
+	if (!requestedId) {
+		showAlert(
+			"Select an ingredient to edit.",
+			"warning"
 		);
+		return false;
+	}
 
-		await storeValue(
-			"IngForm_mode",
-			"edit"
+	const editRow =
+				(qryIngGetIngredients.data || [])
+				.find(r =>
+					Number(r.id) === requestedId
+				);
+
+	if (!editRow?.id) {
+		showAlert(
+			"Ingredient could not be identified.",
+			"error"
 		);
+		return false;
+	}
 
-		await storeValue(
-			"IngForm_edit_id",
-			row.id
-		);
+	await storeValue(
+		"IngForm_context",
+		this.CONTEXT_EDIT_INGREDIENTS
+	);
 
-		await storeValue(
-			"IngForm_edit_row",
-			row
-		);
+	await storeValue(
+		"IngForm_mode",
+		"edit"
+	);
 
-		await qryGetIngAllergenIds.run();
-		await qryGetIngDietTagIds.run();
-		await qryGetIngredientImpactCount.run();
+	await storeValue(
+		"IngForm_edit_id",
+		editRow.id
+	);
 
-		await resetWidget(
-			"mdlAddIng",
-			true
-		);
+	await storeValue(
+		"IngForm_edit_row",
+		editRow
+	);
 
-		showModal(
-			"mdlAddIng"
-		);
+	await qryIngGetAllergenIds.run();
+	await qryIngGetDietTagIds.run();
+	await qryIngGetImpactCount.run();
 
-		await this.captureBaseline();
+	await resetWidget(
+		"mdlAddIng",
+		true
+	);
 
-		return true;
-	},
+	showModal(
+		mdlAddIng.name
+	);
+
+	await this.captureBaseline();
+
+	return true;
+},
 
 
 	// ============================================================
@@ -269,7 +287,7 @@ export default {
 
 		try {
 			const result =
-						await qrySaveIngredient.run();
+						await qryIngSaveIngredient.run();
 
 			const savedId =
 						Number(
@@ -290,7 +308,7 @@ export default {
 				savedId
 			);
 
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			showAlert(
 				"Ingredient saved.",
@@ -436,7 +454,7 @@ export default {
 			return false;
 		}
 
-		await qryGetIngredientImpactCount.run();
+		await qryIngGetImpactCount.run();
 
 		showModal(
 			"mdlDelConfirmIng"
@@ -462,7 +480,7 @@ export default {
 
 		try {
 			const result =
-						await qryDelIng.run({
+						await qryIngDelIng.run({
 							ingredient_id: id
 						});
 
@@ -477,7 +495,7 @@ export default {
 				return false;
 			}
 
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			closeModal(
 				"mdlDelConfirmIng"
@@ -544,7 +562,7 @@ export default {
 			row
 		);
 
-		await qryGetIngredientImpactCount.run();
+		await qryIngGetImpactCount.run();
 
 		showModal("mdlDelConfirmIng");
 
@@ -579,7 +597,7 @@ export default {
 					this.currentState();
 
 		const allNames =
-					(qryGetIngredients.data || [])
+					(qryIngGetIngredients.data || [])
 		.map(r => String(r.name || ""));
 
 		const escapedName =
@@ -628,7 +646,7 @@ export default {
 
 		if (!nameChanged) {
 			const allNames =
-						(qryGetIngredients.data || [])
+						(qryIngGetIngredients.data || [])
 			.map(r => String(r.name || ""));
 
 			const escapedName =
@@ -764,10 +782,10 @@ export default {
 		);
 
 		const allergenRows =
-					await qryGetIngAllergenIds.run();
+					await qryIngGetAllergenIds.run();
 
 		const dietTagRows =
-					await qryGetIngDietTagIds.run();
+					await qryIngGetDietTagIds.run();
 
 		const allergens =
 					(allergenRows || [])
@@ -788,7 +806,7 @@ export default {
 		);
 
 		const allNames =
-					(qryGetIngredients.data || [])
+					(qryIngGetIngredients.data || [])
 		.map(
 			r => String(r.name || "")
 		);
@@ -900,7 +918,7 @@ export default {
 			"edit"
 		) {
 			return (
-				qryGetIngAllergenIds.data || []
+				qryIngGetAllergenIds.data || []
 			).map(
 				r =>
 				String(
@@ -930,7 +948,7 @@ export default {
 			"edit"
 		) {
 			return (
-				qryGetIngDietTagIds.data || []
+				qryIngGetDietTagIds.data || []
 			).map(
 				r =>
 				String(
@@ -1034,7 +1052,7 @@ export default {
 
 	purchaseUnitOptions() {
 		return (
-			qryGetUnits.data || []
+			qryIngGetUnits.data || []
 		).map(u => ({
 			label:
 			u.abbreviation,

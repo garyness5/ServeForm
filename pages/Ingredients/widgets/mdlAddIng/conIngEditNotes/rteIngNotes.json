@@ -30,7 +30,7 @@
   "labelStyle": "",
   "labelText": "Notes",
   "labelTextSize": "1rem",
-  "labelTooltip": "Enter your notes here",
+  "labelTooltip": "",
   "labelWidth": 5,
   "leftColumn": 0,
   "maxDynamicHeight": 9000,

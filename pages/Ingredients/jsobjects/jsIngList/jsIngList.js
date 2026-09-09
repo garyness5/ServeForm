@@ -3,43 +3,81 @@ export default {
 		const row = tblIngList.updatedRow || {};
 		const changes = {};
 
+		const numericValue = value => {
+			if (
+				value === null ||
+				value === undefined ||
+				value === ""
+			) {
+				return null;
+			}
+
+			const cleaned =
+						String(value)
+			.replaceAll(",", "")
+			.replace("%", "")
+			.replace("$", "")
+			.trim();
+
+			return cleaned === ""
+				? null
+			: Number(cleaned);
+		};
+
+
 		if (row.purchase_qty !== undefined) {
-			changes.purchase_qty = row.purchase_qty;
+			changes.purchase_qty =
+				numericValue(row.purchase_qty);
 		}
+
 
 		if (row.purchase_unit !== undefined) {
 			changes.purchase_unit_id =
 				row.purchase_unit || null;
 		}
 
+
 		if (row.wastage_percent !== undefined) {
-			changes.wastage_percent = row.wastage_percent;
+			changes.wastage_percent =
+				numericValue(row.wastage_percent) ?? 0;
 		}
+
 
 		if (row.total_cost !== undefined) {
-			changes.total_cost = row.total_cost;
+			changes.total_cost =
+				numericValue(row.total_cost);
 		}
 
+
 		if (row.category_id !== undefined) {
-			changes.category_id = row.category_id;
+			changes.category_id =
+				row.category_id;
 		}
+
 
 		if (row.item_code !== undefined) {
 			changes.item_code =
 				row.item_code?.trim() || null;
 		}
 
+
 		if (row.supplier_id !== undefined) {
-			changes.supplier_id = row.supplier_id;
+			changes.supplier_id =
+				row.supplier_id;
 		}
+
 
 		if (row.packaging_id !== undefined) {
-			changes.packaging_id = row.packaging_id;
+			changes.packaging_id =
+				row.packaging_id;
 		}
 
+
 		if (row.active !== undefined) {
-			changes.active = row.active;
+			changes.active =
+				row.active;
 		}
+
 
 		return changes;
 	},
@@ -57,12 +95,12 @@ export default {
 		}
 
 		try {
-			await qryUpdateIngredientInline.run({
+			await qryIngUpdateIngredientInline.run({
 				ingredient_id: Number(row.id),
 				changes: this.inlineChanges()
 			});
 
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			showAlert(
 				"Ingredient updated.",
@@ -72,7 +110,7 @@ export default {
 			return true;
 
 		} catch (e) {
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			showAlert(
 				e?.message ||
@@ -85,7 +123,7 @@ export default {
 	},
 
 	unitOptions(unitType) {
-		return (qryGetUnits.data || [])
+		return (qryIngGetUnits.data || [])
 			.filter(u => u.unit_type === unitType)
 			.map(u => ({
 			label: u.abbreviation,
@@ -103,14 +141,14 @@ export default {
 		}
 
 		try {
-			await qryUpdateIngredientInline.run({
+			await qryIngUpdateIngredientInline.run({
 				ingredient_id: Number(ingredientId),
 				changes: {
 					purchase_unit_id: Number(newUnitId)
 				}
 			});
 
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			showAlert(
 				"Ingredient updated.",
@@ -120,7 +158,7 @@ export default {
 			return true;
 
 		} catch (e) {
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			showAlert(
 				e?.message ||
@@ -142,14 +180,14 @@ export default {
 		}
 
 		try {
-			await qryUpdateIngredientInline.run({
+			await qryIngUpdateIngredientInline.run({
 				ingredient_id: Number(ingredientId),
 				changes: {
 					category_id: Number(newCategoryId)
 				}
 			});
 
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			showAlert(
 				"Ingredient updated.",
@@ -159,7 +197,7 @@ export default {
 			return true;
 
 		} catch (e) {
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			showAlert(
 				e?.message ||
@@ -173,7 +211,7 @@ export default {
 
 	async saveSupplierInline(ingredientId, newSupplierId) {
 		try {
-			await qryUpdateIngredientInline.run({
+			await qryIngUpdateIngredientInline.run({
 				ingredient_id: Number(ingredientId),
 				changes: {
 					supplier_id: newSupplierId
@@ -182,13 +220,13 @@ export default {
 				}
 			});
 
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			showAlert("Ingredient updated.", "success");
 			return true;
 
 		} catch (e) {
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			showAlert(
 				e?.message ||
@@ -202,7 +240,7 @@ export default {
 
 	async savePackagingInline(ingredientId, newPackagingId) {
 		try {
-			await qryUpdateIngredientInline.run({
+			await qryIngUpdateIngredientInline.run({
 				ingredient_id: Number(ingredientId),
 				changes: {
 					packaging_id: newPackagingId
@@ -211,56 +249,17 @@ export default {
 				}
 			});
 
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			showAlert("Ingredient updated.", "success");
 			return true;
 
 		} catch (e) {
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			showAlert(
 				e?.message ||
 				"Ingredient Packaging could not be updated.",
-				"error"
-			);
-
-			return false;
-		}
-	},
-
-	async saveYieldUnitInline(ingredientId, newYieldUnitId) {
-		if (!ingredientId || !newYieldUnitId) {
-			showAlert(
-				"Ingredient Yield Unit could not be identified.",
-				"error"
-			);
-			return false;
-		}
-
-		try {
-			await qryUpdateIngredientInline.run({
-				ingredient_id: Number(ingredientId),
-				changes: {
-					yield_unit_id: Number(newYieldUnitId)
-				}
-			});
-
-			await qryGetIngredients.run();
-
-			showAlert(
-				"Ingredient updated.",
-				"success"
-			);
-
-			return true;
-
-		} catch (e) {
-			await qryGetIngredients.run();
-
-			showAlert(
-				e?.message ||
-				"Ingredient Yield Unit could not be updated.",
 				"error"
 			);
 
@@ -348,12 +347,12 @@ export default {
 		}
 
 		try {
-			await qryRenameIngredient.run({
+			await qryIngRenameIngredient.run({
 				ingredient_id: id,
 				new_name: newName
 			});
 
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			closeModal(
 				"mdlRenameIng"
@@ -387,10 +386,23 @@ export default {
 
 	cancelRename() {
 		closeModal(
-			"mdlRenameIng"
+			mdlRenameIng.name
 		);
 
 		return true;
+	},
+
+	async openSetUnit(row) {
+		if (!row?.id) {
+			showAlert(
+				"Ingredient could not be identified.",
+				"error"
+			);
+
+			return false;
+		}
+
+		return jsIngForm.openEditFromIngredients(row);
 	},
 
 	async saveActiveInline() {
@@ -408,7 +420,7 @@ export default {
 		}
 
 		try {
-			await qryUpdateIngredientInline.run({
+			await qryIngUpdateIngredientInline.run({
 				ingredient_id: ingredientId,
 				changes: {
 					active: row.active === false
@@ -417,12 +429,12 @@ export default {
 				}
 			});
 
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			return true;
 
 		} catch (e) {
-			await qryGetIngredients.run();
+			await qryIngGetIngredients.run();
 
 			showAlert(
 				e?.message ||
@@ -435,7 +447,7 @@ export default {
 	},
 
 	filteredRows() {
-		const rows = qryGetIngredients.data || [];
+		const rows = qryIngGetIngredients.data || [];
 
 		const status = String(
 			selIngListFilter.selectedOptionValue || "all"
