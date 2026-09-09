@@ -1,5 +1,5 @@
 {
-  "animateLoading": "{{ qryCusDelCustomer.isLoading }}",
+  "animateLoading": "{{ qryCusDeleteCustomer.isLoading }}",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 6,
   "boxShadow": "none",
@@ -38,7 +38,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ !appsmith.store.current_customer_id || qryCusDelCustomer.isLoading }}",
+  "isDisabled": "{{ !appsmith.store.current_customer_id || qryCusDeleteCustomer.isLoading }}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",

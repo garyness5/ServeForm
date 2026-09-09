@@ -40,13 +40,21 @@ export default {
 			"IngForm_duplicate_row"
 		);
 
+		await removeValue(
+			"IngForm_saved_id"
+		);
+
+		await removeValue(
+			"IngForm_pending_action"
+		);
+
 		await resetWidget(
 			"mdlAddIng",
 			true
 		);
 
 		showModal(
-			"mdlAddIng"
+			mdlAddIng.name
 		);
 
 		await this.captureBaseline();
@@ -59,73 +67,95 @@ export default {
 	// OPEN EDIT
 	// ============================================================
 
-async openEditFromIngredients(row = null) {
-	const requestedId =
-				Number(
-					row?.id ||
-					tblIngList.selectedRow?.id ||
-					0
-				);
+	async openEditFromIngredients(row = null) {
+		const requestedId =
+					Number(
+						row?.id ||
+						tblIngList.selectedRow?.id ||
+						0
+					);
 
-	if (!requestedId) {
-		showAlert(
-			"Select an ingredient to edit.",
-			"warning"
-		);
-		return false;
-	}
+		if (!requestedId) {
+			showAlert(
+				"Select an ingredient to edit.",
+				"warning"
+			);
 
-	const editRow =
-				(qryIngGetIngredients.data || [])
-				.find(r =>
+			return false;
+		}
+
+		const editRow =
+					(qryIngGetIngredients.data || [])
+		.find(r =>
 					Number(r.id) === requestedId
-				);
+				 );
 
-	if (!editRow?.id) {
-		showAlert(
-			"Ingredient could not be identified.",
-			"error"
+		if (!editRow?.id) {
+			showAlert(
+				"Ingredient could not be identified.",
+				"error"
+			);
+
+			return false;
+		}
+
+		await storeValue(
+			"IngForm_context",
+			this.CONTEXT_EDIT_INGREDIENTS
 		);
-		return false;
-	}
 
-	await storeValue(
-		"IngForm_context",
-		this.CONTEXT_EDIT_INGREDIENTS
-	);
+		await storeValue(
+			"IngForm_mode",
+			"edit"
+		);
 
-	await storeValue(
-		"IngForm_mode",
-		"edit"
-	);
+		await storeValue(
+			"IngForm_edit_id",
+			editRow.id
+		);
 
-	await storeValue(
-		"IngForm_edit_id",
-		editRow.id
-	);
+		await storeValue(
+			"IngForm_edit_row",
+			editRow
+		);
 
-	await storeValue(
-		"IngForm_edit_row",
-		editRow
-	);
+		await removeValue(
+			"IngForm_duplicate_allergens"
+		);
 
-	await qryIngGetAllergenIds.run();
-	await qryIngGetDietTagIds.run();
-	await qryIngGetImpactCount.run();
+		await removeValue(
+			"IngForm_duplicate_diet_tags"
+		);
 
-	await resetWidget(
-		"mdlAddIng",
-		true
-	);
+		await removeValue(
+			"IngForm_duplicate_row"
+		);
 
-	showModal(
-		mdlAddIng.name
-	);
+		await removeValue(
+			"IngForm_saved_id"
+		);
 
-	await this.captureBaseline();
+		await removeValue(
+			"IngForm_pending_action"
+		);
 
-	return true;
-},
+		await qryIngGetAllergenIds.run();
+		await qryIngGetDietTagIds.run();
+		await qryIngGetImpactCount.run();
+
+		await resetWidget(
+			"mdlAddIng",
+			true
+		);
+
+		showModal(
+			mdlAddIng.name
+		);
+
+		await this.captureBaseline();
+
+		return true;
+	},
 
 
 	// ============================================================
@@ -138,6 +168,7 @@ async openEditFromIngredients(row = null) {
 			appsmith.store.IngForm_mode === "duplicate"
 		);
 	},
+
 
 	editRow() {
 		if (
@@ -175,7 +206,9 @@ async openEditFromIngredients(row = null) {
 
 			category_id:
 			selIngCategory.selectedOptionValue
-			? String(selIngCategory.selectedOptionValue)
+			? String(
+				selIngCategory.selectedOptionValue
+			)
 			: null,
 
 			purchase_qty:
@@ -183,7 +216,9 @@ async openEditFromIngredients(row = null) {
 
 			purchase_unit_id:
 			selIngPurchaseUnit.selectedOptionValue
-			? String(selIngPurchaseUnit.selectedOptionValue)
+			? String(
+				selIngPurchaseUnit.selectedOptionValue
+			)
 			: null,
 
 			total_cost:
@@ -194,12 +229,16 @@ async openEditFromIngredients(row = null) {
 
 			supplier_id:
 			selIngSupplier.selectedOptionValue
-			? String(selIngSupplier.selectedOptionValue)
+			? String(
+				selIngSupplier.selectedOptionValue
+			)
 			: null,
 
 			packaging_id:
 			selIngPackaging.selectedOptionValue
-			? String(selIngPackaging.selectedOptionValue)
+			? String(
+				selIngPackaging.selectedOptionValue
+			)
 			: null,
 
 			item_code:
@@ -231,10 +270,12 @@ async openEditFromIngredients(row = null) {
 
 
 	isDirty() {
-		// A duplicate is a new unsaved Ingredient.
+		/*
+			A duplicate is always a new unsaved Ingredient
+			until its first Save.
+		*/
 		if (
-			appsmith.store.IngForm_mode ===
-			"duplicate"
+			appsmith.store.IngForm_mode === "duplicate"
 		) {
 			return true;
 		}
@@ -317,11 +358,11 @@ async openEditFromIngredients(row = null) {
 
 			if (closeAfterSave) {
 				closeModal(
-					"mdlIngUnsaved"
+					mdlIngUnsaved.name
 				);
 
 				closeModal(
-					"mdlAddIng"
+					mdlAddIng.name
 				);
 
 				return true;
@@ -353,11 +394,17 @@ async openEditFromIngredients(row = null) {
 				"close"
 			);
 
-			showModal("mdlIngUnsaved");
+			showModal(
+				mdlIngUnsaved.name
+			);
+
 			return false;
 		}
 
-		closeModal("mdlAddIng");
+		closeModal(
+			mdlAddIng.name
+		);
+
 		return true;
 	},
 
@@ -369,18 +416,23 @@ async openEditFromIngredients(row = null) {
 				"add"
 			);
 
-			showModal("mdlIngUnsaved");
+			showModal(
+				mdlIngUnsaved.name
+			);
+
 			return false;
 		}
 
 		await this.openAddFromIngredients();
+
 		return true;
 	},
 
 
 	async saveFromUnsaved() {
 		const action =
-					appsmith.store.IngForm_pending_action || "close";
+					appsmith.store.IngForm_pending_action ||
+					"close";
 
 		const saved =
 					await this.save(false);
@@ -389,12 +441,16 @@ async openEditFromIngredients(row = null) {
 			return false;
 		}
 
-		closeModal("mdlIngUnsaved");
+		closeModal(
+			mdlIngUnsaved.name
+		);
 
 		if (action === "add") {
 			await this.openAddFromIngredients();
 		} else {
-			closeModal("mdlAddIng");
+			closeModal(
+				mdlAddIng.name
+			);
 		}
 
 		await removeValue(
@@ -407,14 +463,19 @@ async openEditFromIngredients(row = null) {
 
 	async discardChanges() {
 		const action =
-					appsmith.store.IngForm_pending_action || "close";
+					appsmith.store.IngForm_pending_action ||
+					"close";
 
-		closeModal("mdlIngUnsaved");
+		closeModal(
+			mdlIngUnsaved.name
+		);
 
 		if (action === "add") {
 			await this.openAddFromIngredients();
 		} else {
-			closeModal("mdlAddIng");
+			closeModal(
+				mdlAddIng.name
+			);
 		}
 
 		await removeValue(
@@ -426,7 +487,9 @@ async openEditFromIngredients(row = null) {
 
 
 	async cancelDiscard() {
-		closeModal("mdlIngUnsaved");
+		closeModal(
+			mdlIngUnsaved.name
+		);
 
 		await removeValue(
 			"IngForm_pending_action"
@@ -434,6 +497,7 @@ async openEditFromIngredients(row = null) {
 
 		return true;
 	},
+
 
 	// ============================================================
 	// DELETE
@@ -457,7 +521,7 @@ async openEditFromIngredients(row = null) {
 		await qryIngGetImpactCount.run();
 
 		showModal(
-			"mdlDelConfirmIng"
+			mdlIngDelete.name
 		);
 
 		return true;
@@ -475,6 +539,7 @@ async openEditFromIngredients(row = null) {
 				"No Ingredient selected.",
 				"warning"
 			);
+
 			return false;
 		}
 
@@ -485,24 +550,27 @@ async openEditFromIngredients(row = null) {
 						});
 
 			const deletedId =
-						Number(result?.[0]?.id || 0);
+						Number(
+							result?.[0]?.id || 0
+						);
 
 			if (!deletedId) {
 				showAlert(
 					"Ingredient was not deleted.",
 					"error"
 				);
+
 				return false;
 			}
 
 			await qryIngGetIngredients.run();
 
 			closeModal(
-				"mdlDelConfirmIng"
+				mdlIngDelete.name
 			);
 
 			closeModal(
-				"mdlAddIng"
+				mdlAddIng.name
 			);
 
 			showAlert(
@@ -525,20 +593,23 @@ async openEditFromIngredients(row = null) {
 
 	cancelDelete() {
 		closeModal(
-			"mdlDelConfirmIng"
+			mdlIngDelete.name
 		);
 
 		return true;
 	},
 
+
 	async deleteFromList() {
-		const row = tblIngList.selectedRow;
+		const row =
+					tblIngList.selectedRow;
 
 		if (!row?.id) {
 			showAlert(
 				"Select an ingredient to delete.",
 				"warning"
 			);
+
 			return false;
 		}
 
@@ -564,59 +635,55 @@ async openEditFromIngredients(row = null) {
 
 		await qryIngGetImpactCount.run();
 
-		showModal("mdlDelConfirmIng");
+		showModal(
+			mdlIngDelete.name
+		);
 
 		return true;
 	},
 
+
 	// ============================================================
-	// DUPLICATE FROM OPEN MODAL
-	// Carries current unsaved working state into new Ingredient.
-	// Source Ingredient itself is NOT saved.
+	// DUPLICATE NAME
+	// Same standard as Recipe / Dish / Menu:
+	// Source
+	// Source - copy
+	// Source - copy 2
+	// Source - copy 3
+	//
+	// Existing suffixes are not parsed.
 	// ============================================================
 
-	async openDuplicateFromIngredients() {
-		const sourceRow =
-					appsmith.store.IngForm_edit_row || {};
+	duplicateName(sourceName) {
+		const baseName =
+					String(sourceName || "").trim();
 
-		const sourceId =
-					Number(
-						appsmith.store.IngForm_edit_id || 0
-					);
-
-		if (!sourceId || !sourceRow?.name) {
-			showAlert(
-				"This Ingredient has not been saved yet.",
-				"warning"
-			);
-
-			return false;
+		if (!baseName) {
+			return "";
 		}
 
-		const current =
-					this.currentState();
-
-		const allNames =
-					(qryIngGetIngredients.data || [])
-		.map(r => String(r.name || ""));
-
 		const escapedName =
-					String(sourceRow.name || "")
-		.replace(
-			/[.*+?^${}()|[\]\\]/g,
-			"\\$&"
-		);
+					baseName.replace(
+						/[.*+?^${}()|[\]\\]/g,
+						"\\$&"
+					);
 
 		const copyRegex =
 					new RegExp(
-						`^${escapedName} - Copy(?: (\\d+))?$`
+						`^${escapedName} - copy(?: (\\d+))?$`,
+						"i"
 					);
 
 		const usedNumbers =
-					allNames
+					(qryIngGetIngredients.data || [])
+		.map(r =>
+				 String(r.name || "")
+				)
 		.map(name => {
 			const match =
-						name.match(copyRegex);
+						name.match(
+							copyRegex
+						);
 
 			if (!match) {
 				return 0;
@@ -631,84 +698,53 @@ async openEditFromIngredients(row = null) {
 		const nextNumber =
 					usedNumbers.length === 0
 		? 1
-		: Math.max(...usedNumbers) + 1;
+		: Math.max(
+			...usedNumbers
+		) + 1;
 
-		const savedName =
-					String(sourceRow.name || "").trim();
+		return nextNumber === 1
+			? `${baseName} - copy`
+		: `${baseName} - copy ${nextNumber}`;
+	},
 
-		const currentName =
-					String(current.name || "").trim();
 
-		const nameChanged =
-					currentName !== savedName;
+	// ============================================================
+	// SHARED DUPLICATE WORKSPACE
+	// ============================================================
 
-		let copyName = currentName || savedName;
+	async beginDuplicate(
+		sourceRow,
+		allergens = [],
+		dietTags = []
+	) {
+		if (!sourceRow?.name) {
+			showAlert(
+				"Ingredient could not be duplicated.",
+				"warning"
+			);
 
-		if (!nameChanged) {
-			const allNames =
-						(qryIngGetIngredients.data || [])
-			.map(r => String(r.name || ""));
-
-			const escapedName =
-						savedName.replace(
-							/[.*+?^${}()|[\]\\]/g,
-							"\\$&"
-						);
-
-			const copyRegex =
-						new RegExp(
-							`^${escapedName} - Copy(?: (\\d+))?$`
-						);
-
-			const usedNumbers =
-						allNames
-			.map(name => {
-				const match =
-							name.match(copyRegex);
-
-				if (!match) {
-					return 0;
-				}
-
-				return match[1]
-					? Number(match[1])
-				: 1;
-			})
-			.filter(n => n > 0);
-
-			const nextNumber =
-						usedNumbers.length === 0
-			? 1
-			: Math.max(...usedNumbers) + 1;
-
-			copyName =
-				nextNumber === 1
-				? `${savedName} - Copy`
-			: `${savedName} - Copy ${nextNumber}`;
+			return false;
 		}
-
 
 		const duplicateRow = {
 			...sourceRow,
-			...current,
 
 			id: null,
-			name: copyName,
 
-			// Preserve the saved Yield Unit preference.
-			yield_unit_id:
-			sourceRow.yield_unit_id || null
+			name:
+			this.duplicateName(
+				sourceRow.name
+			)
 		};
-
 
 		await storeValue(
 			"IngForm_duplicate_allergens",
-			current.allergens
+			(allergens || []).map(String)
 		);
 
 		await storeValue(
 			"IngForm_duplicate_diet_tags",
-			current.diet_tags
+			(dietTags || []).map(String)
 		);
 
 		await storeValue(
@@ -736,6 +772,14 @@ async openEditFromIngredients(row = null) {
 			duplicateRow
 		);
 
+		await removeValue(
+			"IngForm_saved_id"
+		);
+
+		await removeValue(
+			"IngForm_pending_action"
+		);
+
 		await resetWidget(
 			"mdlAddIng",
 			true
@@ -744,8 +788,50 @@ async openEditFromIngredients(row = null) {
 		return true;
 	},
 
+
+	// ============================================================
+	// DUPLICATE FROM OPEN MODAL
+	// Carries current unsaved working state into the duplicate.
+	// Source itself is NOT saved.
+	// Duplicate replaces source as open workspace.
+	// ============================================================
+
+	async openDuplicateFromIngredients() {
+		const sourceId =
+					Number(
+						appsmith.store.IngForm_edit_id || 0
+					);
+
+		if (!sourceId) {
+			showAlert(
+				"This Ingredient has not been saved yet.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		const current =
+					this.currentState();
+
+		const sourceRow = {
+			...(
+				appsmith.store.IngForm_edit_row || {}
+			),
+
+			...current
+		};
+
+		return this.beginDuplicate(
+			sourceRow,
+			current.allergens || [],
+			current.diet_tags || []
+		);
+	},
+
 	// ============================================================
 	// DUPLICATE FROM LIST
+	// Uses saved Ingredient state.
 	// ============================================================
 
 	async duplicateFromList() {
@@ -761,141 +847,56 @@ async openEditFromIngredients(row = null) {
 			return false;
 		}
 
-		await storeValue(
-			"IngForm_context",
-			this.CONTEXT_EDIT_INGREDIENTS
-		);
-
-		await storeValue(
-			"IngForm_mode",
-			"edit"
-		);
-
+		/*
+			These two queries use IngForm_edit_id,
+			so temporarily point them at the selected Ingredient.
+		*/
 		await storeValue(
 			"IngForm_edit_id",
 			row.id
 		);
 
-		await storeValue(
-			"IngForm_edit_row",
-			row
-		);
-
-		const allergenRows =
-					await qryIngGetAllergenIds.run();
-
-		const dietTagRows =
-					await qryIngGetDietTagIds.run();
+		const [
+			allergenRows,
+			dietTagRows
+		] = await Promise.all([
+			qryIngGetAllergenIds.run(),
+			qryIngGetDietTagIds.run()
+		]);
 
 		const allergens =
 					(allergenRows || [])
-		.map(
-			r =>
-			String(
-				r.helper_list_item_id
-			)
-		);
+		.map(r =>
+				 String(
+			r.helper_list_item_id
+		)
+				);
 
 		const dietTags =
 					(dietTagRows || [])
-		.map(
-			r =>
-			String(
-				r.helper_list_item_id
-			)
-		);
+		.map(r =>
+				 String(
+			r.helper_list_item_id
+		)
+				);
 
-		const allNames =
-					(qryIngGetIngredients.data || [])
-		.map(
-			r => String(r.name || "")
-		);
-
-		const escapedName =
-					String(row.name || "")
-		.replace(
-			/[.*+?^${}()|[\]\\]/g,
-			"\\$&"
-		);
-
-		const copyRegex =
-					new RegExp(
-						`^${escapedName} - Copy(?: (\\d+))?$`
+		const started =
+					await this.beginDuplicate(
+						row,
+						allergens,
+						dietTags
 					);
 
-		const usedNumbers =
-					allNames
-		.map(name => {
-			const match =
-						name.match(copyRegex);
-
-			if (!match) {
-				return 0;
-			}
-
-			return match[1]
-				? Number(match[1])
-			: 1;
-		})
-		.filter(n => n > 0);
-
-		const nextNumber =
-					usedNumbers.length === 0
-		? 1
-		: Math.max(...usedNumbers) + 1;
-
-		const copyName =
-					nextNumber === 1
-		? `${row.name} - Copy`
-		: `${row.name} - Copy ${nextNumber}`;
-
-
-		await storeValue(
-			"IngForm_duplicate_allergens",
-			allergens
-		);
-
-		await storeValue(
-			"IngForm_duplicate_diet_tags",
-			dietTags
-		);
-
-		await storeValue(
-			"IngForm_context",
-			this.CONTEXT_ADD_INGREDIENTS
-		);
-
-		await storeValue(
-			"IngForm_mode",
-			"duplicate"
-		);
-
-		await storeValue(
-			"IngForm_edit_id",
-			null
-		);
-
-		await storeValue(
-			"IngForm_edit_row",
-			{
-				...row,
-				id: null,
-				name: copyName
-			}
-		);
-
-		await resetWidget(
-			"mdlAddIng",
-			true
-		);
+		if (!started) {
+			return false;
+		}
 
 		showModal(
-			"mdlAddIng"
+			mdlAddIng.name
 		);
 
 		return true;
 	},
-
 
 	// ============================================================
 	// ALLERGEN / DIET TAG DEFAULTS
@@ -903,8 +904,7 @@ async openEditFromIngredients(row = null) {
 
 	allergenDefaultValues() {
 		if (
-			appsmith.store.IngForm_mode ===
-			"duplicate"
+			appsmith.store.IngForm_mode === "duplicate"
 		) {
 			return (
 				appsmith.store
@@ -914,27 +914,23 @@ async openEditFromIngredients(row = null) {
 		}
 
 		if (
-			appsmith.store.IngForm_mode ===
-			"edit"
+			appsmith.store.IngForm_mode === "edit"
 		) {
 			return (
 				qryIngGetAllergenIds.data || []
-			).map(
-				r =>
-				String(
-					r.helper_list_item_id
-				)
-			);
+			).map(r =>
+						String(
+				r.helper_list_item_id
+			)
+					 );
 		}
 
 		return [];
 	},
 
-
 	dietTagDefaultValues() {
 		if (
-			appsmith.store.IngForm_mode ===
-			"duplicate"
+			appsmith.store.IngForm_mode === "duplicate"
 		) {
 			return (
 				appsmith.store
@@ -944,25 +940,24 @@ async openEditFromIngredients(row = null) {
 		}
 
 		if (
-			appsmith.store.IngForm_mode ===
-			"edit"
+			appsmith.store.IngForm_mode === "edit"
 		) {
 			return (
 				qryIngGetDietTagIds.data || []
-			).map(
-				r =>
-				String(
-					r.helper_list_item_id
-				)
-			);
+			).map(r =>
+						String(
+				r.helper_list_item_id
+			)
+					 );
 		}
 
 		return [];
 	},
 
-
 	// ============================================================
 	// DISPLAY / CALCULATION
+	// Method names retained so existing widget bindings do not break.
+	// User-facing Yield terminology retired.
 	// ============================================================
 
 	yieldUnitText() {
@@ -971,7 +966,6 @@ async openEditFromIngredients(row = null) {
 			.selectedOptionLabel || ""
 		);
 	},
-
 
 	netYieldText() {
 		const qty =
@@ -985,24 +979,25 @@ async openEditFromIngredients(row = null) {
 					);
 
 		if (!qty) {
-			return "Net yield: ";
+			return "Usable qty: ";
 		}
 
-		const netYield =
+		const usableQty =
 					qty *
 					(1 - wastage / 100);
 
 		const value =
-					jsFmt.number(netYield);
+					jsFmt.number(
+						usableQty
+					);
 
 		const unit =
 					this.yieldUnitText();
 
 		return unit
-			? `Net yield:    ${value} ${unit}`
-		: `Net yield:    ${value}`;
+			? `Usable qty:    ${value} ${unit}`
+		: `Usable qty:    ${value}`;
 	},
-
 
 	pricePerUnitText() {
 		const qty =
@@ -1021,34 +1016,35 @@ async openEditFromIngredients(row = null) {
 					);
 
 		if (!qty || !cost) {
-			return "Cost / unit ";
+			return "Net cost: ";
 		}
 
-		const netYield =
+		const usableQty =
 					qty *
 					(1 - wastage / 100);
 
 		if (
-			!netYield ||
-			netYield <= 0
+			!usableQty ||
+			usableQty <= 0
 		) {
-			return "Cost / unit ";
+			return "Net cost: ";
 		}
 
 		const price =
-					cost / netYield;
+					cost / usableQty;
 
 		const formattedPrice =
-					jsFmt.currency(price);
+					jsFmt.currency(
+						price
+					);
 
 		const unit =
 					this.yieldUnitText();
 
 		return unit
-			? `Cost/unit:    $${formattedPrice} / ${unit}`
-		: `Cost/unit:    $${formattedPrice}`;
+			? `Net cost:    ${formattedPrice} / ${unit}`
+		: `Net cost:    ${formattedPrice}`;
 	},
-
 
 	purchaseUnitOptions() {
 		return (
@@ -1062,8 +1058,14 @@ async openEditFromIngredients(row = null) {
 		}));
 	},
 
+	// ============================================================
+	// UNSAVED MODAL TEXT
+	// ============================================================
+
 	unsavedTitle() {
-		switch (appsmith.store.IngForm_mode) {
+		switch (
+			appsmith.store.IngForm_mode
+		) {
 			case "add":
 				return "Unsaved Ingredient";
 
@@ -1076,7 +1078,9 @@ async openEditFromIngredients(row = null) {
 	},
 
 	unsavedWarning() {
-		switch (appsmith.store.IngForm_mode) {
+		switch (
+			appsmith.store.IngForm_mode
+		) {
 			case "add":
 				return "This new Ingredient has not been saved. Save it before closing?";
 
@@ -1086,5 +1090,5 @@ async openEditFromIngredients(row = null) {
 			default:
 				return "This Ingredient has unsaved changes. Save them before closing?";
 		}
-	},
+	}
 };

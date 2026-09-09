@@ -1,7 +1,16 @@
 export default {
+
+	// ============================================================
+	// GENERIC INLINE CHANGES
+	// Qty / Cost / Waste / Code
+	// ============================================================
+
 	inlineChanges() {
-		const row = tblIngList.updatedRow || {};
+		const row =
+					tblIngList.updatedRow || {};
+
 		const changes = {};
+
 
 		const numericValue = value => {
 			if (
@@ -14,76 +23,71 @@ export default {
 
 			const cleaned =
 						String(value)
-			.replaceAll(",", "")
-			.replace("%", "")
-			.replace("$", "")
-			.trim();
+						.replaceAll(",", "")
+						.replace("$", "")
+						.replace("%", "")
+						.trim();
 
-			return cleaned === ""
-				? null
-			: Number(cleaned);
+			if (cleaned === "") {
+				return null;
+			}
+
+			const number =
+						Number(cleaned);
+
+			return Number.isFinite(number)
+				? number
+				: null;
 		};
 
 
-		if (row.purchase_qty !== undefined) {
+		if (
+			row.purchase_qty !== undefined
+		) {
 			changes.purchase_qty =
-				numericValue(row.purchase_qty);
+				numericValue(
+					row.purchase_qty
+				);
 		}
 
 
-		if (row.purchase_unit !== undefined) {
-			changes.purchase_unit_id =
-				row.purchase_unit || null;
-		}
-
-
-		if (row.wastage_percent !== undefined) {
-			changes.wastage_percent =
-				numericValue(row.wastage_percent) ?? 0;
-		}
-
-
-		if (row.total_cost !== undefined) {
+		if (
+			row.total_cost !== undefined
+		) {
 			changes.total_cost =
-				numericValue(row.total_cost);
+				numericValue(
+					row.total_cost
+				);
 		}
 
 
-		if (row.category_id !== undefined) {
-			changes.category_id =
-				row.category_id;
+		if (
+			row.wastage_percent !== undefined
+		) {
+			changes.wastage_percent =
+				numericValue(
+					row.wastage_percent
+				) ?? 0;
 		}
 
 
-		if (row.item_code !== undefined) {
+		if (
+			row.item_code !== undefined
+		) {
 			changes.item_code =
-				row.item_code?.trim() || null;
-		}
-
-
-		if (row.supplier_id !== undefined) {
-			changes.supplier_id =
-				row.supplier_id;
-		}
-
-
-		if (row.packaging_id !== undefined) {
-			changes.packaging_id =
-				row.packaging_id;
-		}
-
-
-		if (row.active !== undefined) {
-			changes.active =
-				row.active;
+				String(
+					row.item_code || ""
+				).trim() || null;
 		}
 
 
 		return changes;
 	},
 
+
 	async saveInline() {
-		const row = tblIngList.updatedRow || {};
+		const row =
+					tblIngList.updatedRow || {};
 
 		if (!row.id) {
 			showAlert(
@@ -94,10 +98,21 @@ export default {
 			return false;
 		}
 
+		const changes =
+					this.inlineChanges();
+
+		if (
+			Object.keys(changes).length === 0
+		) {
+			return true;
+		}
+
 		try {
 			await qryIngUpdateIngredientInline.run({
-				ingredient_id: Number(row.id),
-				changes: this.inlineChanges()
+				ingredient_id:
+					Number(row.id),
+
+				changes
 			});
 
 			await qryIngGetIngredients.run();
@@ -122,29 +137,52 @@ export default {
 		}
 	},
 
+
+	// ============================================================
+	// PURCHASE UNIT
+	// ============================================================
+
 	unitOptions(unitType) {
-		return (qryIngGetUnits.data || [])
-			.filter(u => u.unit_type === unitType)
+		return (
+			qryIngGetUnits.data || []
+		)
+			.filter(u =>
+				u.unit_type === unitType
+			)
 			.map(u => ({
-			label: u.abbreviation,
-			value: String(u.id)
-		}));
+				label:
+					u.abbreviation,
+
+				value:
+					String(u.id)
+			}));
 	},
 
-	async saveUnitInline(ingredientId, newUnitId) {
-		if (!ingredientId || !newUnitId) {
+
+	async saveUnitInline(
+		ingredientId,
+		newUnitId
+	) {
+		if (
+			!ingredientId ||
+			!newUnitId
+		) {
 			showAlert(
 				"Ingredient Unit could not be identified.",
 				"error"
 			);
+
 			return false;
 		}
 
 		try {
 			await qryIngUpdateIngredientInline.run({
-				ingredient_id: Number(ingredientId),
+				ingredient_id:
+					Number(ingredientId),
+
 				changes: {
-					purchase_unit_id: Number(newUnitId)
+					purchase_unit_id:
+						Number(newUnitId)
 				}
 			});
 
@@ -170,20 +208,49 @@ export default {
 		}
 	},
 
-	async saveCategoryInline(ingredientId, newCategoryId) {
+
+	async openSetUnit(row) {
+		if (!row?.id) {
+			showAlert(
+				"Ingredient could not be identified.",
+				"error"
+			);
+
+			return false;
+		}
+
+		return jsIngForm
+			.openEditFromIngredients(row);
+	},
+
+
+	// ============================================================
+	// CATEGORY
+	// ============================================================
+
+	async saveCategoryInline(
+		ingredientId,
+		newCategoryId
+	) {
 		if (!ingredientId) {
 			showAlert(
 				"Ingredient Category could not be identified.",
 				"error"
 			);
+
 			return false;
 		}
 
 		try {
 			await qryIngUpdateIngredientInline.run({
-				ingredient_id: Number(ingredientId),
+				ingredient_id:
+					Number(ingredientId),
+
 				changes: {
-					category_id: Number(newCategoryId)
+					category_id:
+						newCategoryId
+							? Number(newCategoryId)
+							: null
 				}
 			});
 
@@ -201,7 +268,7 @@ export default {
 
 			showAlert(
 				e?.message ||
-				"Ingredient Category could not be updated.",
+					"Ingredient Category could not be updated.",
 				"error"
 			);
 
@@ -209,174 +276,52 @@ export default {
 		}
 	},
 
-	async saveSupplierInline(ingredientId, newSupplierId) {
+
+	// ============================================================
+	// SUPPLIER
+	// ============================================================
+
+	async saveSupplierInline(
+		ingredientId,
+		newSupplierId
+	) {
+		if (!ingredientId) {
+			showAlert(
+				"Ingredient Supplier could not be identified.",
+				"error"
+			);
+
+			return false;
+		}
+
 		try {
 			await qryIngUpdateIngredientInline.run({
-				ingredient_id: Number(ingredientId),
+				ingredient_id:
+					Number(ingredientId),
+
 				changes: {
-					supplier_id: newSupplierId
-					? Number(newSupplierId)
-					: null
+					supplier_id:
+						newSupplierId
+							? Number(newSupplierId)
+							: null
 				}
 			});
 
 			await qryIngGetIngredients.run();
 
-			showAlert("Ingredient updated.", "success");
-			return true;
-
-		} catch (e) {
-			await qryIngGetIngredients.run();
-
 			showAlert(
-				e?.message ||
-				"Ingredient Supplier could not be updated.",
-				"error"
-			);
-
-			return false;
-		}
-	},
-
-	async savePackagingInline(ingredientId, newPackagingId) {
-		try {
-			await qryIngUpdateIngredientInline.run({
-				ingredient_id: Number(ingredientId),
-				changes: {
-					packaging_id: newPackagingId
-					? Number(newPackagingId)
-					: null
-				}
-			});
-
-			await qryIngGetIngredients.run();
-
-			showAlert("Ingredient updated.", "success");
-			return true;
-
-		} catch (e) {
-			await qryIngGetIngredients.run();
-
-			showAlert(
-				e?.message ||
-				"Ingredient Packaging could not be updated.",
-				"error"
-			);
-
-			return false;
-		}
-	},
-
-	async openRename() {
-		const row = tblIngList.selectedRow;
-
-		if (!row?.id) {
-			showAlert(
-				"Select an Ingredient to rename.",
-				"warning"
-			);
-
-			return false;
-		}
-
-		await storeValue(
-			"IngRename_id",
-			row.id
-		);
-
-		await storeValue(
-			"IngRename_name",
-			row.name || ""
-		);
-
-		resetWidget(
-			"mdlRenameIng",
-			true
-		);
-
-		showModal(
-			"mdlRenameIng"
-		);
-
-		return true;
-	},
-
-
-	renameTitle() {
-		const name =
-					appsmith.store.IngRename_name || "";
-
-		return name
-			? `Rename: ${name}`
-		: "Rename Ingredient";
-	},
-
-
-	renameDefaultName() {
-		return (
-			appsmith.store.IngRename_name || ""
-		);
-	},
-
-
-	async saveRename() {
-		const id =
-					Number(
-						appsmith.store.IngRename_id || 0
-					);
-
-		const newName =
-					inpIngRenameTo.text?.trim() || "";
-
-		if (!id) {
-			showAlert(
-				"Ingredient could not be identified.",
-				"error"
-			);
-
-			return false;
-		}
-
-		if (!newName) {
-			showAlert(
-				"Ingredient Name is required.",
-				"warning"
-			);
-
-			return false;
-		}
-
-		try {
-			await qryIngRenameIngredient.run({
-				ingredient_id: id,
-				new_name: newName
-			});
-
-			await qryIngGetIngredients.run();
-
-			closeModal(
-				"mdlRenameIng"
-			);
-
-			await removeValue(
-				"IngRename_id"
-			);
-
-			await removeValue(
-				"IngRename_name"
-			);
-
-			showAlert(
-				"Ingredient renamed.",
+				"Ingredient updated.",
 				"success"
 			);
 
 			return true;
 
 		} catch (e) {
+			await qryIngGetIngredients.run();
+
 			showAlert(
 				e?.message ||
-				"Ingredient could not be renamed.",
+					"Ingredient Supplier could not be updated.",
 				"error"
 			);
 
@@ -384,48 +329,92 @@ export default {
 		}
 	},
 
-	cancelRename() {
-		closeModal(
-			mdlRenameIng.name
-		);
 
-		return true;
-	},
+	// ============================================================
+	// PACKAGING
+	// ============================================================
 
-	async openSetUnit(row) {
-		if (!row?.id) {
+	async savePackagingInline(
+		ingredientId,
+		newPackagingId
+	) {
+		if (!ingredientId) {
 			showAlert(
-				"Ingredient could not be identified.",
+				"Ingredient Packaging could not be identified.",
 				"error"
 			);
 
 			return false;
 		}
 
-		return jsIngForm.openEditFromIngredients(row);
+		try {
+			await qryIngUpdateIngredientInline.run({
+				ingredient_id:
+					Number(ingredientId),
+
+				changes: {
+					packaging_id:
+						newPackagingId
+							? Number(newPackagingId)
+							: null
+				}
+			});
+
+			await qryIngGetIngredients.run();
+
+			showAlert(
+				"Ingredient updated.",
+				"success"
+			);
+
+			return true;
+
+		} catch (e) {
+			await qryIngGetIngredients.run();
+
+			showAlert(
+				e?.message ||
+					"Ingredient Packaging could not be updated.",
+				"error"
+			);
+
+			return false;
+		}
 	},
+
+
+	// ============================================================
+	// ACTIVE
+	// ============================================================
 
 	async saveActiveInline() {
-		const row = tblIngList.updatedRow || {};
+		const row =
+					tblIngList.updatedRow || {};
 
 		const ingredientId =
-					Number(row.id || 0);
+					Number(
+						row.id || 0
+					);
 
 		if (!ingredientId) {
 			showAlert(
 				"Ingredient could not be identified.",
 				"error"
 			);
+
 			return false;
 		}
 
 		try {
 			await qryIngUpdateIngredientInline.run({
-				ingredient_id: ingredientId,
+				ingredient_id:
+					ingredientId,
+
 				changes: {
-					active: row.active === false
-					? false
-					: true
+					active:
+						row.active === false
+							? false
+							: true
 				}
 			});
 
@@ -438,7 +427,7 @@ export default {
 
 			showAlert(
 				e?.message ||
-				"Ingredient Status could not be updated.",
+					"Ingredient Status could not be updated.",
 				"error"
 			);
 
@@ -446,26 +435,42 @@ export default {
 		}
 	},
 
+
+	// ============================================================
+	// LIST FILTERING
+	// ============================================================
+
 	filteredRows() {
-		const rows = qryIngGetIngredients.data || [];
+		const rows =
+					qryIngGetIngredients.data || [];
 
-		const status = String(
-			selIngListFilter.selectedOptionValue || "all"
-		)
-		.trim()
-		.toLowerCase();
+		const status =
+					String(
+						selIngListFilter
+							.selectedOptionValue ||
+						"all"
+					)
+					.trim()
+					.toLowerCase();
 
-		const search = String(
-			inpIngListSearch.text || ""
-		)
-		.trim()
-		.toLowerCase();
+		const search =
+					String(
+						inpIngListSearch.text || ""
+					)
+					.trim()
+					.toLowerCase();
 
 		return rows.filter(row => {
 			const statusOk =
 						status === "all" ||
-						(status === "active" && row.active === true) ||
-						(status === "inactive" && row.active === false);
+						(
+							status === "active" &&
+							row.active === true
+						) ||
+						(
+							status === "inactive" &&
+							row.active === false
+						);
 
 			if (!statusOk) {
 				return false;
@@ -484,10 +489,10 @@ export default {
 			]
 				.filter(Boolean)
 				.some(value =>
-							String(value)
-							.toLowerCase()
-							.includes(search)
-						 );
+					String(value)
+						.toLowerCase()
+						.includes(search)
+				);
 		});
-	},
+	}
 };

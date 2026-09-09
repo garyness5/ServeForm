@@ -52,7 +52,7 @@
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 7,
+  "rightColumn": 9,
   "text": "Save",
   "tooltip": "",
   "topRow": 2,

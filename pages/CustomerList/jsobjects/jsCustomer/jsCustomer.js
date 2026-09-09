@@ -348,12 +348,12 @@ export default {
 					"Customer";
 
 		try {
-			const result = await qryCusDelCustomer.run();
+			const result = await qryCusDeleteCustomer.run();
 
 			const deletedRow = Array.isArray(result)
 			? result[0]
-			: Array.isArray(qryCusDelCustomer.data)
-			? qryCusDelCustomer.data[0]
+			: Array.isArray(qryCusDeleteCustomer.data)
+			? qryCusDeleteCustomer.data[0]
 			: result;
 
 			const deletedCustomerId = Number(

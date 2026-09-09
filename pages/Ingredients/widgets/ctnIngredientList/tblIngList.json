@@ -80,7 +80,7 @@
     "id": 87,
     "ingredient": 137,
     "item_code": 95,
-    "name": 193,
+    "name": 235,
     "net_cost": 102,
     "packaging": 108,
     "packaging_id": 96,
@@ -215,9 +215,6 @@
       "key": "oddRowColor"
     },
     {
-      "key": "headerTextColor"
-    },
-    {
       "key": "primaryColumns.purchase_unit.selectOptions"
     },
     {
@@ -306,8 +303,8 @@
   "enableClientSideSearch": true,
   "endOfData": false,
   "flexVerticalAlignment": "start",
-  "headerRowColor": "#598635",
-  "headerTextColor": "{{appsmith.theme.colors.backgroundColor}}",
+  "headerRowColor": "",
+  "headerTextColor": "",
   "horizontalAlignment": "RIGHT",
   "infiniteScrollEnabled": false,
   "inlineEditingSaveOption": "CUSTOM",
@@ -821,12 +818,12 @@
       "horizontalAlignment": "LEFT",
       "id": "name",
       "index": 1,
-      "isCellEditable": false,
+      "isCellEditable": true,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": false,
+      "isEditable": true,
       "isSaveVisible": true,
       "isVisible": true,
       "label": "Ingredient",
@@ -880,7 +877,7 @@
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "number",
-      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n    currentRow.net_cost == null\n        ? \"\"\n        : jsFmt.currency(currentRow.net_cost)\n)) : \n    currentRow.net_cost == null\n        ? \"\"\n        : jsFmt.currency(currentRow.net_cost)\n })()}}",
+      "computedValue": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\ncurrentRow.net_cost == null\n? \"\"\n: jsFmt.currency(currentRow.net_cost)\n)) : \ncurrentRow.net_cost == null\n? \"\"\n: jsFmt.currency(currentRow.net_cost)\n })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -897,7 +894,7 @@
       "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Net/Unit",
+      "label": "$/Unit",
       "notation": "standard",
       "originalId": "net_cost",
       "sticky": "",

@@ -14,7 +14,7 @@ export default {
 		try {
 			if (!bypassDuplicate) {
 				const duplicate =
-							await qryCheckContactDuplicate.run();
+							await qryCusCheckContactDuplicate.run();
 
 				if (duplicate?.length) {
 					await storeValue(
