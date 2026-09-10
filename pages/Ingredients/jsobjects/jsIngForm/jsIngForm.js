@@ -139,9 +139,7 @@ export default {
 			"IngForm_pending_action"
 		);
 
-		await qryIngGetAllergenIds.run();
-		await qryIngGetDietTagIds.run();
-		await qryIngGetImpactCount.run();
+		await qryIngGetClassifications.run();
 
 		await resetWidget(
 			"mdlAddIng",
@@ -382,6 +380,19 @@ export default {
 		}
 	},
 
+	async saveAndNew() {
+		const saved =
+					await this.save(false);
+
+		if (!saved) {
+			return false;
+		}
+
+		await this.openAddFromIngredients();
+
+		return true;
+	},
+
 
 	// ============================================================
 	// CLOSE / UNSAVED GUARD
@@ -518,7 +529,9 @@ export default {
 			return false;
 		}
 
-		await qryIngGetImpactCount.run();
+		await qryIngGetImpactCount.run({
+			ingredient_id: id
+		});
 
 		showModal(
 			mdlIngDelete.name
@@ -633,7 +646,9 @@ export default {
 			row
 		);
 
-		await qryIngGetImpactCount.run();
+		await qryIngGetImpactCount.run({
+			ingredient_id: Number(row.id)
+		});
 
 		showModal(
 			mdlIngDelete.name
@@ -848,21 +863,27 @@ export default {
 		}
 
 		/*
-			These two queries use IngForm_edit_id,
-			so temporarily point them at the selected Ingredient.
+			qryIngGetClassifications uses IngForm_edit_id,
+			so temporarily point it at the selected Ingredient.
 		*/
+
 		await storeValue(
 			"IngForm_edit_id",
 			row.id
 		);
 
-		const [
-			allergenRows,
-			dietTagRows
-		] = await Promise.all([
-			qryIngGetAllergenIds.run(),
-			qryIngGetDietTagIds.run()
-		]);
+		const classificationRows =
+					await qryIngGetClassifications.run();
+
+		const allergenRows =
+					(classificationRows || []).filter(
+						x => x.classification_type === "allergen"
+					);
+
+		const dietTagRows =
+					(classificationRows || []).filter(
+						x => x.classification_type === "diet_tag"
+					);
 
 		const allergens =
 					(allergenRows || [])
@@ -907,8 +928,7 @@ export default {
 			appsmith.store.IngForm_mode === "duplicate"
 		) {
 			return (
-				appsmith.store
-				.IngForm_duplicate_allergens ||
+				appsmith.store.IngForm_duplicate_allergens ||
 				[]
 			);
 		}
@@ -917,12 +937,14 @@ export default {
 			appsmith.store.IngForm_mode === "edit"
 		) {
 			return (
-				qryIngGetAllergenIds.data || []
-			).map(r =>
-						String(
-				r.helper_list_item_id
+				qryIngGetClassifications.data || []
 			)
-					 );
+				.filter(
+				x => x.classification_type === "allergen"
+			)
+				.map(
+				x => String(x.helper_list_item_id)
+			);
 		}
 
 		return [];
@@ -933,8 +955,7 @@ export default {
 			appsmith.store.IngForm_mode === "duplicate"
 		) {
 			return (
-				appsmith.store
-				.IngForm_duplicate_diet_tags ||
+				appsmith.store.IngForm_duplicate_diet_tags ||
 				[]
 			);
 		}
@@ -943,12 +964,14 @@ export default {
 			appsmith.store.IngForm_mode === "edit"
 		) {
 			return (
-				qryIngGetDietTagIds.data || []
-			).map(r =>
-						String(
-				r.helper_list_item_id
+				qryIngGetClassifications.data || []
 			)
-					 );
+				.filter(
+				x => x.classification_type === "diet_tag"
+			)
+				.map(
+				x => String(x.helper_list_item_id)
+			);
 		}
 
 		return [];
@@ -956,18 +979,16 @@ export default {
 
 	// ============================================================
 	// DISPLAY / CALCULATION
-	// Method names retained so existing widget bindings do not break.
 	// User-facing Yield terminology retired.
 	// ============================================================
 
-	yieldUnitText() {
+	purchaseUnitText() {
 		return (
 			selIngPurchaseUnit
 			.selectedOptionLabel || ""
 		);
 	},
-
-	netYieldText() {
+	usableQtyText() {
 		const qty =
 					Number(
 						inpIngQuantity.text || 0
@@ -992,14 +1013,14 @@ export default {
 					);
 
 		const unit =
-					this.yieldUnitText();
+					this.purchaseUnitText();
 
 		return unit
 			? `Usable qty:    ${value} ${unit}`
 		: `Usable qty:    ${value}`;
 	},
 
-	pricePerUnitText() {
+	netCostText() {
 		const qty =
 					Number(
 						inpIngQuantity.text || 0
@@ -1039,7 +1060,7 @@ export default {
 					);
 
 		const unit =
-					this.yieldUnitText();
+					this.purchaseUnitText();
 
 		return unit
 			? `Net cost:    ${formattedPrice} / ${unit}`

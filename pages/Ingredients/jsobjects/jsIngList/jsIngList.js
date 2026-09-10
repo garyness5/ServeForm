@@ -23,10 +23,10 @@ export default {
 
 			const cleaned =
 						String(value)
-						.replaceAll(",", "")
-						.replace("$", "")
-						.replace("%", "")
-						.trim();
+			.replaceAll(",", "")
+			.replace("$", "")
+			.replace("%", "")
+			.trim();
 
 			if (cleaned === "") {
 				return null;
@@ -37,7 +37,7 @@ export default {
 
 			return Number.isFinite(number)
 				? number
-				: null;
+			: null;
 		};
 
 
@@ -46,8 +46,8 @@ export default {
 		) {
 			changes.purchase_qty =
 				numericValue(
-					row.purchase_qty
-				);
+				row.purchase_qty
+			);
 		}
 
 
@@ -56,8 +56,8 @@ export default {
 		) {
 			changes.total_cost =
 				numericValue(
-					row.total_cost
-				);
+				row.total_cost
+			);
 		}
 
 
@@ -66,8 +66,8 @@ export default {
 		) {
 			changes.wastage_percent =
 				numericValue(
-					row.wastage_percent
-				) ?? 0;
+				row.wastage_percent
+			) ?? 0;
 		}
 
 
@@ -76,8 +76,8 @@ export default {
 		) {
 			changes.item_code =
 				String(
-					row.item_code || ""
-				).trim() || null;
+				row.item_code || ""
+			).trim() || null;
 		}
 
 
@@ -110,12 +110,17 @@ export default {
 		try {
 			await qryIngUpdateIngredientInline.run({
 				ingredient_id:
-					Number(row.id),
+				Number(row.id),
 
 				changes
 			});
 
 			await qryIngGetIngredients.run();
+
+			resetWidget(
+				"tblIngList",
+				true
+			);
 
 			showAlert(
 				"Ingredient updated.",
@@ -127,9 +132,78 @@ export default {
 		} catch (e) {
 			await qryIngGetIngredients.run();
 
+			resetWidget(
+				"tblIngList",
+				true
+			);
+
 			showAlert(
 				e?.message ||
 				"Ingredient could not be updated.",
+				"error"
+			);
+
+			return false;
+		}
+	},
+
+	// ============================================================
+	// INGREDIENT NAME
+	// ============================================================
+
+	async saveNameInline() {
+		const row = tblIngList.updatedRow || {};
+
+		const ingredientId = Number(row.id || 0);
+		const newName = String(row.name || "").trim();
+
+		if (!ingredientId) {
+			showAlert(
+				"Ingredient could not be identified.",
+				"error"
+			);
+
+			return false;
+		}
+
+		if (!newName) {
+			await qryIngGetIngredients.run();
+			resetWidget("tblIngList", true);
+
+			showAlert(
+				"Ingredient Name is required.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		try {
+			await qryIngRenameIngredient.run({
+				ingredient_id: ingredientId,
+				new_name: newName
+			});
+
+			await qryIngGetIngredients.run();
+			resetWidget("tblIngList", true);
+
+			showAlert(
+				"Ingredient updated.",
+				"success"
+			);
+
+			return true;
+
+		} catch (e) {
+			await qryIngGetIngredients.run();
+
+			// Reject the optimistic table edit and reconstruct
+			// from durable Published State.
+			resetWidget("tblIngList", true);
+
+			showAlert(
+				e?.message ||
+				"Ingredient Name could not be updated.",
 				"error"
 			);
 
@@ -147,15 +221,15 @@ export default {
 			qryIngGetUnits.data || []
 		)
 			.filter(u =>
-				u.unit_type === unitType
-			)
+							u.unit_type === unitType
+						 )
 			.map(u => ({
-				label:
-					u.abbreviation,
+			label:
+			u.abbreviation,
 
-				value:
-					String(u.id)
-			}));
+			value:
+			String(u.id)
+		}));
 	},
 
 
@@ -178,15 +252,20 @@ export default {
 		try {
 			await qryIngUpdateIngredientInline.run({
 				ingredient_id:
-					Number(ingredientId),
+				Number(ingredientId),
 
 				changes: {
 					purchase_unit_id:
-						Number(newUnitId)
+					Number(newUnitId)
 				}
 			});
 
 			await qryIngGetIngredients.run();
+
+			resetWidget(
+				"tblIngList",
+				true
+			);
 
 			showAlert(
 				"Ingredient updated.",
@@ -197,6 +276,11 @@ export default {
 
 		} catch (e) {
 			await qryIngGetIngredients.run();
+
+			resetWidget(
+				"tblIngList",
+				true
+			);
 
 			showAlert(
 				e?.message ||
@@ -244,17 +328,22 @@ export default {
 		try {
 			await qryIngUpdateIngredientInline.run({
 				ingredient_id:
-					Number(ingredientId),
+				Number(ingredientId),
 
 				changes: {
 					category_id:
-						newCategoryId
-							? Number(newCategoryId)
-							: null
+					newCategoryId
+					? Number(newCategoryId)
+					: null
 				}
 			});
 
 			await qryIngGetIngredients.run();
+
+			resetWidget(
+				"tblIngList",
+				true
+			);
 
 			showAlert(
 				"Ingredient updated.",
@@ -266,9 +355,14 @@ export default {
 		} catch (e) {
 			await qryIngGetIngredients.run();
 
+			resetWidget(
+				"tblIngList",
+				true
+			);
+
 			showAlert(
 				e?.message ||
-					"Ingredient Category could not be updated.",
+				"Ingredient Category could not be updated.",
 				"error"
 			);
 
@@ -297,17 +391,22 @@ export default {
 		try {
 			await qryIngUpdateIngredientInline.run({
 				ingredient_id:
-					Number(ingredientId),
+				Number(ingredientId),
 
 				changes: {
 					supplier_id:
-						newSupplierId
-							? Number(newSupplierId)
-							: null
+					newSupplierId
+					? Number(newSupplierId)
+					: null
 				}
 			});
 
 			await qryIngGetIngredients.run();
+
+			resetWidget(
+				"tblIngList",
+				true
+			);
 
 			showAlert(
 				"Ingredient updated.",
@@ -319,9 +418,14 @@ export default {
 		} catch (e) {
 			await qryIngGetIngredients.run();
 
+			resetWidget(
+				"tblIngList",
+				true
+			);
+
 			showAlert(
 				e?.message ||
-					"Ingredient Supplier could not be updated.",
+				"Ingredient Supplier could not be updated.",
 				"error"
 			);
 
@@ -350,17 +454,22 @@ export default {
 		try {
 			await qryIngUpdateIngredientInline.run({
 				ingredient_id:
-					Number(ingredientId),
+				Number(ingredientId),
 
 				changes: {
 					packaging_id:
-						newPackagingId
-							? Number(newPackagingId)
-							: null
+					newPackagingId
+					? Number(newPackagingId)
+					: null
 				}
 			});
 
 			await qryIngGetIngredients.run();
+
+			resetWidget(
+				"tblIngList",
+				true
+			);
 
 			showAlert(
 				"Ingredient updated.",
@@ -372,9 +481,14 @@ export default {
 		} catch (e) {
 			await qryIngGetIngredients.run();
 
+			resetWidget(
+				"tblIngList",
+				true
+			);
+
 			showAlert(
 				e?.message ||
-					"Ingredient Packaging could not be updated.",
+				"Ingredient Packaging could not be updated.",
 				"error"
 			);
 
@@ -408,26 +522,36 @@ export default {
 		try {
 			await qryIngUpdateIngredientInline.run({
 				ingredient_id:
-					ingredientId,
+				ingredientId,
 
 				changes: {
 					active:
-						row.active === false
-							? false
-							: true
+					row.active === false
+					? false
+					: true
 				}
 			});
 
 			await qryIngGetIngredients.run();
+
+			resetWidget(
+				"tblIngList",
+				true
+			);
 
 			return true;
 
 		} catch (e) {
 			await qryIngGetIngredients.run();
 
+			resetWidget(
+				"tblIngList",
+				true
+			);
+
 			showAlert(
 				e?.message ||
-					"Ingredient Status could not be updated.",
+				"Ingredient Status could not be updated.",
 				"error"
 			);
 
@@ -447,18 +571,18 @@ export default {
 		const status =
 					String(
 						selIngListFilter
-							.selectedOptionValue ||
+						.selectedOptionValue ||
 						"all"
 					)
-					.trim()
-					.toLowerCase();
+		.trim()
+		.toLowerCase();
 
 		const search =
 					String(
 						inpIngListSearch.text || ""
 					)
-					.trim()
-					.toLowerCase();
+		.trim()
+		.toLowerCase();
 
 		return rows.filter(row => {
 			const statusOk =
@@ -489,10 +613,10 @@ export default {
 			]
 				.filter(Boolean)
 				.some(value =>
-					String(value)
-						.toLowerCase()
-						.includes(search)
-				);
+							String(value)
+							.toLowerCase()
+							.includes(search)
+						 );
 		});
 	}
 };

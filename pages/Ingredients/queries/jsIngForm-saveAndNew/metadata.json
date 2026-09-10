@@ -1,6 +1,6 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_1dfa2da0-c1b4-4d88-91df-cc2a6489b758",
-  "id": "Ingredients_jsIngForm.yieldUnitText",
+  "gitSyncId": "6a0a1bde3214f344228346e7_d79bc400-9b53-4ac6-a181-1e675fe7a60a",
+  "id": "Ingredients_jsIngForm.saveAndNew",
   "pluginId": "js-plugin",
   "pluginType": "JS",
   "unpublishedAction": {
@@ -22,8 +22,8 @@
         "key": "body"
       }
     ],
-    "fullyQualifiedName": "jsIngForm.yieldUnitText",
-    "name": "yieldUnitText",
+    "fullyQualifiedName": "jsIngForm.saveAndNew",
+    "name": "saveAndNew",
     "pageId": "Ingredients",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

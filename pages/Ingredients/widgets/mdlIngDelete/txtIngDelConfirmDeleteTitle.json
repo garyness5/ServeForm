@@ -39,9 +39,9 @@
   "parentId": "6pp4tm9qzz",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 41,
+  "rightColumn": 56,
   "shouldTruncate": false,
-  "text": "{{\n  \"Delete: \" + (tblIngList.selectedRow?.name || \"\")\n}}",
+  "text": "{{\n\"Delete: \" +\n(\tappsmith.store.IngForm_edit_row?.name ||\n \"\"\n)\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,
@@ -49,5 +49,5 @@
   "type": "TEXT_WIDGET",
   "version": 1,
   "widgetId": "ah4p6mqbfw",
-  "widgetName": "titIngDelConfirmDelete"
+  "widgetName": "txtIngDelConfirmDeleteTitle"
 }

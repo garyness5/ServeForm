@@ -1,9 +1,15 @@
 select
-  id,
-  name
-from public.helper_list_items
-where client_id = {{ appsmith.store.current_client_id }}
-  and list_id = 6
-  and active = true
-  and is_system = true
-order by name;
+    hli.id,
+    hli.name,
+    hli.is_system
+from public.helper_list_items hli
+join public.helper_lists hl
+    on hl.id = hli.list_id
+where hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  and hl.list_code = 'diet_tag'
+  and hli.active = true
+  and coalesce(hli.deleted, false) = false
+order by
+    hli.is_system desc,
+    hli.sort_order nulls last,
+    hli.name;

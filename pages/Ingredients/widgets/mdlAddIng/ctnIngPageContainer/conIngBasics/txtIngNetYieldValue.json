@@ -44,7 +44,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 37,
   "shouldTruncate": false,
-  "text": "{{ jsIngForm.netYieldText() }}",
+  "text": "{{ jsIngForm.usableQtyText() }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 24,
