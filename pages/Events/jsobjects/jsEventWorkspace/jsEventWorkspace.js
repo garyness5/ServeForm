@@ -422,12 +422,37 @@ export default {
 	},
 
 	async setCustomer(value) {
-		return await this.capture({
+		const customerId =
+					this.numberOrNull(value);
+
+		await this.capture({
 			customer_id:
-			this.numberOrNull(value),
+			customerId,
 
 			contact_ids: []
 		});
+
+		await qryGetEvtContacts.run();
+
+		const singleContactId =
+					this.singleLinkedContactId(
+						qryGetEvtContacts.data || []
+					);
+
+		if (singleContactId) {
+			await this.capture({
+				contact_ids: [
+					singleContactId
+				]
+			});
+		}
+
+		await resetWidget(
+			"msEvtContacts",
+			true
+		);
+
+		return this.get();
 	},
 
 	async setCustomerContacts(values) {
@@ -440,12 +465,37 @@ export default {
 	},
 
 	async setVenue(value) {
-		return await this.capture({
+		const venueId =
+					this.numberOrNull(value);
+
+		await this.capture({
 			venue_id:
-			this.numberOrNull(value),
+			venueId,
 
 			venue_contact_ids: []
 		});
+
+		await qryGetEvtVenueContacts.run();
+
+		const singleContactId =
+					this.singleLinkedContactId(
+						qryGetEvtVenueContacts.data || []
+					);
+
+		if (singleContactId) {
+			await this.capture({
+				venue_contact_ids: [
+					singleContactId
+				]
+			});
+		}
+
+		await resetWidget(
+			"msEvtVenueContacts",
+			true
+		);
+
+		return this.get();
 	},
 
 	async setVenueContacts(values) {
@@ -455,6 +505,33 @@ export default {
 				values
 			)
 		});
+	},
+
+	linkedContactIds(rows = []) {
+		return (rows || [])
+			.filter(row =>
+							row.linked_to_selected_customer === true ||
+							row.linked_to_selected_customer === "true" ||
+							row.linked_to_selected_venue === true ||
+							row.linked_to_selected_venue === "true"
+						 )
+			.map(row =>
+					 Number(
+			row.value ??
+			row.id ??
+			0
+		)
+					)
+			.filter(Boolean);
+	},
+
+	singleLinkedContactId(rows = []) {
+		const ids =
+					this.linkedContactIds(rows);
+
+		return ids.length === 1
+			? ids[0]
+		: null;
 	},
 
 	async setFormat(value) {

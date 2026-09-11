@@ -286,7 +286,7 @@ export default {
 
 		try {
 			const result =
-						await qryDeleteEventProposal.run();
+						await qryEvtDeleteProposal.run();
 
 			const row =
 						result?.[0] || null;
