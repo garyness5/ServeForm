@@ -21,6 +21,7 @@ export default {
 
 			active: true,
 
+			closed: false,
 			status: "Draft",
 			closed_at: null,
 			closed_proposal_id: null
@@ -166,6 +167,16 @@ export default {
 			? false
 			: true,
 
+			closed:
+			Object.prototype.hasOwnProperty.call(
+				data,
+				"closed"
+			)
+			? data.closed === true
+			: String(
+				data.status || ""
+			).trim() === "Closed",
+
 			status:
 			String(
 				data.status || "Draft"
@@ -252,6 +263,9 @@ export default {
 
 			active:
 			row.active,
+
+			closed:
+			row.status === "Closed",
 
 			status:
 			row.status || "Draft",
@@ -551,10 +565,8 @@ export default {
 
 	async setClosed(value) {
 		return await this.capture({
-			status:
+			closed:
 			value === true
-			? "Closed"
-			: "Open"
 		});
 	},
 
@@ -562,90 +574,121 @@ export default {
 		const workspace =
 					this.current();
 
-		if (
-			workspace.status ===
-			"Closed"
-		) {
+		if (workspace.closed) {
 			return "Closed";
 		}
 
-		const rows =
-					qryGetProposalsForEvent.data ||
-					[];
-
-		if (
-			rows.some(row =>
-								row.proposal_status ===
-								"Ordered"
-							 )
-		) {
-			return "Ordered";
-		}
-
-		if (
-			rows.some(row =>
-								row.proposal_status ===
-								"Accepted"
-							 )
-		) {
-			return "Accepted";
-		}
-
-		if (
-			rows.some(row =>
-								row.proposal_status ===
-								"Issued"
-							 )
-		) {
-			return "Sent";
-		}
-
-		return "Draft";
+		return (
+			String(
+				workspace.status || "Draft"
+			).trim() ||
+			"Draft"
+		);
 	},
 
 	canShowClosed() {
-		const workspace =
-					this.current();
-
-		/*
-	 * Already Closed:
-	 * keep the checkbox visible so the user can
-	 * uncheck / recheck it during the reopen session.
-	 */
-		if (workspace.status === "Closed") {
-			return true;
-		}
-
-		/*
-	 * A reopened saved Closed Event must also keep
-	 * Closed available until the next Save.
-	 */
-		const saved =
-					this.savedEvent();
-
-		if (saved.status === "Closed") {
-			return true;
-		}
-
-		/*
-	 * Otherwise Closed is available only when the
-	 * Event has a saved Active Ordered Proposal.
-	 *
-	 * Do not depend on which Proposal happens
-	 * to be selected in the selector.
-	 */
 		return (
-			qryGetProposalsForEvent.data || []
-		).some(row =>
-					 row.proposal_status === "Ordered" &&
-					 row.active !== false
-					);
+			Number(
+				appsmith.store.current_event_id || 0
+			) > 0
+		);
 	},
 
 	isClosedLocked() {
 		return (
-			this.savedEvent().status === "Closed" &&
-			this.current().status === "Closed"
+			this.savedEvent().closed === true &&
+			this.current().closed === true
+		);
+	},
+
+	async requestClosedChange(value) {
+		const wantsClosed =
+					value === true;
+
+		const savedClosed =
+					this.savedEvent().closed === true;
+
+		/*
+	 * Normal Close:
+	 * no warning required.
+	 */
+		if (wantsClosed) {
+			return await this.setClosed(true);
+		}
+
+		/*
+	 * An Event that is not saved Closed can simply
+	 * remain/open as normal.
+	 */
+		if (!savedClosed) {
+			return await this.setClosed(false);
+		}
+
+		/*
+	 * Saved Closed Event:
+	 * do NOT reopen yet.
+	 *
+	 * Restore the checkbox visually and ask the user
+	 * whether this is a correction or a new occurrence.
+	 */
+		await this.setClosed(true);
+
+		await resetWidget(
+			"chkEvtClosed",
+			true
+		);
+
+		showModal(
+			mdlEvtReopen.name
+		);
+
+		return false;
+	},
+
+	async confirmReopen() {
+		closeModal(
+			mdlEvtReopen.name
+		);
+
+		await this.setClosed(false);
+
+		await resetWidget(
+			"chkEvtClosed",
+			true
+		);
+
+		return true;
+	},
+
+	async cancelReopen() {
+		closeModal(
+			mdlEvtReopen.name
+		);
+
+		await this.setClosed(true);
+
+		await resetWidget(
+			"chkEvtClosed",
+			true
+		);
+
+		return true;
+	},
+
+	async duplicateFromReopen() {
+		closeModal(
+			mdlEvtReopen.name
+		);
+
+		await this.setClosed(true);
+
+		await resetWidget(
+			"chkEvtClosed",
+			true
+		);
+
+		return await jsEventActionGuard.request(
+			"duplicate"
 		);
 	},
 };

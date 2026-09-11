@@ -3,7 +3,7 @@
   "borderColor": "",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 8,
+  "bottomRow": 14,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "defaultModel": "{{\n{\n\tcontacts:\n\tjsEventAddressBook.selectedContactDetails()\n}\n}}",
   "dynamicBindingPathList": [

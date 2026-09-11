@@ -104,7 +104,7 @@ export default {
 
 			const staged =
 						await jsEventActions
-			.stageDuplicateSnapshot();
+			.stageDuplicateSnapshot(true);
 
 			if (!staged) {
 				showAlert(

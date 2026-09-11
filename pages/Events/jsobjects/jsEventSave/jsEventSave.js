@@ -182,23 +182,120 @@ export default {
 	},
 
 	headerSnapshotFromPage() {
-		const header = {
-			...jsEventWorkspace.current()
+		const workspace =
+					jsEventWorkspace.current();
+
+		const saved =
+					jsEventWorkspace.savedEvent();
+
+		let statusRequest =
+				workspace.status || "Draft";
+
+		/*
+	 * Closed is Event-owned Working State.
+	 *
+	 * Backend still temporarily receives
+	 * Closed / Open through p_header.status.
+	 *
+	 * Normal Proposal-derived Event Status
+	 * is never manufactured here.
+	 */
+		if (workspace.closed === true) {
+			statusRequest = "Closed";
+		}
+		else if (
+			saved.closed === true &&
+			workspace.closed === false
+		) {
+			statusRequest = "Open";
+		}
+
+		return {
+			name:
+			workspace.name,
+
+			event_ref:
+			workspace.event_ref,
+
+			event_datetime:
+			workspace.event_datetime,
+
+			customer_id:
+			workspace.customer_id,
+
+			contact_ids:
+			workspace.contact_ids || [],
+
+			venue_id:
+			workspace.venue_id,
+
+			venue_contact_ids:
+			workspace.venue_contact_ids || [],
+
+			total_guests_manual:
+			workspace.total_guests_manual,
+
+			format:
+			workspace.format,
+
+			customer_notes:
+			workspace.customer_notes,
+
+			internal_notes:
+			workspace.internal_notes,
+
+			active:
+			workspace.active,
+
+			status:
+			statusRequest
 		};
-
-		delete header.event_id;
-
-		return header;
 	},
 
 	headerSnapshotFromSaved() {
-		const header = {
-			...jsEventWorkspace.savedEvent()
+		const workspace =
+					jsEventWorkspace.savedEvent();
+
+		return {
+			name:
+			workspace.name,
+
+			event_ref:
+			workspace.event_ref,
+
+			event_datetime:
+			workspace.event_datetime,
+
+			customer_id:
+			workspace.customer_id,
+
+			contact_ids:
+			workspace.contact_ids || [],
+
+			venue_id:
+			workspace.venue_id,
+
+			venue_contact_ids:
+			workspace.venue_contact_ids || [],
+
+			total_guests_manual:
+			workspace.total_guests_manual,
+
+			format:
+			workspace.format,
+
+			customer_notes:
+			workspace.customer_notes,
+
+			internal_notes:
+			workspace.internal_notes,
+
+			active:
+			workspace.active,
+
+			status:
+			workspace.status
 		};
-
-		delete header.event_id;
-
-		return header;
 	},
 
 	isNewBlankEvent() {
@@ -228,7 +325,12 @@ export default {
 		const saved =
 					this.headerSnapshotFromSaved();
 
+		const closedChanged =
+					jsEventWorkspace.current().closed !==
+					jsEventWorkspace.savedEvent().closed;
+
 		return (
+			closedChanged ||
 			JSON.stringify(page) !==
 			JSON.stringify(saved)
 		);

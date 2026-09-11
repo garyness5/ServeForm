@@ -23,7 +23,7 @@ export default {
 													 );
 
 		let candidate =
-				`${name} Copy`;
+				`${name} - copy`;
 
 		let counter = 2;
 
@@ -33,7 +33,7 @@ export default {
 			)
 		) {
 			candidate =
-				`${name} Copy ${counter}`;
+				`${name} - copy ${counter}`;
 
 			counter += 1;
 		}
@@ -59,7 +59,9 @@ export default {
 						 );
 	},
 
-	async buildDuplicateSnapshot() {
+	async buildDuplicateSnapshot(
+		useSavedHeader = false
+	) {
 		const sourceEventId =
 					Number(
 						appsmith.store.current_event_id || 0
@@ -77,8 +79,10 @@ export default {
 		/*
 		 * Capture the LIVE Event Header.
 		 */
-		const liveHeader =
-					jsEventWorkspace.current();
+		const sourceHeader =
+					useSavedHeader
+		? jsEventWorkspace.savedEvent()
+		: jsEventWorkspace.current();
 
 		await Promise.all([
 			qryGetAllProposalMenusForEvent.run(),
@@ -198,7 +202,7 @@ export default {
 
 			header: {
 				...this.deepCopy(
-					liveHeader
+					sourceHeader
 				),
 
 				event_id:
@@ -206,11 +210,11 @@ export default {
 
 				name:
 				this.copyName(
-					liveHeader.name
+					sourceHeader.name
 				),
 
-				event_ref:
-				null,
+				closed:
+				false,
 
 				status:
 				"Draft",
@@ -222,7 +226,7 @@ export default {
 				null,
 
 				closed_proposal_id:
-				null
+				null,
 			},
 
 			proposals:
@@ -230,9 +234,13 @@ export default {
 		};
 	},
 
-	async stageDuplicateSnapshot() {
+	async stageDuplicateSnapshot(
+		useSavedHeader = false
+	) {
 		const snapshot =
-					await this.buildDuplicateSnapshot();
+					await this.buildDuplicateSnapshot(
+						useSavedHeader
+					);
 
 		if (!snapshot) {
 			return false;

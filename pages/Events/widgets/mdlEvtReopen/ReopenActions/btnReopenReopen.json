@@ -4,6 +4,7 @@
   "bottomRow": 6,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
+  "buttonStyle": "PRIMARY_BUTTON",
   "buttonVariant": "PRIMARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
@@ -12,17 +13,14 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
-      "key": "onClick"
+      "key": "isDisabled"
     },
     {
-      "key": "isDisabled"
+      "key": "onClick"
     }
   ],
   "dynamicTriggerPathList": [
@@ -30,34 +28,32 @@
       "key": "onClick"
     }
   ],
-  "iconAlign": "left",
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ !jsEvtListActions.hasSelection() }}",
+  "isDisabled": "",
   "isLoading": false,
   "isVisible": true,
-  "key": "o01hoigeqy",
-  "leftColumn": 14,
+  "key": "oy0hw5tj7l",
+  "leftColumn": 48,
   "minWidth": 120,
-  "mobileBottomRow": 8,
-  "mobileLeftColumn": 6,
-  "mobileRightColumn": 22,
-  "mobileTopRow": 4,
+  "mobileBottomRow": 22,
+  "mobileLeftColumn": 47,
+  "mobileRightColumn": 63,
+  "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEvtListActions.duplicateSelectedEvent() }}",
-  "parentColumnSpace": 10.609375,
-  "parentId": "sfs10q6jkb",
-  "parentRowSpace": 10,
+  "onClick": "{{ jsEventWorkspace.confirmReopen() }}",
+  "originalBottomRow": 48,
+  "originalTopRow": 44,
+  "parentId": "u730z2hzht",
   "placement": "CENTER",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 20,
-  "text": "Duplicate",
-  "tooltip": "Delete selected recipe",
+  "rightColumn": 62,
+  "text": "Reopen",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "zx6xou4npb",
-  "widgetName": "btnDuplicateListEvent"
+  "widgetId": "wypva2xref",
+  "widgetName": "btnReopenReopen"
 }

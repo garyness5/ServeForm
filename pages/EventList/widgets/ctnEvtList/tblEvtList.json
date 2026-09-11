@@ -5,7 +5,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 53,
+  "bottomRow": 60,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "cachedTableData": {},
   "canFreezeColumn": true,
@@ -120,9 +120,6 @@
       "key": "oddRowColor"
     },
     {
-      "key": "headerTextColor"
-    },
-    {
       "key": "primaryColumns.event_date.computedValue"
     },
     {
@@ -188,7 +185,7 @@
   "endOfData": false,
   "flexVerticalAlignment": "start",
   "headerRowColor": "",
-  "headerTextColor": "{{appsmith.theme.colors.backgroundColor}}",
+  "headerTextColor": "",
   "horizontalAlignment": "LEFT",
   "infiniteScrollEnabled": false,
   "inlineEditingSaveOption": "CUSTOM",

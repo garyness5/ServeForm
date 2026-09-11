@@ -12,11 +12,17 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -25,7 +31,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": false,
+  "isDisabled": "{{ Number(appsmith.store.current_event_id || 0) <= 0 }}",
   "isLoading": false,
   "isVisible": true,
   "key": "1jck26kllg",
@@ -47,6 +53,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 25,
   "text": "Duplicate",
+  "tooltip": "Duplicate the event",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
