@@ -21,90 +21,109 @@ export default {
 	menuPayload(rows) {
 		return (rows || [])
 			.filter(row =>
-				jsProposalComponents
-					.hasContent(row)
-			)
-			.map((row, index) => {
-				const derived =
 							jsProposalComponents
-								.refreshDerivedFields(row);
+							.hasContent(row)
+						 )
+			.map((row, index) => {
+			const derived =
+						jsProposalComponents
+			.refreshDerivedFields(row);
 
-				return {
-					line_no:
-					index + 1,
+			return {
+				line_no:
+				index + 1,
 
-					menu_id:
-					Number(
-						derived.menu_id || 0
-					) || null,
+				menu_id:
+				Number(
+					derived.menu_id || 0
+				) || null,
 
-					category_id:
-					Number(
-						derived.category_id || 0
-					) || null,
+				category_id:
+				Number(
+					derived.category_id || 0
+				) || null,
 
-					category_name:
-					this.textClean(
-						derived.category_name
-					),
+				category_name:
+				this.textClean(
+					derived.category_name
+				),
 
-					menu_name:
-					this.textClean(
-						derived.current_menu_name ||
-						derived.menu_name
-					),
+				menu_name:
+				this.textClean(
+					derived.current_menu_name ||
+					derived.menu_name
+				),
 
-					guests:
-					derived.guests == null
-						? null
-						: Number(
-							derived.guests
-						),
+				guests:
+				derived.guests == null
+				? null
+				: Number(
+					derived.guests
+				),
 
-					extra_guests:
-					derived.extra_guests == null
-						? 0
-						: Number(
-							derived.extra_guests
-						),
+				extra_guests:
+				derived.extra_guests == null
+				? 0
+				: Number(
+					derived.extra_guests
+				),
 
-					allergen_names:
-					this.textClean(
-						derived.allergen_names
-					),
+				allergen_names:
+				this.textClean(
+					derived.allergen_names
+				),
 
-					diet_tag_names:
-					this.textClean(
-						derived.diet_tag_names
-					),
+				diet_tag_names:
+				this.textClean(
+					derived.diet_tag_names
+				),
 
-					notes:
-					this.textClean(
-						derived.notes
-					),
+				notes:
+				this.textClean(
+					derived.notes
+				),
 
-					active:
-					derived.active === false
-						? false
-						: true
-				};
-			});
+				active:
+				derived.active === false
+				? false
+				: true
+			};
+		});
 	},
 
 	async refreshCurrentProposal(
 		proposalId
 	) {
-		await qryGetSelectedProposal.run();
+		/*
+	 * The Proposal has already been committed.
+	 *
+	 * Reload all Published State used by:
+	 * - selected Proposal header
+	 * - selected Proposal components
+	 * - Event Proposal selector
+	 *
+	 * These queries are independent once
+	 * current_proposal_id is established.
+	 */
+		await Promise.all([
+			qryGetSelectedProposal.run(),
+			qryGetSelectedProposalMenus.run(),
+			qryGetProposalsForEvent.run()
+		]);
 
-		await qryGetSelectedProposalMenus.run();
-
-		await qryGetProposalsForEvent.run();
-
+		/*
+	 * The old workspace/baseline represented
+	 * pre-save Working State.
+	 */
 		await jsProposalWorkspaces
 			.discard(
-				proposalId
-			);
+			proposalId
+		);
 
+		/*
+	 * Rebuild the selected Proposal workspace
+	 * from the newly saved Supabase truth.
+	 */
 		await jsProposalWorkspaces
 			.initializeCurrentWorkspace();
 
@@ -142,13 +161,13 @@ export default {
 			const savedId =
 						Number(
 							result?.[0]
-								?.proposal_id ||
+							?.proposal_id ||
 							0
 						);
 
 			return savedId > 0
 				? savedId
-				: null;
+			: null;
 		}
 		finally {
 			await removeValue(
@@ -163,9 +182,9 @@ export default {
 	) {
 		const workspace =
 					jsProposalWorkspaces
-						.get(
-							tempProposalId
-						);
+		.get(
+			tempProposalId
+		);
 
 		if (!workspace) {
 			return null;
@@ -178,7 +197,7 @@ export default {
 			source_proposal_id:
 			Number(
 				workspace
-					.source_proposal_id ||
+				.source_proposal_id ||
 				0
 			) || null,
 
@@ -200,13 +219,13 @@ export default {
 			const savedId =
 						Number(
 							result?.[0]
-								?.proposal_id ||
+							?.proposal_id ||
 							0
 						);
 
 			return savedId > 0
 				? savedId
-				: null;
+			: null;
 		}
 		finally {
 			await removeValue(
@@ -219,7 +238,7 @@ export default {
 		const existingEventId =
 					Number(
 						appsmith.store
-							.current_event_id ||
+						.current_event_id ||
 						0
 					);
 
@@ -239,7 +258,7 @@ export default {
 		 */
 		const eventId =
 					await jsEventSave
-						.ensureEventSavedForProposal();
+		.ensureEventSavedForProposal();
 
 		if (eventId <= 0) {
 			showAlert(
@@ -283,7 +302,7 @@ export default {
 		const proposalId =
 					Number(
 						appsmith.store
-							.current_proposal_id ||
+						.current_proposal_id ||
 						0
 					);
 
@@ -298,7 +317,7 @@ export default {
 
 		const rows =
 					jsProposalComponents
-						.effectiveRows();
+		.effectiveRows();
 
 		/*
 		 * Proposal cannot exist in Supabase until
@@ -309,7 +328,7 @@ export default {
 		 */
 		const eventId =
 					await this
-						.ensureParentEvent();
+		.ensureParentEvent();
 
 		if (eventId <= 0) {
 			return false;
@@ -323,10 +342,10 @@ export default {
 		if (proposalId > 0) {
 			savedId =
 				await this
-					.saveExistingProposal(
-						proposalId,
-						rows
-					);
+				.saveExistingProposal(
+				proposalId,
+				rows
+			);
 
 			if (!savedId) {
 				showAlert(
@@ -339,8 +358,8 @@ export default {
 
 			await this
 				.refreshCurrentProposal(
-					savedId
-				);
+				savedId
+			);
 		}
 
 		/*
@@ -349,10 +368,10 @@ export default {
 		else {
 			savedId =
 				await this
-					.saveNewProposal(
-						proposalId,
-						rows
-					);
+				.saveNewProposal(
+				proposalId,
+				rows
+			);
 
 			if (!savedId) {
 				showAlert(
@@ -372,8 +391,8 @@ export default {
 			 */
 			await jsProposalWorkspaces
 				.discard(
-					proposalId
-				);
+				proposalId
+			);
 
 			/*
 			 * Current Proposal now uses its real
@@ -390,8 +409,8 @@ export default {
 			 */
 			await this
 				.refreshCurrentProposal(
-					savedId
-				);
+				savedId
+			);
 
 			/*
 			 * Renumber any remaining temporary

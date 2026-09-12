@@ -436,15 +436,25 @@ export default {
 	},
 
 	proposalIdsForEventSave() {
+		const currentEventId =
+					Number(
+						appsmith.store.current_event_id || 0
+					);
+
 		/*
-		 * Every persisted Proposal belongs to the
-		 * Event Save document, whether dirty or not.
-		 */
+	 * Persisted Proposals belong to Event Save
+	 * only when we are editing an already-saved Event.
+	 *
+	 * A new / duplicated Event must never inherit
+	 * stale persisted Proposal IDs from the previous
+	 * qryGetProposalsForEvent result.
+	 */
 		const savedIds =
-					(
-						qryGetProposalsForEvent.data ||
-						[]
-					)
+					currentEventId > 0
+		? (
+			qryGetProposalsForEvent.data ||
+			[]
+		)
 		.map(row =>
 				 Number(
 			row.id || 0
@@ -452,13 +462,16 @@ export default {
 				)
 		.filter(id =>
 						id > 0
-					 );
+					 )
+		: [];
 
 		/*
-		 * Every Proposal Working State also belongs
-		 * to the document. This includes temporary
-		 * never-saved Proposals.
-		 */
+	 * Proposal Working States belong to the current
+	 * Event workspace.
+	 *
+	 * For new / duplicated Events these will normally
+	 * be temporary negative IDs.
+	 */
 		const workspaceIds =
 					Object.keys(
 						jsProposalWorkspaces.all()

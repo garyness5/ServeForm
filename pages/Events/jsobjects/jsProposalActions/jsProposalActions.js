@@ -550,7 +550,7 @@ export default {
 			);
 
 			showModal(
-				"mdlEvtGroReplace"
+				mdlEvtGroReplace.name
 			);
 
 			return false;
@@ -627,7 +627,7 @@ export default {
 			);
 
 			closeModal(
-				"mdlEvtGroReplace"
+				mdlEvtGroReplace.name
 			);
 
 			showAlert(
@@ -659,7 +659,7 @@ export default {
 		await removeValue("evt_gro_unorder_request");
 		await removeValue("evt_gro_keep_manual");
 
-		closeModal("mdlEvtGroReplace");
+		closeModal(mdlEvtGroReplace.name);
 
 		return true;
 	},
@@ -717,7 +717,7 @@ export default {
 				{ proposal_id: proposalId }
 			);
 
-			showModal("mdlEvtGroReplace");
+			showModal(mdlEvtGroReplace.name);
 
 			return false;
 		}
@@ -755,7 +755,7 @@ export default {
 			await removeValue("evt_gro_unorder_request");
 			await removeValue("evt_gro_keep_manual");
 
-			closeModal("mdlEvtGroReplace");
+			closeModal(mdlEvtGroReplace.name);
 
 			showAlert(
 				"Proposal removed from Groceries.",
@@ -822,103 +822,5 @@ export default {
 		return this.isOrdered()
 			? await this.unorder()
 		: await this.sendToOrder();
-	},
-
-	async updateOrder() {
-
-		const proposalId =
-					Number(appsmith.store.current_proposal_id || 0);
-
-		if (!proposalId || proposalId < 0) {
-
-			showAlert(
-				"Select a saved Proposal first.",
-				"warning"
-			);
-
-			return false;
-		}
-
-
-		if (!this.isOrdered()) {
-
-			showAlert(
-				"Only an Ordered Proposal can update the Order.",
-				"warning"
-			);
-
-			return false;
-		}
-
-
-		/*
-	 * Groceries must receive saved truth only.
-	 */
-		if (
-			jsProposalWorkspaces.isDirty(
-				proposalId
-			)
-		) {
-
-			showAlert(
-				"Save the Proposal before updating the Order.",
-				"warning"
-			);
-
-			return false;
-		}
-
-
-		if (jsEventSave.isDirty()) {
-
-			showAlert(
-				"Save the Event before updating the Order.",
-				"warning"
-			);
-
-			return false;
-		}
-
-
-		try {
-
-			const result =
-						await qrySendProposalToGroceries.run();
-
-			const row =
-						result?.[0] || null;
-
-			if (!row?.gro_event_id) {
-
-				showAlert(
-					"Order could not be updated.",
-					"error"
-				);
-
-				return false;
-			}
-
-
-			await qryGetProposalsForEvent.run();
-			await qryGetSelectedProposal.run();
-
-
-			showAlert(
-				"Order updated. Click Update All in Groceries to apply the changes.",
-				"success"
-			);
-
-			return true;
-
-		} catch (error) {
-
-			showAlert(
-				error?.message ||
-				"Order could not be updated.",
-				"error"
-			);
-
-			return false;
-		}
 	},
 };
