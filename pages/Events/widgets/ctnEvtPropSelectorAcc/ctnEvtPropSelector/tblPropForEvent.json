@@ -57,13 +57,13 @@
   "columnWidthMap": {
     "active": 103,
     "customColumn1": 60,
-    "proposal_no": 144,
+    "proposal_no": 153,
     "proposal_sequence_number": 233,
     "proposal_status": 92,
     "sent_at": 149,
     "updated_at": 217
   },
-  "compactMode": "SHORT",
+  "compactMode": "DEFAULT",
   "customIsLoading": false,
   "customIsLoadingValue": "",
   "defaultPageSize": 0,

@@ -432,8 +432,13 @@ export default {
 		try {
 			await qrySetEvtProposalStatus.run();
 
-			await qryGetProposalsForEvent.run();
-			await qryGetSelectedProposal.run();
+			await Promise.all([
+				qryGetProposalsForEvent.run(),
+				qryGetSelectedProposal.run(),
+				qryGetEvtItemById.run()
+			]);
+
+			await jsEventWorkspace.resetFromSaved();
 
 			return true;
 
@@ -615,8 +620,13 @@ export default {
 			}
 
 
-			await qryGetProposalsForEvent.run();
-			await qryGetSelectedProposal.run();
+			await Promise.all([
+				qryGetProposalsForEvent.run(),
+				qryGetSelectedProposal.run(),
+				qryGetEvtItemById.run()
+			]);
+
+			await jsEventWorkspace.resetFromSaved();
 
 			await removeValue(
 				"evt_gro_replace_request"
@@ -749,8 +759,13 @@ export default {
 				return false;
 			}
 
-			await qryGetProposalsForEvent.run();
-			await qryGetSelectedProposal.run();
+			await Promise.all([
+				qryGetProposalsForEvent.run(),
+				qryGetSelectedProposal.run(),
+				qryGetEvtItemById.run()
+			]);
+
+			await jsEventWorkspace.resetFromSaved();
 
 			await removeValue("evt_gro_unorder_request");
 			await removeValue("evt_gro_keep_manual");
