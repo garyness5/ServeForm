@@ -37,7 +37,7 @@
       "mobileTopRow": 0,
       "needsErrorInfo": false,
       "parentColumnSpace": 1,
-      "parentId": "rwzbm0niqf",
+      "parentId": "8hqnlh3fqk",
       "parentRowSpace": 1,
       "renderMode": "CANVAS",
       "responsiveBehavior": "fill",
@@ -46,8 +46,8 @@
       "topRow": 0,
       "type": "CANVAS_WIDGET",
       "version": 1,
-      "widgetId": "rumxlz92ea",
-      "widgetName": "Canvas6CopyCopyCopy1Copy"
+      "widgetId": "yr4qosxsyb",
+      "widgetName": "Canvas6CopyCopyCopy1CopyCopy"
     }
   ],
   "detachFromLayout": true,
@@ -79,10 +79,10 @@
   "renderMode": "CANVAS",
   "rightColumn": 56,
   "shouldScrollContents": true,
-  "topRow": 183,
+  "topRow": 190,
   "type": "MODAL_WIDGET",
   "version": 2,
-  "widgetId": "rwzbm0niqf",
-  "widgetName": "mdlEvtReopen",
+  "widgetId": "8hqnlh3fqk",
+  "widgetName": "mdlEvtClose",
   "width": 456
 }

@@ -586,6 +586,110 @@ export default {
 		);
 	},
 
+	closeCostSource() {
+		const rows =
+					qryGetProposalsForEvent.data || [];
+
+		const ordered =
+					rows.find(row =>
+										row.proposal_status === "Ordered"
+									 );
+
+		if (ordered) {
+			return {
+				id:
+				Number(ordered.id || 0),
+
+				status:
+				"Ordered",
+
+				label:
+				String(
+					ordered.proposal_number ||
+					ordered.proposal_title ||
+					`Proposal ${ordered.proposal_no || ""}`
+				).trim()
+			};
+		}
+
+		const accepted =
+					rows.find(row =>
+										row.proposal_status === "Accepted"
+									 );
+
+		if (accepted) {
+			return {
+				id:
+				Number(accepted.id || 0),
+
+				status:
+				"Accepted",
+
+				label:
+				String(
+					accepted.proposal_number ||
+					accepted.proposal_title ||
+					`Proposal ${accepted.proposal_no || ""}`
+				).trim()
+			};
+		}
+
+		return null;
+	},
+
+	closeMessage() {
+		const source =
+					this.closeCostSource();
+
+		if (!source) {
+			return [
+				"Closing this Event will freeze its current costs.",
+				"",
+				"No Proposal is currently marked Ordered or Accepted. The Event can still be closed, but no frozen Event cost will be recorded.",
+				"",
+				"To view closed Events later, select Closed from the Filter dropdown at the top of EventList."
+			].join("\n");
+		}
+
+		return [
+			"Closing this Event will freeze its current costs.",
+			"",
+			`Frozen cost source: ${source.label} — ${source.status}`,
+			"",
+			"Please confirm this is the correct Proposal before closing."
+		].join("\n");
+	},
+
+	async confirmClose() {
+		closeModal(
+			mdlEvtClose.name
+		);
+
+		await this.setClosed(true);
+
+		await resetWidget(
+			"chkEvtClosed",
+			true
+		);
+
+		return true;
+	},
+
+	async cancelClose() {
+		closeModal(
+			mdlEvtClose.name
+		);
+
+		await this.setClosed(false);
+
+		await resetWidget(
+			"chkEvtClosed",
+			true
+		);
+
+		return true;
+	},
+
 	canShowClosed() {
 		return (
 			Number(
@@ -609,16 +713,28 @@ export default {
 					this.savedEvent().closed === true;
 
 		/*
-	 * Normal Close:
-	 * no warning required.
+	 * User is asking to Close an open Event.
+	 *
+	 * Do not change Working State yet.
+	 * Restore the checkbox and show confirmation.
 	 */
 		if (wantsClosed) {
-			return await this.setClosed(true);
+			await this.setClosed(false);
+
+			await resetWidget(
+				"chkEvtClosed",
+				true
+			);
+
+			showModal(
+				mdlEvtClose.name
+			);
+
+			return false;
 		}
 
 		/*
-	 * An Event that is not saved Closed can simply
-	 * remain/open as normal.
+	 * Normal open Event.
 	 */
 		if (!savedClosed) {
 			return await this.setClosed(false);
@@ -626,10 +742,8 @@ export default {
 
 		/*
 	 * Saved Closed Event:
-	 * do NOT reopen yet.
-	 *
-	 * Restore the checkbox visually and ask the user
-	 * whether this is a correction or a new occurrence.
+	 * restore Closed while asking whether to
+	 * Reopen, Duplicate or Cancel.
 	 */
 		await this.setClosed(true);
 

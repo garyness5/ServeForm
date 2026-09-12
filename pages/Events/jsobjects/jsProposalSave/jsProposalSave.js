@@ -1,11 +1,17 @@
 export default {
 	textClean(value) {
-		const text = String(value ?? "").trim();
+		const text =
+					String(
+						value ?? ""
+					).trim();
+
 		return text || null;
 	},
 
 	requiredMessage() {
-		if (!jsProposalData.hasSelectedProposal()) {
+		if (
+			!jsProposalData.hasSelectedProposal()
+		) {
 			return "No Proposal is currently selected.";
 		}
 
@@ -15,73 +21,74 @@ export default {
 	menuPayload(rows) {
 		return (rows || [])
 			.filter(row =>
-							jsProposalComponents.hasContent(row)
-						 )
+				jsProposalComponents
+					.hasContent(row)
+			)
 			.map((row, index) => {
-			const derived =
-						jsProposalComponents
-			.refreshDerivedFields(row);
+				const derived =
+							jsProposalComponents
+								.refreshDerivedFields(row);
 
-			return {
-				line_no:
-				index + 1,
+				return {
+					line_no:
+					index + 1,
 
-				menu_id:
-				Number(
-					derived.menu_id || 0
-				) || null,
+					menu_id:
+					Number(
+						derived.menu_id || 0
+					) || null,
 
-				category_id:
-				Number(
-					derived.category_id || 0
-				) || null,
+					category_id:
+					Number(
+						derived.category_id || 0
+					) || null,
 
-				category_name:
-				this.textClean(
-					derived.category_name
-				),
+					category_name:
+					this.textClean(
+						derived.category_name
+					),
 
-				menu_name:
-				this.textClean(
-					derived.current_menu_name ||
-					derived.menu_name
-				),
+					menu_name:
+					this.textClean(
+						derived.current_menu_name ||
+						derived.menu_name
+					),
 
-				guests:
-				derived.guests == null
-				? null
-				: Number(
-					derived.guests
-				),
+					guests:
+					derived.guests == null
+						? null
+						: Number(
+							derived.guests
+						),
 
-				extra_guests:
-				derived.extra_guests == null
-				? 0
-				: Number(
-					derived.extra_guests
-				),
+					extra_guests:
+					derived.extra_guests == null
+						? 0
+						: Number(
+							derived.extra_guests
+						),
 
-				allergen_names:
-				this.textClean(
-					derived.allergen_names
-				),
+					allergen_names:
+					this.textClean(
+						derived.allergen_names
+					),
 
-				diet_tag_names:
-				this.textClean(
-					derived.diet_tag_names
-				),
+					diet_tag_names:
+					this.textClean(
+						derived.diet_tag_names
+					),
 
-				notes:
-				this.textClean(
-					derived.notes
-				),
+					notes:
+					this.textClean(
+						derived.notes
+					),
 
-				active:
-				derived.active === false
-				? false
-				: true
-			};
-		});
+					active:
+					derived.active === false
+						? false
+						: true
+				};
+			});
 	},
 
 	async refreshCurrentProposal(
@@ -94,7 +101,9 @@ export default {
 		await qryGetProposalsForEvent.run();
 
 		await jsProposalWorkspaces
-			.discard(proposalId);
+			.discard(
+				proposalId
+			);
 
 		await jsProposalWorkspaces
 			.initializeCurrentWorkspace();
@@ -116,7 +125,9 @@ export default {
 			proposalId,
 
 			menus:
-			this.menuPayload(rows)
+			this.menuPayload(
+				rows
+			)
 		};
 
 		await storeValue(
@@ -130,16 +141,16 @@ export default {
 
 			const savedId =
 						Number(
-							result?.[0]?.proposal_id || 0
+							result?.[0]
+								?.proposal_id ||
+							0
 						);
 
-			if (!savedId) {
-				return null;
-			}
-
-			return savedId;
-
-		} finally {
+			return savedId > 0
+				? savedId
+				: null;
+		}
+		finally {
 			await removeValue(
 				"proposal_save_request"
 			);
@@ -152,7 +163,9 @@ export default {
 	) {
 		const workspace =
 					jsProposalWorkspaces
-		.get(tempProposalId);
+						.get(
+							tempProposalId
+						);
 
 		if (!workspace) {
 			return null;
@@ -164,11 +177,15 @@ export default {
 
 			source_proposal_id:
 			Number(
-				workspace.source_proposal_id || 0
+				workspace
+					.source_proposal_id ||
+				0
 			) || null,
 
 			menus:
-			this.menuPayload(rows)
+			this.menuPayload(
+				rows
+			)
 		};
 
 		await storeValue(
@@ -182,20 +199,67 @@ export default {
 
 			const savedId =
 						Number(
-							result?.[0]?.proposal_id || 0
+							result?.[0]
+								?.proposal_id ||
+							0
 						);
 
-			if (!savedId) {
-				return null;
-			}
-
-			return savedId;
-
-		} finally {
+			return savedId > 0
+				? savedId
+				: null;
+		}
+		finally {
 			await removeValue(
 				"proposal_save_request"
 			);
 		}
+	},
+
+	async ensureParentEvent() {
+		const existingEventId =
+					Number(
+						appsmith.store
+							.current_event_id ||
+						0
+					);
+
+		/*
+		 * Existing Event:
+		 * Proposal Save must not save unrelated
+		 * Event Header changes.
+		 */
+		if (existingEventId > 0) {
+			return existingEventId;
+		}
+
+		/*
+		 * New / duplicated Event:
+		 * establish only the parent Event identity
+		 * before the Proposal can be persisted.
+		 */
+		const eventId =
+					await jsEventSave
+						.ensureEventSavedForProposal();
+
+		if (eventId <= 0) {
+			showAlert(
+				"Proposal was not saved because the Event could not be created.",
+				"error"
+			);
+
+			return 0;
+		}
+
+		/*
+		 * Reload saved Proposal truth for the newly
+		 * created Event.
+		 *
+		 * Other temporary Proposal workspaces remain
+		 * untouched.
+		 */
+		await qryGetProposalsForEvent.run();
+
+		return eventId;
 	},
 
 	async saveProposal() {
@@ -212,13 +276,15 @@ export default {
 		}
 
 		/*
-	 * Capture the Proposal identity before
-	 * the parent Event changes from temporary
-	 * to persisted.
-	 */
+		 * Capture the Proposal identity before a
+		 * temporary parent Event receives its
+		 * persistent identity.
+		 */
 		const proposalId =
 					Number(
-						appsmith.store.current_proposal_id || 0
+						appsmith.store
+							.current_proposal_id ||
+						0
 					);
 
 		if (!proposalId) {
@@ -232,61 +298,35 @@ export default {
 
 		const rows =
 					jsProposalComponents
-		.effectiveRows();
+						.effectiveRows();
 
 		/*
-	 * A Proposal cannot exist in Supabase
-	 * until its parent Event has a real ID.
-	 *
-	 * For a new / duplicated Event:
-	 * save only the Event Header/Notes first.
-	 *
-	 * Other temporary Proposals remain
-	 * untouched in proposal_workspaces.
-	 */
-		if (
-			Number(
-				appsmith.store.current_event_id || 0
-			) <= 0
-		) {
-			const eventSaved =
-						await jsEventSave.saveEvent();
-
-			if (!eventSaved) {
-				showAlert(
-					"Proposal was not saved because the Event could not be created.",
-					"error"
-				);
-
-				return false;
-			}
-
-			/*
-		 * current_event_id now belongs to the
-		 * newly created Event.
+		 * Proposal cannot exist in Supabase until
+		 * its parent Event has a real identity.
 		 *
-		 * Replace stale saved Proposal rows from
-		 * the source Event with saved truth for
-		 * the new Event.
-		 *
-		 * Negative temporary Proposal workspaces
-		 * remain untouched and continue to appear
-		 * through filteredProposals().
+		 * This creates only the parent Event when
+		 * necessary. It does not perform Event Save.
 		 */
-			await qryGetProposalsForEvent.run();
+		const eventId =
+					await this
+						.ensureParentEvent();
+
+		if (eventId <= 0) {
+			return false;
 		}
 
 		let savedId = null;
 
 		/*
-	 * Existing persisted Proposal.
-	 */
+		 * Existing persisted Proposal.
+		 */
 		if (proposalId > 0) {
 			savedId =
-				await this.saveExistingProposal(
-				proposalId,
-				rows
-			);
+				await this
+					.saveExistingProposal(
+						proposalId,
+						rows
+					);
 
 			if (!savedId) {
 				showAlert(
@@ -297,20 +337,22 @@ export default {
 				return false;
 			}
 
-			await this.refreshCurrentProposal(
-				savedId
-			);
+			await this
+				.refreshCurrentProposal(
+					savedId
+				);
 		}
 
 		/*
-	 * Temporary unsaved Proposal.
-	 */
-		else if (proposalId < 0) {
+		 * Temporary never-saved Proposal.
+		 */
+		else {
 			savedId =
-				await this.saveNewProposal(
-				proposalId,
-				rows
-			);
+				await this
+					.saveNewProposal(
+						proposalId,
+						rows
+					);
 
 			if (!savedId) {
 				showAlert(
@@ -322,39 +364,40 @@ export default {
 			}
 
 			/*
-		 * Remove ONLY the temporary workspace
-		 * that has just been persisted.
-		 *
-		 * Every other temporary Proposal remains
-		 * exactly as the user left it.
-		 */
+			 * Remove only the temporary workspace
+			 * that has now been persisted.
+			 *
+			 * Other temporary Proposals remain
+			 * exactly as the user left them.
+			 */
 			await jsProposalWorkspaces
 				.discard(
-				proposalId
-			);
+					proposalId
+				);
 
 			/*
-		 * Current Proposal now uses its real
-		 * Supabase identity.
-		 */
+			 * Current Proposal now uses its real
+			 * persistent Supabase identity.
+			 */
 			await storeValue(
 				"current_proposal_id",
 				savedId
 			);
 
 			/*
-		 * Load the newly saved Proposal as its
-		 * new Published + Working State.
-		 */
-			await this.refreshCurrentProposal(
-				savedId
-			);
+			 * Load the saved Proposal as the new
+			 * Published + Working State.
+			 */
+			await this
+				.refreshCurrentProposal(
+					savedId
+				);
 
 			/*
- * Renumber any remaining duplicated
- * temporary Draft labels after this
- * Proposal received its real number.
- */
+			 * Renumber any remaining temporary
+			 * duplicated Draft labels now that this
+			 * Proposal received its real number.
+			 */
 			await jsProposalWorkspaces
 				.renumberTemporaryDrafts();
 		}
@@ -365,5 +408,5 @@ export default {
 		);
 
 		return true;
-	},
+	}
 };

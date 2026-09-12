@@ -254,13 +254,41 @@ export default {
 		);
 	},
 
+	isMeaningfulTemporary(
+		proposalId
+	) {
+		const id =
+					Number(
+						proposalId || 0
+					);
+
+		if (id >= 0) {
+			return false;
+		}
+
+		const workspace =
+					this.get(id);
+
+		if (!workspace) {
+			return false;
+		}
+
+		const components =
+					this.normalizeComponents(
+						workspace.components || []
+					);
+
+		return components.length > 0;
+	},
+
 	dirtyProposalIds() {
 		return Object.keys(
 			this.all()
 		)
 			.map(Number)
 			.filter(id =>
-							this.isDirty(id)
+							this.isDirty(id) ||
+							this.isMeaningfulTemporary(id)
 						 );
 	},
 

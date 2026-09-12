@@ -12,14 +12,20 @@ export default {
 
 	proposalLabel(proposalId) {
 		const id =
-					Number(proposalId || 0);
+					Number(
+						proposalId || 0
+					);
 
 		const row =
 					(
-						qryGetProposalsForEvent.data || []
-					).find(item =>
-								 Number(item.id || 0) === id
-								);
+						qryGetProposalsForEvent.data ||
+						[]
+					)
+		.find(item =>
+					Number(
+			item.id || 0
+		) === id
+				 );
 
 		if (row?.proposal_no != null) {
 			return `Proposal ${row.proposal_no}`;
@@ -40,9 +46,6 @@ export default {
 
 	actionTitle(action) {
 		switch (action) {
-			case "save":
-				return "Proposals: Unsaved Changes";
-
 			case "duplicate":
 				return "Duplicate Event";
 
@@ -53,11 +56,11 @@ export default {
 				return "Delete Event";
 
 			default:
-				return "Proposals: Unsaved Changes";
+				return "Unsaved Changes";
 		}
 	},
 
-	actionMessage(action, state) {
+	actionMessage(state) {
 		const proposalIds =
 					state?.proposal_ids || [];
 
@@ -71,8 +74,10 @@ export default {
 		const parts = [
 			"This Event has unsaved changes.",
 			"",
-			"Save All — save all Event and Proposal changes, then continue.",
+			"Save — save all Event and Proposal changes, then continue.",
+			"",
 			"Discard — discard all unsaved changes and revert to the last saved state. Any Proposal that has never been saved will be deleted.",
+			"",
 			"Cancel — return without doing anything."
 		];
 
@@ -89,15 +94,16 @@ export default {
 
 	async request(action) {
 		/*
-	 * Capture the visible Event Header first.
-	 * This preserves whatever is currently on screen.
-	 */
+		 * Capture the visible Event Header first.
+		 * This preserves whatever is currently
+		 * on screen before any action decision.
+		 */
 		await jsEventWorkspace.capture();
 
 		/*
-	 * Duplicate needs its staged snapshot before
-	 * any Save / Discard decision.
-	 */
+		 * Duplicate needs its snapshot staged
+		 * before any Save / Discard decision.
+		 */
 		if (action === "duplicate") {
 			const staged =
 						await jsEventActions
@@ -109,8 +115,19 @@ export default {
 		}
 
 		/*
-	 * Read the actual current dirty state.
-	 */
+		 * Event Save has its own confirmation modal.
+		 *
+		 * Save means:
+		 * save the complete Event + Proposal state.
+		 */
+		if (action === "save") {
+			return await this
+				.saveAndReload();
+		}
+
+		/*
+		 * Read current dirty state.
+		 */
 		const eventDirty =
 					jsEventSave.isDirty();
 
@@ -119,56 +136,19 @@ export default {
 		.dirtyProposalIds();
 
 		const state = {
-			event_dirty: eventDirty,
-			proposal_ids: proposalIds
+			event_dirty:
+			eventDirty,
+
+			proposal_ids:
+			proposalIds
 		};
 
 		/*
-	 * SAVE
-	 *
-	 * Event-only dirty:
-	 * save directly.
-	 *
-	 * Dirty Proposals:
-	 * Save becomes Save All decision.
-	 */
-		if (action === "save") {
-			if (proposalIds.length) {
-				await storeValue(
-					"pendingEventAction",
-					action
-				);
-
-				await storeValue(
-					"evt_unsaved_title",
-					this.actionTitle(action)
-				);
-
-				await storeValue(
-					"evt_unsaved_message",
-					this.actionMessage(
-						action,
-						state
-					)
-				);
-
-				showModal(
-					"mdlEvtUnsavedChanges"
-				);
-
-				return false;
-			}
-
-			return await jsEventSave
-				.saveEvent();
-		}
-
-		/*
-	 * CLOSE / DUPLICATE / other guarded actions
-	 *
-	 * Any Event or Proposal dirty state must
-	 * go through Save All / Discard / Cancel.
-	 */
+		 * Other guarded Event actions.
+		 *
+		 * Any Event or Proposal dirty state must
+		 * go through Save / Discard / Cancel.
+		 */
 		if (
 			eventDirty ||
 			proposalIds.length
@@ -180,19 +160,20 @@ export default {
 
 			await storeValue(
 				"evt_unsaved_title",
-				this.actionTitle(action)
+				this.actionTitle(
+					action
+				)
 			);
 
 			await storeValue(
 				"evt_unsaved_message",
 				this.actionMessage(
-					action,
 					state
 				)
 			);
 
 			showModal(
-				"mdlEvtUnsavedChanges"
+				mdlEvtUnsavedChanges.name
 			);
 
 			return false;
@@ -206,10 +187,6 @@ export default {
 
 	async executeWithoutWarning(action) {
 		switch (action) {
-			case "save":
-				return await jsEventSave
-					.saveEvent();
-
 			case "duplicate":
 				return await jsEventActions
 					.openStagedDuplicate();
@@ -227,7 +204,8 @@ export default {
 				const target =
 							String(
 								appsmith.store
-								.pendingEventNavigationTarget || ""
+								.pendingEventNavigationTarget ||
+								""
 							).trim();
 
 				if (!target) {
@@ -252,6 +230,104 @@ export default {
 		}
 	},
 
+	async saveAndReload() {
+		const currentProposalId =
+					Number(
+						appsmith.store.current_proposal_id ||
+						0
+					);
+
+		const saveResult =
+					await jsEventSave
+		.saveDocument();
+
+		if (!saveResult) {
+			return false;
+		}
+
+		const idMap =
+					this.proposalIdMap(
+						saveResult
+					);
+
+		/*
+		 * Resolve the selected temporary
+		 * Proposal to its new persisted ID.
+		 */
+		if (currentProposalId < 0) {
+			const mappedId =
+						Number(
+							idMap[
+								String(
+									currentProposalId
+								)
+							] || 0
+						);
+
+			if (mappedId > 0) {
+				await storeValue(
+					"current_proposal_id",
+					mappedId
+				);
+			}
+			else {
+				await removeValue(
+					"current_proposal_id"
+				);
+			}
+		}
+
+		/*
+		 * Reload committed Event truth.
+		 */
+		await qryGetEvtItemById.run();
+
+		await jsEventWorkspace
+			.resetFromSaved();
+
+		await qryGetProposalsForEvent.run();
+
+		const resolvedProposalId =
+					Number(
+						appsmith.store.current_proposal_id ||
+						0
+					);
+
+		/*
+		 * Existing Proposal workspaces now represent
+		 * the old pre-save baseline.
+		 */
+		await removeValue(
+			"proposal_workspaces"
+		);
+
+		if (resolvedProposalId > 0) {
+			await qryGetSelectedProposal.run();
+
+			await qryGetSelectedProposalMenus.run();
+
+			await jsProposalWorkspaces
+				.initializeCurrentWorkspace();
+		}
+		else {
+			await removeValue(
+				"current_proposal_id"
+			);
+		}
+
+		await resetWidget(
+			"tblEvtComponents",
+			true
+		);
+
+		showAlert(
+			"Event saved.",
+			"success"
+		);
+
+		return true;
+	},
+
 	proposalIdMap(resultRow) {
 		const raw =
 					resultRow?.proposal_id_map;
@@ -269,8 +345,11 @@ export default {
 
 		if (typeof raw === "string") {
 			try {
-				return JSON.parse(raw);
-			} catch (error) {
+				return JSON.parse(
+					raw
+				);
+			}
+			catch (error) {
 				return {};
 			}
 		}
@@ -280,117 +359,25 @@ export default {
 
 	async confirm() {
 		const action =
-					appsmith.store.pendingEventAction || null;
+					appsmith.store
+		.pendingEventAction ||
+					null;
 
 		if (!action) {
 			return false;
 		}
 
 		try {
-			const currentProposalId =
-						Number(
-							appsmith.store.current_proposal_id || 0
-						);
+			const saved =
+						await this
+			.saveAndReload();
 
-			const saveResult =
-						await this.saveAllDirty();
-
-			if (!saveResult) {
+			if (!saved) {
 				return false;
 			}
 
-			const idMap =
-						this.proposalIdMap(
-							saveResult
-						);
-
-			/*
-		 * If this was a new Event,
-		 * saveAllDirty() now returned its real ID.
-		 */
-			const savedEventId =
-						Number(
-							saveResult.event_id || 0
-						);
-
-			if (
-				savedEventId > 0 &&
-				Number(
-					appsmith.store.current_event_id || 0
-				) <= 0
-			) {
-				await storeValue(
-					"current_event_id",
-					savedEventId
-				);
-			}
-
-			/*
-		 * Resolve current temporary Proposal.
-		 */
-			if (currentProposalId < 0) {
-				const mappedId =
-							Number(
-								idMap[
-									String(currentProposalId)
-								] || 0
-							);
-
-				if (mappedId > 0) {
-					await storeValue(
-						"current_proposal_id",
-						mappedId
-					);
-				}
-				else {
-					await removeValue(
-						"current_proposal_id"
-					);
-				}
-			}
-
-			/*
-		 * Reload saved Event truth.
-		 */
-			await qryGetEvtItemById.run();
-
-			await jsEventWorkspace
-				.resetFromSaved();
-
-			await qryGetProposalsForEvent.run();
-
-			const resolvedProposalId =
-						Number(
-							appsmith.store.current_proposal_id || 0
-						);
-
-			/*
-		 * Old workspaces are now stale.
-		 */
-			await removeValue(
-				"proposal_workspaces"
-			);
-
-			if (resolvedProposalId > 0) {
-				await qryGetSelectedProposal.run();
-				await qryGetSelectedProposalMenus.run();
-
-				await jsProposalWorkspaces
-					.initializeCurrentWorkspace();
-			}
-			else {
-				await removeValue(
-					"current_proposal_id"
-				);
-			}
-
-			await resetWidget(
-				"tblEvtComponents",
-				true
-			);
-
 			closeModal(
-				"mdlEvtUnsavedChanges"
+				mdlEvtUnsavedChanges.name
 			);
 
 			await removeValue(
@@ -406,25 +393,13 @@ export default {
 			);
 
 			/*
-		 * Save button itself ends here.
-		 */
-			if (action === "save") {
-				showAlert(
-					"Event and Proposals saved.",
-					"success"
-				);
-
-				return true;
-			}
-
-			/*
-		 * Other Event actions continue only
-		 * after Save All has completed.
-		 */
-			return await this.executeWithoutWarning(
+			 * Continue the action that originally
+			 * triggered the unsaved-changes modal.
+			 */
+			return await this
+				.executeWithoutWarning(
 				action
 			);
-
 		}
 		catch (error) {
 			showAlert(
@@ -439,7 +414,9 @@ export default {
 
 	async discardAndContinue() {
 		const action =
-					appsmith.store.pendingEventAction || null;
+					appsmith.store
+		.pendingEventAction ||
+					null;
 
 		if (!action) {
 			return false;
@@ -448,7 +425,7 @@ export default {
 		await this.discardAll();
 
 		closeModal(
-			"mdlEvtUnsavedChanges"
+			mdlEvtUnsavedChanges.name
 		);
 
 		await removeValue(
@@ -463,38 +440,41 @@ export default {
 			"evt_unsaved_message"
 		);
 
-		return await this.executeWithoutWarning(
+		return await this
+			.executeWithoutWarning(
 			action
 		);
 	},
 
 	async discardAll() {
 		/*
-	 * Restore Event Working State
-	 * to the last saved Event.
-	 */
+		 * Restore Event Working State
+		 * to last saved Event truth.
+		 */
 		await jsEventWorkspace
 			.resetFromSaved();
 
 		/*
-	 * Remove every unsaved Proposal workspace.
-	 */
+		 * Remove every unsaved Proposal workspace.
+		 */
 		await removeValue(
 			"proposal_workspaces"
 		);
 
 		/*
-	 * Reload persisted Proposal truth.
-	 */
+		 * Reload persisted Proposal truth.
+		 */
 		await qryGetProposalsForEvent.run();
 
 		const proposalId =
 					Number(
-						appsmith.store.current_proposal_id || 0
+						appsmith.store.current_proposal_id ||
+						0
 					);
 
 		if (proposalId > 0) {
 			await qryGetSelectedProposal.run();
+
 			await qryGetSelectedProposalMenus.run();
 
 			await jsProposalWorkspaces
@@ -516,7 +496,7 @@ export default {
 
 	async cancel() {
 		closeModal(
-			"mdlEvtUnsavedChanges"
+			mdlEvtUnsavedChanges.name
 		);
 
 		await removeValue(
@@ -542,140 +522,29 @@ export default {
 		return true;
 	},
 
-	proposalPayload(proposalId) {
-		const id =
-					Number(proposalId || 0);
-
-		const workspace =
-					jsProposalWorkspaces.get(id);
-
-		const rows =
-					id ===
-					Number(
-						appsmith.store.current_proposal_id || 0
-					)
-		? jsProposalComponents.effectiveRows()
-		: (workspace?.components || []);
-
-		return {
-			proposal_id:
-			id,
-
-			source_proposal_id:
-			id < 0
-			? (
-				Number(
-					workspace
-					?.source_proposal_id ||
-					0
-				) || null
-			)
-			: null,
-
-			menus:
-			jsProposalSave.menuPayload(
-				rows
-			)
-		};
-	},
-
-	async saveAllDirty() {
-		const dirtyIds =
-					jsProposalWorkspaces
-		.dirtyProposalIds();
-
-		const request = {
-			event_id:
-			Number(
-				appsmith.store.current_event_id || 0
-			),
-
-			header:
-			jsEventSave
-			.headerSnapshotFromPage(),
-
-			proposals:
-			dirtyIds.map(id =>
-									 this.proposalPayload(id)
-									)
-		};
-
-		await storeValue(
-			"event_document_save_request",
-			request
-		);
-
-		try {
-			const result =
-						await qrySaveEventDocument.run();
-
-			const row =
-						result?.[0] || null;
-
-			if (
-				Number(
-					row?.event_id || 0
-				) <= 0
-			) {
-				showAlert(
-					"Event and Proposals were not saved.",
-					"error"
-				);
-
-				return null;
-			}
-
-			const savedEventId =
-						Number(
-							row.event_id
-						);
-
-			/*
-		 * New / duplicated Event:
-		 * adopt the real Supabase Event ID
-		 * returned by Save-All.
-		 */
-			if (
-				Number(
-					appsmith.store.current_event_id || 0
-				) <= 0
-			) {
-				await storeValue(
-					"current_event_id",
-					savedEventId
-				);
-			}
-
-			return row;
-
-		} finally {
-			await removeValue(
-				"event_document_save_request"
-			);
-		}
-	},
-
 	async requestNavigation(pageName) {
 		const target =
-					String(pageName || "").trim();
+					String(
+						pageName || ""
+					).trim();
 
 		if (!target) {
 			return false;
 		}
 
 		/*
-	 * Capture current visible Event Header
-	 * before any navigation decision.
-	 */
+		 * Capture current visible Event Header
+		 * before any navigation decision.
+		 */
 		await jsEventWorkspace.capture();
 
 		const state =
 					await this.dirtyState();
 
 		/*
-	 * Clean page:
-	 * navigate immediately.
-	 */
+		 * Clean page:
+		 * navigate immediately.
+		 */
 		if (
 			!state.event_dirty &&
 			!state.proposal_ids.length
@@ -690,10 +559,10 @@ export default {
 		}
 
 		/*
-	 * Dirty page:
-	 * remember the destination and use the
-	 * standard Save All / Discard / Cancel modal.
-	 */
+		 * Dirty page:
+		 * remember the destination and use
+		 * Save / Discard / Cancel.
+		 */
 		await storeValue(
 			"pendingEventNavigationTarget",
 			target
@@ -712,15 +581,14 @@ export default {
 		await storeValue(
 			"evt_unsaved_message",
 			this.actionMessage(
-				"navigate",
 				state
 			)
 		);
 
 		showModal(
-			"mdlEvtUnsavedChanges"
+			mdlEvtUnsavedChanges.name
 		);
 
 		return false;
-	},
+	}
 };
