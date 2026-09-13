@@ -6,7 +6,7 @@ export default {
 			return false;
 		}
 
-		await qryEvtGetList.run();
+		await qryEvtLstGetList.run();
 
 		return true;
 	}

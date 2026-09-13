@@ -395,10 +395,6 @@ export default {
 						appsmith.store.current_proposal_id || 0
 					);
 
-		/*
-	 * Workflow status requires a real,
-	 * persisted Proposal.
-	 */
 		if (proposalId <= 0) {
 			showAlert(
 				"Save the Proposal before accepting it.",
@@ -408,17 +404,6 @@ export default {
 			return false;
 		}
 
-		const proposal =
-					jsPropData.proposal();
-
-		const newStatus =
-					accepted === true
-		? "Accepted"
-		: proposal.was_issued === true ||
-					proposal.sent_at != null
-		? "Issued"
-		: "Draft";
-
 		await storeValue(
 			"proposal_status_id",
 			proposalId
@@ -426,7 +411,9 @@ export default {
 
 		await storeValue(
 			"proposal_status_request",
-			newStatus
+			accepted === true
+			? "Accepted"
+			: "Draft"
 		);
 
 		try {

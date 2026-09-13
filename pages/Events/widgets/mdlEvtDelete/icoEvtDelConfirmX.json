@@ -32,7 +32,7 @@
   "mobileRightColumn": 64,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onClick": "{{closeModal(mdlEvtDelete.name);}}",
+  "onClick": "{{ closeModal(mdlEvtDelete.name) }}",
   "parentId": "yddgge3wef",
   "renderMode": "CANVAS",
   "responsiveBehavior": "hug",

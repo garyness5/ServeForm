@@ -58,19 +58,19 @@
     "category_name": 154,
     "cost_per_unit": 104,
     "customColumn1": 85,
-    "customer_name": 91,
+    "customer_name": 112,
     "diet_tag_names": 181,
     "event_date": 203,
-    "event_datetime_display": 127,
-    "event_ref": 83,
+    "event_datetime_display": 149,
+    "event_ref": 106,
     "extra_percent": 90,
     "format": 104,
     "id": 78,
     "menu_count": 80,
-    "name": 115,
+    "name": 149,
     "name_norm": 142,
     "status": 90,
-    "to_produce": 119,
+    "to_produce": 96,
     "total_cost": 108,
     "total_guests": 73,
     "warning_count": 109,
@@ -151,6 +151,9 @@
     },
     {
       "key": "primaryColumns.event_datetime_display.computedValue"
+    },
+    {
+      "key": "primaryColumns.active.isCellEditable"
     }
   ],
   "dynamicPropertyPathList": [
@@ -171,6 +174,9 @@
     },
     {
       "key": "primaryColumns.status.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.active.isCellEditable"
     }
   ],
   "dynamicTriggerPathList": [
@@ -226,7 +232,7 @@
       "horizontalAlignment": "CENTER",
       "id": "active",
       "index": 12,
-      "isCellEditable": true,
+      "isCellEditable": "{{(() => { const tableData = tblEvtList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.status !== \"Closed\" )) :  currentRow.status !== \"Closed\"  })()}}",
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
@@ -236,7 +242,7 @@
       "isVisible": true,
       "label": "Active",
       "notation": "standard",
-      "onCheckChange": "{{\nqryEvtToggleActive.run()\n.then(() => qryEvtGetList.run())\n.then(() => resetWidget(\"tblEvtList\", true))\n}}",
+      "onCheckChange": "{{\nqryEvtLstSetActive.run()\n.then(() => qryEvtLstGetList.run())\n.then(() => resetWidget(\"tblEvtList\", true))\n}}",
       "originalId": "active",
       "sticky": "",
       "textSize": "0.875rem",
@@ -598,17 +604,18 @@
       "horizontalAlignment": "LEFT",
       "id": "status",
       "index": 4,
-      "isCellEditable": false,
+      "isCellEditable": true,
       "isCellVisible": true,
       "isDerived": false,
       "isDisabled": false,
       "isDiscardVisible": true,
-      "isEditable": false,
+      "isEditable": true,
       "isSaveVisible": true,
       "isVisible": true,
       "label": "Status",
       "notation": "standard",
       "onOptionChange": "{{true}}",
+      "onSubmit": "{{}}",
       "originalId": "status",
       "selectOptions": "",
       "sticky": "",
@@ -642,7 +649,7 @@
       "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "To Produce",
+      "label": "Produce",
       "notation": "standard",
       "originalId": "to_produce",
       "sticky": "",
@@ -676,7 +683,7 @@
       "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Total Cost",
+      "label": "Total",
       "notation": "standard",
       "originalId": "total_cost",
       "sticky": "",

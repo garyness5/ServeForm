@@ -32,7 +32,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ qryEvtDeleteList.isLoading }}",
+  "isDisabled": "{{ qryEvtLstDeleteList.isLoading }}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",

@@ -167,7 +167,7 @@ export default {
 			return false;
 		}
 
-		showModal("mdlEvtDelete");
+		showModal(mdlEvtDelete.name);
 		return true;
 	},
 
@@ -183,7 +183,7 @@ export default {
 
 		try {
 			const result =
-						await qryEvtDeleteList.run();
+						await qryEvtLstDeleteList.run();
 
 			const row =
 						result?.[0] || null;
@@ -195,10 +195,10 @@ export default {
 			}
 
 			closeModal(
-				"mdlEvtDelete"
+				mdlEvtDelete.name
 			);
 
-			await qryEvtGetList.run();
+			await qryEvtLstGetList.run();
 
 			showAlert(
 				"Event deleted.",
@@ -220,7 +220,7 @@ export default {
 
 	filteredEvents() {
 		const rows =
-					qryEvtGetList.data || [];
+					qryEvtLstGetList.data || [];
 
 		const filter =
 					selEvtListFilter.selectedOptionValue ||

@@ -1,0 +1,12 @@
+select *
+from public.set_event_active_secure(
+	{{
+	Number(
+		tblEvtList.updatedRow?.id ||
+		tblEvtList.triggeredRow?.id ||
+		0
+	)
+	}},
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	{{ tblEvtList.updatedRow.active === true }}
+);

@@ -5,6 +5,10 @@ select
     v.active,
     v.updated_at,
 
+    -- Independent workflow facts
+    coalesce(pi.accepted, false) as accepted,
+    coalesce(pi.ordered, false) as ordered,
+
     -- Identity / support columns
     v.id,
     v.event_id,
@@ -25,7 +29,7 @@ select
 from public.vw_prop_selector v
 
 join public.prop_items pi
-  on pi.id = v.id
+    on pi.id = v.id
 
 where v.client_id =
       '{{ appsmith.store.current_client_id }}'::uuid
@@ -37,11 +41,10 @@ where v.client_id =
 
 order by
     case
-        when v.proposal_status = 'Ordered' then 0
-        when v.proposal_status = 'Accepted' then 1
-        when v.proposal_status = 'Issued' then 2
-        when v.proposal_status = 'Draft' then 3
-        else 4
+        when coalesce(pi.ordered, false) = true then 0
+        when coalesce(pi.accepted, false) = true then 1
+        when v.sent_at is not null then 2
+        else 3
     end,
 
     v.updated_at desc nulls last,
