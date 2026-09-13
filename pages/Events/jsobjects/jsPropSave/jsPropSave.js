@@ -108,7 +108,7 @@ export default {
 		await Promise.all([
 			qryEvtGetSelectedProposal.run(),
 			qryEvtGetSelectedPropMenus.run(),
-			qryEvtGetPropForEvent.run()
+			qryEvtGetPropsForEvent.run()
 		]);
 
 		/*
@@ -276,7 +276,7 @@ export default {
 		 * Other temporary Proposal workspaces remain
 		 * untouched.
 		 */
-		await qryEvtGetPropForEvent.run();
+		await qryEvtGetPropsForEvent.run();
 
 		return eventId;
 	},

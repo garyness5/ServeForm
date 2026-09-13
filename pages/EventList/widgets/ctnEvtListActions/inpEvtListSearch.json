@@ -48,7 +48,7 @@
   "mobileRightColumn": 49,
   "mobileTopRow": 9,
   "needsErrorInfo": false,
-  "onTextChanged": "{{ qryGetEvtList.run() }}",
+  "onTextChanged": "{{ qryEvtGetList.run() }}",
   "parentColumnSpace": 17.625,
   "parentId": "sfs10q6jkb",
   "parentRowSpace": 10,

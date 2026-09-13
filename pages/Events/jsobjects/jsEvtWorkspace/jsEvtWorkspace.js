@@ -588,7 +588,7 @@ export default {
 
 	closeCostSource() {
 		const rows =
-					qryEvtGetPropForEvent.data || [];
+					qryEvtGetPropsForEvent.data || [];
 
 		const ordered =
 					rows.find(row =>

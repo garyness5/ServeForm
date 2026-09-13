@@ -90,7 +90,7 @@ export default {
 		]);
 
 		const proposalRows =
-					qryEvtGetPropForEvent.data || [];
+					qryEvtGetPropsForEvent.data || [];
 
 		const menuRows =
 					qryEvtGetAllPropMenus.data || [];

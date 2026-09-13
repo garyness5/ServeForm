@@ -173,7 +173,7 @@ export default {
 		await jsEvtWorkspace
 			.resetFromSaved();
 
-		await qryEvtGetPropForEvent.run();
+		await qryEvtGetPropsForEvent.run();
 
 		closeModal(
 			mdlEvtRename.name
@@ -436,57 +436,12 @@ export default {
 	},
 
 	proposalIdsForEventSave() {
-		const currentEventId =
-					Number(
-						appsmith.store.current_event_id || 0
-					);
-
-		/*
-	 * Persisted Proposals belong to Event Save
-	 * only when we are editing an already-saved Event.
-	 *
-	 * A new / duplicated Event must never inherit
-	 * stale persisted Proposal IDs from the previous
-	 * qryGetProposalsForEvent result.
-	 */
-		const savedIds =
-					currentEventId > 0
-		? (
-			qryEvtGetPropForEvent.data ||
-			[]
-		)
-		.map(row =>
-				 Number(
-			row.id || 0
-		)
-				)
-		.filter(id =>
-						id > 0
-					 )
-		: [];
-
-		/*
-	 * Proposal Working States belong to the current
-	 * Event workspace.
-	 *
-	 * For new / duplicated Events these will normally
-	 * be temporary negative IDs.
-	 */
-		const workspaceIds =
-					Object.keys(
-						jsPropWorkspaces.all()
-					)
-		.map(Number)
-		.filter(id =>
-						id !== 0
-					 );
-
-		return [
-			...new Set([
-				...savedIds,
-				...workspaceIds
-			])
-		];
+		return (
+			jsPropWorkspaces
+			.dirtyProposalIds()
+			.map(Number)
+			.filter(id => id !== 0)
+		);
 	},
 
 	proposalRowsForSave(

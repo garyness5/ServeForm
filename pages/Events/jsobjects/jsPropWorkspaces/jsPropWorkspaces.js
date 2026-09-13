@@ -403,7 +403,7 @@ export default {
 		const maxSavedNo =
 					Math.max(
 						0,
-						...(qryEvtGetPropForEvent.data || [])
+						...(qryEvtGetPropsForEvent.data || [])
 						.map(row =>
 								 Number(row.proposal_no || 0)
 								)

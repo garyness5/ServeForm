@@ -30,7 +30,7 @@ export default {
 		try {
 			await qryEvtSetPropActive.run();
 
-			await qryEvtGetPropForEvent.run();
+			await qryEvtGetPropsForEvent.run();
 
 			if (
 				proposalId ===
@@ -93,7 +93,7 @@ export default {
 		const savedRows =
 					eventId > 0
 		? [
-			...(qryEvtGetPropForEvent.data || [])
+			...(qryEvtGetPropsForEvent.data || [])
 		]
 		: [];
 
@@ -307,7 +307,7 @@ export default {
 				"current_proposal_id"
 			);
 
-			await qryEvtGetPropForEvent.run();
+			await qryEvtGetPropsForEvent.run();
 
 			await resetWidget(
 				"tblEvtComponents",
@@ -433,7 +433,7 @@ export default {
 			await qryEvtSetPropStatus.run();
 
 			await Promise.all([
-				qryEvtGetPropForEvent.run(),
+				qryEvtGetPropsForEvent.run(),
 				qryEvtGetSelectedProposal.run(),
 				qryEvtGetItemById.run()
 			]);
@@ -621,7 +621,7 @@ export default {
 
 
 			await Promise.all([
-				qryEvtGetPropForEvent.run(),
+				qryEvtGetPropsForEvent.run(),
 				qryEvtGetSelectedProposal.run(),
 				qryEvtGetItemById.run()
 			]);
@@ -760,7 +760,7 @@ export default {
 			}
 
 			await Promise.all([
-				qryEvtGetPropForEvent.run(),
+				qryEvtGetPropsForEvent.run(),
 				qryEvtGetSelectedProposal.run(),
 				qryEvtGetItemById.run()
 			]);
@@ -803,7 +803,7 @@ export default {
 		}
 
 		return (
-			(qryEvtGetPropForEvent.data || [])
+			(qryEvtGetPropsForEvent.data || [])
 			.find(
 				row =>
 				Number(row.id) === proposalId

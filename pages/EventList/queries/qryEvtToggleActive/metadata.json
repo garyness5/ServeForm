@@ -1,11 +1,11 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_bb10f93a-ad54-46cf-b2fb-520857500bc7",
-  "id": "EventList_qryDeleteEvtList",
+  "gitSyncId": "6a0a1bde3214f344228346e7_89705ce5-2f82-4dd9-b5a6-fe9d7d202f85",
+  "id": "EventList_qryEvtToggleActive",
   "pluginId": "postgres-plugin",
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.delete_event(\n\t{{ Number(tblEvtList.selectedRow?.id || 0) }},\n\t'{{ appsmith.store.current_client_id }}'::uuid\n);",
+      "body": "update public.evt_items e\nset\n    active = {{ tblEvtList.updatedRow.active === false ? false : true }},\n    updated_at = now()\nwhere e.id = {{\n    Number(\n        tblEvtList.updatedRow?.id ||\n        tblEvtList.triggeredRow?.id ||\n        0\n    )\n}}\n  and e.client_id =\n      '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(e.deleted, false) = false\nreturning\n    e.id,\n    e.active,\n    e.updated_at;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -27,7 +27,7 @@
         "key": "body"
       }
     ],
-    "name": "qryDeleteEvtList",
+    "name": "qryEvtToggleActive",
     "pageId": "EventList",
     "runBehaviour": "MANUAL",
     "userSetOnLoad": false

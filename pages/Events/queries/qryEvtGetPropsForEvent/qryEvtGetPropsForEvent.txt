@@ -44,9 +44,6 @@ order by
         else 4
     end,
 
-    coalesce(
-        v.sent_at,
-        v.created_at
-    ) desc,
+    v.updated_at desc nulls last,
 
     v.id desc;

@@ -183,7 +183,7 @@ export default {
 
 		try {
 			const result =
-						await qryDeleteEvtList.run();
+						await qryEvtDeleteList.run();
 
 			const row =
 						result?.[0] || null;
@@ -198,7 +198,7 @@ export default {
 				"mdlEvtDelete"
 			);
 
-			await qryGetEvtList.run();
+			await qryEvtGetList.run();
 
 			showAlert(
 				"Event deleted.",
@@ -220,7 +220,7 @@ export default {
 
 	filteredEvents() {
 		const rows =
-					qryGetEvtList.data || [];
+					qryEvtGetList.data || [];
 
 		const filter =
 					selEvtListFilter.selectedOptionValue ||

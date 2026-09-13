@@ -18,7 +18,7 @@ export default {
 
 		const row =
 					(
-						qryEvtGetPropForEvent.data ||
+						qryEvtGetPropsForEvent.data ||
 						[]
 					)
 		.find(item =>
@@ -285,7 +285,7 @@ export default {
 		await jsEvtWorkspace
 			.resetFromSaved();
 
-		await qryEvtGetPropForEvent.run();
+		await qryEvtGetPropsForEvent.run();
 
 		const resolvedProposalId =
 					Number(
@@ -464,7 +464,7 @@ export default {
 		/*
 		 * Reload persisted Proposal truth.
 		 */
-		await qryEvtGetPropForEvent.run();
+		await qryEvtGetPropsForEvent.run();
 
 		const proposalId =
 					Number(
