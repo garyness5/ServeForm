@@ -1,5 +1,5 @@
 {
-  "animateLoading": "{{ qrySaveEvtCustomer.isLoading }}",
+  "animateLoading": "{{ qryEvtSaveCustomer.isLoading }}",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 6,
   "boxShadow": "none",
@@ -38,7 +38,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\n\tqrySaveEvtCustomer.isLoading ||\n\t!(inpEvtCustomerName.text || \"\").trim()\n}}",
+  "isDisabled": "{{\n\tqryEvtSaveCustomer.isLoading ||\n\t!(inpEvtCustomerName.text || \"\").trim()\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -49,7 +49,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEventAddressBook.saveCustomer() }}",
+  "onClick": "{{ jsEvtAddressBook.saveCustomer() }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "u8rbrer1mn",

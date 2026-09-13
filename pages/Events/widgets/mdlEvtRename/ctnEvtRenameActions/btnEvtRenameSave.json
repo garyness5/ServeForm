@@ -35,7 +35,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ !jsEventSave.canSaveRename() }}",
+  "isDisabled": "{{ !jsEvtSave.canSaveRename() }}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -46,7 +46,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEventSave.renameEvent() }}",
+  "onClick": "{{ jsEvtSave.renameEvent() }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "vusu7sfnm4",

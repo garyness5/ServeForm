@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 17,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  jsEventWorkspace.get().venue_id ?? \"\" ))(selEvtVenue.options, selEvtVenue.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  jsEvtWorkspace.get().venue_id ?? \"\" ))(selEvtVenue.options, selEvtVenue.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -39,7 +39,7 @@
       "key": "onOptionChange"
     }
   ],
-  "isDisabled": "{{ jsEventWorkspace.isClosedLocked() }}",
+  "isDisabled": "{{ jsEvtWorkspace.isClosedLocked() }}",
   "isFilterable": true,
   "isLoading": false,
   "isRequired": false,
@@ -60,7 +60,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 15,
   "needsErrorInfo": false,
-  "onOptionChange": "{{\njsEventAddressBook.captureParentSelection(\n\t\"venue\"\n)\n}}",
+  "onOptionChange": "{{\njsEvtAddressBook.captureParentSelection(\n\t\"venue\"\n)\n}}",
   "optionLabel": "label",
   "optionValue": "value",
   "originalBottomRow": 17,
@@ -73,7 +73,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 58,
   "serverSideFiltering": false,
-  "sourceData": "{{ qryGetEvtVenues.data || [] }}",
+  "sourceData": "{{ qryEvtGetVenues.data || [] }}",
   "topRow": 13,
   "type": "SELECT_WIDGET",
   "version": 1,

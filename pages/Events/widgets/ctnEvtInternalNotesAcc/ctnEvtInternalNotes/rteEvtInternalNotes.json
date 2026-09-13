@@ -3,7 +3,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 23,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
-  "defaultText": "{{ jsEventWorkspace.get().internal_notes || \"\" }}",
+  "defaultText": "{{ jsEvtWorkspace.get().internal_notes || \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "borderRadius"
@@ -35,7 +35,7 @@
   "flexVerticalAlignment": "start",
   "inputType": "html",
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ jsEventWorkspace.isClosedLocked() }}",
+  "isDisabled": "{{ jsEvtWorkspace.isClosedLocked() }}",
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,

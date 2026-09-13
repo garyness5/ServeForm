@@ -37,7 +37,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsProposalActions.cancelGroReplace() }}",
+  "onClick": "{{ jsPropActions.cancelGroReplace() }}",
   "originalBottomRow": 42,
   "originalTopRow": 38,
   "parentId": "vyshzmvstx",

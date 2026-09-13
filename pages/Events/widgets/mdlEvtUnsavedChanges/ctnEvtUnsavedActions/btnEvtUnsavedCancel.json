@@ -40,7 +40,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEventActionGuard.cancel() }}",
+  "onClick": "{{ jsEvtActionGuard.cancel() }}",
   "originalBottomRow": 60,
   "originalTopRow": 56,
   "parentId": "yn18hvdav2",

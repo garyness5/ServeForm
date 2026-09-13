@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 62,
   "shouldTruncate": false,
-  "text": "{{\n\"Event Status:  \" +\njsEventWorkspace.displayStatus()\n}}",
+  "text": "{{\n\"Event Status:  \" +\njsEvtWorkspace.displayStatus()\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 13,

@@ -37,7 +37,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEventWorkspace.cancelClose() }}",
+  "onClick": "{{ jsEvtWorkspace.cancelClose() }}",
   "originalBottomRow": 42,
   "originalTopRow": 38,
   "parentId": "0m331erox2",

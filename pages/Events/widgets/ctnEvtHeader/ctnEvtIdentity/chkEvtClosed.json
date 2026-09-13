@@ -4,7 +4,7 @@
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 29,
-  "defaultCheckedState": "{{ jsEventWorkspace.current().closed === true }}",
+  "defaultCheckedState": "{{ jsEvtWorkspace.current().closed === true }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -39,7 +39,7 @@
   "isDisabled": false,
   "isLoading": false,
   "isRequired": false,
-  "isVisible": "{{\njsEventWorkspace.canShowClosed()\n}}",
+  "isVisible": "{{\njsEvtWorkspace.canShowClosed()\n}}",
   "key": "u9rui2qgut",
   "label": "Closed",
   "labelPosition": "Left",
@@ -54,7 +54,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 25,
   "needsErrorInfo": false,
-  "onCheckChange": "{{\njsEventWorkspace.requestClosedChange(\n\tchkEvtClosed.isChecked\n)\n}}",
+  "onCheckChange": "{{\njsEvtWorkspace.requestClosedChange(\n\tchkEvtClosed.isChecked\n)\n}}",
   "originalBottomRow": 29,
   "originalTopRow": 25,
   "parentColumnSpace": 6.2236328125,

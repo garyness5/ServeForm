@@ -1,5 +1,5 @@
 {
-  "animateLoading": "{{ qrySaveEvtVenue.isLoading }}",
+  "animateLoading": "{{ qryEvtSaveVenue.isLoading }}",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 6,
   "boxShadow": "none",
@@ -38,7 +38,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\n\tqrySaveEvtVenue.isLoading ||\n\t!(inpEvtVenueName.text || \"\").trim()\n}}",
+  "isDisabled": "{{\n\tqryEvtSaveVenue.isLoading ||\n\t!(inpEvtVenueName.text || \"\").trim()\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -49,7 +49,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEventAddressBook.saveVenue() }}",
+  "onClick": "{{ jsEvtAddressBook.saveVenue() }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "ffl7e56imc",

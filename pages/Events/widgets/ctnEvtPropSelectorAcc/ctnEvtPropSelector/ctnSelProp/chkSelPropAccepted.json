@@ -4,7 +4,7 @@
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 12,
-  "defaultCheckedState": "{{\njsProposalData.proposal()?.proposal_status === \"Accepted\"\n}}",
+  "defaultCheckedState": "{{\njsPropData.proposal()?.proposal_status === \"Accepted\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -36,7 +36,7 @@
       "key": "onCheckChange"
     }
   ],
-  "isDisabled": "{{\n!jsProposalData.hasSelectedProposal() ||\nNumber(appsmith.store.current_proposal_id || 0) <= 0\n}}",
+  "isDisabled": "{{\n!jsPropData.hasSelectedProposal() ||\nNumber(appsmith.store.current_proposal_id || 0) <= 0\n}}",
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,
@@ -55,7 +55,7 @@
   "mobileRightColumn": 48,
   "mobileTopRow": 17,
   "needsErrorInfo": false,
-  "onCheckChange": "{{\njsProposalActions.setAccepted(\n\tchkSelPropAccepted.isChecked\n)\n}}",
+  "onCheckChange": "{{\njsPropActions.setAccepted(\n\tchkSelPropAccepted.isChecked\n)\n}}",
   "originalBottomRow": 13,
   "originalTopRow": 9,
   "parentColumnSpace": 17.875,

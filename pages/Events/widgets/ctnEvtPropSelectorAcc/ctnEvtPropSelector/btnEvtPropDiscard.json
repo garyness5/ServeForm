@@ -31,7 +31,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ !jsProposalData.canDiscardProposal() }}",
+  "isDisabled": "{{ !jsPropData.canDiscardProposal() }}",
   "isLoading": false,
   "isVisible": true,
   "key": "bv6gv3416k",
@@ -42,7 +42,7 @@
   "mobileRightColumn": 18,
   "mobileTopRow": 1,
   "needsErrorInfo": false,
-  "onClick": "{{ jsProposalActions.discardCurrent() }}",
+  "onClick": "{{ jsPropActions.discardCurrent() }}",
   "originalBottomRow": 9,
   "originalTopRow": 5,
   "parentColumnSpace": 19.5,

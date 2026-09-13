@@ -42,7 +42,7 @@
   "mobileRightColumn": 57,
   "mobileTopRow": 2,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEventActionGuard.request(\"duplicate\") }}",
+  "onClick": "{{ jsEvtActionGuard.request(\"duplicate\") }}",
   "parentColumnSpace": 18.1875,
   "parentId": "eum2utosue",
   "parentRowSpace": 10,

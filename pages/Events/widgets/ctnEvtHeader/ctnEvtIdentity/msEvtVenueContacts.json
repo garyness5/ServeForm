@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 21,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  (jsEventWorkspace.get().venue_contact_ids || []).map(String) ))(msEvtVenueContacts.options, msEvtVenueContacts.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => (  (jsEvtWorkspace.get().venue_contact_ids || []).map(String) ))(msEvtVenueContacts.options, msEvtVenueContacts.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -45,7 +45,7 @@
       "key": "onDropdownOpen"
     }
   ],
-  "isDisabled": "{{ jsEventWorkspace.isClosedLocked() }}",
+  "isDisabled": "{{ jsEvtWorkspace.isClosedLocked() }}",
   "isFilterable": true,
   "isLoading": false,
   "isRequired": false,
@@ -66,8 +66,8 @@
   "mobileRightColumn": 18,
   "mobileTopRow": 20,
   "needsErrorInfo": false,
-  "onDropdownOpen": "{{ qryGetEvtVenueContacts.run() }}",
-  "onOptionChange": "{{\njsEventAddressBook.captureContactSelection(\n\t\"venue\"\n)\n}}",
+  "onDropdownOpen": "{{ qryEvtGetVenueContacts.run() }}",
+  "onOptionChange": "{{\njsEvtAddressBook.captureContactSelection(\n\t\"venue\"\n)\n}}",
   "optionLabel": "label",
   "optionValue": "value",
   "originalBottomRow": 21,
@@ -80,7 +80,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 58,
   "serverSideFiltering": false,
-  "sourceData": "{{\nArray.isArray(qryGetEvtVenueContacts.data)\n? qryGetEvtVenueContacts.data\n: []\n}}",
+  "sourceData": "{{\nArray.isArray(qryEvtGetVenueContacts.data)\n? qryEvtGetVenueContacts.data\n: []\n}}",
   "topRow": 17,
   "type": "MULTI_SELECT_WIDGET_V2",
   "version": 1,

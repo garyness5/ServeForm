@@ -29,7 +29,7 @@
   "fontSize": "0.875rem",
   "fontStyle": "ITALIC",
   "isLoading": false,
-  "isVisible": "{{ jsEventWorkspace.get().closed === true }}",
+  "isVisible": "{{ jsEvtWorkspace.get().closed === true }}",
   "key": "9kjttflf0u",
   "leftColumn": 41,
   "maxDynamicHeight": 9000,

@@ -7,7 +7,7 @@
   "closeOnSelection": true,
   "dateFormat": "YYYY-MMM-DD | HH:mm",
   "datePickerType": "DATE_PICKER",
-  "defaultDate": "{{\njsEventWorkspace.get().event_datetime\n? moment(jsEventWorkspace.get().event_datetime)\n.format(\"YYYY-MM-DDTHH:mm:ss\")\n: \"\"\n}}",
+  "defaultDate": "{{\njsEvtWorkspace.get().event_datetime\n? moment(jsEvtWorkspace.get().event_datetime)\n.format(\"YYYY-MM-DDTHH:mm:ss\")\n: \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -43,7 +43,7 @@
     }
   ],
   "firstDayOfWeek": 0,
-  "isDisabled": "{{ jsEventWorkspace.isClosedLocked() }}",
+  "isDisabled": "{{ jsEvtWorkspace.isClosedLocked() }}",
   "isLoading": false,
   "isRequired": false,
   "isVisible": true,

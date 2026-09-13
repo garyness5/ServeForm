@@ -49,7 +49,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 53,
   "shouldTruncate": false,
-  "text": "{{ jsEventAddressBook.contactModalTitle() }}",
+  "text": "{{ jsEvtAddressBook.contactModalTitle() }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 0,

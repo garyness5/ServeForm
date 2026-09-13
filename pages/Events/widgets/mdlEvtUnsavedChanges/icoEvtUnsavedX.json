@@ -36,7 +36,7 @@
   "mobileRightColumn": 64,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEventActionGuard.cancel() }}",
+  "onClick": "{{ jsEvtActionGuard.cancel() }}",
   "parentId": "qtesy6qkrq",
   "renderMode": "CANVAS",
   "responsiveBehavior": "hug",

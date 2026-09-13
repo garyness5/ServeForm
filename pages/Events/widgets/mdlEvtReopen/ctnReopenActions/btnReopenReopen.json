@@ -40,7 +40,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEventWorkspace.confirmReopen() }}",
+  "onClick": "{{ jsEvtWorkspace.confirmReopen() }}",
   "originalBottomRow": 48,
   "originalTopRow": 44,
   "parentId": "u730z2hzht",

@@ -36,7 +36,7 @@
   "mobileRightColumn": 64,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onClick": "{{ jsProposalActions.cancelGroReplace() }}",
+  "onClick": "{{ jsPropActions.cancelGroReplace() }}",
   "parentId": "sgf64gnnvx",
   "renderMode": "CANVAS",
   "responsiveBehavior": "hug",

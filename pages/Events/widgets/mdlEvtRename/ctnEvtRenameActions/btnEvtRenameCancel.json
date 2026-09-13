@@ -37,7 +37,7 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEventActions.cancelEventName() }}",
+  "onClick": "{{ jsEvtActions.cancelEventName() }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "vusu7sfnm4",
