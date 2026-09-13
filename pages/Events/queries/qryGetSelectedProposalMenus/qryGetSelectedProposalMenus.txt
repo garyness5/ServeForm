@@ -22,6 +22,7 @@ select
     production_guests,
 
     kitchen_cost,
+    frozen_cost_per_unit,
 
     allergen_names,
     diet_tag_names,

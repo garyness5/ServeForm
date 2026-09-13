@@ -192,7 +192,32 @@ export default {
 
 			components:
 			this.deepCopy(
-				item.components
+				item.components.map(row => ({
+					...row,
+
+					/*
+			 * A duplicated Event is a new occurrence.
+			 *
+			 * Historical cost basis belongs only to
+			 * the source Event and must never cross
+			 * the Event Duplicate boundary.
+			 *
+			 * With frozen_cost_per_unit cleared,
+			 * jsProposalComponents.refreshDerivedFields()
+			 * will use the Menu's current cost.
+			 */
+					frozen_cost_per_unit:
+					null,
+
+					menu_cost:
+					null,
+
+					line_cost:
+					null,
+
+					kitchen_cost:
+					null
+				}))
 			)
 		}));
 

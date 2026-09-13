@@ -641,9 +641,15 @@ export default {
 		const source =
 					this.closeCostSource();
 
+		const freezeWarning = [
+			"Closing this Event permanently freezes its Menu costs.",
+			"Future changes to Ingredient, Recipe, Dish or Menu costs will not update this Event, even if the Event is later reopened.",
+			"Use Duplicate if you need a new Event using current costs."
+		];
+
 		if (!source) {
 			return [
-				"Closing this Event will freeze its current costs.",
+				...freezeWarning,
 				"",
 				"No Proposal is currently marked Ordered or Accepted. The Event can still be closed, but no frozen Event cost will be recorded.",
 				"",
@@ -652,7 +658,7 @@ export default {
 		}
 
 		return [
-			"Closing this Event will freeze its current costs.",
+			...freezeWarning,
 			"",
 			`Frozen cost source: ${source.label} — ${source.status}`,
 			"",

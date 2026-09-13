@@ -71,6 +71,7 @@ export default {
 			production_guests: null,
 
 			menu_cost: null,
+			frozen_cost_per_unit: null,
 			line_cost: null,
 			kitchen_cost: null,
 
@@ -212,6 +213,11 @@ export default {
 
 			menu_cost:
 			this.numberOrNull(source.menu_cost),
+
+			frozen_cost_per_unit:
+			this.numberOrNull(
+				source.frozen_cost_per_unit
+			),
 
 			line_cost:
 			lineCost === null ||
@@ -356,6 +362,11 @@ export default {
 				row.menu_renamed === true,
 
 				menu_cost:
+				row.frozen_cost_per_unit ??
+				null,
+
+				frozen_cost_per_unit:
+				row.frozen_cost_per_unit ??
 				null,
 
 				line_cost:
@@ -610,6 +621,11 @@ export default {
 			extra_guests:
 			this.numberOrNull(
 				row?.extra_guests
+			),
+
+			frozen_cost_per_unit:
+			this.numberOrNull(
+				row?.frozen_cost_per_unit
 			)
 		};
 
@@ -619,6 +635,21 @@ export default {
 						base.menu_name ||
 						""
 					).trim();
+
+		const productionGuests =
+					base.guests == null
+		? null
+		: (
+			base.guests +
+			Number(
+				base.extra_guests || 0
+			)
+		);
+
+		const frozenCost =
+					this.numberOrNull(
+						base.frozen_cost_per_unit
+					);
 
 		/*
 	 * No Menu selected.
@@ -638,6 +669,9 @@ export default {
 				menu_renamed: false,
 
 				menu_cost: null,
+				frozen_cost_per_unit:
+				frozenCost,
+
 				line_cost: null,
 				kitchen_cost: null,
 
@@ -663,21 +697,143 @@ export default {
 		const item =
 					this.currentMenu(base);
 
-		const productionGuests =
-					base.guests == null
-		? null
-		: (
-			base.guests +
-			Number(
-				base.extra_guests || 0
-			)
-		);
+		const rowInactive =
+					base.active === false;
 
 		/*
-	 * Source Menu no longer resolves.
-	 * Keep frozen Proposal identity and
-	 * user-owned quantities.
+	 * ==================================================
+	 * FROZEN HISTORICAL COST
+	 *
+	 * Once frozen_cost_per_unit exists, it permanently
+	 * owns this Proposal Menu's cost basis.
+	 *
+	 * Current upstream Menu pricing is ignored forever,
+	 * even if the Event is later reopened.
+	 * ==================================================
 	 */
+		if (frozenCost != null) {
+
+			const calculatedCost =
+						rowInactive ||
+						productionGuests == null
+			? null
+			: Math.round(
+				productionGuests *
+				frozenCost *
+				100
+			) / 100;
+
+			const sourceDeleted =
+						!item ||
+						item.deleted === true;
+
+			const sourceInactive =
+						item?.active === false;
+
+			return {
+				...base,
+
+				/*
+			 * Preserve the saved Proposal identity.
+			 */
+				menu_id:
+				base.menu_id,
+
+				menu_name:
+				base.menu_name,
+
+				current_menu_name:
+				item?.name ??
+				base.current_menu_name ??
+				base.menu_name,
+
+				display_menu_name:
+				base.menu_name ??
+				item?.name ??
+				null,
+
+				menu_renamed:
+				item?.name
+				? (
+					String(base.menu_name || "").trim() !==
+					String(item.name || "").trim()
+				)
+				: false,
+
+				category_id:
+				base.category_id,
+
+				category_name:
+				base.category_name,
+
+				current_category_id:
+				item?.category_id ??
+				base.current_category_id ??
+				base.category_id,
+
+				current_category_name:
+				item?.category_name ??
+				base.current_category_name ??
+				base.category_name,
+
+				menu_cost:
+				frozenCost,
+
+				frozen_cost_per_unit:
+				frozenCost,
+
+				production_guests:
+				productionGuests,
+
+				line_cost:
+				calculatedCost,
+
+				kitchen_cost:
+				calculatedCost,
+
+				/*
+			 * Keep the saved Proposal summaries.
+			 * Historical Event cost must not depend
+			 * on today's Menu state.
+			 */
+				allergen_names:
+				base.allergen_names ??
+				null,
+
+				diet_tag_names:
+				base.diet_tag_names ??
+				null,
+
+				current_menu_active:
+				sourceDeleted
+				? false
+				: sourceInactive
+				? false
+				: true,
+
+				current_menu_deleted:
+				sourceDeleted,
+
+				component_status:
+				sourceDeleted
+				? "Source Deleted"
+				: sourceInactive
+				? "Source Inactive"
+				: rowInactive
+				? "Inactive"
+				: "Active"
+			};
+		}
+
+
+		/*
+	 * ==================================================
+	 * NEVER-FROZEN EVENT
+	 *
+	 * Continue using current upstream Menu truth.
+	 * ==================================================
+	 */
+
 		if (!item) {
 			return {
 				...base,
@@ -709,17 +865,6 @@ export default {
 		const sourceInactive =
 					item.active === false;
 
-		const rowInactive =
-					base.active === false;
-
-		/*
-	 * Deleted source:
-	 * keep the Proposal's frozen Menu,
-	 * Category, Guests and Extras.
-	 *
-	 * Do not replace frozen identity with
-	 * current deleted-source values.
-	 */
 		if (sourceDeleted) {
 			return {
 				...base,
@@ -745,11 +890,6 @@ export default {
 			};
 		}
 
-		/*
-	 * Active or Inactive source still exists.
-	 * Current upstream Menu truth overlays
-	 * the Proposal-owned row.
-	 */
 		const menuCost =
 					this.numberOrNull(
 						item.cost_per_unit ??
@@ -801,6 +941,9 @@ export default {
 
 			menu_cost:
 			menuCost,
+
+			frozen_cost_per_unit:
+			null,
 
 			production_guests:
 			productionGuests,
@@ -1118,7 +1261,7 @@ export default {
 
 		return value == null
 			? ""
-		: fmt.currency(value);
+		: jsFmt.currency(value);
 	},
 
 	async onActiveChange(row) {
