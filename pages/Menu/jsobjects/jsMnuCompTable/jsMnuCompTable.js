@@ -296,43 +296,126 @@ export default {
 
 		await this.syncFromTable();
 
-		const freshRow = this.getRows().find(r => r.draft_row_id === row.draft_row_id) || row;
+		const freshRow =
+					this.getRows()
+		.find(r => r.draft_row_id === row.draft_row_id) || row;
 
-		const item = (qryMnuGetComponentItems.data || []).find(i =>
-																													 i.item_type === freshRow.item_type &&
-																													 i.name === freshRow.component_name
-																													);
+		const item =
+					(qryMnuGetComponentItems.data || [])
+		.find(i =>
+					i.item_type === freshRow.item_type &&
+					i.name === freshRow.component_name
+				 );
 
 		if (!item) return;
 
 		return await this.patchRow(freshRow, {
-			item_type: item.item_type,
-			component_category: item.category_name,
-			component_name: item.name,
+			/*
+		 * Keep:
+		 * Type
+		 * Category
+		 * newly selected Item
+		 */
+			item_type:
+			item.item_type,
 
-			ingredient_id: item.item_type === "ingredient" ? item.id : null,
-			child_recipe_id: item.item_type === "recipe" ? item.id : null,
-			child_dish_id: item.item_type === "dish" ? item.id : null,
+			component_category:
+			item.category_name,
 
-			unit_id: item.default_unit_id,
-			unit_abbreviation: item.default_unit,
-			unit_type: item.unit_type,
+			component_name:
+			item.name,
 
-			wastage_percent: item.wastage_percent,
-			price_per_unit: item.price_per_unit,
-			cost_per_base_unit: item.cost_per_base_unit,
-			factor_to_base: item.factor_to_base,
+			ingredient_id:
+			item.item_type === "ingredient"
+			? item.id
+			: null,
 
-			allergen_names: item.allergen_names,
-			diet_tag_names: item.diet_tag_names,
+			child_recipe_id:
+			item.item_type === "recipe"
+			? item.id
+			: null,
 
-			child_deleted: false,
-			child_active: true,
-			component_status: "active",
+			child_dish_id:
+			item.item_type === "dish"
+			? item.id
+			: null,
 
-			apply_wastage: true,
-			active: true,
-			line_cost: null
+
+			/*
+		 * New Item means old Qty has no meaning.
+		 */
+			qty:
+			null,
+
+
+			/*
+		 * New Item establishes its own default Unit.
+		 *
+		 * Dish uses pax presentation and therefore
+		 * does not use a physical Unit ID.
+		 */
+			unit_id:
+			item.item_type === "dish"
+			? null
+			: item.default_unit_id,
+
+			unit_abbreviation:
+			item.item_type === "dish"
+			? "pax"
+			: item.default_unit,
+
+			unit_type:
+			item.unit_type || null,
+
+
+			/*
+		 * Refresh current upstream Item truth.
+		 */
+			wastage_percent:
+			item.wastage_percent,
+
+			price_per_unit:
+			item.price_per_unit,
+
+			cost_per_base_unit:
+			item.cost_per_base_unit,
+
+			factor_to_base:
+			item.factor_to_base,
+
+			allergen_names:
+			item.allergen_names,
+
+			diet_tag_names:
+			item.diet_tag_names,
+
+			child_deleted:
+			false,
+
+			child_active:
+			true,
+
+			component_status:
+			"active",
+
+			apply_wastage:
+			true,
+
+
+			/*
+		 * Keep the row's current local Active state.
+		 */
+			active:
+			freshRow.active === false
+			? false
+			: true,
+
+
+			/*
+		 * Qty is blank, so no Line Cost yet.
+		 */
+			line_cost:
+			null
 		});
 	},
 
@@ -352,10 +435,43 @@ export default {
 	},
 
 	rowsForSave() {
-		const rows = this.mergeUpdatedRows();
+		const rows =
+					this.mergeUpdatedRows();
 
 		return this.normalizeRows(rows)
-			.filter(r => this.hasContent(r))
+
+		/*
+		 * Only real component rows cross the
+		 * Published-State boundary.
+		 *
+		 * A row containing only Item Type /
+		 * Category is incomplete Working State,
+		 * not a durable Menu component.
+		 *
+		 * Deleted upstream components are retained
+		 * because they already represent a real
+		 * saved component reference.
+		 */
+			.filter(r => {
+			const isDeletedChild =
+						r.component_status === "child_deleted" ||
+						r.child_deleted === true;
+
+			if (isDeletedChild) {
+				return !!(
+					r.ingredient_id ||
+					r.child_recipe_id ||
+					r.child_dish_id
+				);
+			}
+
+			return !!(
+				(r.item_type === "ingredient" && r.ingredient_id) ||
+				(r.item_type === "recipe" && r.child_recipe_id) ||
+				(r.item_type === "dish" && r.child_dish_id)
+			);
+		})
+
 			.map((r, index) => {
 			const isDeletedChild =
 						r.component_status === "child_deleted" ||
@@ -363,39 +479,135 @@ export default {
 
 			if (isDeletedChild) {
 				return {
-					menu_id: Number(appsmith.store.current_menu_id || 0),
-					line_no: index + 1,
-					item_type: r.item_type || null,
-					ingredient_id: r.item_type === "ingredient" ? Number(r.ingredient_id || 0) || null : null,
-					child_recipe_id: r.item_type === "recipe" ? Number(r.child_recipe_id || 0) || null : null,
-					child_dish_id: r.item_type === "dish" ? Number(r.child_dish_id || 0) || null : null,
-					qty: r.saved_qty === "" || r.saved_qty == null ? null : Number(r.saved_qty),
-					unit_id: Number(r.saved_unit_id || 0) || null,
-					apply_wastage: r.apply_wastage === false ? false : true,
-					active: r.active === false ? false : true
+					menu_id:
+					Number(
+						appsmith.store.current_menu_id || 0
+					),
+
+					line_no:
+					index + 1,
+
+					item_type:
+					r.item_type || null,
+
+					ingredient_id:
+					r.item_type === "ingredient"
+					? Number(r.ingredient_id || 0) || null
+					: null,
+
+					child_recipe_id:
+					r.item_type === "recipe"
+					? Number(r.child_recipe_id || 0) || null
+					: null,
+
+					child_dish_id:
+					r.item_type === "dish"
+					? Number(r.child_dish_id || 0) || null
+					: null,
+
+					qty:
+					r.saved_qty === "" ||
+					r.saved_qty == null
+					? null
+					: Number(r.saved_qty),
+
+					unit_id:
+					Number(r.saved_unit_id || 0) || null,
+
+					apply_wastage:
+					r.apply_wastage === false
+					? false
+					: true,
+
+					active:
+					r.active === false
+					? false
+					: true
 				};
 			}
 
-			const item = (qryMnuGetComponentItems.data || []).find(i =>
-																														 i.item_type === r.item_type &&
-																														 i.name === r.component_name
-																														);
+			const item =
+						(qryMnuGetComponentItems.data || [])
+			.find(i =>
+						i.item_type === r.item_type &&
+						i.name === r.component_name
+					 );
 
-			const unit = (qryMnuGetComponentUnits.data || []).find(u =>
-																														 u.abbreviation === r.unit_abbreviation
-																														);
+			const unit =
+						(qryMnuGetComponentUnits.data || [])
+			.find(u =>
+						u.abbreviation ===
+						r.unit_abbreviation
+					 );
 
 			return {
-				menu_id: Number(appsmith.store.current_menu_id || 0),
-				line_no: index + 1,
-				item_type: r.item_type || null,
-				ingredient_id: r.item_type === "ingredient" ? Number(r.ingredient_id || item?.id || 0) || null : null,
-				child_recipe_id: r.item_type === "recipe" ? Number(r.child_recipe_id || item?.id || 0) || null : null,
-				child_dish_id: r.item_type === "dish" ? Number(r.child_dish_id || item?.id || 0) || null : null,
-				qty: r.qty === "" || r.qty == null ? null : Number(r.qty),
-				unit_id: unit?.id || r.unit_id || item?.default_unit_id || null,
-				apply_wastage: r.apply_wastage === false ? false : true,
-				active: r.active === false ? false : true
+				menu_id:
+				Number(
+					appsmith.store.current_menu_id || 0
+				),
+
+				line_no:
+				index + 1,
+
+				item_type:
+				r.item_type || null,
+
+				ingredient_id:
+				r.item_type === "ingredient"
+				? Number(
+					r.ingredient_id ||
+					item?.id ||
+					0
+				) || null
+				: null,
+
+				child_recipe_id:
+				r.item_type === "recipe"
+				? Number(
+					r.child_recipe_id ||
+					item?.id ||
+					0
+				) || null
+				: null,
+
+				child_dish_id:
+				r.item_type === "dish"
+				? Number(
+					r.child_dish_id ||
+					item?.id ||
+					0
+				) || null
+				: null,
+
+				qty:
+				r.qty === "" ||
+				r.qty == null
+				? null
+				: Number(r.qty),
+
+				/*
+				 * Dish components use pax and therefore
+				 * deliberately have no physical Unit.
+				 */
+				unit_id:
+				r.item_type === "dish"
+				? null
+				: (
+					unit?.id ||
+					r.unit_id ||
+					item?.default_unit_id ||
+					null
+				),
+
+				apply_wastage:
+				r.apply_wastage === false
+				? false
+				: true,
+
+				active:
+				r.active === false
+				? false
+				: true
 			};
 		});
 	},

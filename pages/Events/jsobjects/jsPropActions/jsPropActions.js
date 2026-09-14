@@ -825,4 +825,117 @@ export default {
 			? await this.unorder()
 		: await this.sendToOrder();
 	},
+
+	async sendToQuote() {
+
+		const proposalId =
+					Number(
+						appsmith.store.current_proposal_id || 0
+					);
+
+		if (!proposalId) {
+			showAlert(
+				"Select a Proposal first.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		if (proposalId < 0) {
+			showAlert(
+				"Save the Proposal before sending it to Quote.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		/*
+	 * Only Published State crosses to Quote.
+	 */
+		if (
+			jsPropWorkspaces.isDirty(
+				proposalId
+			)
+		) {
+			showAlert(
+				"Save the Proposal before sending it to Quote.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		if (jsEvtSave.isDirty()) {
+			showAlert(
+				"Save the Event before sending the Proposal to Quote.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		try {
+
+			const result =
+						await qryEvtSendPropToQuote.run();
+
+			const row =
+						result?.[0] || null;
+
+			if (!row?.inbox_id) {
+				throw new Error(
+					"Proposal could not be sent to Quote."
+				);
+			}
+
+			await Promise.all([
+				qryEvtGetPropsForEvent.run(),
+				qryEvtGetSelectedProposal.run(),
+				qryEvtGetItemById.run()
+			]);
+
+			await jsEvtWorkspace.resetFromSaved();
+
+			showAlert(
+				row.resent === true
+				? "Proposal resent to Quote."
+				: "Proposal sent to Quote.",
+				"success"
+			);
+
+			return true;
+
+		} catch (error) {
+
+			showAlert(
+				error?.message ||
+				"Proposal could not be sent to Quote.",
+				"error"
+			);
+
+			return false;
+		}
+	},
+
+	quoteButtonText() {
+		const proposal =
+					jsPropData.proposal();
+
+		if (!proposal) {
+			return "To Quote";
+		}
+
+		return (
+			proposal.sent_at != null ||
+			proposal.was_issued === true
+		)
+			? "Resend"
+		: "To Quote";
+	},
+
+	async quoteButtonAction() {
+		return await this.sendToQuote();
+	},
 };
