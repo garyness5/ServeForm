@@ -42,16 +42,16 @@
     "category_name",
     "required_qty",
     "required_unit",
-    "supplier_name",
     "id",
     "batch_id",
     "gro_event_id",
     "event_id",
     "event_datetime",
     "ingredient_id",
-    "required_unit_id"
+    "required_unit_id",
+    "proposal_id"
   ],
-  "columnUpdatedAt": 1787333093183,
+  "columnUpdatedAt": 1789481246183,
   "columnWidthMap": {
     "active": 102,
     "category_id": 118,
@@ -129,9 +129,6 @@
       "key": "primaryColumns.category_name.computedValue"
     },
     {
-      "key": "primaryColumns.supplier_name.computedValue"
-    },
-    {
       "key": "primaryColumns.event_name.computedValue"
     },
     {
@@ -154,6 +151,9 @@
     },
     {
       "key": "primaryColumns.required_unit_id.computedValue"
+    },
+    {
+      "key": "primaryColumns.proposal_id.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -169,7 +169,7 @@
   "endOfData": false,
   "flexVerticalAlignment": "start",
   "fontStyle": "",
-  "headerRowColor": "#4e85a9",
+  "headerRowColor": "",
   "headerTextColor": "{{appsmith.theme.colors.backgroundColor}}",
   "horizontalAlignment": "LEFT",
   "infiniteScrollEnabled": false,
@@ -605,6 +605,40 @@
       "verticalAlignment": "CENTER",
       "width": 150
     },
+    "proposal_id": {
+      "alias": "proposal_id",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "number",
+      "computedValue": "{{(() => { const tableData = tblGroDetails.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"proposal_id\"])) : proposal_id })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "LEFT",
+      "id": "proposal_id",
+      "index": 4,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "proposal_id",
+      "notation": "standard",
+      "originalId": "proposal_id",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
     "required_qty": {
       "alias": "required_qty",
       "allowCellWrapping": false,
@@ -699,40 +733,6 @@
       "label": "required_unit_id",
       "notation": "standard",
       "originalId": "required_unit_id",
-      "sticky": "",
-      "textColor": "",
-      "textSize": "0.875rem",
-      "thousandSeparator": true,
-      "validation": {},
-      "verticalAlignment": "CENTER",
-      "width": 150
-    },
-    "supplier_name": {
-      "alias": "supplier_name",
-      "allowCellWrapping": false,
-      "allowSameOptionsInNewRow": true,
-      "cellBackground": "",
-      "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblGroDetails.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"supplier_name\"])) : supplier_name })()}}",
-      "currencyCode": "USD",
-      "decimals": 0,
-      "enableFilter": true,
-      "enableSort": true,
-      "fontStyle": "",
-      "horizontalAlignment": "LEFT",
-      "id": "supplier_name",
-      "index": 11,
-      "isCellEditable": false,
-      "isCellVisible": true,
-      "isDerived": false,
-      "isDisabled": false,
-      "isDiscardVisible": true,
-      "isEditable": false,
-      "isSaveVisible": true,
-      "isVisible": true,
-      "label": "Supplier",
-      "notation": "standard",
-      "originalId": "supplier_name",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",

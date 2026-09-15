@@ -39,7 +39,7 @@
   "labelStyle": "",
   "labelTextSize": "0.875rem",
   "labelWidth": 5,
-  "leftColumn": 54,
+  "leftColumn": 53,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
@@ -50,7 +50,7 @@
   "needsErrorInfo": false,
   "onTextChanged": "{{ qryEvtLstGetList.run() }}",
   "parentColumnSpace": 17.625,
-  "parentId": "sfs10q6jkb",
+  "parentId": "vi2te728o0",
   "parentRowSpace": 10,
   "placeholderText": "Search Events...",
   "renderMode": "CANVAS",
@@ -62,6 +62,6 @@
   "topRow": 2,
   "type": "INPUT_WIDGET_V2",
   "version": 2,
-  "widgetId": "rnz0fnruop",
-  "widgetName": "inpEvtListSearch"
+  "widgetId": "4wrm715e33",
+  "widgetName": "inpOrdSearch"
 }
