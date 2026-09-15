@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 53,
   "shouldTruncate": false,
-  "text": "{{ jsGroceriesActions.modalTitle() }}",
+  "text": "{{ jsGroActions.modalTitle() }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,
