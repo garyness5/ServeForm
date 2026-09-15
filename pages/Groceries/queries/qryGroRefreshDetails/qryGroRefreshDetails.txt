@@ -1,5 +1,4 @@
 select *
 from public.refresh_gro_details(
-	'{{ appsmith.store.current_client_id }}'::uuid,
-	1
+	'{{ appsmith.store.current_client_id }}'::uuid
 );

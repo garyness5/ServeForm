@@ -1,7 +1,6 @@
 select *
 from public.unorder_proposal_from_groceries(
-    {{ Number(appsmith.store.gro_remove_proposal_id || 0) }},
-    '{{ appsmith.store.current_client_id }}'::uuid,
-    {{ appsmith.store.gro_keep_manual === true }},
-    1
+	{{ Number(appsmith.store.gro_remove_proposal_id || 0) }}::bigint,
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	{{ appsmith.store.gro_keep_manual === true ? 'true' : 'false' }}::boolean
 );

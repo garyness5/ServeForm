@@ -119,11 +119,11 @@ export default {
 			/*
 		 * Reload clean saved Order state.
 		 */
-			await getOrdGroceryOrder.run();
+			await qryOrdGetGroceryOrder.run();
 
 			await storeValue(
 				"gro_order_local_rows",
-				getOrdGroceryOrder.data || []
+				qryOrdGetGroceryOrder.data || []
 			);
 
 			await resetWidget(
@@ -132,7 +132,7 @@ export default {
 			);
 
 			await tblGroOrder.setData(
-				getOrdGroceryOrder.data || []
+				qryOrdGetGroceryOrder.data || []
 			);
 
 			await removeValue(
@@ -199,11 +199,11 @@ export default {
 		try {
 
 			await qryOrdSaveRows.run();
-			await getOrdGroceryOrder.run();
+			await qryOrdGetGroceryOrder.run();
 
 			await storeValue(
 				"gro_order_local_rows",
-				getOrdGroceryOrder.data || []
+				qryOrdGetGroceryOrder.data || []
 			);
 
 			await resetWidget(
@@ -212,7 +212,7 @@ export default {
 			);
 
 			await tblGroOrder.setData(
-				getOrdGroceryOrder.data || []
+				qryOrdGetGroceryOrder.data || []
 			);
 
 			showAlert(
