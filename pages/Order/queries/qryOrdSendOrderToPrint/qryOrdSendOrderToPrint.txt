@@ -1,4 +1,4 @@
 select *
 from public.send_gro_order_to_print(
-	'{{ appsmith.store.current_client_id }}'::uuid
+  '{{ appsmith.store.current_client_id }}'::uuid
 );

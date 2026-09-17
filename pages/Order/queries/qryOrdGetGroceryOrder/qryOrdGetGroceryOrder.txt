@@ -15,11 +15,11 @@ select
   coalesce(go.display_required_unit_id, go.required_unit_id) as required_unit_id,
 
   round(
-    go.required_qty
-    * stored_u.factor_to_base
-    / display_u.factor_to_base,
-    2
-  ) as required_qty,
+		go.required_qty
+		* stored_u.factor_to_base
+		/ display_u.factor_to_base,
+		2
+	) as required_qty,
 
   display_u.abbreviation as required_unit,
 
@@ -35,10 +35,15 @@ select
   go.packs_to_order
 
 from public.gro_order go
+
 join public.units stored_u
   on stored_u.id = go.required_unit_id
+
 join public.units display_u
-  on display_u.id = coalesce(go.display_required_unit_id, go.required_unit_id)
-where go.batch_id = 1
-  and go.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+  on display_u.id =
+     coalesce(go.display_required_unit_id, go.required_unit_id)
+
+where go.client_id =
+      '{{ appsmith.store.current_client_id }}'::uuid
+
 order by go.line_no;

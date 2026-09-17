@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.restore_gro_participation(\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t1\n);",
+      "body": "select *\nfrom public.restore_gro_participation(\n    '{{ appsmith.store.current_client_id }}'::uuid\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

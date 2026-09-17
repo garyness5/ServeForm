@@ -1,6 +1,5 @@
 select
     id,
-    batch_id,
     gro_event_id,
     event_id,
     proposal_id,
@@ -23,8 +22,6 @@ from public.gro_details
 
 where client_id =
       '{{ appsmith.store.current_client_id }}'::uuid
-
-  and batch_id = 1
 
 order by
     event_datetime nulls last,

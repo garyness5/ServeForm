@@ -812,7 +812,6 @@ export default {
 
 
 	orderButtonText() {
-
 		return this.isOrdered()
 			? "Unorder"
 		: "To Order";

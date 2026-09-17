@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_gro_print_rows(\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t'{{ JSON.stringify(jsGroPrintTable.rowsForSave()).replaceAll(\"'\", \"''\") }}'::jsonb\n);",
+      "body": "select *\nfrom public.send_gro_order_to_print(\n\t'{{ appsmith.store.current_client_id }}'::uuid\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

@@ -426,7 +426,7 @@ export default {
 			const row =
 						result?.[0] || null;
 
-			if (!row?.proposal_id) {
+			if (!row) {
 				showAlert(
 					"Event could not be removed from Groceries.",
 					"error"
