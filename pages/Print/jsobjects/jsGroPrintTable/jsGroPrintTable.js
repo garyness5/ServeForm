@@ -5,10 +5,15 @@ export default {
 
 		return rows.map((row, index) => {
 			const update = updates.find(u =>
-																	u.index === index ||
-																	u.rowIndex === index ||
-																	Number(u.allFields?.id || u.updatedFields?.id || u.id || 0) === Number(row.id || 0)
-																 );
+				u.index === index ||
+				u.rowIndex === index ||
+				Number(
+					u.allFields?.id ||
+					u.updatedFields?.id ||
+					u.id ||
+					0
+				) === Number(row.id || 0)
+			);
 
 			if (!update) return row;
 
@@ -24,25 +29,65 @@ export default {
 		return this.mergedRows()
 			.filter(r => r.id)
 			.map((r, index) => ({
-			id: Number(r.id),
-			purchased: r.purchased === true ? true : false,
-			print_sort_no: index + 1
-		}));
+				id: Number(r.id),
+				purchased: r.purchased === true,
+				print_sort_no: index + 1
+			}));
+	},
+
+	savedRowsForCompare() {
+		return (qryGroPrnGetPrint.data || [])
+			.filter(r => r.id)
+			.map(r => ({
+				id: Number(r.id),
+				purchased: r.purchased === true
+			}));
+	},
+
+	tableDirty() {
+		const current = this.rowsForSave()
+			.map(r => ({
+				id: Number(r.id),
+				purchased: r.purchased === true
+			}));
+
+		return JSON.stringify(current) !==
+			JSON.stringify(this.savedRowsForCompare());
+	},
+
+	isDirty() {
+		return this.tableDirty();
 	},
 
 	async savePrint() {
-		await qryGroPrnSavePrintRows.run();
+		try {
+			await qryGroPrnSavePrintRows.run();
 
-		await Promise.all([
-			qryGroPrnGetPrint.run(),
-			qryGroPrnGetNotes.run()
-		]);
+			await qryGroPrnGetPrint.run();
 
-		await resetWidget("tblGroPrint", true);
-		await tblGroPrint.setData(qryGroPrnGetPrint.data);
-		await resetWidget("rteGroPrintNotes", true);
+			await resetWidget(
+				"tblGroPrint",
+				true
+			);
 
-		showAlert("Print saved.", "success");
-		return true;
+			await tblGroPrint.setData(
+				qryGroPrnGetPrint.data || []
+			);
+
+			showAlert(
+				"Print saved.",
+				"success"
+			);
+
+			return true;
+
+		} catch (error) {
+			showAlert(
+				error?.message || "Print could not be saved.",
+				"error"
+			);
+
+			return false;
+		}
 	}
 }

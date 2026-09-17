@@ -29,7 +29,7 @@
     ],
     "name": "qryOrdGetNotes",
     "pageId": "Order",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }
