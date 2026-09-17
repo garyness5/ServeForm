@@ -3,13 +3,16 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 26,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
-  "defaultText": "This is the initial <b>content</b> of the editor",
+  "defaultText": "{{ qryGroPrnGetNotes.data?.[0]?.print_notes || \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "borderRadius"
     },
     {
       "key": "boxShadow"
+    },
+    {
+      "key": "defaultText"
     }
   ],
   "dynamicHeight": "FIXED",

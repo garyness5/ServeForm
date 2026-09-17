@@ -2,5 +2,4 @@ update public.gro_print
 set
   print_notes = {{ JSON.stringify(rteGroPrintNotes.text) }},
   updated_at = now()
-where client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and batch_id = 1;
+where client_id = '{{ appsmith.store.current_client_id }}'::uuid;

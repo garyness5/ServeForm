@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.refresh_gro_order(\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t1,\n\t{{\n\tappsmith.store.gro_keep_manual !== false\n\t? 'true'\n\t: 'false'\n\t}}\n);",
+      "body": "select *\nfrom public.refresh_gro_order(\n  '{{ appsmith.store.current_client_id }}'::uuid,\n  {{\n    appsmith.store.gro_keep_manual !== false\n    ? 'true'\n    : 'false'\n  }}::boolean\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

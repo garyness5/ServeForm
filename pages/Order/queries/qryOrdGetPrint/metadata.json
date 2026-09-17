@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n  id,\n  line_no,\n  supplier_name,\n  ingredient_code,\n  ingredient_name,\n  buy_qty,\n  buy_unit,\n  packs_to_order,\n  packaging_name,\n  purchased\nfrom public.gro_print\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and batch_id = 1\norder by\n  line_no;",
+      "body": "select\n  id,\n  line_no,\n  supplier_name,\n  ingredient_code,\n  ingredient_name,\n  buy_qty,\n  buy_unit,\n  packs_to_order,\n  packaging_name,\n  purchased\nfrom public.gro_print\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\norder by line_no;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

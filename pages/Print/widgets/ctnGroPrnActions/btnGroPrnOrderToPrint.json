@@ -40,7 +40,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ showAlert(\"PDF print output will be added next.\", \"info\") }}",
+  "onClick": "{{ qryGroPrnGetNotes.data?.[0]?.print_notes || \"\" }}",
   "parentColumnSpace": 10.609375,
   "parentId": "1pud0jjs2h",
   "parentRowSpace": 10,
