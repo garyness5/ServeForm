@@ -2,7 +2,7 @@
   "animateLoading": true,
   "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 16,
+  "bottomRow": 19,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -14,16 +14,24 @@
       "key": "borderRadius"
     },
     {
+      "key": "isVisible"
+    },
+    {
       "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
+  "dynamicPropertyPathList": [
+    {
+      "key": "isVisible"
+    }
+  ],
   "dynamicTriggerPathList": [],
   "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
   "fontSize": "0.875rem",
   "fontStyle": "",
   "isLoading": false,
-  "isVisible": true,
+  "isVisible": "{{ true }}",
   "key": "hk41io6ubo",
   "leftColumn": 4,
   "maxDynamicHeight": 9000,
@@ -34,23 +42,23 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 6,
   "needsErrorInfo": false,
-  "originalBottomRow": 16,
-  "originalTopRow": 6,
+  "originalBottomRow": 19,
+  "originalTopRow": 14,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
-  "parentId": "1hdbugvmom",
+  "parentId": "hh4v0r1mbz",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
   "rightColumn": 60,
   "shouldTruncate": false,
-  "text": "{{ \"This Event will no longer be available in Groceries group. There are quantites you have entered in the Order page. <br><br>Do you want to keep all these quantities? Or do you want them all removed? This action cannot be undone.  \" }}",
+  "text": "{{\n  appsmith.store.evt_gro_unorder_request?.mode === \"values\"\n    ? \"There are quantities you entered on the Order page. Do you want to keep these quantities for the remaining Events, or remove them?\"\n    : \"Groceries Details and Order will be updated to reflect any remaining Events.\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 6,
+  "topRow": 14,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "b77lgdzhd4",
-  "widgetName": "txtEvtRemoveWarning"
+  "widgetId": "ex8hxjxleo",
+  "widgetName": "txtEvtUnorderWarning"
 }

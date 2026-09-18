@@ -29,7 +29,7 @@
       "leftColumn": 0,
       "maxDynamicHeight": 9000,
       "minDynamicHeight": 4,
-      "minHeight": 658,
+      "minHeight": 420,
       "minWidth": 450,
       "mobileBottomRow": 240,
       "mobileLeftColumn": 0,
@@ -37,7 +37,7 @@
       "mobileTopRow": 0,
       "needsErrorInfo": false,
       "parentColumnSpace": 1,
-      "parentId": "isflwqar0d",
+      "parentId": "e5fponlvgu",
       "parentRowSpace": 1,
       "renderMode": "CANVAS",
       "responsiveBehavior": "fill",
@@ -46,7 +46,7 @@
       "topRow": 0,
       "type": "CANVAS_WIDGET",
       "version": 1,
-      "widgetId": "1hdbugvmom",
+      "widgetId": "hh4v0r1mbz",
       "widgetName": "Canvas6CopyCopy"
     }
   ],
@@ -79,10 +79,10 @@
   "renderMode": "CANVAS",
   "rightColumn": 56,
   "shouldScrollContents": true,
-  "topRow": 36,
+  "topRow": 35,
   "type": "MODAL_WIDGET",
   "version": 2,
-  "widgetId": "isflwqar0d",
-  "widgetName": "mdlEvtRemoveFromGroceries",
+  "widgetId": "e5fponlvgu",
+  "widgetName": "mdlEvtUnorder",
   "width": 456
 }

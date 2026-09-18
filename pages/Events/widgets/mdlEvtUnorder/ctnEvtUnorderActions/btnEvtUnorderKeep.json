@@ -2,10 +2,11 @@
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 6,
+  "bottomRowBeforeCollapse": 6,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
   "buttonStyle": "PRIMARY_BUTTON",
-  "buttonVariant": "SECONDARY",
+  "buttonVariant": "PRIMARY",
   "disabledWhenInvalid": false,
   "dynamicBindingPathList": [
     {
@@ -13,6 +14,12 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isVisible"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
@@ -21,6 +28,9 @@
     },
     {
       "key": "onClick"
+    },
+    {
+      "key": "isVisible"
     }
   ],
   "dynamicTriggerPathList": [
@@ -29,31 +39,32 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "",
+  "isDisabled": "{{ qryEvtUnorderPropFromGroceries.isLoading }}",
   "isLoading": false,
-  "isVisible": true,
+  "isVisible": "{{\n  appsmith.store.evt_gro_unorder_request?.mode === \"values\"\n}}",
   "key": "oy0hw5tj7l",
-  "leftColumn": 34,
+  "leftColumn": 49,
   "minWidth": 120,
   "mobileBottomRow": 22,
   "mobileLeftColumn": 47,
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ true }}",
-  "originalBottomRow": 60,
-  "originalTopRow": 56,
-  "parentId": "j8noe1hibk",
+  "onClick": "{{ jsPropActions.confirmUnorder(true) }}",
+  "originalBottomRow": 6,
+  "originalTopRow": 2,
+  "parentId": "bvnsz2n1r2",
   "placement": "CENTER",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 47,
-  "text": "Remove",
+  "rightColumn": 62,
+  "text": "Keep",
   "topRow": 2,
+  "topRowBeforeCollapse": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "etikvz2tyu",
-  "widgetName": "btnEvtRemoveValues"
+  "widgetId": "1cypxlmzzp",
+  "widgetName": "btnEvtUnorderKeep"
 }

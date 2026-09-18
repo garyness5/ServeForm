@@ -383,31 +383,76 @@ export default {
 		const impact =
 					qryGroCheckRemoveImpact.data?.[0] || {};
 
+		const generated =
+					impact.has_generated_details === true;
+
+		const manual =
+					impact.has_manual_values === true;
+
+		const surviving =
+					impact.has_surviving_generated_sources === true;
+
 		/*
-	 * Generated + manual purchasing values:
-	 * user must choose Keep / Remove / Cancel.
-	 */
-		if (
-			impact.has_generated_details === true &&
-			impact.has_manual_values === true
-		) {
+     * Waiting source:
+     * never contributed to Details/Order.
+     * Remove immediately.
+     */
+		if (!generated) {
+
+			await storeValue(
+				"gro_remove_mode",
+				"waiting"
+			);
+
+			return await this.confirmRemoveSelected(true);
+		}
+
+		/*
+     * Generated source with meaningful surviving
+     * manual purchasing work.
+     *
+     * User chooses:
+     * Keep Values / Remove Values / Cancel.
+     */
+		if (manual && surviving) {
+
+			await storeValue(
+				"gro_remove_mode",
+				"values"
+			);
+
 			await storeValue(
 				"gro_pending_update_reason",
 				"remove_event"
 			);
 
-			showModal(
-				"mdlGroToOrderRemove"
-			);
+			showModal(mdlGroToOrderRemove.name);
 
 			return false;
 		}
 
 		/*
-	 * Dormant or no manual-value impact:
-	 * remove immediately.
-	 */
-		return await this.confirmRemoveSelected(true);
+     * Generated source, but Keep Values has no
+     * meaningful choice:
+     *
+     * - no manual values, OR
+     * - no other generated source survives.
+     *
+     * Require simple destructive confirmation.
+     */
+		await storeValue(
+			"gro_remove_mode",
+			"confirm"
+		);
+
+		await storeValue(
+			"gro_pending_update_reason",
+			"remove_event"
+		);
+
+		showModal(mdlGroToOrderRemove.name);
+
+		return false;
 	},
 
 

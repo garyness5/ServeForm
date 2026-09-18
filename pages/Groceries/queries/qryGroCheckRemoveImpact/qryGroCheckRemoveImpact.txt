@@ -17,4 +17,20 @@ select
 				go.buy_qty is not null
 				or go.packs_to_order is not null
 			)
-		) as has_manual_values;
+		) as has_manual_values,
+
+    exists (
+			select 1
+			from public.gro_events ge
+			where ge.client_id =
+			'{{ appsmith.store.current_client_id }}'::uuid
+			and ge.id <>
+			{{ Number(appsmith.store.gro_remove_event_id || 0) }}
+			and ge.to_order = true
+			and exists (
+				select 1
+				from public.gro_details gd
+				where gd.client_id = ge.client_id
+				and gd.gro_event_id = ge.id
+			)
+		) as has_surviving_generated_sources;

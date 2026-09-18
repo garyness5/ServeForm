@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.unorder_proposal_from_groceries(\n\t{{ Number(appsmith.store.current_proposal_id || 0) }},\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t{{ appsmith.store.evt_gro_keep_manual === true }},\n\t1\n);",
+      "body": "select *\nfrom public.unorder_proposal_from_groceries(\n\t{{ Number(appsmith.store.current_proposal_id || 0) }}::bigint,\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t{{ appsmith.store.evt_gro_keep_manual === true ? 'true' : 'false' }}::boolean\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 4,
+  "bottomRow": 5,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
   "buttonVariant": "TERTIARY",
@@ -11,11 +11,17 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "onClick"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicTriggerPathList": [
@@ -25,25 +31,25 @@
   ],
   "iconName": "cross",
   "iconSize": 24,
-  "isDisabled": false,
+  "isDisabled": "{{ qryEvtUnorderPropFromGroceries.isLoading }}",
   "isLoading": false,
   "isVisible": true,
   "key": "gshmixm7n1",
-  "leftColumn": 58,
+  "leftColumn": 57,
   "minWidth": 50,
   "mobileBottomRow": 4,
   "mobileLeftColumn": 58,
   "mobileRightColumn": 64,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onClick": "{{ true }}",
-  "parentId": "1hdbugvmom",
+  "onClick": "{{ jsPropActions.cancelUnorder() }}",
+  "parentId": "hh4v0r1mbz",
   "renderMode": "CANVAS",
   "responsiveBehavior": "hug",
-  "rightColumn": 64,
-  "topRow": 0,
+  "rightColumn": 63,
+  "topRow": 1,
   "type": "ICON_BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "gps1qbwhjn",
-  "widgetName": "IcoEvtRemoveX"
+  "widgetId": "5qtijas7tf",
+  "widgetName": "icoEvtUnorderClose"
 }

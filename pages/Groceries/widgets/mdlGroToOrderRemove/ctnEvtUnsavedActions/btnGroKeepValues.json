@@ -2,6 +2,7 @@
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 6,
+  "bottomRowBeforeCollapse": 6,
   "boxShadow": "none",
   "buttonColor": "{{appsmith.theme.colors.primaryColor}}",
   "buttonStyle": "PRIMARY_BUTTON",
@@ -13,6 +14,9 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isVisible"
     }
   ],
   "dynamicPropertyPathList": [
@@ -21,6 +25,9 @@
     },
     {
       "key": "onClick"
+    },
+    {
+      "key": "isVisible"
     }
   ],
   "dynamicTriggerPathList": [
@@ -31,7 +38,7 @@
   "isDefaultClickDisabled": true,
   "isDisabled": "",
   "isLoading": false,
-  "isVisible": true,
+  "isVisible": "{{ appsmith.store.gro_remove_mode !== \"confirm\" }}",
   "key": "oy0hw5tj7l",
   "leftColumn": 49,
   "minWidth": 120,
@@ -41,8 +48,8 @@
   "mobileTopRow": 18,
   "needsErrorInfo": false,
   "onClick": "{{\nappsmith.store.gro_pending_update_reason === \"remove_event\"\n? jsGroActions.confirmRemoveSelected(true)\n: jsGroActions.confirmUpdate(true)\n}}",
-  "originalBottomRow": 48,
-  "originalTopRow": 44,
+  "originalBottomRow": 6,
+  "originalTopRow": 2,
   "parentId": "7mnr3bh9ga",
   "placement": "CENTER",
   "recaptchaType": "V3",
@@ -52,6 +59,7 @@
   "rightColumn": 62,
   "text": "Keep",
   "topRow": 2,
+  "topRowBeforeCollapse": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
   "widgetId": "ulb56f9piu",

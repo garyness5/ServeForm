@@ -36,7 +36,7 @@
   "originalBottomRow": 5,
   "originalTopRow": 1,
   "overflow": "NONE",
-  "parentId": "vapd6k2vrl",
+  "parentId": "hh4v0r1mbz",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
   "rightColumn": 57,
@@ -48,6 +48,6 @@
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "kv9c3xpha0",
-  "widgetName": "txtGroRemoveTitle"
+  "widgetId": "b581n4h9jl",
+  "widgetName": "txtEvtUnorderTitle"
 }

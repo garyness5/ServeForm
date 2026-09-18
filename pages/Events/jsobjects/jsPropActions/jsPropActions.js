@@ -653,7 +653,6 @@ export default {
 	async cancelGroReplace() {
 
 		await removeValue("evt_gro_replace_request");
-		await removeValue("evt_gro_unorder_request");
 		await removeValue("evt_gro_keep_manual");
 
 		closeModal(mdlEvtGroReplace.name);
@@ -696,6 +695,7 @@ export default {
 				"Select a Proposal first.",
 				"warning"
 			);
+
 			return false;
 		}
 
@@ -704,22 +704,62 @@ export default {
 		const impact =
 					qryEvtCheckGroReplaceImpact.data?.[0] || null;
 
-		if (
-			impact &&
-			impact.has_generated_details === true &&
-			impact.has_manual_values === true
-		) {
-			await storeValue(
-				"evt_gro_unorder_request",
-				{ proposal_id: proposalId }
-			);
-
-			showModal(mdlEvtGroReplace.name);
-
-			return false;
+		/*
+     * No Groceries source exists.
+     *
+     * This can occur with old/remnant data where
+     * the Proposal is Ordered but its Groceries
+     * handoff is missing.
+     *
+     * The shared backend Unorder operation will
+     * clear Ordered without disturbing Groceries.
+     */
+		if (!impact) {
+			return await this.confirmUnorder(true);
 		}
 
-		return await this.confirmUnorder(true);
+		const generated =
+					impact.has_generated_details === true;
+
+		const manual =
+					impact.has_manual_values === true;
+
+		const surviving =
+					impact.has_surviving_generated_sources === true;
+
+		/*
+     * Waiting source:
+     * no generated Groceries work exists.
+     * Unorder immediately.
+     */
+		if (!generated) {
+			return await this.confirmUnorder(true);
+		}
+
+		await storeValue(
+			"evt_gro_unorder_request",
+			{
+				proposal_id: proposalId,
+				mode:
+				manual && surviving
+				? "values"
+				: "confirm"
+			}
+		);
+
+		/*
+     * Generated + manual values + surviving
+     * generated source:
+     *
+     * Keep / Remove / Cancel.
+     *
+     * All other generated cases:
+     *
+     * simple Remove / Cancel confirmation.
+     */
+		showModal(mdlEvtUnorder.name);
+
+		return false;
 	},
 
 
@@ -757,7 +797,7 @@ export default {
 			await removeValue("evt_gro_unorder_request");
 			await removeValue("evt_gro_keep_manual");
 
-			closeModal(mdlEvtGroReplace.name);
+			closeModal(mdlEvtUnorder.name);
 
 			showAlert(
 				"Proposal removed from Groceries.",
@@ -778,6 +818,16 @@ export default {
 
 			return false;
 		}
+	},
+
+	async cancelUnorder() {
+
+		await removeValue("evt_gro_unorder_request");
+		await removeValue("evt_gro_keep_manual");
+
+		closeModal(mdlEvtUnorder.name);
+
+		return true;
 	},
 
 	currentProposal() {

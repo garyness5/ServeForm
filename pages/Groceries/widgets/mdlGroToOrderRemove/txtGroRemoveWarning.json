@@ -2,7 +2,7 @@
   "animateLoading": true,
   "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 30,
+  "bottomRow": 35,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -12,15 +12,23 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isVisible"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
+  "dynamicPropertyPathList": [
+    {
+      "key": "isVisible"
+    }
+  ],
   "dynamicTriggerPathList": [],
   "fontFamily": "{{appsmith.theme.fontFamily.appFont}}",
   "fontSize": "0.875rem",
   "fontStyle": "",
   "isLoading": false,
-  "isVisible": true,
+  "isVisible": "{{\n  appsmith.store.gro_pending_update_reason !== \"remove_event\"\n  ||\n  appsmith.store.gro_remove_mode === \"values\"\n}}",
   "key": "hk41io6ubo",
   "leftColumn": 4,
   "maxDynamicHeight": 9000,
@@ -31,8 +39,8 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 6,
   "needsErrorInfo": false,
-  "originalBottomRow": 30,
-  "originalTopRow": 14,
+  "originalBottomRow": 35,
+  "originalTopRow": 19,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
   "parentId": "vapd6k2vrl",
@@ -44,7 +52,7 @@
   "text": "You have manually entered quantities in the Order.\n\nKeep: keeps quantities for ingredients still needed by other Events in the rebuilt Order.\n\nRemove: clears the manually entered quantities.\n\nIf an ingredient is no longer needed after the rebuild, its manually entered quantity will be removed.",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 14,
+  "topRow": 19,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
