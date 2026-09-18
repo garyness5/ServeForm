@@ -29,7 +29,7 @@
     ],
     "name": "qryOrdGetSuppliers",
     "pageId": "Order",
-    "runBehaviour": "AUTOMATIC",
-    "userSetOnLoad": false
+    "runBehaviour": "MANUAL",
+    "userSetOnLoad": true
   }
 }

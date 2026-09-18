@@ -29,7 +29,7 @@
     ],
     "name": "qryDtlGetDetails",
     "pageId": "Details",
-    "runBehaviour": "AUTOMATIC",
-    "userSetOnLoad": false
+    "runBehaviour": "MANUAL",
+    "userSetOnLoad": true
   }
 }

@@ -48,7 +48,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 15,
   "text": "Update All",
-  "tooltip": "Create a new recipe",
+  "tooltip": "Refresh Details and Order from the selected Event(s)",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,

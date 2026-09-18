@@ -620,4 +620,51 @@ export default {
 			list
 		);
 	},
+
+	filteredQueue() {
+		const rows = qryGroGetQueue.data || [];
+
+		const filter =
+					String(selGroFilter.selectedOptionValue || "all")
+		.toLowerCase();
+
+		const search =
+					String(inpGroSearch.text || "")
+		.trim()
+		.toLowerCase();
+
+		return rows.filter(row => {
+
+			const isActive =
+						row.event_active === true ||
+						row.event_active === "true" ||
+						row.event_active === 1 ||
+						row.event_active === "1";
+
+			if (filter === "active" && !isActive) {
+				return false;
+			}
+
+			if (filter === "inactive" && isActive) {
+				return false;
+			}
+
+			if (search) {
+				const searchable = [
+					row.event_name,
+					row.event_ref,
+					row.proposal_number
+				]
+				.filter(v => v !== null && v !== undefined)
+				.join(" ")
+				.toLowerCase();
+
+				if (!searchable.includes(search)) {
+					return false;
+				}
+			}
+
+			return true;
+		});
+	},
 };
