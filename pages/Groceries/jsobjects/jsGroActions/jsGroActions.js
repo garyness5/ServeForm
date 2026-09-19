@@ -1,317 +1,174 @@
 export default {
-	async updateToOrder(row) {
 
-		const groEventId =
-					Number(row?.gro_event_id || 0);
+	async updateAll() {
 
-		if (!groEventId) {
+		try {
+
+			/*
+         * Capture the current table Working State.
+         */
+			const staged =
+					await this.stagePendingChanges();
+
+			const changes =
+					staged.changes;
+
+			const hasParticipationRemovals =
+					(changes.participationRemovals || []).length > 0;
+
+			const hasFullRemovals =
+					(changes.removals || []).length > 0;
+
+			/*
+         * Any destructive change requires one
+         * combined confirmation before Supabase
+         * is changed.
+         */
+			if (
+				hasParticipationRemovals ||
+				hasFullRemovals
+			) {
+
+				await storeValue(
+					"gro_pending_update_reason",
+					"batch_update"
+				);
+
+				showModal(
+					mdlGroToOrderRemove.name
+				);
+
+				return false;
+			}
+
+			/*
+         * Additions / ordinary refresh only:
+         * no confirmation required.
+         */
+			return await this.runUpdateAll();
+
+		} catch (error) {
+
 			showAlert(
-				"Could not identify the Groceries row.",
+				error?.message ||
+				"Groceries could not be updated.",
 				"error"
 			);
 
 			return false;
 		}
-
-		await storeValue(
-			"gro_queue_row_id",
-			groEventId
-		);
-
-		await storeValue(
-			"gro_queue_to_order",
-			row?.to_order === true
-		);
-
-		await qryGroUpdateQToOrder.run();
-
-		await qryGroGetQueue.run();
-
-		await removeValue(
-			"gro_queue_row_id"
-		);
-
-		await removeValue(
-			"gro_queue_to_order"
-		);
-
-		return true;
 	},
 
-	async updateAll() {
+	async runUpdateAll() {
 
-		/*
-	 * Check whether an existing Groceries source
-	 * has become invalid upstream.
-	 *
-	 * Update All revalidates sources already present
-	 * in Groceries.
-	 *
-	 * It does NOT create missing queue sources.
-	 * Only Events -> To Order may do that.
-	 */
-		await qryGroCheckQSources.run();
+		try {
 
-		const queueImpact =
+			/*
+         * Apply all staged To Order / Remove changes
+         * and rebuild Details + Order once.
+         *
+         * Applicable manual Order values are
+         * preserved by the backend.
+         * Print is cleared by refresh_gro_order().
+         */
+			await qryGroApplyQueueChanges.run();
+
+
+			/*
+         * Revalidate upstream sources after applying
+         * the user's Working State.
+         */
+			await qryGroCheckQSources.run();
+
+			const queueImpact =
 					qryGroCheckQSources.data?.[0] || {};
 
-		const invalidSourceCount =
+			const invalidSourceCount =
 					Number(
 						queueImpact.invalid_source_count || 0
 					);
 
-		const invalidGeneratedCount =
-					Number(
-						queueImpact.invalid_generated_count || 0
-					);
+			if (invalidSourceCount > 0) {
 
-		const hasManualValues =
-					queueImpact.has_manual_values === true;
+				await qryGroRemoveInvalidQSource.run();
 
+				/*
+             * Invalid-source removal changed the queue,
+             * so rebuild from the corrected final state.
+             */
+				await qryGroRefreshDetails.run();
 
-		/*
-	 * If an invalid source has already generated
-	 * Groceries work and Order contains manual values,
-	 * let the user decide whether those manual values
-	 * should be kept where possible or removed.
-	 */
-		if (
-			invalidGeneratedCount > 0 &&
-			hasManualValues
-		) {
-			await storeValue(
-				"gro_pending_update_reason",
-				"invalid_source"
-			);
+				await storeValue(
+					"gro_keep_manual",
+					true
+				);
 
-			showModal(
-				mdlGroToOrderRemove.name
-			);
-
-			return false;
-		}
+				await qryGroRefreshOrder.run();
+			}
 
 
-		/*
-	 * Invalid sources with no destructive manual
-	 * impact can be removed safely.
-	 */
-		if (invalidSourceCount > 0) {
-			await qryGroRemoveInvalidQSource.run();
-		}
-
-
-		/*
-	 * Check whether the user changed Groceries
-	 * To Order participation since the last rebuild.
-	 */
-		await qryGroCheckImpact.run();
-
-		const participationImpact =
-					qryGroCheckImpact.data?.[0] || {};
-
-		const addedCount =
-					Number(
-						participationImpact.added_count || 0
-					);
-
-		const removedCount =
-					Number(
-						participationImpact.removed_count || 0
-					);
-
-		const participationHasManualValues =
-					participationImpact
-		.has_manual_values === true;
-
-		const addedNames =
-					participationImpact.added_event_names || [];
-
-		const removedNames =
-					participationImpact.removed_event_names || [];
-
-		const affectedEvents =
-					[
-						...new Set([
-							...addedNames,
-							...removedNames
-						])
-					];
-
-
-		/*
-	 * Adding or removing participating sources
-	 * rebuilds Order.
-	 *
-	 * If manual values exist, ask first.
-	 */
-		if (
-			(addedCount > 0 || removedCount > 0) &&
-			participationHasManualValues
-		) {
-
-			await storeValue(
-				"gro_affected_event_names",
-				affectedEvents
-			);
-
-			await storeValue(
-				"gro_pending_update_reason",
-				"participation"
-			);
-
-			showModal(
-				mdlGroToOrderRemove.name
-			);
-
-			return false;
-		}
-
-		return await this.runUpdateAll(true);
-	},
-
-	async runUpdateAll(keepManual = true) {
-
-		/*
-         * Any invalid upstream source may now
-         * be removed before rebuilding.
+			/*
+         * Reload Saved State and clear table
+         * Working State.
          */
-		await qryGroRemoveInvalidQSource.run();
+			await qryGroGetQueue.run();
 
-		await storeValue(
-			"gro_keep_manual",
-			keepManual === true
-		);
-
-		await qryGroRefreshDetails.run();
-		await qryGroRefreshOrder.run();
-
-
-		await qryGroGetQueue.run();
-
-		await resetWidget(
-			"tblGroEvents",
-			true
-		);
-
-		await removeValue("gro_affected_event_names");
-
-		await removeValue(
-			"gro_pending_update_reason"
-		);
-
-		await removeValue(
-			"gro_keep_manual"
-		);
-
-		closeModal(mdlGroToOrderRemove.name);
-
-
-		showAlert(
-			keepManual
-			? "Update complete. Quantities kept where possible. Print list cleared."
-			: "Update complete. Quantities removed. Print list cleared.",
-			"success"
-		);
-
-		return true;
-	},
-
-
-	async confirmUpdate(keepManual = true) {
-
-		return await this.runUpdateAll(
-			keepManual
-		);
-	},
-
-	modalEventsText() {
-
-		const reason =
-					appsmith.store.gro_pending_update_reason || "";
-
-		const names =
-					appsmith.store.gro_affected_event_names || [];
-
-		const list =
-					names.length
-		? names.map(name => "• " + name).join("\n")
-		: "• Selected Event(s)";
-
-
-		if (reason === "remove_event") {
-
-			const explanation =
-						appsmith.store.gro_remove_mode === "values"
-			? "Removing this Event will update Details and Order using the remaining Events."
-			: "Removing this Event will update Details and Order to reflect the remaining Events.";
-
-			return (
-				"The following Event will be removed from Groceries:\n\n" +
-				list +
-				"\n\n" +
-				explanation
+			await resetWidget(
+				"tblGroEvents",
+				true
 			);
-		}
 
 
-		if (reason === "invalid_source") {
-			return (
-				"The following Event(s) can no longer remain in the Order:\n\n" +
-				list
+			/*
+         * Clear temporary batch state.
+         */
+			await removeValue(
+				"gro_pending_to_order_changes"
 			);
-		}
 
-
-		const impact =
-					qryGroCheckImpact.data?.[0] || {};
-
-		const added =
-					Number(impact.added_count || 0);
-
-		const removed =
-					Number(impact.removed_count || 0);
-
-
-		if (added > 0 && removed === 0) {
-			return (
-				"The following Event(s) will be added to the Order:\n\n" +
-				list
+			await removeValue(
+				"gro_pending_remove_proposal_ids"
 			);
-		}
 
-
-		if (removed > 0 && added === 0) {
-			return (
-				"The following Event(s) will be removed from the Order:\n\n" +
-				list
+			await removeValue(
+				"gro_pending_update_reason"
 			);
+
+			await removeValue(
+				"gro_keep_manual"
+			);
+
+
+			closeModal(
+				mdlGroToOrderRemove.name
+			);
+
+			showAlert(
+				"Groceries updated. Manual Order values were kept where applicable and Print was cleared.",
+				"success"
+			);
+
+			return true;
+
+		} catch (error) {
+
+			showAlert(
+				error?.message ||
+				"Groceries could not be updated.",
+				"error"
+			);
+
+			return false;
 		}
-
-
-		return (
-			"The following Event changes will rebuild the Order:\n\n" +
-			list
-		);
 	},
 
 	async cancelUpdate() {
 
-		const reason =
-					appsmith.store
-		.gro_pending_update_reason;
-
-
 		/*
-         * If the user changed ToOrder selections
-         * and then cancels, restore those selections
-         * to the state represented by current Details.
-         */
-		if (reason === "participation") {
-			await qryGroRestoreParticipation.run();
-		}
-
-
+     * Nothing has reached Supabase yet.
+     * Reload Saved State and discard the
+     * checkbox Working State.
+     */
 		await qryGroGetQueue.run();
 
 		await resetWidget(
@@ -319,14 +176,17 @@ export default {
 			true
 		);
 
-		await removeValue("gro_affected_event_names");
+		await removeValue(
+			"gro_pending_to_order_changes"
+		);
+
+		await removeValue(
+			"gro_pending_remove_proposal_ids"
+		);
 
 		await removeValue(
 			"gro_pending_update_reason"
 		);
-
-		await removeValue("gro_remove_event_id");
-		await removeValue("gro_remove_proposal_id");
 
 		closeModal(
 			mdlGroToOrderRemove.name
@@ -338,20 +198,23 @@ export default {
 	filteredRows() {
 
 		const rows =
-					qryGroGetQueue.data || [];
+				(qryGroGetQueue.data || []).map(row => ({
+					...row,
+					remove: false
+				}));
 
 		const filter =
-					selGroFilter.selectedOptionValue || "All";
+				selGroFilter.selectedOptionValue || "All";
 
 		const search =
-					String(inpGroSearch.text || "")
-		.trim()
-		.toLowerCase();
+				String(inpGroSearch.text || "")
+			.trim()
+			.toLowerCase();
 
 		return rows.filter(row => {
 
 			const matchesFilter =
-						filter === "All"
+					filter === "All"
 
 			|| (
 				filter === "To Order" &&
@@ -372,177 +235,47 @@ export default {
 			}
 
 			const searchable =
-						[
-							row.event_name,
-							row.event_ref,
-							row.proposal_number
-						]
-			.filter(Boolean)
-			.join(" ")
-			.toLowerCase();
+					[
+						row.event_name,
+						row.event_ref,
+						row.proposal_number
+					]
+				.filter(Boolean)
+				.join(" ")
+				.toLowerCase();
 
 			return searchable.includes(search);
 		});
 	},
 
-	async removeSelected() {
-
-		const row =
-					tblGroEvents.selectedRow || null;
-
-		if (!row?.gro_event_id || !row?.proposal_id) {
-			showAlert(
-				"Select an Event to remove.",
-				"warning"
-			);
-
-			return false;
-		}
-
-		await storeValue(
-			"gro_remove_event_id",
-			Number(row.gro_event_id)
-		);
-
-		await storeValue(
-			"gro_remove_proposal_id",
-			Number(row.proposal_id)
-		);
-
-		await storeValue(
-			"gro_affected_event_names",
-			[row.event_name || "Selected Event"]
-		);
-
-		await qryGroCheckRemoveImpact.run();
-
-		const impact =
-					qryGroCheckRemoveImpact.data?.[0] || {};
-
-		const generated =
-					impact.has_generated_details === true;
-
-		const manual =
-					impact.has_manual_values === true;
-
-		const surviving =
-					impact.has_surviving_generated_sources === true;
-
-		/*
-     * Waiting source:
-     * never contributed to Details/Order.
-     * Remove immediately.
-     */
-		if (!generated) {
-
-			await storeValue(
-				"gro_remove_mode",
-				"waiting"
-			);
-
-			return await this.confirmRemoveSelected(true);
-		}
-
-		/*
-     * Generated source with meaningful surviving
-     * manual purchasing work.
-     *
-     * User chooses:
-     * Keep Values / Remove Values / Cancel.
-     */
-		if (manual && surviving) {
-
-			await storeValue(
-				"gro_remove_mode",
-				"values"
-			);
-
-			await storeValue(
-				"gro_pending_update_reason",
-				"remove_event"
-			);
-
-			showModal(mdlGroToOrderRemove.name);
-
-			return false;
-		}
-
-		/*
-     * Generated source, but Keep Values has no
-     * meaningful choice:
-     *
-     * - no manual values, OR
-     * - no other generated source survives.
-     *
-     * Require simple destructive confirmation.
-     */
-		await storeValue(
-			"gro_remove_mode",
-			"confirm"
-		);
-
-		await storeValue(
-			"gro_pending_update_reason",
-			"remove_event"
-		);
-
-		showModal(mdlGroToOrderRemove.name);
-
-		return false;
+	modalTitle() {
+		return "Update Groceries?";
 	},
 
-
-	async confirmRemoveSelected(keepManual = true) {
+	async confirmModal() {
 
 		try {
 
-			await storeValue(
-				"gro_keep_manual",
-				keepManual === true
-			);
+			const reason =
+					appsmith.store.gro_pending_update_reason;
 
-			const result =
-						await qryGroUnorderProposal.run();
+			if (reason !== "batch_update") {
 
-			const row =
-						result?.[0] || null;
-
-			if (!row) {
 				showAlert(
-					"Event could not be removed from Groceries.",
-					"error"
+					"No Groceries update is pending.",
+					"warning"
 				);
 
 				return false;
 			}
 
-			await qryGroGetQueue.run();
-
-			await resetWidget(
-				"tblGroEvents",
-				true
-			);
-
-			await removeValue("gro_remove_event_id");
-			await removeValue("gro_remove_proposal_id");
-			await removeValue("gro_affected_event_names");
-			await removeValue("gro_pending_update_reason");
-			await removeValue("gro_keep_manual");
-
-			closeModal(mdlGroToOrderRemove.name);
-
-			showAlert(
-				"Event removed from Groceries.",
-				"success"
-			);
-
-			return true;
+			return await this.runUpdateAll();
 
 		} catch (error) {
 
 			showAlert(
 				error?.message ||
-				"Event could not be removed from Groceries.",
+				"Groceries could not be updated.",
 				"error"
 			);
 
@@ -550,69 +283,205 @@ export default {
 		}
 	},
 
-	modalTitle() {
+	pendingChanges() {
 
-		const reason =
-					appsmith.store.gro_pending_update_reason || "";
+		const savedRows =
+				qryGroGetQueue.data || [];
 
-		if (reason === "remove_event") {
-			return "Remove Event from Groceries?";
-		}
+		const updatedRows =
+				tblGroEvents.updatedRows || [];
 
-		if (reason === "invalid_source") {
-			return "Update Groceries?";
-		}
+		const savedById =
+				new Map(
+					savedRows.map(row => [
+						Number(row.gro_event_id),
+						row
+					])
+				);
 
-		/*
-	 * Participation change.
-	 */
-		const impact =
-					qryGroCheckImpact.data?.[0] || {};
+		const changes = {
+			additions: [],
+			participationRemovals: [],
+			removals: []
+		};
 
-		const added =
-					Number(impact.added_count || 0);
+		updatedRows.forEach(update => {
 
-		const removed =
-					Number(impact.removed_count || 0);
+			const working =
+					update?.allFields || {};
 
-		if (added > 0 && removed === 0) {
-			return "Add Events to Order?";
-		}
+			const id =
+					Number(working.gro_event_id || 0);
 
-		if (removed > 0 && added === 0) {
-			return "Remove Events from Order?";
-		}
+			const saved =
+					savedById.get(id);
 
-		return "Update Order?";
+			if (!id || !saved) {
+				return;
+			}
+
+			/*
+         * Remove overrides To Order.
+         */
+			if (working.remove === true) {
+
+				changes.removals.push({
+					...working
+				});
+
+				return;
+			}
+
+			const wasToOrder =
+					saved.to_order === true;
+
+			const isToOrder =
+					working.to_order === true;
+
+			if (!wasToOrder && isToOrder) {
+
+				changes.additions.push({
+					...working
+				});
+
+				return;
+			}
+
+			if (wasToOrder && !isToOrder) {
+
+				changes.participationRemovals.push({
+					...working
+				});
+			}
+		});
+
+		return changes;
 	},
 
-	modalWarningVisible() {
+	pendingImpact() {
 
-		const reason =
-					appsmith.store.gro_pending_update_reason || "";
+		const changes =
+				this.pendingChanges();
 
-		const mode =
-					appsmith.store.gro_remove_mode || "";
+		const participationRemovals =
+				changes.participationRemovals || [];
 
-		return (
-			reason !== "remove_event" ||
-			mode === "values"
+		const removals =
+				changes.removals || [];
+
+		const affected =
+				[
+					...participationRemovals,
+					...removals
+				];
+
+		return {
+			additions:
+			changes.additions || [],
+
+			participationRemovals,
+
+			removals,
+
+			affected,
+
+			hasDestructiveChanges:
+			affected.length > 0
+		};
+	},
+
+	async stagePendingChanges() {
+
+		const changes =
+				this.pendingChanges();
+
+		const toOrderChanges = [
+			...(changes.additions || []).map(row => ({
+				proposal_id: Number(row.proposal_id),
+				to_order: true
+			})),
+
+			...(changes.participationRemovals || []).map(row => ({
+				proposal_id: Number(row.proposal_id),
+				to_order: false
+			}))
+		];
+
+		const removeProposalIds =
+				(changes.removals || [])
+			.map(row => Number(row.proposal_id))
+			.filter(Boolean);
+
+		await storeValue(
+			"gro_pending_to_order_changes",
+			toOrderChanges
 		);
+
+		await storeValue(
+			"gro_pending_remove_proposal_ids",
+			removeProposalIds
+		);
+
+		return {
+			changes,
+			toOrderChanges,
+			removeProposalIds
+		};
 	},
 
-	async confirmModal(keepManual = true) {
+	pendingEventsText() {
 
-		const reason =
-					appsmith.store.gro_pending_update_reason || "";
+		const impact =
+				this.pendingImpact();
 
-		if (reason === "remove_event") {
-			return await this.confirmRemoveSelected(keepManual);
+		const staying =
+				impact.participationRemovals || [];
+
+		const removing =
+				impact.removals || [];
+
+		let text =
+				"The selected changes will update Details and Order. " +
+				"The Print page will be cleared.";
+
+		text +=
+			"\n\nEvents checked in the Remove column will also be removed " +
+			"from the Groceries page. All other Events will remain in Groceries.";
+
+		text +=
+			"\n\nAffected Events";
+
+		if (staying.length) {
+
+			text +=
+				"\n\n" +
+				staying
+				.map(row =>
+						 "• " +
+						 (row.event_name || row.event_ref || "Event")
+						)
+				.join("\n");
 		}
 
-		return await this.confirmUpdate(keepManual);
-	},
+		if (removing.length) {
 
-	keepButtonVisible() {
-		return appsmith.store.gro_remove_mode !== "confirm";
-	},
+			text +=
+				"\n\nRemove checked\n" +
+				removing
+				.map(row =>
+						 "• " +
+						 (row.event_name || row.event_ref || "Event")
+						)
+				.join("\n");
+		}
+
+		text +=
+			"\n\nManually entered Order values for remaining ingredients " +
+			"will be kept where applicable.";
+
+		text +=
+			"\n\nDo you want to continue?";
+
+		return text;
+	}
 };

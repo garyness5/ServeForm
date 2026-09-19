@@ -39,6 +39,7 @@
     "proposal_no",
     "total_guests",
     "to_order",
+    "remove",
     "gro_event_id",
     "event_id",
     "proposal_id",
@@ -52,7 +53,7 @@
     "proposal_deleted",
     "proposal_hidden"
   ],
-  "columnUpdatedAt": 1789513725564,
+  "columnUpdatedAt": 1789832904592,
   "columnWidthMap": {
     "event_name": 172,
     "event_ref": 138,
@@ -136,21 +137,17 @@
     },
     {
       "key": "primaryColumns.proposal_hidden.computedValue"
+    },
+    {
+      "key": "primaryColumns.remove.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
     {
       "key": "tableData"
-    },
-    {
-      "key": "primaryColumns.to_order.onCheckChange"
     }
   ],
-  "dynamicTriggerPathList": [
-    {
-      "key": "primaryColumns.to_order.onCheckChange"
-    }
-  ],
+  "dynamicTriggerPathList": [],
   "enableClientSideSearch": true,
   "endOfData": false,
   "flexVerticalAlignment": "start",
@@ -754,6 +751,40 @@
       "verticalAlignment": "CENTER",
       "width": 150
     },
+    "remove": {
+      "alias": "remove",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "checkbox",
+      "computedValue": "{{(() => { const tableData = tblGroEvents.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( typeof currentRow === \"undefined\" ? false : currentRow.remove )) :  typeof currentRow === \"undefined\" ? false : currentRow.remove  })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "CENTER",
+      "id": "remove",
+      "index": 19,
+      "isCellEditable": true,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": true,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Remove",
+      "notation": "standard",
+      "originalId": "remove",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
     "to_order": {
       "alias": "to_order",
       "allowCellWrapping": false,
@@ -766,7 +797,7 @@
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "CENTER",
       "id": "to_order",
       "index": 9,
       "isCellEditable": true,
@@ -779,7 +810,7 @@
       "isVisible": true,
       "label": "To Order",
       "notation": "standard",
-      "onCheckChange": "{{ jsGroActions.updateToOrder(tblGroEvents.updatedRow) }}",
+      "onCheckChange": "",
       "originalId": "to_order",
       "sticky": "",
       "textColor": "",

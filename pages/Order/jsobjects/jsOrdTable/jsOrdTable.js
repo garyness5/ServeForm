@@ -86,23 +86,23 @@ export default {
 	async updateAll() {
 		try {
 			/*
-		 * Save current inline Order edits first.
-		 * These become the manual values that may
-		 * survive the rebuild.
-		 */
+         * Save current inline Order edits first.
+         * These become the manual values that may
+         * survive the rebuild.
+         */
 			await qryOrdSaveRows.run();
 
 			/*
-		 * Refresh generated Details from the current
-		 * saved Events / Ordered Proposals.
-		 */
+         * Refresh generated Details from the current
+         * saved Events / Ordered Proposals.
+         */
 			await qryOrdRefreshDetails.run();
 
 			/*
-		 * Rebuild Order from Details.
-		 * Keep manual values where the Ingredient +
-		 * required Unit still survives.
-		 */
+         * Rebuild Order from Details.
+         * Keep manual values where the Ingredient +
+         * required Unit still survives.
+         */
 			await storeValue(
 				"gro_keep_manual",
 				true
@@ -111,17 +111,13 @@ export default {
 			await qryOrdRefreshOrder.run();
 
 			/*
-		 * Reload clean saved Order state.
-		 */
+         * Reload clean saved Order state.
+         */
 			await qryOrdGetGroceryOrder.run();
 
 			await resetWidget(
 				"tblGroOrder",
 				true
-			);
-
-			await tblGroOrder.setData(
-				qryOrdGetGroceryOrder.data || []
 			);
 
 			await removeValue(

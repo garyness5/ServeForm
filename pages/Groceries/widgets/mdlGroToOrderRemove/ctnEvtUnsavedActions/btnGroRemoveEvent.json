@@ -14,20 +14,11 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "isVisible"
     }
   ],
   "dynamicPropertyPathList": [
     {
-      "key": "isDisabled"
-    },
-    {
       "key": "onClick"
-    },
-    {
-      "key": "isVisible"
     }
   ],
   "dynamicTriggerPathList": [
@@ -36,9 +27,9 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "",
+  "isDisabled": false,
   "isLoading": false,
-  "isVisible": "{{ jsGroActions.keepButtonVisible() }}",
+  "isVisible": true,
   "key": "oy0hw5tj7l",
   "leftColumn": 49,
   "minWidth": 120,
@@ -47,7 +38,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsGroActions.confirmModal(true) }}",
+  "onClick": "{{ jsGroActions.confirmModal() }}",
   "originalBottomRow": 6,
   "originalTopRow": 2,
   "parentId": "7mnr3bh9ga",
@@ -57,11 +48,11 @@
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
   "rightColumn": 62,
-  "text": "Keep",
+  "text": "Yes",
   "topRow": 2,
   "topRowBeforeCollapse": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
   "widgetId": "ulb56f9piu",
-  "widgetName": "btnGroKeepValues"
+  "widgetName": "btnGroRemoveEvent"
 }
