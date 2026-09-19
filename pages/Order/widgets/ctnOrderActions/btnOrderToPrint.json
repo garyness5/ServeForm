@@ -51,7 +51,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 26,
   "text": "To Print",
-  "tooltip": "Edit selected dish",
+  "tooltip": "Send to print",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,

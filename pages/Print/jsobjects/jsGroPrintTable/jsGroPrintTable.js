@@ -1,12 +1,10 @@
 export default {
 	mergedRows() {
-		const rows = tblGroPrint.tableData || [];
+		const rows = qryGroPrnGetPrint.data || [];
 		const updates = tblGroPrint.updatedRows || [];
 
-		return rows.map((row, index) => {
+		return rows.map(row => {
 			const update = updates.find(u =>
-																	u.index === index ||
-																	u.rowIndex === index ||
 																	Number(
 				u.allFields?.id ||
 				u.updatedFields?.id ||
@@ -28,35 +26,15 @@ export default {
 	rowsForSave() {
 		return this.mergedRows()
 			.filter(r => r.id)
-			.map((r, index) => ({
-			id: Number(r.id),
-			purchased: r.purchased === true,
-			print_sort_no: index + 1
-		}));
-	},
-
-	savedRowsForCompare() {
-		return (qryGroPrnGetPrint.data || [])
-			.filter(r => r.id)
 			.map(r => ({
 			id: Number(r.id),
-			purchased: r.purchased === true
+			purchased: r.purchased === true,
+			print_sort_no: r.print_sort_no ?? null
 		}));
-	},
-
-	tableDirty() {
-		const current = this.rowsForSave()
-		.map(r => ({
-			id: Number(r.id),
-			purchased: r.purchased === true
-		}));
-
-		return JSON.stringify(current) !==
-			JSON.stringify(this.savedRowsForCompare());
 	},
 
 	isDirty() {
-		return this.tableDirty();
+		return (tblGroPrint.updatedRows || []).length > 0;
 	},
 
 	async savePrint() {

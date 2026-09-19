@@ -54,7 +54,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 13,
   "text": "Update",
-  "tooltip": "Edit selected dish",
+  "tooltip": "Update from Order page",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,

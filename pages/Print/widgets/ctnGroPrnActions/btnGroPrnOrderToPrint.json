@@ -51,7 +51,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 19,
   "text": "Print",
-  "tooltip": "Edit selected dish",
+  "tooltip": "Print grocery list",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,

@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 6,
   "boxShadow": "none",
-  "defaultOptionValue": "active",
+  "defaultOptionValue": "All",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -35,7 +35,7 @@
   "labelText": "",
   "labelTextColor": "",
   "labelTextSize": "0.875rem",
-  "labelTooltip": "Events Active/Inactive/Closed Filter",
+  "labelTooltip": "Filter Events ",
   "labelWidth": "3",
   "leftColumn": 42,
   "maxDynamicHeight": 9000,
@@ -57,7 +57,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 50,
   "serverSideFiltering": false,
-  "sourceData": "{{ [\n\t{ label: \"Active\", value: \"active\" },\n\t{ label: \"Inactive\", value: \"inactive\" },\n\t{ label: \"All\", value: \"all\" }\n]\n}}",
+  "sourceData": "{{ [\n  { label: \"All\", value: \"All\" },\n  { label: \"To Order\", value: \"To Order\" },\n  { label: \"Waiting\", value: \"Waiting\" }\n] }}",
   "topRow": 2,
   "type": "SELECT_WIDGET",
   "version": 1,

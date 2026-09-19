@@ -8,14 +8,17 @@ export default {
 	},
 
 	mergedRows() {
-		const rows = tblGroOrder.tableData || [];
+		const rows = qryOrdGetGroceryOrder.data || [];
 		const updates = tblGroOrder.updatedRows || [];
 
-		return rows.map((row, index) => {
+		return rows.map(row => {
 			const update = updates.find(u =>
-																	u.index === index ||
-																	u.rowIndex === index ||
-																	Number(u.allFields?.id || u.updatedFields?.id || u.id || 0) === Number(row.id || 0)
+																	Number(
+				u.allFields?.id ||
+				u.updatedFields?.id ||
+				u.id ||
+				0
+			) === Number(row.id || 0)
 																 );
 
 			if (!update) return row;
@@ -33,7 +36,7 @@ export default {
 			.filter(r => r.id)
 			.map(r => ({
 			id: Number(r.id),
-			required_unit_id: this.clean(r.required_unit_id),
+			display_required_unit_id: this.clean(r.required_unit_id),
 			buy_qty: this.clean(r.buy_qty),
 			buy_unit_id: this.clean(r.buy_unit_id),
 			to_order: r.to_order === false ? false : true,
@@ -42,31 +45,10 @@ export default {
 			packaging_id: this.clean(r.packaging_id),
 			packs_to_order: this.clean(r.packs_to_order)
 		}));
-	},
-
-	savedRowsForCompare() {
-		return (qryOrdGetGroceryOrder.data || [])
-			.filter(r => r.id)
-			.map(r => ({
-			id: Number(r.id),
-			required_unit_id: this.clean(r.required_unit_id),
-			buy_qty: this.clean(r.buy_qty),
-			buy_unit_id: this.clean(r.buy_unit_id),
-			to_order: r.to_order === false ? false : true,
-			purchased: r.purchased === true ? true : false,
-			supplier_id: this.clean(r.supplier_id),
-			packaging_id: this.clean(r.packaging_id),
-			packs_to_order: this.clean(r.packs_to_order)
-		}));
-	},
-
-	tableDirty() {
-		return JSON.stringify(this.rowsForSave()) !==
-			JSON.stringify(this.savedRowsForCompare());
 	},
 
 	isDirty() {
-		return this.tableDirty();
+		return (tblGroOrder.updatedRows || []).length > 0;
 	},
 
 	unitById(id) {
@@ -101,46 +83,26 @@ export default {
 		) / 100;
 	},
 
-	onRequiredUnitChange(row) {
-		const newQty = this.convertedRequiredQty(row);
-
-		return storeValue(
-			"gro_order_local_rows",
-			(tblGroOrder.tableData || []).map(r =>
-																				Number(r.id) === Number(row.id)
-																				? {
-				...r,
-				required_unit_id: row.required_unit_id,
-				required_qty: newQty,
-				required_unit:
-				this.unitById(row.required_unit_id)?.abbreviation ||
-				r.required_unit
-			}
-																				: r
-																			 )
-		);
-	},
-
 	async updateAll() {
 		try {
 			/*
-			 * Save current inline Order edits first.
-			 * These become the manual values that may
-			 * survive the rebuild.
-			 */
+		 * Save current inline Order edits first.
+		 * These become the manual values that may
+		 * survive the rebuild.
+		 */
 			await qryOrdSaveRows.run();
 
 			/*
-			 * Refresh generated Details from the current
-			 * saved Events / Ordered Proposals.
-			 */
+		 * Refresh generated Details from the current
+		 * saved Events / Ordered Proposals.
+		 */
 			await qryOrdRefreshDetails.run();
 
 			/*
-			 * Rebuild Order from Details.
-			 * Keep manual values where the Ingredient +
-			 * required Unit still survives.
-			 */
+		 * Rebuild Order from Details.
+		 * Keep manual values where the Ingredient +
+		 * required Unit still survives.
+		 */
 			await storeValue(
 				"gro_keep_manual",
 				true
@@ -149,19 +111,9 @@ export default {
 			await qryOrdRefreshOrder.run();
 
 			/*
-			 * Any Order rebuild invalidates Print.
-			 */
-			await qryOrdClearPrint.run();
-
-			/*
-			 * Reload clean saved Order state.
-			 */
+		 * Reload clean saved Order state.
+		 */
 			await qryOrdGetGroceryOrder.run();
-
-			await storeValue(
-				"gro_order_local_rows",
-				qryOrdGetGroceryOrder.data || []
-			);
 
 			await resetWidget(
 				"tblGroOrder",
@@ -196,6 +148,64 @@ export default {
 
 			return false;
 		}
+	},
+
+	filteredRows() {
+		const rows = qryOrdGetGroceryOrder.data || [];
+
+		const search = String(inpOrdSearch.text || "")
+		.trim()
+		.toLowerCase();
+
+		const filter = String(selOrdFilter.selectedOptionValue || "all");
+
+		return rows.filter(row => {
+
+			// ----- Filter -----
+			let passesFilter = true;
+
+			switch (filter) {
+				case "to_order":
+					passesFilter = row.to_order === true;
+					break;
+
+				case "not_ordered":
+					passesFilter = row.to_order !== true;
+					break;
+
+				case "purchased":
+					passesFilter = row.purchased === true;
+					break;
+
+				case "not_purchased":
+					passesFilter = row.purchased !== true;
+					break;
+
+				case "all":
+				default:
+					passesFilter = true;
+			}
+
+			if (!passesFilter) return false;
+
+			// ----- Search -----
+			if (!search) return true;
+
+			return [
+				row.ingredient_code,
+				row.ingredient_name,
+				row.category_name,
+				row.supplier_name,
+				row.packaging_name,
+				row.required_unit,
+				row.buy_unit
+			]
+				.some(value =>
+							String(value ?? "")
+							.toLowerCase()
+							.includes(search)
+						 );
+		});
 	},
 
 	neededUnitOptions(row) {
@@ -233,11 +243,6 @@ export default {
 			await qryOrdSaveRows.run();
 			await qryOrdGetGroceryOrder.run();
 
-			await storeValue(
-				"gro_order_local_rows",
-				qryOrdGetGroceryOrder.data || []
-			);
-
 			await resetWidget(
 				"tblGroOrder",
 				true
@@ -266,28 +271,11 @@ export default {
 
 	async sendToPrint() {
 		try {
-			/*
-			 * Save current Order edits first.
-			 */
+			// Save any current Order edits first.
 			await qryOrdSaveRows.run();
 
-			/*
-			 * Reload the saved Order baseline so
-			 * the Order is clean before handoff.
-			 */
-			await qryOrdGetGroceryOrder.run();
-
-			await storeValue(
-				"gro_order_local_rows",
-				qryOrdGetGroceryOrder.data || []
-			);
-
-			/*
-			 * Replace Print from the current saved
-			 * To Order rows.
-			 */
+			// Replace Print from the current saved To Order rows.
 			await qryOrdSendOrderToPrint.run();
-			await qryOrdGetPrint.run();
 
 			showAlert(
 				"Sent to Print.",

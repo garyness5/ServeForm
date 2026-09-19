@@ -54,7 +54,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 13,
   "text": "Save",
-  "tooltip": "Edit selected dish",
+  "tooltip": "Save changes",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,

@@ -29,7 +29,7 @@
     ],
     "name": "qryGroCheckImpact",
     "pageId": "Groceries",
-    "runBehaviour": "MANUAL",
+    "runBehaviour": "AUTOMATIC",
     "userSetOnLoad": false
   }
 }

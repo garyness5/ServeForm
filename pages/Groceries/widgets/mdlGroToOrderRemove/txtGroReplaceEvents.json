@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 17,
+  "bottomRow": 12,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -33,7 +33,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 6,
   "needsErrorInfo": false,
-  "originalBottomRow": 17,
+  "originalBottomRow": 12,
   "originalTopRow": 6,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
@@ -43,7 +43,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 59,
   "shouldTruncate": false,
-  "text": "{{\n  appsmith.store.gro_pending_update_reason === \"remove_event\"\n    ? (\n        jsGroActions.removeEventsText()\n        + \"\\n\\n\"\n        + (\n            appsmith.store.gro_remove_mode === \"values\"\n              ? \"Removing this Event will update Details and Order using the remaining Events.\"\n              : \"Removing this Event will update Details and Order to reflect the remaining Events.\"\n          )\n      )\n    : jsGroActions.removeEventsText()\n}}",
+  "text": "{{ jsGroActions.modalEventsText() }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 6,

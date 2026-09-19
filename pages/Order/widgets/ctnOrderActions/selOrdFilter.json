@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 6,
   "boxShadow": "none",
-  "defaultOptionValue": "active",
+  "defaultOptionValue": "all",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -57,7 +57,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 52,
   "serverSideFiltering": false,
-  "sourceData": "{{ [\n\t{ label: \"All\", value: \"all\" },  \n\t{ label: \"Active\", value: \"active\" },\n\t{ label: \"Inactive\", value: \"inactive\" },\n\t{ label: \"Closed\", value: \"closed\" }\n\n]\n}}",
+  "sourceData": "{{ [\n  { label: \"All\", value: \"all\" },\n  { label: \"To Order\", value: \"to_order\" },\n  { label: \"Not Ordered\", value: \"not_ordered\" },\n  { label: \"Purchased\", value: \"purchased\" },\n  { label: \"Not Purchased\", value: \"not_purchased\" }\n] }}",
   "topRow": 2,
   "type": "SELECT_WIDGET",
   "version": 1,

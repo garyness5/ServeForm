@@ -85,7 +85,7 @@ export default {
 			);
 
 			showModal(
-				"mdlGroToOrderRemove"
+				mdlGroToOrderRemove.name
 			);
 
 			return false;
@@ -161,7 +161,7 @@ export default {
 			);
 
 			showModal(
-				"mdlGroToOrderRemove"
+				mdlGroToOrderRemove.name
 			);
 
 			return false;
@@ -186,23 +186,12 @@ export default {
 		await qryGroRefreshDetails.run();
 		await qryGroRefreshOrder.run();
 
-		/*
-         * Update All always invalidates Print.
-         * Print is rebuilt only when the user
-         * explicitly sends Order to Print.
-         */
-		await qryGroClearPrint.run();
-
 
 		await qryGroGetQueue.run();
 
 		await resetWidget(
 			"tblGroEvents",
 			true
-		);
-
-		await tblGroEvents.setData(
-			qryGroGetQueue.data
 		);
 
 		await removeValue("gro_affected_event_names");
@@ -215,9 +204,7 @@ export default {
 			"gro_keep_manual"
 		);
 
-		closeModal(
-			"mdlGroToOrderRemove"
-		);
+		closeModal(mdlGroToOrderRemove.name);
 
 
 		showAlert(
@@ -238,6 +225,75 @@ export default {
 		);
 	},
 
+	modalEventsText() {
+
+		const reason =
+					appsmith.store.gro_pending_update_reason || "";
+
+		const names =
+					appsmith.store.gro_affected_event_names || [];
+
+		const list =
+					names.length
+		? names.map(name => "• " + name).join("\n")
+		: "• Selected Event(s)";
+
+
+		if (reason === "remove_event") {
+
+			const explanation =
+						appsmith.store.gro_remove_mode === "values"
+			? "Removing this Event will update Details and Order using the remaining Events."
+			: "Removing this Event will update Details and Order to reflect the remaining Events.";
+
+			return (
+				"The following Event will be removed from Groceries:\n\n" +
+				list +
+				"\n\n" +
+				explanation
+			);
+		}
+
+
+		if (reason === "invalid_source") {
+			return (
+				"The following Event(s) can no longer remain in the Order:\n\n" +
+				list
+			);
+		}
+
+
+		const impact =
+					qryGroCheckImpact.data?.[0] || {};
+
+		const added =
+					Number(impact.added_count || 0);
+
+		const removed =
+					Number(impact.removed_count || 0);
+
+
+		if (added > 0 && removed === 0) {
+			return (
+				"The following Event(s) will be added to the Order:\n\n" +
+				list
+			);
+		}
+
+
+		if (removed > 0 && added === 0) {
+			return (
+				"The following Event(s) will be removed from the Order:\n\n" +
+				list
+			);
+		}
+
+
+		return (
+			"The following Event changes will rebuild the Order:\n\n" +
+			list
+		);
+	},
 
 	async cancelUpdate() {
 
@@ -263,10 +319,6 @@ export default {
 			true
 		);
 
-		await tblGroEvents.setData(
-			qryGroGetQueue.data
-		);
-
 		await removeValue("gro_affected_event_names");
 
 		await removeValue(
@@ -277,26 +329,10 @@ export default {
 		await removeValue("gro_remove_proposal_id");
 
 		closeModal(
-			"mdlGroToOrderRemove"
+			mdlGroToOrderRemove.name
 		);
 
 		return true;
-	},
-
-	removeEventsText() {
-
-		const names =
-					appsmith.store.gro_affected_event_names || [];
-
-		const list =
-					names.length
-		? names.map(name => "• " + name).join("\n")
-		: "• Selected Event(s)";
-
-		return (
-			"The following Event(s) will be removed from the Order:\n\n" +
-			list
-		);
 	},
 
 	filteredRows() {
@@ -487,19 +523,13 @@ export default {
 				true
 			);
 
-			await tblGroEvents.setData(
-				jsGroActions.filteredRows()
-			);
-
 			await removeValue("gro_remove_event_id");
 			await removeValue("gro_remove_proposal_id");
 			await removeValue("gro_affected_event_names");
 			await removeValue("gro_pending_update_reason");
 			await removeValue("gro_keep_manual");
 
-			closeModal(
-				"mdlGroToOrderRemove"
-			);
+			closeModal(mdlGroToOrderRemove.name);
 
 			showAlert(
 				"Event removed from Groceries.",
@@ -556,115 +586,33 @@ export default {
 		return "Update Order?";
 	},
 
-
-	modalEventsText() {
+	modalWarningVisible() {
 
 		const reason =
 					appsmith.store.gro_pending_update_reason || "";
 
-		const names =
-					appsmith.store.gro_affected_event_names || [];
-
-		const list =
-					names.length
-		? names
-		.map(name => "• " + name)
-		.join("\n")
-		: "• Selected Event(s)";
-
-
-		if (reason === "remove_event") {
-			return (
-				"The following Event will be removed from Groceries:\n\n" +
-				list
-			);
-		}
-
-
-		if (reason === "invalid_source") {
-			return (
-				"The following Event(s) can no longer remain in the Order:\n\n" +
-				list
-			);
-		}
-
-
-		const impact =
-					qryGroCheckImpact.data?.[0] || {};
-
-		const added =
-					Number(impact.added_count || 0);
-
-		const removed =
-					Number(impact.removed_count || 0);
-
-
-		if (added > 0 && removed === 0) {
-			return (
-				"The following Event(s) will be added to the Order:\n\n" +
-				list
-			);
-		}
-
-
-		if (removed > 0 && added === 0) {
-			return (
-				"The following Event(s) will be removed from the Order:\n\n" +
-				list
-			);
-		}
-
+		const mode =
+					appsmith.store.gro_remove_mode || "";
 
 		return (
-			"The following Event changes will rebuild the Order:\n\n" +
-			list
+			reason !== "remove_event" ||
+			mode === "values"
 		);
 	},
 
-	filteredQueue() {
-		const rows = qryGroGetQueue.data || [];
+	async confirmModal(keepManual = true) {
 
-		const filter =
-					String(selGroFilter.selectedOptionValue || "all")
-		.toLowerCase();
+		const reason =
+					appsmith.store.gro_pending_update_reason || "";
 
-		const search =
-					String(inpGroSearch.text || "")
-		.trim()
-		.toLowerCase();
+		if (reason === "remove_event") {
+			return await this.confirmRemoveSelected(keepManual);
+		}
 
-		return rows.filter(row => {
+		return await this.confirmUpdate(keepManual);
+	},
 
-			const isActive =
-						row.event_active === true ||
-						row.event_active === "true" ||
-						row.event_active === 1 ||
-						row.event_active === "1";
-
-			if (filter === "active" && !isActive) {
-				return false;
-			}
-
-			if (filter === "inactive" && isActive) {
-				return false;
-			}
-
-			if (search) {
-				const searchable = [
-					row.event_name,
-					row.event_ref,
-					row.proposal_number
-				]
-				.filter(v => v !== null && v !== undefined)
-				.join(" ")
-				.toLowerCase();
-
-				if (!searchable.includes(search)) {
-					return false;
-				}
-			}
-
-			return true;
-		});
+	keepButtonVisible() {
+		return appsmith.store.gro_remove_mode !== "confirm";
 	},
 };
