@@ -110,6 +110,8 @@ export default {
 		const proposalCopies =
 					proposalRows
 		.map(proposal => {
+
+
 			const proposalId =
 						Number(
 							proposal.id || 0
@@ -167,6 +169,10 @@ export default {
 
 			return {
 				proposalId,
+
+				active:
+				workspace?.active ??
+				proposal.active !== false,
 
 				components:
 				this.meaningfulComponents(

@@ -1,6 +1,6 @@
 select *
 from public.save_new_event_proposal_secure(
-	{{ Number(appsmith.store.current_event_id || 0) }},
+	{{ Number(appsmith.store.current_event_id || 0) }}::bigint,
 
 	'{{ appsmith.store.current_client_id }}'::uuid,
 
@@ -22,5 +22,12 @@ from public.save_new_event_proposal_secure(
 	)
 
 	: null
-	}}
+	}},
+
+	{{
+	appsmith.store.proposal_save_request
+	?.active !== false
+	? 'true'
+	: 'false'
+	}}::boolean
 );

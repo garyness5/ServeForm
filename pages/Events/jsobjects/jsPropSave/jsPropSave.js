@@ -139,14 +139,18 @@ export default {
 		proposalId,
 		rows
 	) {
+		const workspace =
+					jsPropWorkspaces.get(proposalId);
+
 		const request = {
 			proposal_id:
 			proposalId,
 
+			active:
+			workspace?.active !== false,
+
 			menus:
-			this.menuPayload(
-				rows
-			)
+			this.menuPayload(rows)
 		};
 
 		await storeValue(
@@ -196,15 +200,14 @@ export default {
 
 			source_proposal_id:
 			Number(
-				workspace
-				.source_proposal_id ||
-				0
+				workspace.source_proposal_id || 0
 			) || null,
 
+			active:
+			workspace?.active !== false,
+
 			menus:
-			this.menuPayload(
-				rows
-			)
+			this.menuPayload(rows)
 		};
 
 		await storeValue(

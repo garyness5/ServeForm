@@ -2,7 +2,7 @@
   "animateLoading": true,
   "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 19,
+  "bottomRow": 27,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -42,7 +42,7 @@
   "mobileRightColumn": 20,
   "mobileTopRow": 6,
   "needsErrorInfo": false,
-  "originalBottomRow": 19,
+  "originalBottomRow": 27,
   "originalTopRow": 14,
   "overflow": "NONE",
   "parentColumnSpace": 6.9375,
@@ -52,7 +52,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 60,
   "shouldTruncate": false,
-  "text": "{{\n  appsmith.store.evt_gro_unorder_request?.mode === \"values\"\n    ? \"There are quantities you entered on the Order page. Do you want to keep these quantities for the remaining Events, or remove them?\"\n    : \"Groceries Details and Order will be updated to reflect any remaining Events.\"\n}}",
+  "text": "{{\n\t\"Groceries Details and Order will be updated to reflect any  remaining Events. Manually entered Order values for remaining ingredients will be kept where applicable. <br><br>The Print page will be cleared. <br><br>Do you want to continue?\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 14,

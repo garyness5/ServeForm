@@ -37,15 +37,11 @@ export default {
 
 		await jsEvtWorkspace.initialize();
 
-		/*
-		 * Event Formats depends on the current client
-		 * and is intentionally Manual.
-		 */
-		await qryEvtGetFormats.run();
-
-		/*
-		 * Supporting queries load automatically.
-		 */
+		await Promise.all([
+			qryEvtGetFormats.run(),
+			qryEvtGetContacts.run(),
+			qryEvtGetVenueContacts.run()
+		]);
 
 		await storeValue(
 			"accEvtCustomerNotes",

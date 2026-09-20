@@ -525,17 +525,16 @@ export default {
 			id < 0
 			? (
 				Number(
-					workspace
-					?.source_proposal_id ||
-					0
+					workspace?.source_proposal_id || 0
 				) || null
 			)
 			: null,
 
+			active:
+			workspace?.active !== false,
+
 			menus:
-			jsPropSave.menuPayload(
-				rows
-			)
+			jsPropSave.menuPayload(rows)
 		};
 	},
 

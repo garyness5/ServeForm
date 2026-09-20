@@ -128,9 +128,17 @@ export default {
 						workspace.saved_components
 					);
 
+		const componentsDirty =
+					JSON.stringify(current) !==
+					JSON.stringify(saved);
+
+		const activeDirty =
+					(workspace.active === false) !==
+					(workspace.saved_active === false);
+
 		return (
-			JSON.stringify(current) !==
-			JSON.stringify(saved)
+			componentsDirty ||
+			activeDirty
 		);
 	},
 
@@ -147,30 +155,26 @@ export default {
 		const existing =
 					this.get(proposalId);
 
-		/*
-	 * If this Proposal already has genuine
-	 * unsaved work, preserve it.
-	 */
 		if (
 			existing &&
-			this.workspaceIsDirty(
-				proposalId
-			)
+			this.isDirty(proposalId)
 		) {
 			return existing;
 		}
 
-		/*
-	 * Otherwise freshly loaded database truth wins.
-	 */
 		const queryComponents =
 					this.componentsFromQuery();
 
+		const proposal =
+					qryEvtGetSelectedProposal.data?.[0] || {};
+
 		const queryUpdatedAt =
-					qryEvtGetSelectedProposal
-		.data?.[0]
-		?.updated_at ||
-					null;
+					proposal.updated_at || null;
+
+		const queryActive =
+					proposal.active === false
+		? false
+		: true;
 
 		return await this.set(
 			proposalId,
@@ -182,6 +186,12 @@ export default {
 				this.deepCopy(
 					queryComponents
 				),
+
+				active:
+				queryActive,
+
+				saved_active:
+				queryActive,
 
 				saved_updated_at:
 				queryUpdatedAt
@@ -214,6 +224,21 @@ export default {
 		);
 	},
 
+	async setActive(proposalId, active) {
+		const id = Number(proposalId || 0);
+
+		if (!id) {
+			return false;
+		}
+
+		return await this.set(
+			id,
+			{
+				active: active === true
+			}
+		);
+	},
+
 	isDirty(
 		proposalId = this.currentProposalId()
 	) {
@@ -230,8 +255,7 @@ export default {
 
 		const currentRows =
 					isCurrentProposal
-		? jsPropComponents
-		.mergeUpdatedRows()
+		? jsPropComponents.mergeUpdatedRows()
 		: workspace.components;
 
 		const currentComponents =
@@ -244,13 +268,17 @@ export default {
 						workspace.saved_components
 					);
 
+		const componentsDirty =
+					JSON.stringify(currentComponents) !==
+					JSON.stringify(savedComponents);
+
+		const activeDirty =
+					(workspace.active === false) !==
+					(workspace.saved_active === false);
+
 		return (
-			JSON.stringify(
-				currentComponents
-			) !==
-			JSON.stringify(
-				savedComponents
-			)
+			componentsDirty ||
+			activeDirty
 		);
 	},
 
@@ -338,7 +366,8 @@ export default {
 
 	async createTemporary(
 		components = [],
-		sourceProposalId = null
+		sourceProposalId = null,
+		active = true
 	) {
 		const tempId =
 					this.makeTemporaryId();
@@ -364,16 +393,24 @@ export default {
 				Number(sourceProposalId || 0) ||
 				null,
 
+				active:
+				active !== false,
+
+				/*
+			 * New Proposal has no Published
+			 * Active state yet.
+			 *
+			 * Use its initial Working State as
+			 * the baseline so a blank new
+			 * Proposal is not dirty merely
+			 * because Active defaults true.
+			 */
+				saved_active:
+				active !== false,
+
 				components:
 				normalized,
 
-				/*
-			 * A new/duplicated Proposal has never
-			 * been saved.
-			 *
-			 * Empty saved baseline makes meaningful
-			 * copied/entered work dirty immediately.
-			 */
 				saved_components:
 				jsPropComponents
 				.normalizeRows([]),
@@ -475,12 +512,18 @@ export default {
 						proposal.source_proposal_id || 0
 					) || null,
 
+					active:
+					proposal?.active !== false,
+
+					saved_active:
+					proposal?.active !== false,
+
 					/*
-				 * Used only for displaying
-				 * Draft 1, Draft 2, etc.
-				 * while this duplicated Event
-				 * still exists only in Working State.
-				 */
+		 * Used only for displaying
+		 * Draft 1, Draft 2, etc.
+		 * while this duplicated Event
+		 * still exists only in Working State.
+		 */
 					temp_proposal_no:
 					Number(
 						proposal.temp_proposal_no || 0
@@ -511,5 +554,5 @@ export default {
 		}
 
 		return createdIds;
-	}
+	},
 };

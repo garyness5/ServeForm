@@ -1,59 +1,4 @@
 export default {
-	async setActive(row, active) {
-		const proposalId =
-					Number(
-						row?.id ||
-						row?.allFields?.id ||
-						row?.updatedFields?.id ||
-						0
-					);
-
-		if (!proposalId) {
-			showAlert(
-				"Proposal could not be identified.",
-				"warning"
-			);
-
-			return false;
-		}
-
-		await storeValue(
-			"proposal_active_request",
-			active === true
-		);
-
-		await storeValue(
-			"proposal_active_id",
-			proposalId
-		);
-
-		try {
-			await qryEvtSetPropActive.run();
-
-			await qryEvtGetPropsForEvent.run();
-
-			if (
-				proposalId ===
-				Number(
-					appsmith.store.current_proposal_id || 0
-				)
-			) {
-				await qryEvtGetSelectedProposal.run();
-			}
-
-			return true;
-
-		} finally {
-			await removeValue(
-				"proposal_active_request"
-			);
-
-			await removeValue(
-				"proposal_active_id"
-			);
-		}
-	},
-
 	async onActiveChange() {
 		const updates =
 					tblPropForEvent.updatedRows || [];
@@ -65,10 +10,39 @@ export default {
 			return false;
 		}
 
-		return await this.setActive(
-			update,
+		const proposalId =
+					Number(
+						update.id ||
+						update.allFields?.id ||
+						update.updatedFields?.id ||
+						0
+					);
+
+		if (!proposalId) {
+			return false;
+		}
+
+		await jsPropWorkspaces.setActive(
+			proposalId,
 			update.updatedFields?.active
 		);
+
+		/*
+	 * Editing Proposal Active also makes
+	 * that Proposal the selected workspace.
+	 */
+		if (
+			proposalId !==
+			Number(
+				appsmith.store.current_proposal_id || 0
+			)
+		) {
+			await jsPropSelector.selectProposal(
+				update.allFields || update
+			);
+		}
+
+		return true;
 	},
 
 	filteredProposals() {
@@ -85,16 +59,28 @@ export default {
 	 * Saved Proposal rows belong only to
 	 * a persisted Event.
 	 *
-	 * When eventId = 0, this is a new/duplicated
-	 * Event existing only in Working State.
-	 * Never expose stale query rows from the
-	 * source Event.
+	 * Overlay Proposal Working State so
+	 * unsaved Active changes remain visible.
 	 */
 		const savedRows =
 					eventId > 0
 		? [
 			...(qryEvtGetPropsForEvent.data || [])
-		]
+		].map(row => {
+			const workspace =
+						jsPropWorkspaces.get(
+							Number(row.id || 0)
+						);
+
+			return {
+				...row,
+
+				active:
+				workspace
+				? workspace.active !== false
+				: row.active !== false
+			};
+		})
 		: [];
 
 		const temporaryRows =
@@ -130,7 +116,7 @@ export default {
 				"Draft",
 
 				active:
-				true,
+				workspace?.active !== false,
 
 				updated_at:
 				null,
@@ -699,78 +685,49 @@ export default {
 			return false;
 		}
 
-		await qryEvtCheckGroReplaceImpact.run();
+		await qryEvtCheckGroUnorderImpact.run();
 
 		const impact =
-					qryEvtCheckGroReplaceImpact.data?.[0] || null;
+					qryEvtCheckGroUnorderImpact.data?.[0] || null;
 
 		/*
-     * No Groceries source exists.
-     *
-     * This can occur with old/remnant data where
-     * the Proposal is Ordered but its Groceries
-     * handoff is missing.
-     *
-     * The shared backend Unorder operation will
-     * clear Ordered without disturbing Groceries.
-     */
-		if (!impact) {
-			return await this.confirmUnorder(true);
+	 * No Groceries source, or source has never
+	 * participated in Details:
+	 *
+	 * remove/unorder silently.
+	 */
+		if (
+			!impact ||
+			impact.has_generated_details !== true
+		) {
+			return await this.confirmUnorder();
 		}
-
-		const generated =
-					impact.has_generated_details === true;
-
-		const manual =
-					impact.has_manual_values === true;
-
-		const surviving =
-					impact.has_surviving_generated_sources === true;
 
 		/*
-     * Waiting source:
-     * no generated Groceries work exists.
-     * Unorder immediately.
-     */
-		if (!generated) {
-			return await this.confirmUnorder(true);
-		}
-
+	 * This source has participated in Groceries.
+	 * Removing it has downstream impact, so require
+	 * the same confirmation principle as
+	 * Groceries -> Remove -> Update All.
+	 */
 		await storeValue(
 			"evt_gro_unorder_request",
 			{
-				proposal_id: proposalId,
-				mode:
-				manual && surviving
-				? "values"
-				: "confirm"
+				proposal_id: proposalId
 			}
 		);
 
-		/*
-     * Generated + manual values + surviving
-     * generated source:
-     *
-     * Keep / Remove / Cancel.
-     *
-     * All other generated cases:
-     *
-     * simple Remove / Cancel confirmation.
-     */
 		showModal(mdlEvtUnorder.name);
 
 		return false;
 	},
 
 
-	async confirmUnorder(keepManual = true) {
+	async confirmUnorder() {
+
+		const request =
+					appsmith.store.evt_gro_unorder_request || {};
 
 		try {
-
-			await storeValue(
-				"evt_gro_keep_manual",
-				keepManual === true
-			);
 
 			const result =
 						await qryEvtUnorderPropFromGroceries.run();
@@ -780,10 +737,40 @@ export default {
 
 			if (!row?.proposal_id) {
 				showAlert(
-					"Proposal could not be Unordered.",
+					"Proposal could not be removed from Groceries.",
 					"error"
 				);
+
 				return false;
+			}
+
+			/*
+		 * Proposal Inactive requested:
+		 * Groceries removal succeeded, so the
+		 * triggering state change may now complete.
+		 */
+			if (
+				request.action === "inactivate_proposal"
+			) {
+				await storeValue(
+					"proposal_active_id",
+					Number(request.proposal_id || 0)
+				);
+
+				await storeValue(
+					"proposal_active_request",
+					false
+				);
+
+				await qryEvtSetPropActive.run();
+
+				await removeValue(
+					"proposal_active_id"
+				);
+
+				await removeValue(
+					"proposal_active_request"
+				);
 			}
 
 			await Promise.all([
@@ -794,13 +781,16 @@ export default {
 
 			await jsEvtWorkspace.resetFromSaved();
 
-			await removeValue("evt_gro_unorder_request");
-			await removeValue("evt_gro_keep_manual");
+			await removeValue(
+				"evt_gro_unorder_request"
+			);
 
 			closeModal(mdlEvtUnorder.name);
 
 			showAlert(
-				"Proposal removed from Groceries.",
+				request.action === "inactivate_proposal"
+				? "Proposal made Inactive and removed from Groceries."
+				: "Proposal removed from Groceries.",
 				"success"
 			);
 
@@ -808,11 +798,9 @@ export default {
 
 		} catch (error) {
 
-			await removeValue("evt_gro_keep_manual");
-
 			showAlert(
 				error?.message ||
-				"Proposal could not be Unordered.",
+				"Proposal could not be updated.",
 				"error"
 			);
 
@@ -822,8 +810,9 @@ export default {
 
 	async cancelUnorder() {
 
-		await removeValue("evt_gro_unorder_request");
-		await removeValue("evt_gro_keep_manual");
+		await removeValue(
+			"evt_gro_unorder_request"
+		);
 
 		closeModal(mdlEvtUnorder.name);
 

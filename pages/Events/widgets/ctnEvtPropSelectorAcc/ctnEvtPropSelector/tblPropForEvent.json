@@ -168,10 +168,10 @@
       "key": "onRowSelected"
     },
     {
-      "key": "primaryColumns.active.onCheckChange"
+      "key": "primaryColumns.updated_at.inputFormat"
     },
     {
-      "key": "primaryColumns.updated_at.inputFormat"
+      "key": "primaryColumns.active.onCheckChange"
     }
   ],
   "dynamicTriggerPathList": [

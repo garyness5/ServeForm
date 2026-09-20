@@ -1,0 +1,22 @@
+select
+    ge.id as gro_event_id,
+    ge.event_id,
+    ge.proposal_id,
+    count(gd.id) > 0 as has_generated_details
+
+from public.gro_events ge
+
+left join public.gro_details gd
+    on gd.gro_event_id = ge.id
+   and gd.client_id = ge.client_id
+
+where ge.client_id =
+      '{{ appsmith.store.current_client_id }}'::uuid
+
+  and ge.proposal_id =
+      {{ Number(appsmith.store.current_proposal_id || 0) }}::bigint
+
+group by
+    ge.id,
+    ge.event_id,
+    ge.proposal_id;

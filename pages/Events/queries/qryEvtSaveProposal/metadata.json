@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_event_proposal_secure(\n\t{{\n\tNumber(\n\t\tappsmith.store.proposal_save_request?.proposal_id || 0\n\t)\n\t}},\n\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\n\t'{{\n\tJSON.stringify(\n\t\tappsmith.store.proposal_save_request?.menus || []\n\t).replaceAll(\"'\", \"''\")\n\t}}'::jsonb\n);",
+      "body": "select *\nfrom public.save_event_proposal_secure(\n\t{{\n\tNumber(\n\t\tappsmith.store.proposal_save_request\n\t\t?.proposal_id || 0\n\t)\n\t}}::bigint,\n\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\n\t'{{\n\tJSON.stringify(\n\t\tappsmith.store.proposal_save_request\n\t\t?.menus || []\n\t).replaceAll(\"'\", \"''\")\n\t}}'::jsonb,\n\n\t{{\n\tappsmith.store.proposal_save_request\n\t?.active !== false\n\t? 'true'\n\t: 'false'\n\t}}::boolean\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

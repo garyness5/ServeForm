@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 57,
   "shouldTruncate": false,
-  "text": "{{\n  appsmith.store.gro_pending_update_reason === \"remove_event\"\n    ? \"Remove Event from Groceries?\"\n    : \"Update Groceries?\"\n}}",
+  "text": "{{ \"Remove Proposal from Groceries?\" }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,

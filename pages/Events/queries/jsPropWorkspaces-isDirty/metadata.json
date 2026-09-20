@@ -9,7 +9,7 @@
       "jsArguments": [
         {
           "name": "proposalId",
-          "value": "{{jsProposalWorkspaces.currentProposalId()}}"
+          "value": "{{jsPropWorkspaces.currentProposalId()}}"
         }
       ],
       "paginationType": "NONE",
