@@ -2,7 +2,7 @@
   "animateLoading": true,
   "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 27,
+  "bottomRow": 24,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -52,7 +52,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 60,
   "shouldTruncate": false,
-  "text": "{{\n\t\"Groceries Details and Order will be updated to reflect any  remaining Events. Manually entered Order values for remaining ingredients will be kept where applicable. <br><br>The Print page will be cleared. <br><br>Do you want to continue?\"\n}}",
+  "text": "{{\n\"Groceries Details and Order will be updated to reflect the remaining Events. Manually entered quantities will be kept for ingredients still required.<br><br>Do you want to remove?\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 14,

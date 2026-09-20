@@ -230,7 +230,157 @@ export default {
 		}
 	},
 
+	orderedProposal() {
+		return (
+			(qryEvtGetPropsForEvent.data || [])
+			.find(row =>
+						row?.proposal_status === "Ordered"
+					 ) ||
+			null
+		);
+	},
+
+	async handleInactiveOrderedBeforeSave() {
+		/*
+	 * FIRST:
+	 * Check dirty saved Proposal workspaces.
+	 *
+	 * Event Save persists all dirty Proposals,
+	 * so it must enforce the same
+	 * Ordered -> Inactive rule as Proposal Save.
+	 */
+		const dirtyProposalIds =
+					jsPropWorkspaces
+		.dirtyProposalIds()
+		.map(Number)
+		.filter(id => id > 0);
+
+		for (const proposalId of dirtyProposalIds) {
+			const workspace =
+						jsPropWorkspaces.get(
+							proposalId
+						);
+
+			const savedProposal =
+						(
+							qryEvtGetPropsForEvent.data ||
+							[]
+						)
+			.find(row =>
+						Number(row.id || 0) ===
+						proposalId
+					 );
+
+			const becomingInactive =
+						workspace?.active === false &&
+						workspace?.saved_active !== false;
+
+			const isOrdered =
+						savedProposal?.proposal_status ===
+						"Ordered";
+
+			if (
+				becomingInactive &&
+				isOrdered
+			) {
+				await storeValue(
+					"evt_active_save_original_proposal_id",
+					Number(
+						appsmith.store
+						.current_proposal_id ||
+						0
+					)
+				);
+
+				await storeValue(
+					"evt_gro_unorder_after_action",
+					"save_event"
+				);
+
+				await storeValue(
+					"current_proposal_id",
+					proposalId
+				);
+
+				await qryEvtGetSelectedProposal.run();
+				await qryEvtGetSelectedPropMenus.run();
+
+				await jsPropActions.unorder();
+
+				return false;
+			}
+		}
+
+		/*
+	 * SECOND:
+	 * Check Event Active -> Inactive.
+	 */
+		const eventWorkspace =
+					jsEvtWorkspace.get();
+
+		const savedEvent =
+					qryEvtGetItemById.data?.[0] ||
+					null;
+
+		const eventBecomingInactive =
+					eventWorkspace?.active === false &&
+					savedEvent?.active !== false;
+
+		if (!eventBecomingInactive) {
+			return true;
+		}
+
+		const ordered =
+					this.orderedProposal();
+
+		if (!ordered) {
+			return true;
+		}
+
+		const proposalId =
+					Number(
+						ordered.id || 0
+					);
+
+		if (proposalId <= 0) {
+			return true;
+		}
+
+		await storeValue(
+			"evt_active_save_original_proposal_id",
+			Number(
+				appsmith.store.current_proposal_id ||
+				0
+			)
+		);
+
+		await storeValue(
+			"evt_gro_unorder_after_action",
+			"save_event"
+		);
+
+		await storeValue(
+			"current_proposal_id",
+			proposalId
+		);
+
+		await qryEvtGetSelectedProposal.run();
+		await qryEvtGetSelectedPropMenus.run();
+
+		await jsPropActions.unorder();
+
+		return false;
+	},
+
 	async saveAndReload() {
+		const canContinue =
+					await this
+		.handleInactiveOrderedBeforeSave();
+
+		if (!canContinue) {
+			return false;
+		}
+
 		const currentProposalId =
 					Number(
 						appsmith.store.current_proposal_id ||

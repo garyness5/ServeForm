@@ -284,6 +284,65 @@ export default {
 		return eventId;
 	},
 
+	async handleOrderedInactiveBeforeSave(
+		proposalId
+	) {
+		const id =
+					Number(
+						proposalId || 0
+					);
+
+		if (id <= 0) {
+			return true;
+		}
+
+		const workspace =
+					jsPropWorkspaces.get(id);
+
+		const savedProposal =
+					(qryEvtGetPropsForEvent.data || [])
+		.find(
+			row =>
+			Number(row.id) === id
+		)
+		||
+					qryEvtGetSelectedProposal.data?.[0]
+		||
+					null;
+
+		const becomingInactive =
+					workspace?.active === false &&
+					workspace?.saved_active !== false;
+
+		const isOrdered =
+					savedProposal?.proposal_status ===
+					"Ordered";
+
+		if (
+			!becomingInactive ||
+			!isOrdered
+		) {
+			return true;
+		}
+
+		await storeValue(
+			"evt_gro_unorder_after_action",
+			"save_proposal"
+		);
+
+		/*
+	 * Existing Unorder owns:
+	 * - Groceries impact check
+	 * - direct removal when not exploded
+	 * - mdlEvtUnorder when exploded
+	 * - clearing Ordered
+	 * - Groceries rebuild
+	 */
+		await jsPropActions.unorder();
+
+		return false;
+	},
+
 	async saveProposal() {
 		const message =
 					this.requiredMessage();
@@ -315,6 +374,16 @@ export default {
 				"error"
 			);
 
+			return false;
+		}
+
+		const canContinue =
+					await this
+		.handleOrderedInactiveBeforeSave(
+			proposalId
+		);
+
+		if (!canContinue) {
 			return false;
 		}
 
