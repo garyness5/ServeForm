@@ -442,26 +442,28 @@ export default {
 			return false;
 		}
 
-		if (proposalId < 0) {
-			showAlert(
-				"Save the Proposal before sending it to Order.",
-				"warning"
-			);
-
-			return false;
-		}
-
+		/*
+ * To Order is an explicit production action.
+ *
+ * The selected Proposal must exist in Published State,
+ * but the user does not need to save it separately first.
+ *
+ * Saving here affects only the selected Proposal.
+ * Unrelated Event Header and Proposal Working State
+ * remain untouched.
+ */
 		if (
+			proposalId < 0 ||
 			jsPropWorkspaces.isDirty(
 				proposalId
 			)
 		) {
-			showAlert(
-				"Save the Proposal before sending it to Order.",
-				"warning"
-			);
+			const saved =
+						await jsPropSave.saveProposal();
 
-			return false;
+			if (!saved) {
+				return false;
+			}
 		}
 
 		if (jsEvtSave.isDirty()) {
