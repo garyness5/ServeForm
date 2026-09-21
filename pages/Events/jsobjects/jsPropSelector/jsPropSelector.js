@@ -98,6 +98,38 @@ export default {
 		}
 	},
 
+	onRowSelected() {
+		const selectedRow =
+					tblPropForEvent.selectedRow;
+
+		const selectedId =
+					Number(selectedRow?.id || 0);
+
+		const currentId =
+					Number(
+						appsmith.store.current_proposal_id || 0
+					);
+
+		if (!selectedId) {
+			return this.clearSelection();
+		}
+
+		/*
+	 * A table-data refresh may re-fire
+	 * onRowSelected for the Proposal that
+	 * is already selected.
+	 *
+	 * That is not a real selection change.
+	 */
+		if (selectedId === currentId) {
+			return true;
+		}
+
+		return this.selectProposal(
+			selectedRow
+		);
+	},
+
 	async selectProposal(row) {
 		const newProposalId =
 					Number(

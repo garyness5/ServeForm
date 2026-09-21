@@ -338,7 +338,9 @@ export default {
 	 * - clearing Ordered
 	 * - Groceries rebuild
 	 */
-		await jsPropActions.unorder();
+		await jsPropActions.unorder(
+			proposalId
+		);
 
 		return false;
 	},

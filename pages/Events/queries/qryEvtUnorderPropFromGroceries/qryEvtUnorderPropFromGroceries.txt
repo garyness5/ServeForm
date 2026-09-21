@@ -1,6 +1,6 @@
 select *
 from public.unorder_proposal_from_groceries(
-	{{ Number(appsmith.store.current_proposal_id || 0) }}::bigint,
+	{{ Number(appsmith.store.evt_gro_unorder_request?.proposal_id || 0) }}::bigint,
 	'{{ appsmith.store.current_client_id }}'::uuid,
 	true::boolean
 );

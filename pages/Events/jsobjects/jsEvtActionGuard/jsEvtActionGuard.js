@@ -245,9 +245,10 @@ export default {
 	 * FIRST:
 	 * Check dirty saved Proposal workspaces.
 	 *
-	 * Event Save persists all dirty Proposals,
-	 * so it must enforce the same
-	 * Ordered -> Inactive rule as Proposal Save.
+	 * Event Save persists all dirty Proposals.
+	 * If an Ordered Proposal is being made
+	 * inactive, its production source must be
+	 * removed before the inactive state is saved.
 	 */
 		const dirtyProposalIds =
 					jsPropWorkspaces
@@ -284,28 +285,13 @@ export default {
 				isOrdered
 			) {
 				await storeValue(
-					"evt_active_save_original_proposal_id",
-					Number(
-						appsmith.store
-						.current_proposal_id ||
-						0
-					)
-				);
-
-				await storeValue(
 					"evt_gro_unorder_after_action",
 					"save_event"
 				);
 
-				await storeValue(
-					"current_proposal_id",
+				await jsPropActions.unorder(
 					proposalId
 				);
-
-				await qryEvtGetSelectedProposal.run();
-				await qryEvtGetSelectedPropMenus.run();
-
-				await jsPropActions.unorder();
 
 				return false;
 			}
@@ -347,27 +333,13 @@ export default {
 		}
 
 		await storeValue(
-			"evt_active_save_original_proposal_id",
-			Number(
-				appsmith.store.current_proposal_id ||
-				0
-			)
-		);
-
-		await storeValue(
 			"evt_gro_unorder_after_action",
 			"save_event"
 		);
 
-		await storeValue(
-			"current_proposal_id",
+		await jsPropActions.unorder(
 			proposalId
 		);
-
-		await qryEvtGetSelectedProposal.run();
-		await qryEvtGetSelectedPropMenus.run();
-
-		await jsPropActions.unorder();
 
 		return false;
 	},

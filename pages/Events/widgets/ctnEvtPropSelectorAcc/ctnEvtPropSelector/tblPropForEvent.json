@@ -55,7 +55,7 @@
     "created_at",
     "proposal_sequence_number"
   ],
-  "columnUpdatedAt": 1789346293031,
+  "columnUpdatedAt": 1789951739547,
   "columnWidthMap": {
     "active": 103,
     "customColumn1": 111,
@@ -203,7 +203,7 @@
   "mobileRightColumn": 12,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onRowSelected": "{{\ntblPropForEvent.selectedRow?.id\n? jsPropSelector.selectProposal(\n\ttblPropForEvent.selectedRow\n)\n: jsPropSelector.clearSelection()\n}}",
+  "onRowSelected": "{{ jsPropSelector.onRowSelected() }}",
   "originalBottomRow": 38,
   "originalTopRow": 11,
   "parentColumnSpace": 18.890625,

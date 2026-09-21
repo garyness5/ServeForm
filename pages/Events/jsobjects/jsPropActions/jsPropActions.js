@@ -671,30 +671,48 @@ export default {
 		);
 	},
 
-	async unorder() {
+	async unorder(proposalId = null) {
 
-		const proposalId =
-					Number(appsmith.store.current_proposal_id || 0);
+		const id =
+					Number(
+						proposalId ||
+						appsmith.store.current_proposal_id ||
+						0
+					);
 
-		if (!proposalId) {
+		if (id <= 0) {
 			showAlert(
-				"Select a Proposal first.",
+				"Select a saved Proposal first.",
 				"warning"
 			);
 
 			return false;
 		}
 
+		/*
+	 * The target Proposal is explicit.
+	 *
+	 * Selection is UI Working State and must not
+	 * determine which Proposal is Unordered.
+	 */
+		await storeValue(
+			"evt_gro_unorder_request",
+			{
+				proposal_id: id
+			}
+		);
+
 		await qryEvtCheckGroReplaceImpact.run();
 
 		const impact =
-					qryEvtCheckGroReplaceImpact.data?.[0] || null;
+					qryEvtCheckGroReplaceImpact.data?.[0] ||
+					null;
 
 		/*
-	 * No Groceries source, or source has not
-	 * generated Details/Order.
+	 * No generated Groceries work.
 	 *
-	 * Unorder immediately.
+	 * Remove the saved production source and
+	 * clear Ordered immediately.
 	 */
 		if (
 			!impact ||
@@ -704,86 +722,38 @@ export default {
 		}
 
 		/*
-	 * Generated Groceries work exists.
+	 * Generated Details / Order exist.
 	 *
-	 * Confirm removal before Groceries removes
-	 * the source and rebuilds Details/Order.
+	 * Existing Groceries removal/rebuild rules
+	 * own the downstream impact.
 	 */
-		await storeValue(
-			"evt_gro_unorder_request",
-			{
-				proposal_id: proposalId
-			}
+		showModal(
+			mdlEvtUnorder.name
 		);
-
-		showModal(mdlEvtUnorder.name);
 
 		return false;
 	},
 
 
 	async confirmUnorder() {
+		const afterAction =
+					String(
+						appsmith.store
+						.evt_gro_unorder_after_action ||
+						""
+					);
 
 		try {
+			await qryEvtUnorderPropFromGroceries.run();
 
-			/*
-		 * Applicable manual Order quantities
-		 * are always preserved.
-		 */
-			await storeValue(
-				"evt_gro_keep_manual",
-				true
+			closeModal(
+				mdlEvtUnorder.name
 			);
-
-			const result =
-						await qryEvtUnorderPropFromGroceries.run();
-
-			const row =
-						result?.[0] || null;
-
-			if (!row?.proposal_id) {
-				showAlert(
-					"Proposal could not be Unordered.",
-					"error"
-				);
-
-				return false;
-			}
-
-			/*
-		 * Capture continuation BEFORE removing
-		 * any temporary orchestration stores.
-		 */
-			const afterAction =
-						appsmith.store
-			.evt_gro_unorder_after_action ||
-						null;
-
-			const originalProposalId =
-						Number(
-							appsmith.store
-							.evt_active_save_original_proposal_id ||
-							0
-						);
 
 			await Promise.all([
 				qryEvtGetPropsForEvent.run(),
-				qryEvtGetSelectedProposal.run(),
 				qryEvtGetItemById.run()
 			]);
-
-			/*
-		 * Direct Unorder keeps the existing
-		 * Published-State reset behavior.
-		 *
-		 * Save-bound Unorder must NOT reset the
-		 * Event Working State before the pending
-		 * Save continues.
-		 */
-			if (!afterAction) {
-				await jsEvtWorkspace
-					.resetFromSaved();
-			}
 
 			await removeValue(
 				"evt_gro_unorder_request"
@@ -797,69 +767,34 @@ export default {
 				"evt_gro_unorder_after_action"
 			);
 
-			closeModal(
-				mdlEvtUnorder.name
-			);
-
-			showAlert(
-				"Proposal removed from Groceries.",
-				"success"
-			);
-
 			/*
-		 * Proposal Save continuation.
+		 * Save-triggered inactivation:
+		 *
+		 * Preserve all current Working State.
+		 * The lifecycle prerequisite is complete,
+		 * so continue the save that requested it.
 		 */
-			if (
-				afterAction === "save_proposal"
-			) {
-				return await jsPropSave
-					.saveProposal();
+			if (afterAction === "save_proposal") {
+				return await jsPropSave.saveProposal();
+			}
+
+			if (afterAction === "save_event") {
+				return await jsEvtActionGuard.saveAndReload();
 			}
 
 			/*
-		 * Event Save continuation.
-		 */
-			if (
-				afterAction === "save_event"
-			) {
-				if (originalProposalId > 0) {
-					await storeValue(
-						"current_proposal_id",
-						originalProposalId
-					);
-
-					await qryEvtGetSelectedProposal
-						.run();
-
-					await qryEvtGetSelectedPropMenus
-						.run();
-				}
-				else {
-					await removeValue(
-						"current_proposal_id"
-					);
-				}
-
-				await removeValue(
-					"evt_active_save_original_proposal_id"
-				);
-
-				return await jsEvtActionGuard
-					.saveAndReload();
-			}
-
+ * Direct manual Unorder.
+ *
+ * Unorder changes lifecycle Published State only.
+ * It must not reset unrelated Event Header or
+ * Proposal Working State.
+ */
 			return true;
 
-		}
-		catch (error) {
-
-			await removeValue(
-				"evt_gro_keep_manual"
-			);
-
+		} catch (error) {
 			showAlert(
 				error?.message ||
-				"Proposal could not be Unordered.",
+				"Unable to remove Proposal from Groceries.",
 				"error"
 			);
 
@@ -868,6 +803,9 @@ export default {
 	},
 
 	async cancelUnorder() {
+		closeModal(
+			mdlEvtUnorder.name
+		);
 
 		await removeValue(
 			"evt_gro_unorder_request"
@@ -880,16 +818,6 @@ export default {
 		await removeValue(
 			"evt_gro_unorder_after_action"
 		);
-
-		await removeValue(
-			"evt_active_save_workspace"
-		);
-
-		await removeValue(
-			"evt_active_save_original_proposal_id"
-		);
-
-		closeModal(mdlEvtUnorder.name);
 
 		return true;
 	},
