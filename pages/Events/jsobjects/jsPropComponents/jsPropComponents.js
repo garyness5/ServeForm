@@ -701,16 +701,11 @@ export default {
 					base.active === false;
 
 		/*
-	 * ==================================================
-	 * FROZEN HISTORICAL COST
-	 *
-	 * Once frozen_cost_per_unit exists, it permanently
-	 * owns this Proposal Menu's cost basis.
-	 *
-	 * Current upstream Menu pricing is ignored forever,
-	 * even if the Event is later reopened.
-	 * ==================================================
+	 * With frozen_cost_per_unit cleared,
+	 * jsPropComponents.refreshDerivedFields()
+	 * will use the Menu's current cost.
 	 */
+
 		if (frozenCost != null) {
 
 			const calculatedCost =
@@ -1216,45 +1211,6 @@ export default {
 		return result;
 	},
 
-	async onQuantityChange(row) {
-		if (!row?.draft_row_id) {
-			return null;
-		}
-
-		const mergedRows =
-					this.mergeUpdatedRows();
-
-		const rows = mergedRows.map(
-			(item, index) => {
-				if (
-					item.draft_row_id !==
-					row.draft_row_id
-				) {
-					return this.prepareRow(
-						item,
-						index + 1
-					);
-				}
-
-				const submittedRow = {
-					...item,
-					...row
-				};
-
-				return this.prepareRow(
-					this.refreshDerivedFields(
-						submittedRow
-					),
-					index + 1
-				);
-			}
-		);
-
-		return await this.setDraftRows(
-			rows
-		);
-	},
-
 	lineCostDisplay(row) {
 		const value =
 					this.lineCost(row);
@@ -1318,24 +1274,6 @@ export default {
 		return this.refreshDerivedFields(
 			row
 		).line_cost;
-	},
-
-	totalGuests() {
-		return this.effectiveRows()
-			.reduce((sum, row) => {
-			if (
-				row.active === false
-			) {
-				return sum;
-			}
-
-			return (
-				sum +
-				Number(
-					row.guests || 0
-				)
-			);
-		}, 0);
 	},
 
 	toProduce() {

@@ -19,7 +19,7 @@ export default {
 
 	async openCustomerAdd() {
 		await this.clearCustomerQuickAdd();
-		showModal("mdlEvtCustomer");
+		showModal(mdlEvtCustomer.name);
 	},
 
 	async closeCustomerAdd() {
@@ -45,22 +45,6 @@ export default {
 
 		await qryEvtGetContacts.run();
 		return qryEvtGetContacts.data || [];
-	},
-
-	async resetContactSelection(context) {
-		if (context === "venue") {
-			await resetWidget(
-				"msEvtVenueContacts",
-				true
-			);
-		} else {
-			await resetWidget(
-				"msEvtContacts",
-				true
-			);
-		}
-
-		return await this.refreshContactOptions(context);
 	},
 
 	async saveCustomer() {
@@ -436,10 +420,6 @@ export default {
 	},
 
 	async captureParentSelection(context) {
-		await new Promise(resolve =>
-											setTimeout(resolve, 50)
-										 );
-
 		const isVenue =
 					context === "venue";
 
@@ -478,10 +458,6 @@ export default {
 	},
 
 	async captureContactSelection(context) {
-		await new Promise(resolve =>
-											setTimeout(resolve, 50)
-										 );
-
 		const isVenue =
 					context === "venue";
 

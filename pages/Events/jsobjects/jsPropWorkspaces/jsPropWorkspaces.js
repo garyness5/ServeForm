@@ -200,28 +200,42 @@ export default {
 	},
 
 	async setCurrentComponents(rows) {
-		if (
-			!jsPropData.hasSelectedProposal()
-		) {
-			return null;
-		}
-
 		const proposalId =
 					this.currentProposalId();
 
-		const existing =
-					this.get(proposalId) || {};
+		if (!proposalId) {
+			return false;
+		}
 
-		return await this.set(
-			proposalId,
-			{
-				...existing,
+		const workspaces = {
+			...(appsmith.store.proposal_workspaces || {})
+		};
 
-				components:
-				jsPropComponents
-				.normalizeRows(rows)
-			}
+		const key =
+					String(proposalId);
+
+		const workspace =
+					workspaces[key];
+
+		if (!workspace) {
+			return false;
+		}
+
+		workspaces[key] = {
+			...workspace,
+
+			components:
+			jsPropComponents.normalizeRows(
+				rows || []
+			)
+		};
+
+		await storeValue(
+			"proposal_workspaces",
+			workspaces
 		);
+
+		return true;
 	},
 
 	async setActive(proposalId, active) {
@@ -554,5 +568,38 @@ export default {
 		}
 
 		return createdIds;
+	},
+
+	async syncPublishedActive(id, active) {
+
+		const proposalId = Number(id || 0);
+
+		if (!proposalId) {
+			return false;
+		}
+
+		const workspaces = {
+			...(appsmith.store.proposal_workspaces || {})
+		};
+
+		const key = String(proposalId);
+		const workspace = workspaces[key];
+
+		if (!workspace) {
+			return false;
+		}
+
+		workspaces[key] = {
+			...workspace,
+			active: active === true,
+			saved_active: active === true
+		};
+
+		await storeValue(
+			"proposal_workspaces",
+			workspaces
+		);
+
+		return true;
 	},
 };

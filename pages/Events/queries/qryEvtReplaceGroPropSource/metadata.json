@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.replace_gro_proposal_source(\n    {{ Number(appsmith.store.current_proposal_id || 0) }},\n    '{{ appsmith.store.current_client_id }}'::uuid,\n    {{ appsmith.store.evt_gro_keep_manual === true }},\n    1\n);",
+      "body": "select *\nfrom public.replace_gro_proposal_source(\n\t{{ Number(appsmith.store.current_proposal_id || 0) }}::bigint,\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\ttrue\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

@@ -166,12 +166,18 @@ export default {
 		 * Persisted Event:
 		 * Rename remains its own explicit action.
 		 */
+
+		const eventWorking =
+					jsEvtWorkspace.current();
+
 		await qryEvtRenameEvent.run();
 
 		await qryEvtGetItemById.run();
 
-		await jsEvtWorkspace
-			.resetFromSaved();
+		await jsEvtWorkspace.set({
+			...eventWorking,
+			name: newName
+		});
 
 		await qryEvtGetPropsForEvent.run();
 

@@ -35,13 +35,31 @@ export default {
 		 */
 		await qryEvtGetItemById.run();
 
-		await jsEvtWorkspace.initialize();
-
+		/*
+ * Contact MultiSelect source data must exist before
+ * the Event workspace establishes its saved selections.
+ *
+ * Otherwise Appsmith can evaluate a saved Contact ID
+ * before that value exists in the widget sourceData,
+ * causing intermittent missing Contacts and false dirty.
+ */
 		await Promise.all([
 			qryEvtGetFormats.run(),
 			qryEvtGetContacts.run(),
 			qryEvtGetVenueContacts.run()
 		]);
+
+		await jsEvtWorkspace.initialize();
+
+		await resetWidget(
+			"msEvtContacts",
+			true
+		);
+
+		await resetWidget(
+			"msEvtVenueContacts",
+			true
+		);
 
 		await storeValue(
 			"accEvtCustomerNotes",

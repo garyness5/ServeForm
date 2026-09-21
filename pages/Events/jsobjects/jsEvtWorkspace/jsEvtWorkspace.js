@@ -440,17 +440,15 @@ export default {
 					this.numberOrNull(value);
 
 		await this.capture({
-			customer_id:
-			customerId,
-
+			customer_id: customerId,
 			contact_ids: []
 		});
 
-		await qryGetEvtContacts.run();
+		await qryEvtGetContacts.run();
 
 		const singleContactId =
 					this.singleLinkedContactId(
-						qryGetEvtContacts.data || []
+						qryEvtGetContacts.data || []
 					);
 
 		if (singleContactId) {
@@ -468,7 +466,6 @@ export default {
 
 		return this.get();
 	},
-
 	async setCustomerContacts(values) {
 		return await this.capture({
 			contact_ids:

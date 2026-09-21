@@ -372,6 +372,10 @@ export default {
 	},
 
 	async setAccepted(accepted) {
+
+		const eventWorking =
+					jsEvtWorkspace.current();
+
 		if (!jsPropData.hasSelectedProposal()) {
 			return false;
 		}
@@ -411,7 +415,7 @@ export default {
 				qryEvtGetItemById.run()
 			]);
 
-			await jsEvtWorkspace.resetFromSaved();
+			await jsEvtWorkspace.set(eventWorking);
 
 			return true;
 
@@ -428,10 +432,10 @@ export default {
 
 	async sendToOrder() {
 
-		const proposalId =
-					Number(
-						appsmith.store.current_proposal_id || 0
-					);
+		let proposalId =
+				Number(
+					appsmith.store.current_proposal_id || 0
+				);
 
 		if (!proposalId) {
 			showAlert(
@@ -443,20 +447,17 @@ export default {
 		}
 
 		/*
- * To Order is an explicit production action.
- *
- * The selected Proposal must exist in Published State,
- * but the user does not need to save it separately first.
- *
- * Saving here affects only the selected Proposal.
- * Unrelated Event Header and Proposal Working State
- * remain untouched.
- */
+     * To Order is an explicit production action.
+     *
+     * The selected Proposal must exist in Published State.
+     * If it is new or dirty, save only that Proposal first.
+     *
+     * Unrelated Event Header and Proposal Working State
+     * must remain untouched.
+     */
 		if (
 			proposalId < 0 ||
-			jsPropWorkspaces.isDirty(
-				proposalId
-			)
+			jsPropWorkspaces.isDirty(proposalId)
 		) {
 			const saved =
 						await jsPropSave.saveProposal();
@@ -464,21 +465,40 @@ export default {
 			if (!saved) {
 				return false;
 			}
-		}
 
-		if (jsEvtSave.isDirty()) {
-			showAlert(
-				"Save the Event before sending the Proposal to Order.",
-				"warning"
+			/*
+         * A temporary Proposal receives its real durable ID
+         * during Save, so re-read the selected Proposal ID.
+         */
+			proposalId =
+				Number(
+				appsmith.store.current_proposal_id || 0
 			);
 
-			return false;
+			if (proposalId <= 0) {
+				showAlert(
+					"Proposal could not be prepared for Order.",
+					"error"
+				);
+
+				return false;
+			}
 		}
+
+		/*
+     * IMPORTANT:
+     *
+     * Dirty Event Header Working State does NOT block
+     * To Order and is NOT saved here.
+     *
+     * To Order owns only the minimum production state
+     * required for the selected Proposal.
+     */
 
 
 		/*
-	 * Check whether Groceries already has this Event.
-	 */
+     * Check whether Groceries already has this Event.
+     */
 		await qryEvtCheckGroReplaceImpact.run();
 
 		const impact =
@@ -486,23 +506,23 @@ export default {
 
 
 		/*
-	 * Same Proposal already owns the Groceries row.
-	 * Sending again is harmless/idempotent.
-	 */
+     * Same Proposal already owns the Groceries row.
+     * Sending again is harmless/idempotent.
+     */
 		if (
 			impact &&
 			Number(impact.current_proposal_id || 0) === proposalId
 		) {
-			return await this.confirmSendToOrder(true);
+			return await this.confirmSendToOrder();
 		}
 
 
 		/*
-	 * Different Proposal, but the current Groceries source
-	 * has already generated Details.
-	 *
-	 * Ask before replacing it.
-	 */
+     * Different Proposal, but the current Groceries source
+     * has already generated Details.
+     *
+     * Ask before replacing it.
+     */
 		if (
 			impact &&
 			impact.has_generated_details === true
@@ -511,6 +531,7 @@ export default {
 				"evt_gro_replace_request",
 				{
 					proposal_id: proposalId,
+
 					event_id:
 					Number(
 						appsmith.store.current_event_id || 0
@@ -538,62 +559,42 @@ export default {
 
 
 		/*
-	 * Dormant / never-generated Groceries source:
-	 * replace silently.
-	 */
-		return await this.confirmSendToOrder(true);
+     * Dormant / never-generated Groceries source:
+     * replace silently.
+     */
+		return await this.confirmSendToOrder();
 	},
 
-	async confirmSendToOrder(keepManual = true) {
+	async confirmSendToOrder() {
+
+		const eventWorking =
+					jsEvtWorkspace.current();
+
+		let result;
 
 		try {
 
-			const request =
-						appsmith.store.evt_gro_replace_request || null;
-
-			let result = null;
-
-			/*
-		 * Exploded replacement:
-		 * remove old Event Details,
-		 * rebuild Order from remaining Details,
-		 * clear Print,
-		 * replace Proposal source,
-		 * leave replacement dormant.
-		 */
-			if (request) {
-
-				await storeValue(
-					"evt_gro_keep_manual",
-					keepManual === true
-				);
+			if (appsmith.store.evt_gro_replace_request) {
 
 				result =
 					await qryEvtReplaceGroPropSource.run();
 
 			} else {
 
-				/*
-			 * Dormant / first-time send:
-			 * no downstream rebuild required.
-			 */
 				result =
 					await qryEvtSendPropToGroceries.run();
 			}
 
-
 			const row =
-						result?.[0] || null;
+						Array.isArray(result)
+			? result[0]
+			: result?.[0] || result;
 
 			if (!row?.gro_event_id) {
-				showAlert(
-					"Proposal could not be sent to Groceries.",
-					"error"
+				throw new Error(
+					"Groceries source was not created."
 				);
-
-				return false;
 			}
-
 
 			await Promise.all([
 				qryEvtGetPropsForEvent.run(),
@@ -601,14 +602,18 @@ export default {
 				qryEvtGetItemById.run()
 			]);
 
-			await jsEvtWorkspace.resetFromSaved();
+			await jsEvtWorkspace.set({
+				...eventWorking,
+				active: true
+			});
 
-			await removeValue(
-				"evt_gro_replace_request"
+			await jsPropWorkspaces.syncPublishedActive(
+				Number(appsmith.store.current_proposal_id || 0),
+				true
 			);
 
 			await removeValue(
-				"evt_gro_keep_manual"
+				"evt_gro_replace_request"
 			);
 
 			closeModal(
@@ -624,10 +629,6 @@ export default {
 
 		} catch (error) {
 
-			await removeValue(
-				"evt_gro_keep_manual"
-			);
-
 			showAlert(
 				error?.message ||
 				"Proposal could not be sent to Groceries.",
@@ -641,7 +642,6 @@ export default {
 	async cancelGroReplace() {
 
 		await removeValue("evt_gro_replace_request");
-		await removeValue("evt_gro_keep_manual");
 
 		closeModal(mdlEvtGroReplace.name);
 
@@ -762,10 +762,6 @@ export default {
 			);
 
 			await removeValue(
-				"evt_gro_keep_manual"
-			);
-
-			await removeValue(
 				"evt_gro_unorder_after_action"
 			);
 
@@ -811,10 +807,6 @@ export default {
 
 		await removeValue(
 			"evt_gro_unorder_request"
-		);
-
-		await removeValue(
-			"evt_gro_keep_manual"
 		);
 
 		await removeValue(

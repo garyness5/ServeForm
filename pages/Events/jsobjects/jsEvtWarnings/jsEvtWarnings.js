@@ -14,6 +14,12 @@ export default {
 
 		const header = jsEvtWorkspace.current();
 
+		if (header.active === false) {
+			warnings.push(
+				"Event is Inactive."
+			);
+		}
+
 		if (!header.customer_id) {
 			warnings.push(
 				"No Customer selected."
