@@ -43,7 +43,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ showModal(mdlEvtDelete.name) }}",
+  "onClick": "{{ jsEvtActions.openDelete() }}",
   "parentColumnSpace": 10.609375,
   "parentId": "eum2utosue",
   "parentRowSpace": 10,

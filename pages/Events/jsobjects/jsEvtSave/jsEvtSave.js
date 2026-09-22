@@ -244,11 +244,11 @@ export default {
 			venue_contact_ids:
 			workspace.venue_contact_ids || [],
 
-			total_guests_manual:
-			workspace.total_guests_manual,
-
 			format:
 			workspace.format,
+
+			total_guests_manual:
+			workspace.total_guests_manual,
 
 			customer_notes:
 			workspace.customer_notes,
@@ -290,11 +290,11 @@ export default {
 			venue_contact_ids:
 			workspace.venue_contact_ids || [],
 
-			total_guests_manual:
-			workspace.total_guests_manual,
-
 			format:
 			workspace.format,
+
+			total_guests_manual:
+			workspace.total_guests_manual,
 
 			customer_notes:
 			workspace.customer_notes,

@@ -362,7 +362,7 @@ export default {
 		);
 
 		showModal(
-			"mdlEvtRename"
+			mdlEvtRename.name
 		);
 
 		return true;
@@ -379,10 +379,60 @@ export default {
 		);
 
 		closeModal(
-			"mdlEvtRename"
+			mdlEvtRename.name
 		);
 
 		return true;
+	},
+
+	async openDelete() {
+		const eventId =
+					Number(
+						appsmith.store.current_event_id || 0
+					);
+
+		if (eventId <= 0) {
+			showAlert(
+				"No saved Event is selected.",
+				"warning"
+			);
+
+			return false;
+		}
+
+		try {
+			const result =
+						await qryEvtGetDeleteImpact.run();
+
+			const impact =
+						result?.[0] || null;
+
+			if (!impact) {
+				throw new Error(
+					"Event delete impact could not be checked."
+				);
+			}
+
+			await storeValue(
+				"evt_delete_impact",
+				impact
+			);
+
+			showModal(
+				mdlEvtDelete.name
+			);
+
+			return true;
+		}
+		catch (error) {
+			showAlert(
+				error?.message ||
+				"Event delete impact could not be checked.",
+				"error"
+			);
+
+			return false;
+		}
 	},
 
 	async deleteEvent() {
@@ -393,7 +443,7 @@ export default {
 
 		if (eventId <= 0) {
 			closeModal(
-				"mdlEvtDelete"
+				mdlEvtDelete.name
 			);
 
 			showAlert(
@@ -418,7 +468,7 @@ export default {
 			}
 
 			closeModal(
-				"mdlEvtDelete"
+				mdlEvtDelete.name
 			);
 
 			showAlert(
@@ -443,5 +493,35 @@ export default {
 
 			return false;
 		}
+	},
+
+	deleteImpactText() {
+		const impact =
+					appsmith.store.evt_delete_impact || {};
+
+		if (impact.has_groceries_materialized !== true) {
+			return "";
+		}
+
+		return (
+			"Groceries, Details and Order will be updated to reflect the remaining Events. " +
+			"Manually entered quantities will be kept for ingredients still required.<br><br>" +
+			"Do you want to remove?"
+		);
+	},
+
+	deleteImpactCountText() {
+		const impact =
+					appsmith.store.evt_delete_impact || {};
+
+		if (impact.has_groceries_materialized !== true) {
+			return "";
+		}
+
+		return (
+			"This Event will be removed from Groceries." +
+			"\n\n" +
+			(jsEvtWorkspace.current()?.name || "This Event")
+		);
 	},
 };

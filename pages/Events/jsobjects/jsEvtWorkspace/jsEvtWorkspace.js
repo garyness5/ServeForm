@@ -142,14 +142,14 @@ export default {
 				data.venue_contact_ids
 			),
 
-			total_guests_manual:
-			this.numberOrNull(
-				data.total_guests_manual
-			),
-
 			format:
 			this.textClean(
 				data.format
+			),
+
+			total_guests_manual:
+			this.numberOrNull(
+				data.total_guests_manual
 			),
 
 			customer_notes:
@@ -249,11 +249,11 @@ export default {
 			venue_contact_ids:
 			row.venue_contact_ids || [],
 
-			total_guests_manual:
-			row.total_guests_manual,
-
 			format:
 			row.format,
+
+			total_guests_manual:
+			row.total_guests_manual,
 
 			customer_notes:
 			row.customer_notes,
@@ -328,9 +328,6 @@ export default {
 			event_ref:
 			inpEvtRef.text,
 
-			total_guests_manual:
-			inpTotalGuests.text,
-
 			event_datetime:
 			datEvtDate.selectedDate === "" ||
 			datEvtDate.selectedDate === null
@@ -361,6 +358,11 @@ export default {
 			format:
 			selEvtFormat
 			.selectedOptionValue,
+
+			total_guests_manual:
+			inpTotalGuests.text === "" || inpTotalGuests.text == null
+			? null
+			: Number(inpTotalGuests.text),
 
 			customer_notes:
 			rteEvtCustomerNotes.text,

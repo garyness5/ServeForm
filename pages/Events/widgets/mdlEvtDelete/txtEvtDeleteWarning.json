@@ -44,7 +44,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 59,
   "shouldTruncate": false,
-  "text": "{{\n  \"This Event will no longer be available for use. This action cannot be undone.\\n\\nDo you want to delete the Event?\"\n}}",
+  "text": "{{\nappsmith.store.evt_delete_impact?.has_groceries_materialized === true\n? jsEvtActions.deleteImpactText()\n: \"This Event will no longer be available for use. This action cannot be undone.\\n\\nDo you want to delete the Event?\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 7,
@@ -52,5 +52,5 @@
   "type": "TEXT_WIDGET",
   "version": 1,
   "widgetId": "zo6sky75ja",
-  "widgetName": "txtEvtDeleteEvent"
+  "widgetName": "txtEvtDeleteWarning"
 }

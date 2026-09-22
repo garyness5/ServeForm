@@ -57,11 +57,11 @@ export default {
 
 		if (
 			header.total_guests_manual === null ||
-			header.total_guests_manual === undefined ||
+			header.total_guests_manual === "" ||
 			Number(header.total_guests_manual) <= 0
 		) {
 			warnings.push(
-				"Total Guests missing."
+				"No. of Guests missing."
 			);
 		}
 

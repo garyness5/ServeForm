@@ -1,0 +1,5 @@
+select *
+from public.get_event_delete_impact(
+	{{ appsmith.store.current_event_id }},
+	{{ appsmith.store.client_id }}
+);
