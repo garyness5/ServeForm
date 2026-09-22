@@ -442,9 +442,7 @@ export default {
 					);
 
 		if (eventId <= 0) {
-			closeModal(
-				mdlEvtDelete.name
-			);
+			closeModal(mdlEvtDelete.name);
 
 			showAlert(
 				"No saved Event is selected.",
@@ -467,9 +465,11 @@ export default {
 				);
 			}
 
-			closeModal(
-				mdlEvtDelete.name
+			await removeValue(
+				"evt_delete_impact"
 			);
+
+			closeModal(mdlEvtDelete.name);
 
 			showAlert(
 				"Event deleted.",
@@ -507,21 +507,6 @@ export default {
 			"Groceries, Details and Order will be updated to reflect the remaining Events. " +
 			"Manually entered quantities will be kept for ingredients still required.<br><br>" +
 			"Do you want to remove?"
-		);
-	},
-
-	deleteImpactCountText() {
-		const impact =
-					appsmith.store.evt_delete_impact || {};
-
-		if (impact.has_groceries_materialized !== true) {
-			return "";
-		}
-
-		return (
-			"This Event will be removed from Groceries." +
-			"\n\n" +
-			(jsEvtWorkspace.current()?.name || "This Event")
 		);
 	},
 };

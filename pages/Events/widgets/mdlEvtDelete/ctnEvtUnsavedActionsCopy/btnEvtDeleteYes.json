@@ -32,7 +32,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\nappsmith.store.evt_delete_impact?.has_groceries_materialized === true &&\n!qryEvtGetDeleteImpact.isLoading\n}}",
+  "isDisabled": "{{ qryEvtDeleteEvent.isLoading }}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",

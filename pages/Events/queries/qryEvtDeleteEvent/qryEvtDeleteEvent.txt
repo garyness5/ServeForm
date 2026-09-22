@@ -1,5 +1,11 @@
 select *
 from public.delete_event(
-    {{ Number(appsmith.store.current_event_id || 0) }},
-    '{{ appsmith.store.current_client_id }}'::uuid
+	{{ Number(appsmith.store.current_event_id || 0) }},
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	{{
+	appsmith.store.evt_delete_impact
+	?.has_groceries_materialized === true
+	? 'true'
+	: 'false'
+	}}::boolean
 );
