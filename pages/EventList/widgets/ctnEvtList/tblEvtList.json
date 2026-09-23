@@ -51,7 +51,7 @@
     "event_datetime",
     "event_date"
   ],
-  "columnUpdatedAt": 1782839438889,
+  "columnUpdatedAt": 1790119585360,
   "columnWidthMap": {
     "active": 60,
     "category_id": 118,
@@ -73,7 +73,7 @@
     "to_produce": 96,
     "total_cost": 108,
     "total_guests": 73,
-    "warning_count": 109,
+    "warning_count": 105,
     "yield_qty": 60,
     "yield_unit": 64,
     "yield_unit_id": 129,
@@ -170,10 +170,10 @@
       "key": "primaryColumns.event_date.outputFormat"
     },
     {
-      "key": "primaryColumns.active.onCheckChange"
+      "key": "primaryColumns.status.onOptionChange"
     },
     {
-      "key": "primaryColumns.status.onOptionChange"
+      "key": "primaryColumns.active.onCheckChange"
     },
     {
       "key": "primaryColumns.active.isCellEditable"
@@ -242,7 +242,7 @@
       "isVisible": true,
       "label": "Active",
       "notation": "standard",
-      "onCheckChange": "{{\nqryEvtLstSetActive.run()\n.then(() => qryEvtLstGetList.run())\n.then(() => resetWidget(\"tblEvtList\", true))\n}}",
+      "onCheckChange": "{{ jsEvtListActions.onActiveChange() }}",
       "originalId": "active",
       "sticky": "",
       "textSize": "0.875rem",
@@ -740,7 +740,7 @@
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "RIGHT",
       "id": "warning_count",
       "index": 11,
       "isCellEditable": false,

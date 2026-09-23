@@ -1,12 +1,19 @@
 select *
-from public.set_event_active_secure(
+from public.set_event_active_from_list(
 	{{
 	Number(
-		tblEvtList.updatedRow?.id ||
-		tblEvtList.triggeredRow?.id ||
-		0
+		appsmith.store.evt_list_active_action?.id || 0
 	)
 	}},
 	'{{ appsmith.store.current_client_id }}'::uuid,
-	{{ tblEvtList.updatedRow.active === true }}
+	{{
+	appsmith.store.evt_list_active_action?.active === true
+	? 'true'
+	: 'false'
+	}}::boolean,
+	{{
+	appsmith.store.evt_list_active_confirmed === true
+	? 'true'
+	: 'false'
+	}}::boolean
 );

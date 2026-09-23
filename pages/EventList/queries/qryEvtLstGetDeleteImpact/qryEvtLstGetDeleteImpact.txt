@@ -1,0 +1,5 @@
+select *
+from public.get_event_delete_impact(
+	{{ Number(tblEvtList.selectedRow?.id || 0) }},
+	'{{ appsmith.store.current_client_id }}'::uuid
+);

@@ -37,10 +37,10 @@
   "mobileRightColumn": 47,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ jsEvtListActions.cancelDelete() }}",
+  "onClick": "{{ jsEvtListActions.cancelActiveChange() }}",
   "originalBottomRow": 32,
   "originalTopRow": 28,
-  "parentId": "673iutptzq",
+  "parentId": "khwiyotja6",
   "placement": "CENTER",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
@@ -51,6 +51,6 @@
   "topRow": 3,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "zz2w5bydi8",
-  "widgetName": "btnEvtDeleteCancel"
+  "widgetId": "kxm70un5t4",
+  "widgetName": "btnEvtListActiveCancel"
 }

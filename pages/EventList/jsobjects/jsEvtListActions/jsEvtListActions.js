@@ -167,8 +167,37 @@ export default {
 			return false;
 		}
 
-		showModal(mdlEvtDelete.name);
-		return true;
+		try {
+			const result =
+						await qryEvtLstGetDeleteImpact.run();
+
+			const impact =
+						result?.[0] || null;
+
+			if (!impact) {
+				throw new Error(
+					"Event delete impact could not be checked."
+				);
+			}
+
+			await storeValue(
+				"evt_list_delete_impact",
+				impact
+			);
+
+			showModal(mdlEvtDelete.name);
+
+			return true;
+		}
+		catch (error) {
+			showAlert(
+				error?.message ||
+				"Event delete impact could not be checked.",
+				"error"
+			);
+
+			return false;
+		}
 	},
 
 	async deleteSelectedEventConfirm() {
@@ -177,7 +206,6 @@ export default {
 				"Select an event first.",
 				"warning"
 			);
-
 			return false;
 		}
 
@@ -193,6 +221,10 @@ export default {
 					"Event could not be deleted."
 				);
 			}
+
+			await removeValue(
+				"evt_list_delete_impact"
+			);
 
 			closeModal(
 				mdlEvtDelete.name
@@ -216,6 +248,275 @@ export default {
 
 			return false;
 		}
+	},
+
+	async cancelDelete() {
+		await removeValue(
+			"evt_list_delete_impact"
+		);
+
+		closeModal(
+			mdlEvtDelete.name
+		);
+
+		return true;
+	},
+
+	deleteWarningText() {
+		const impact =
+					appsmith.store.evt_list_delete_impact || {};
+
+		if (impact.has_groceries_materialized === true) {
+			return "Groceries, Details and Order will be updated to reflect the remaining Events. Manually entered quantities will be kept for ingredients still required.<br><br>Do you want to remove?";
+		}
+
+		return "Do you want to delete this Event?";
+	},
+
+	async changeActive(action) {
+		if (!action?.id) {
+			return false;
+		}
+
+		try {
+			/*
+		 * Activating is always immediate.
+		 */
+			if (action.active === true) {
+				await storeValue(
+					"evt_list_active_confirmed",
+					false
+				);
+
+				await qryEvtLstSetActive.run();
+
+				await removeValue(
+					"evt_list_active_confirmed"
+				);
+
+				await removeValue(
+					"evt_list_active_action"
+				);
+
+				await qryEvtLstGetList.run();
+
+				resetWidget(
+					"tblEvtList",
+					true
+				);
+
+				return true;
+			}
+
+			/*
+		 * Check Groceries before deactivating.
+		 */
+			const result =
+						await qryEvtLstGetActiveImpact.run();
+
+			const impact =
+						result?.[0] || null;
+
+			if (!impact) {
+				throw new Error(
+					"Event impact could not be checked."
+				);
+			}
+
+			/*
+		 * Materialized Groceries requires confirmation.
+		 * Keep evt_list_active_action until Yes/Cancel.
+		 */
+			if (impact.has_groceries_materialized === true) {
+				await storeValue(
+					"evt_list_active_impact",
+					impact
+				);
+
+				await qryEvtLstGetList.run();
+
+				resetWidget(
+					"tblEvtList",
+					true
+				);
+
+				showModal(
+					mdlEvtListActive.name
+				);
+
+				return false;
+			}
+
+			/*
+		 * No Groceries or queue-only.
+		 */
+			await storeValue(
+				"evt_list_active_confirmed",
+				false
+			);
+
+			await qryEvtLstSetActive.run();
+
+			await removeValue(
+				"evt_list_active_confirmed"
+			);
+
+			await removeValue(
+				"evt_list_active_action"
+			);
+
+			await qryEvtLstGetList.run();
+
+			resetWidget(
+				"tblEvtList",
+				true
+			);
+
+			return true;
+		}
+		catch (error) {
+			await removeValue(
+				"evt_list_active_confirmed"
+			);
+
+			await removeValue(
+				"evt_list_active_action"
+			);
+
+			await qryEvtLstGetList.run();
+
+			resetWidget(
+				"tblEvtList",
+				true
+			);
+
+			showAlert(
+				error?.message ||
+				"Event could not be updated.",
+				"error"
+			);
+
+			return false;
+		}
+	},
+
+	async onActiveChange() {
+		const updates =
+					tblEvtList.updatedRows || [];
+
+		const update =
+					updates[updates.length - 1];
+
+		if (!update) {
+			return false;
+		}
+
+		const eventId =
+					Number(
+						update.id ||
+						update.allFields?.id ||
+						update.updatedFields?.id ||
+						0
+					);
+
+		if (!eventId) {
+			return false;
+		}
+
+		const newActive =
+					update.updatedFields?.active;
+
+		if (typeof newActive !== "boolean") {
+			return false;
+		}
+
+		await storeValue(
+			"evt_list_active_action",
+			{
+				id: eventId,
+				active: newActive
+			}
+		);
+
+		return await this.changeActive(
+			appsmith.store.evt_list_active_action
+		);
+	},
+
+	async confirmActiveChange() {
+		try {
+			await storeValue(
+				"evt_list_active_confirmed",
+				true
+			);
+
+			await qryEvtLstSetActive.run();
+
+			await removeValue(
+				"evt_list_active_confirmed"
+			);
+
+			await removeValue(
+				"evt_list_active_action"
+			);
+
+			await removeValue(
+				"evt_list_active_impact"
+			);
+
+			closeModal(
+				mdlEvtListActive.name
+			);
+
+			await qryEvtLstGetList.run();
+
+			resetWidget(
+				"tblEvtList",
+				true
+			);
+
+			return true;
+		}
+		catch (error) {
+			await removeValue(
+				"evt_list_active_confirmed"
+			);
+
+			showAlert(
+				error?.message ||
+				"Event could not be made inactive.",
+				"error"
+			);
+
+			return false;
+		}
+	},
+
+	async cancelActiveChange() {
+		await removeValue(
+			"evt_list_active_confirmed"
+		);
+
+		await removeValue(
+			"evt_list_active_action"
+		);
+
+		await removeValue(
+			"evt_list_active_impact"
+		);
+
+		closeModal(
+			mdlEvtListActive.name
+		);
+
+		await qryEvtLstGetList.run();
+
+		resetWidget(
+			"tblEvtList",
+			true
+		);
+
+		return true;
 	},
 
 	filteredEvents() {

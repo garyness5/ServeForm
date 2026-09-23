@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 41,
   "shouldTruncate": false,
-  "text": "{{ \"Delete \" + tblEvtList.selectedRow.name }}",
+  "text": "{{ \"Delete \" + tblEvtList.selectedRow.name + \"?\"}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,

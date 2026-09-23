@@ -1,5 +1,11 @@
 select *
 from public.delete_event(
 	{{ Number(tblEvtList.selectedRow?.id || 0) }},
-	'{{ appsmith.store.current_client_id }}'::uuid
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	{{
+	appsmith.store.evt_list_delete_impact
+	?.has_groceries_materialized === true
+	? 'true'
+	: 'false'
+	}}::boolean
 );
