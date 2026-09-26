@@ -1,9 +1,24 @@
-update public.venues
-set
-  deleted = true,
-  active = false,
-  updated_at = now()
-where id = {{ Number(tblVenues.selectedRow?.id || 0) }}::bigint
-  and client_id = {{ appsmith.store.current_client_id }}::uuid
-  and coalesce(deleted, false) = false
-returning id;
+with deleted as (
+	select *
+	from public.set_venue_deleted(
+		{{ appsmith.user.email }}::text,
+		{{
+		Number(
+			appsmith.store.current_venue_id ||
+			tblVenues.selectedRow?.id ||
+			0
+		)
+		}}::bigint,
+		{{ appsmith.store.current_client_id }}::uuid,
+		true
+	)
+)
+select
+    {{
+Number(
+	appsmith.store.current_venue_id ||
+	tblVenues.selectedRow?.id ||
+	0
+)
+}}::bigint as id
+from deleted;

@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_venue_master(\n  nullif(\n    {{ Number(appsmith.store.current_venue_id || 0) }}::bigint,\n    0\n  ),\n\n  {{ appsmith.store.current_client_id }}::uuid,\n\n  {{ (inpVenueName.text ?? \"\").trim() }}::text,\n  {{ (inpVenueAddress.text ?? \"\").trim() }}::text,\n  {{ (inpVenuePhone.text ?? \"\").trim() }}::text,\n  {{ (inpVenueMobile.text ?? \"\").trim() }}::text,\n  {{ (inpVenueEmail.text ?? \"\").trim() }}::text,\n  {{ (inpVenueNotes.text ?? \"\").trim() }}::text,\n\n  {{ chkVenueActive.isChecked }}::boolean,\n\n  {{\n    (msVenueContacts.selectedOptionValues || []).length\n      ? `{${msVenueContacts.selectedOptionValues.map(Number).join(\",\")}}`\n      : \"{}\"\n  }}::bigint[]\n);",
+      "body": "select *\nfrom public.save_venue_master(\n\t{{ appsmith.user.email }}::text,\n\tnullif(\n\t\t{{ Number(appsmith.store.current_venue_id || 0) }}::bigint,\n\t\t0\n\t),\n\n\t{{ appsmith.store.current_client_id }}::uuid,\n\n\t{{ (inpVenueName.text ?? \"\").trim() }}::text,\n\t{{ (inpVenueAddress.text ?? \"\").trim() }}::text,\n\t{{ (inpVenuePhone.text ?? \"\").trim() }}::text,\n\t{{ (inpVenueMobile.text ?? \"\").trim() }}::text,\n\t{{ (inpVenueEmail.text ?? \"\").trim() }}::text,\n\t{{ (inpVenueNotes.text ?? \"\").trim() }}::text,\n\n\t{{ chkVenueActive.isChecked }}::boolean,\n\n\t{{\n\t(msVenueContacts.selectedOptionValues || []).length\n\t? `{${msVenueContacts.selectedOptionValues.map(Number).join(\",\")}}`\n\t: \"{}\"\n\t}}::bigint[]\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

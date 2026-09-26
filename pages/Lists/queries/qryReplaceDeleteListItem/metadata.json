@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.replace_delete_helper_item(\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t{{ Number(tblListsItems.selectedRow?.id || 0) }},\n\t{{\n\tappsmith.store.plReplaceToId\n\t? Number(appsmith.store.plReplaceToId)\n\t: null\n\t}},\n\t{{\n\tappsmith.store.plReplaceAction === \"Delete\"\n\t}}\n);",
+      "body": "select *\nfrom public.replace_delete_helper_item(\n\t'{{ appsmith.user.email }}'::text,\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t{{ Number(tblListsItems.selectedRow?.id || 0) }},\n\t{{\n\tappsmith.store.plReplaceToId\n\t? Number(appsmith.store.plReplaceToId)\n\t: null\n\t}},\n\t{{\n\tappsmith.store.plReplaceAction === \"Delete\"\n\t}}\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

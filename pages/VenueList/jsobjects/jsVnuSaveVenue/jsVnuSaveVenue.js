@@ -22,7 +22,7 @@ export default {
 				);
 
 				showModal(
-					"mdlVenueDuplicateWarning"
+					mdlVenueDuplicateWarning.name
 				);
 
 				return;
@@ -76,7 +76,7 @@ export default {
 			if (closeAfter === false) {
 				await jsVnuSaveVenue.prepareNew();
 			} else {
-				closeModal("mdlVenue");
+				closeModal(mdlVenue.name);
 			}
 		} catch (error) {
 			showAlert(
@@ -133,7 +133,7 @@ export default {
 		await jsVnuSaveVenue.prepareNew();
 
 		showModal(
-			"mdlVenue"
+			mdlVenue.name
 		);
 	},
 
@@ -201,7 +201,7 @@ export default {
 		);
 
 		showModal(
-			"mdlVenue"
+			mdlVenue.name
 		);
 	},
 
@@ -279,7 +279,7 @@ export default {
 				true
 			);
 
-			showModal("mdlVenue");
+			showModal(mdlVenue.name);
 
 			showAlert(
 				"Venue duplicated.",
@@ -303,16 +303,16 @@ export default {
 		await jsVnuSaveContact.resetQuickFields();
 
 		closeModal(
-			"mdlVenue"
+			mdlVenue.name
 		);
 	},
 
 	async closeDuplicateWarning() {
-		closeModal("mdlVenueDuplicateWarning");
+		closeModal(mdlVenueDuplicateWarning.name);
 
 		await removeValue("venue_duplicate_name");
 
-		showModal("mdlVenue");
+		showModal(mdlVenue.name);
 	},
 
 	async openDelete() {
@@ -325,7 +325,7 @@ export default {
 
 		await storeValue("current_venue_id", venueId);
 
-		showModal("mdlVenueDelConfirm");
+		showModal(mdlVenueDelConfirm.name);
 	},
 
 	async deleteVenue() {
@@ -347,7 +347,7 @@ export default {
 				throw new Error("The Venue was not deleted.");
 			}
 
-			closeModal("mdlVenueDelConfirm");
+			closeModal(mdlVenueDelConfirm.name);
 
 			await removeValue("current_venue_id");
 			await removeValue("current_venue_record");
@@ -365,7 +365,38 @@ export default {
 	},
 
 	async cancelDelete() {
-		closeModal("mdlVenueDelConfirm");
+		closeModal(mdlVenueDelConfirm.name);
 		await removeValue("current_venue_id");
-	}
+	},
+
+	async setActive(venueId, active) {
+		const id = Number(venueId || 0);
+
+		if (!id) {
+			showAlert(
+				"Venue ID is missing.",
+				"error"
+			);
+
+			await qryVnuGetVenues.run();
+			return;
+		}
+
+		try {
+			await qryVnuToggleActive.run({
+				venue_id: id,
+				active: active === true
+			});
+
+			await qryVnuGetVenues.run();
+		} catch (error) {
+			showAlert(
+				error?.message ||
+				"Venue status could not be updated.",
+				"error"
+			);
+
+			await qryVnuGetVenues.run();
+		}
+	},
 };

@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "update public.venues\nset\n  active = {{ tblVenues.updatedRow.active === false ? false : true }},\n  updated_at = now()\nwhere id = {{ Number(tblVenues.updatedRow.id || tblVenues.triggeredRow.id || 0) }}\n  and client_id = '{{ appsmith.store.current_client_id }}'::uuid\nreturning id, active;",
+      "body": "select *\nfrom public.set_venue_status(\n\t{{ appsmith.user.email }}::text,\n\t{{ Number(this.params.venue_id || 0) }}::bigint,\n\t{{ appsmith.store.current_client_id }}::uuid,\n\t{{ this.params.active }}::boolean\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

@@ -10,7 +10,7 @@ export default {
 
 	async openAdd() {
 		resetWidget("inpPLAddName");
-		showModal("mdlPLAdd");
+		showModal(mdlPLAdd.name);
 
 		return true;
 	},
@@ -98,7 +98,7 @@ export default {
 
 		resetWidget("inpPLRenameName");
 
-		showModal("mdlPLRename");
+		showModal(mdlPLRename.name);
 
 		return true;
 	},
@@ -137,23 +137,10 @@ export default {
 
 		await qryGetPicklistItems.run();
 
-		closeModal("mdlPLRename");
+		closeModal(mdlPLRename.name);
 
 		showAlert(
 			"Item renamed",
-			"success"
-		);
-
-		return true;
-	},
-
-	async cleanupBlankRows() {
-		await qryCleanupBlankHelperItems.run();
-
-		await qryGetPicklistItems.run();
-
-		showAlert(
-			"Blank list items cleaned up",
 			"success"
 		);
 
@@ -175,7 +162,7 @@ export default {
 		resetWidget("radPLReplaceDeleteAction");
 		resetWidget("selPLReplaceWith");
 
-		showModal("mdlPLReplace");
+		showModal(mdlPLReplace.name);
 
 		return true;
 	},
@@ -233,7 +220,7 @@ export default {
 
 		await qryGetPicklistItems.run();
 
-		closeModal("mdlPLReplace");
+		closeModal(mdlPLReplace.name);
 
 		showAlert(
 			appsmith.store.plReplaceAction === "Replace"

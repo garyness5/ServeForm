@@ -1,7 +1,7 @@
-update public.venues
-set
-  active = {{ tblVenues.updatedRow.active === false ? false : true }},
-  updated_at = now()
-where id = {{ Number(tblVenues.updatedRow.id || tblVenues.triggeredRow.id || 0) }}
-  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
-returning id, active;
+select *
+from public.set_venue_status(
+	{{ appsmith.user.email }}::text,
+	{{ Number(this.params.venue_id || 0) }}::bigint,
+	{{ appsmith.store.current_client_id }}::uuid,
+	{{ this.params.active }}::boolean
+);

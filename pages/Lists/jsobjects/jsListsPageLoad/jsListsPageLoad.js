@@ -6,6 +6,7 @@ export default {
 			return false;
 		}
 
+		await qryGetHelperLists.run();
 		await qryImpSuppliers.run();
 
 		return true;

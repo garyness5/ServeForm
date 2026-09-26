@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "update public.venues\nset\n  deleted = true,\n  active = false,\n  updated_at = now()\nwhere id = {{ Number(tblVenues.selectedRow?.id || 0) }}::bigint\n  and client_id = {{ appsmith.store.current_client_id }}::uuid\n  and coalesce(deleted, false) = false\nreturning id;",
+      "body": "with deleted as (\n\tselect *\n\tfrom public.set_venue_deleted(\n\t\t{{ appsmith.user.email }}::text,\n\t\t{{\n\t\tNumber(\n\t\t\tappsmith.store.current_venue_id ||\n\t\t\ttblVenues.selectedRow?.id ||\n\t\t\t0\n\t\t)\n\t\t}}::bigint,\n\t\t{{ appsmith.store.current_client_id }}::uuid,\n\t\ttrue\n\t)\n)\nselect\n    {{\nNumber(\n\tappsmith.store.current_venue_id ||\n\ttblVenues.selectedRow?.id ||\n\t0\n)\n}}::bigint as id\nfrom deleted;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

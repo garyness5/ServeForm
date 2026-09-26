@@ -207,7 +207,7 @@
       "isVisible": true,
       "label": "Active",
       "notation": "standard",
-      "onCheckChange": "{{\n  qryVnuToggleActive.run()\n    .then(() => qryVnuGetVenues.run())\n}}",
+      "onCheckChange": "{{jsVnuSaveVenue.setActive(\n\ttblVenues.updatedRow.id,\n\ttblVenues.updatedRow.active\n)}}",
       "originalId": "active",
       "sticky": "",
       "textColor": "",
