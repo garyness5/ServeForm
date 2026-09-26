@@ -1,5 +1,12 @@
-select *
-from public.get_event_delete_impact(
-	{{ Number(appsmith.store.current_event_id || 0) }},
-	'{{ appsmith.store.current_client_id }}'::uuid
-);
+select
+    e.id          as event_id,
+    e.event_name,
+    e.client_id,
+    c.client_name
+from public.evt_items e
+join public.clients c
+    on c.id = e.client_id
+where coalesce(e.deleted, false) = false
+order by
+    c.client_name,
+    e.id;

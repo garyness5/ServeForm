@@ -1,5 +1,14 @@
-delete from public.customer_contact_links
-where customer_id =
-      {{ Number(appsmith.store.current_customer_id || 0) }}::bigint
-  and client_id =
-      {{ appsmith.store.current_client_id }}::uuid;
+select *
+from public.sync_customer_contact_links(
+	{{ appsmith.user.email }}::text,
+
+	{{ Number(appsmith.store.current_customer_id || 0) }}::bigint,
+
+	{{ appsmith.store.current_client_id }}::uuid,
+
+	{{
+	msCustomerContacts.selectedOptionValues.length
+	? `{${msCustomerContacts.selectedOptionValues.map(Number).join(",")}}`
+	: "{}"
+	}}::bigint[]
+);

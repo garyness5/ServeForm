@@ -49,7 +49,7 @@
     "customer_names",
     "venue_names"
   ],
-  "columnUpdatedAt": 1784665885681,
+  "columnUpdatedAt": 1790447941052,
   "columnWidthMap": {
     "active": 107,
     "contact_name": 243,
@@ -191,9 +191,9 @@
       "isEditable": true,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "active",
+      "label": "Active",
       "notation": "standard",
-      "onCheckChange": "{{\n\tqryCtcToggleActive.run({\n\t\tcontact_id: currentRow.id,\n\t\tactive: currentRow.active\n\t})\n\t.then(() => qryCtcGetContacts.run())\n\t.catch((error) => {\n\t\tshowAlert(\n\t\t\terror?.message ||\n\t\t\t\t\"Contact status could not be updated.\",\n\t\t\t\"error\"\n\t\t);\n\n\t\treturn qryCtcGetContacts.run();\n\t})\n}}",
+      "onCheckChange": "{{jsContactSave.setActive(tblContacts.selectedRow.id, tblContacts.selectedRow.active)}}",
       "originalId": "active",
       "sticky": "",
       "textSize": "0.875rem",

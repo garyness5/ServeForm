@@ -1,10 +1,7 @@
-update public.customers
-set
-    active = {{ this.params.active }}::boolean,
-    updated_at = now()
-where id = {{ Number(this.params.customer_id || 0) }}::bigint
-  and client_id = {{ appsmith.store.current_client_id }}::uuid
-  and coalesce(deleted, false) = false
-returning
-    id,
-    active;
+select *
+from public.set_customer_status(
+	{{ appsmith.user.email }}::text,
+	{{ Number(this.params.customer_id || 0) }}::bigint,
+	{{ appsmith.store.current_client_id }}::uuid,
+	{{ this.params.active }}::boolean
+);

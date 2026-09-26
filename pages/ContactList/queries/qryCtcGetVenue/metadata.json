@@ -29,7 +29,7 @@
     ],
     "name": "qryCtcGetVenue",
     "pageId": "ContactList",
-    "runBehaviour": "MANUAL",
+    "runBehaviour": "AUTOMATIC",
     "userSetOnLoad": false
   }
 }

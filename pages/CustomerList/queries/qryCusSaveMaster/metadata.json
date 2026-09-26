@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_customer_master(\n  nullif({{ Number(appsmith.store.current_customer_id || 0) }}::bigint, 0),\n  {{ appsmith.store.current_client_id }}::uuid,\n  {{ (inpCustomerName.text ?? \"\").trim() }}::text,\n  {{ inpCustomerCompany.text ?? \"\" }}::text,\n  {{ inpCustomerAddress.text ?? \"\" }}::text,\n  {{ inpCustomerPhone.text ?? \"\" }}::text,\n  {{ inpCustomerMobile.text ?? \"\" }}::text,\n  {{ inpCustomerEmail.text ?? \"\" }}::text,\n  {{ inpCustomerWebsite.text ?? \"\" }}::text,\n  {{ inpCustomerNotes.text ?? \"\" }}::text,\n  {{ chkCustomerActive.isChecked }}::boolean\n);",
+      "body": "select *\nfrom public.save_customer_master(\n\t{{ appsmith.user.email }}::text,\n\n\tnullif(\n\t\t{{ Number(appsmith.store.current_customer_id || 0) }}::bigint,\n\t\t0\n\t),\n\n\t{{ appsmith.store.current_client_id }}::uuid,\n\n\t{{ (inpCustomerName.text ?? \"\").trim() }}::text,\n\t{{ inpCustomerCompany.text ?? \"\" }}::text,\n\t{{ inpCustomerAddress.text ?? \"\" }}::text,\n\t{{ inpCustomerPhone.text ?? \"\" }}::text,\n\t{{ inpCustomerMobile.text ?? \"\" }}::text,\n\t{{ inpCustomerEmail.text ?? \"\" }}::text,\n\t{{ inpCustomerWebsite.text ?? \"\" }}::text,\n\t{{ inpCustomerNotes.text ?? \"\" }}::text,\n\t{{ chkCustomerActive.isChecked }}::boolean\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

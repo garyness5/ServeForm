@@ -3,9 +3,9 @@
   "animateLoading": true,
   "autoFocus": false,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 27,
+  "bottomRow": 35,
   "boxShadow": "none",
-  "defaultText": "{{\n  appsmith.store.contact_form_mode === \"edit\"\n    ? appsmith.store.current_contact_record?.email ?? \"\"\n    : \"\"\n}}",
+  "defaultText": "{{\nappsmith.store.contact_form_mode === \"edit\"\n? appsmith.store.current_contact_record?.email ?? \"\"\n: \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -29,8 +29,8 @@
   "label": "Email",
   "labelAlignment": "left",
   "labelPosition": "Left",
-  "labelStyle": "BOLD",
-  "labelTextSize": "1rem",
+  "labelStyle": "",
+  "labelTextSize": "0.875rem",
   "labelWidth": "10",
   "leftColumn": 1,
   "maxDynamicHeight": 9000,
@@ -51,7 +51,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "showStepArrows": false,
-  "topRow": 23,
+  "topRow": 31,
   "type": "INPUT_WIDGET_V2",
   "version": 2,
   "widgetId": "966p6kswhm",

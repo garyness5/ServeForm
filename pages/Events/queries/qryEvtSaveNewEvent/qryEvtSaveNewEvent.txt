@@ -1,5 +1,6 @@
 select *
 from public.save_new_event(
+	'{{ appsmith.user.email }}'::text,
 	'{{ appsmith.store.current_client_id }}'::uuid,
 
 	'{{

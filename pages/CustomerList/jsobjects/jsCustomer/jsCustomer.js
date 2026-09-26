@@ -43,7 +43,7 @@ export default {
 						closeAfter
 					);
 
-					showModal("mdlCustomerDuplicateWarning");
+					showModal(mdlCustomerDuplicateWarning.name);
 					return;
 				}
 			}
@@ -74,19 +74,12 @@ export default {
 
 			await qryCusDeleteContactLinks.run();
 
-			if (
-				(msCustomerContacts.selectedOptionValues || [])
-				.length > 0
-			) {
-				await qryCusInsertContactLinks.run();
-			}
-
 			await qryCusGetCustomers.run();
 
-			closeModal("mdlCustomerDuplicateWarning");
+			closeModal(mdlCustomerDuplicateWarning.name);
 
 			if (closeAfter) {
-				closeModal("mdlCustomer");
+				closeModal(mdlCustomer.name);
 
 				await this.clearState();
 
@@ -109,7 +102,7 @@ export default {
 	},
 
 	async confirmDuplicate() {
-		closeModal("mdlCustomerDuplicateWarning");
+		closeModal(mdlCustomerDuplicateWarning.name);
 
 		await this.save(
 			appsmith.store.customer_duplicate_close_after !== false,
@@ -147,13 +140,13 @@ export default {
 	},
 
 	async close() {
-		closeModal("mdlCustomer");
+		closeModal(mdlCustomer.name);
 		await this.clearState();
 	},
 
 	async openNew() {
 		await this.prepareNew();
-		showModal("mdlCustomer");
+		showModal(mdlCustomer.name);
 	},
 
 	async openEdit() {
@@ -204,7 +197,7 @@ export default {
 		resetWidget("mdlCustomer", true);
 		resetWidget("msCustomerContacts", true);
 
-		showModal("mdlCustomer");
+		showModal(mdlCustomer.name);
 	},
 
 	async duplicate() {
@@ -286,7 +279,7 @@ export default {
 			resetWidget("mdlCustomer", true);
 			resetWidget("msCustomerContacts", true);
 
-			showModal("mdlCustomer");
+			showModal(mdlCustomer.name);
 
 			showAlert(
 				`${duplicatedCustomer.customer_name} created.`,
@@ -323,7 +316,7 @@ export default {
 			selectedCustomer
 		);
 
-		showModal("mdlCustomerDeleteConfirm");
+		showModal(mdlCustomerDeleteConfirm.name);
 	},
 
 	async deleteCustomer() {
@@ -337,7 +330,7 @@ export default {
 				"warning"
 			);
 
-			closeModal("mdlCustomerDeleteConfirm");
+			closeModal(mdlCustomerDeleteConfirm.name);
 			return;
 		}
 
@@ -369,8 +362,8 @@ export default {
 				);
 			}
 
-			closeModal("mdlCustomerDeleteConfirm");
-			closeModal("mdlCustomer");
+			closeModal(mdlCustomerDeleteConfirm.name);
+			closeModal(mdlCustomer.name);
 
 			await qryCusGetCustomers.run();
 			await this.clearState();
@@ -390,8 +383,39 @@ export default {
 		}
 	},
 
+	async setActive(customerId, active) {
+		const id = Number(customerId || 0);
+
+		if (!id) {
+			showAlert(
+				"Customer ID is missing.",
+				"error"
+			);
+
+			await qryCusGetCustomers.run();
+			return;
+		}
+
+		try {
+			await qryCusToggleActive.run({
+				customer_id: id,
+				active: active === true
+			});
+
+			await qryCusGetCustomers.run();
+		} catch (error) {
+			showAlert(
+				error?.message ||
+				"Customer status could not be updated.",
+				"error"
+			);
+
+			await qryCusGetCustomers.run();
+		}
+	},
+
 	async cancelDelete() {
-		closeModal("mdlCustomerDeleteConfirm");
+		closeModal(mdlCustomerDeleteConfirm.name);
 
 		await removeValue("current_customer_id");
 		await removeValue("current_customer_record");

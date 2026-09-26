@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.set_event_active_from_list(\n\t{{\n\tNumber(\n\t\tappsmith.store.evt_list_active_action?.id || 0\n\t)\n\t}},\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t{{\n\tappsmith.store.evt_list_active_action?.active === true\n\t? 'true'\n\t: 'false'\n\t}}::boolean,\n\t{{\n\tappsmith.store.evt_list_active_confirmed === true\n\t? 'true'\n\t: 'false'\n\t}}::boolean\n);",
+      "body": "select *\nfrom public.set_event_active_from_list(\n\t'{{ appsmith.user.email }}'::text,\n\n\t{{\n\tNumber(\n\t\tappsmith.store.evt_list_active_action?.id || 0\n\t)\n\t}},\n\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\n\t{{\n\tappsmith.store.evt_list_active_action?.active === true\n\t? 'true'\n\t: 'false'\n\t}}::boolean,\n\n\t{{\n\tappsmith.store.evt_list_active_confirmed === true\n\t? 'true'\n\t: 'false'\n\t}}::boolean\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

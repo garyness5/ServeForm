@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_contact_master(\n  null::bigint,\n\n  {{ appsmith.store.current_client_id }}::uuid,\n\n  {{ (inpContactName.text ?? \"\").trim() }}::text,\n  {{ (inpContactTitle.text ?? \"\").trim() }}::text,\n  {{ (inpContactPhone.text ?? \"\").trim() }}::text,\n  {{ (inpContactMobile.text ?? \"\").trim() }}::text,\n  {{ (inpContactEmail.text ?? \"\").trim() }}::text,\n  {{ (inpContactNotes.text ?? \"\").trim() }}::text,\n\n  true::boolean,\n\n  case\n    when coalesce(\n      {{ Number(appsmith.store.current_customer_id || 0) }},\n      0\n    ) > 0\n    then array[\n      {{ Number(appsmith.store.current_customer_id || 0) }}\n    ]::bigint[]\n    else '{}'::bigint[]\n  end,\n\n  '{}'::bigint[]\n);",
+      "body": "select *\nfrom public.save_contact_master(\n\t{{ appsmith.user.email }}::text,\n\n\tnull::bigint,\n\n\t{{ appsmith.store.current_client_id }}::uuid,\n\n\t{{ (inpContactName.text ?? \"\").trim() }}::text,\n\t{{ (inpContactTitle.text ?? \"\").trim() }}::text,\n\t{{ (inpContactPhone.text ?? \"\").trim() }}::text,\n\t{{ (inpContactMobile.text ?? \"\").trim() }}::text,\n\t{{ (inpContactEmail.text ?? \"\").trim() }}::text,\n\t{{ (inpContactNotes.text ?? \"\").trim() }}::text,\n\n\ttrue::boolean,\n\n\tcase\n\twhen coalesce(\n\t\t{{ Number(appsmith.store.current_customer_id || 0) }},\n\t\t0\n\t) > 0\n\tthen array[\n\t\t{{ Number(appsmith.store.current_customer_id || 0) }}\n\t]::bigint[]\n\telse '{}'::bigint[]\n\tend,\n\n\t'{}'::bigint[]\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

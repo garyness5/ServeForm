@@ -2,7 +2,7 @@
   "animateLoading": true,
   "borderColor": "#d4d4d8",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 17,
+  "bottomRow": 15,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -44,7 +44,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 59,
   "shouldTruncate": false,
-  "text": "{{\n  tblContacts.selectedRow?.contact_name\n    ? `Delete Contact \"${tblContacts.selectedRow.contact_name}\"?<br><br>The Contact will be removed from Contact lists and picklists. Existing references may continue to display the deleted Contact as a warning.`\n    : \"Delete this Contact?\"\n}}",
+  "text": "{{\n`The Contact will be removed from Contact list and dropdowns.<br><br>Delete this Contact?`\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 7,

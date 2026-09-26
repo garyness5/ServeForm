@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select public.duplicate_contact_master(\n    {{ Number(tblContacts.selectedRow.id || 0) }},\n    '{{ appsmith.store.current_client_id }}'::uuid\n) as new_contact_id;",
+      "body": "select public.duplicate_contact_master(\n\t{{ appsmith.user.email }}::text,\n\t{{ Number(tblContacts.selectedRow.id || 0) }}::bigint,\n\t{{ appsmith.store.current_client_id }}::uuid\n) as new_contact_id;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

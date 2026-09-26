@@ -1,9 +1,13 @@
-update public.contacts
-set
-  deleted = true,
-  active = false,
-  updated_at = now()
-where id = {{ Number(tblContacts.selectedRow.id || 0) }}
-  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and coalesce(deleted, false) = false
-returning id;
+with deleted as (
+	select *
+	from public.set_contact_deleted(
+		{{ appsmith.user.email }}::text,
+		{{ Number(tblContacts.selectedRow.id || 0) }}::bigint,
+		{{ appsmith.store.current_client_id }}::uuid,
+		true
+	)
+)
+select
+    {{ Number(tblContacts.selectedRow.id || 0) }}::bigint as id,
+    {{ tblContacts.selectedRow.contact_name }}::text as contact_name
+from deleted;

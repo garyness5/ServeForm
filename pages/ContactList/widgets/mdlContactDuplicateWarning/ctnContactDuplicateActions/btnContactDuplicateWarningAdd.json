@@ -37,7 +37,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ contactSave.confirmDuplicate() }}",
+  "onClick": "{{ jsContactSave.confirmDuplicate() }}",
   "originalBottomRow": 36,
   "originalTopRow": 32,
   "parentId": "cvt2z5mwyr",

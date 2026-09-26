@@ -29,7 +29,7 @@
     ],
     "name": "qryCtcGetContacts",
     "pageId": "ContactList",
-    "runBehaviour": "AUTOMATIC",
-    "userSetOnLoad": false
+    "runBehaviour": "MANUAL",
+    "userSetOnLoad": true
   }
 }

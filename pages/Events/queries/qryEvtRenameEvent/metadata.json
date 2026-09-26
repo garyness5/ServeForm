@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.rename_event(\n    {{ Number(appsmith.store.current_event_id || 0) }},\n    '{{ appsmith.store.current_client_id }}'::uuid,\n    '{{ (inpEvtRenameName.text || \"\").trim().replaceAll(\"'\", \"''\") }}'\n);",
+      "body": "select *\nfrom public.rename_event(\n\t'{{ appsmith.user.email }}'::text,\n\t{{ Number(appsmith.store.current_event_id || 0) }},\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t'{{ (inpEvtRenameName.text || \"\").trim().replaceAll(\"'\", \"''\") }}'\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

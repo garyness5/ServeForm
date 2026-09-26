@@ -3,9 +3,9 @@
   "animateLoading": true,
   "autoFocus": false,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 19,
+  "bottomRow": 27,
   "boxShadow": "none",
-  "defaultText": "{{\n  appsmith.store.contact_form_mode === \"edit\"\n    ? (appsmith.store.current_contact_record?.phone || \"\")\n    : \"\"\n}}",
+  "defaultText": "{{\nappsmith.store.contact_form_mode === \"edit\"\n? (appsmith.store.current_contact_record?.phone || \"\")\n: \"\"\n}}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -29,8 +29,8 @@
   "label": "Phone",
   "labelAlignment": "left",
   "labelPosition": "Left",
-  "labelStyle": "BOLD",
-  "labelTextSize": "1rem",
+  "labelStyle": "",
+  "labelTextSize": "0.875rem",
   "labelWidth": "10",
   "leftColumn": 1,
   "maxDynamicHeight": 9000,
@@ -52,7 +52,7 @@
   "rightColumn": 63,
   "shouldAllowAutofill": false,
   "showStepArrows": false,
-  "topRow": 15,
+  "topRow": 23,
   "type": "INPUT_WIDGET_V2",
   "version": 2,
   "widgetId": "0jv0nq3bkb",

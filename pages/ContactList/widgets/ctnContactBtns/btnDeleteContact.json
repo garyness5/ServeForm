@@ -43,7 +43,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ contactSave.openDelete() }}",
+  "onClick": "{{ jsContactSave.openDelete() }}",
   "parentColumnSpace": 10.609375,
   "parentId": "m9kgzdtc6h",
   "parentRowSpace": 10,

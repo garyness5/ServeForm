@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.set_customer_deleted(\n    {{ Number(appsmith.store.current_customer_id) }}::bigint,\n    {{ appsmith.store.current_client_id }}::uuid,\n    true\n);",
+      "body": "select *\nfrom public.set_customer_deleted(\n\t{{ appsmith.user.email }}::text,\n\t{{ Number(appsmith.store.current_customer_id) }}::bigint,\n\t{{ appsmith.store.current_client_id }}::uuid,\n\ttrue\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

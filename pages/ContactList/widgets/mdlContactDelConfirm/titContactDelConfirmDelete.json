@@ -41,7 +41,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 55,
   "shouldTruncate": false,
-  "text": "{{\n  \"Delete: \" + (tblContacts.selectedRow?.contact_name || \"\")\n}}",
+  "text": "{{\n  \"Delete \" + (tblContacts.selectedRow?.contact_name || \"\")\n+ \"?\"}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 1,
