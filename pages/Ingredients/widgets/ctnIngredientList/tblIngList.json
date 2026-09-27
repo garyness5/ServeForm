@@ -65,10 +65,10 @@
     "deleted",
     "created_at"
   ],
-  "columnUpdatedAt": 1789049347796,
+  "columnUpdatedAt": 1790519655824,
   "columnWidthMap": {
     "active": 95,
-    "allergen_names": 60,
+    "allergen_names": 98,
     "base_unit": 103,
     "category": 134,
     "category_id": 79,
@@ -285,9 +285,6 @@
       "key": "primaryColumns.purchase_unit.onOptionChange"
     },
     {
-      "key": "primaryColumns.category_name.onOptionChange"
-    },
-    {
       "key": "primaryColumns.packaging_name.onOptionChange"
     },
     {
@@ -298,6 +295,9 @@
     },
     {
       "key": "primaryColumns.supplier_name.onOptionChange"
+    },
+    {
+      "key": "primaryColumns.category_name.onOptionChange"
     }
   ],
   "enableClientSideSearch": true,
@@ -325,6 +325,7 @@
   "mobileTopRow": 13,
   "needsErrorInfo": false,
   "oddRowColor": "{{appsmith.theme.colors.backgroundColor}}",
+  "onRowSelected": "{{}}",
   "originalBottomRow": 81,
   "originalTopRow": 9,
   "parentColumnSpace": 16.109375,
@@ -490,7 +491,7 @@
       "isVisible": true,
       "label": "Category",
       "notation": "standard",
-      "onOptionChange": "{{\njsIngList.saveCategoryInline(\n\ttblIngList.updatedRow.id,\n\ttblIngList.updatedRow.category_name\n)\n}}",
+      "onOptionChange": "{{ jsIngList.saveCategoryInline(currentRow.id, currentRow.category_name) }}",
       "originalId": "category_name",
       "selectOptions": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n[\n\t{\n\t\tlabel: \"\",\n\t\tvalue: \"\"\n\t},\n\t...(qryIngGetCategories.data || []).map(x => ({\n\t\tlabel: x.name,\n\t\tvalue: String(x.id)\n\t}))\n]\n)) : \n[\n\t{\n\t\tlabel: \"\",\n\t\tvalue: \"\"\n\t},\n\t...(qryIngGetCategories.data || []).map(x => ({\n\t\tlabel: x.name,\n\t\tvalue: String(x.id)\n\t}))\n]\n })()}}",
       "sortBy": "label",
@@ -999,7 +1000,7 @@
       "isVisible": true,
       "label": "Pack",
       "notation": "standard",
-      "onOptionChange": "{{\njsIngList.savePackagingInline(\n\ttblIngList.updatedRow.id,\n\ttblIngList.updatedRow.packaging_name\n)\n}}",
+      "onOptionChange": "{{ jsIngList.savePackagingInline(currentRow.id, currentRow.packaging_name) }}",
       "originalId": "packaging_name",
       "selectOptions": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n[\n\t{\n\t\tlabel: \"\",\n\t\tvalue: \"\"\n\t},\n\t...(qryIngGetPackaging.data || []).map(x => ({\n\t\tlabel: x.name,\n\t\tvalue: String(x.id)\n\t}))\n]\n)) : \n[\n\t{\n\t\tlabel: \"\",\n\t\tvalue: \"\"\n\t},\n\t...(qryIngGetPackaging.data || []).map(x => ({\n\t\tlabel: x.name,\n\t\tvalue: String(x.id)\n\t}))\n]\n })()}}",
       "sticky": "",
@@ -1070,7 +1071,7 @@
       "isVisible": true,
       "label": "Unit",
       "notation": "standard",
-      "onOptionChange": "{{\n!tblIngList.updatedRow.purchase_unit_id\n? jsIngList.openSetUnit(tblIngList.updatedRow)\n: jsIngList.saveUnitInline(\n\ttblIngList.updatedRow.id,\n\ttblIngList.updatedRow.purchase_unit\n)\n}}",
+      "onOptionChange": "{{\ncurrentRow.purchase_unit === \"__SET__\"\n? jsIngList.openSetUnit(currentRow)\n: jsIngList.saveUnitInline(\n\tcurrentRow.id,\n\tcurrentRow.purchase_unit\n)\n}}",
       "originalId": "purchase_unit",
       "selectOptions": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\ncurrentRow.purchase_unit_id\n? jsIngList.unitOptions(currentRow.unit_type)\n: [\n\t{\n\t\tlabel: \"Set\",\n\t\tvalue: \"__SET__\"\n\t}\n]\n)) : \ncurrentRow.purchase_unit_id\n? jsIngList.unitOptions(currentRow.unit_type)\n: [\n\t{\n\t\tlabel: \"Set\",\n\t\tvalue: \"__SET__\"\n\t}\n]\n })()}}",
       "sortBy": "label",
@@ -1209,7 +1210,7 @@
       "isVisible": true,
       "label": "Supplier",
       "notation": "standard",
-      "onOptionChange": "{{\njsIngList.saveSupplierInline(\n\ttblIngList.updatedRow.id,\n\ttblIngList.updatedRow.supplier_name\n)\n}}",
+      "onOptionChange": "{{ jsIngList.saveSupplierInline(currentRow.id, currentRow.supplier_name) }}",
       "originalId": "supplier_name",
       "selectOptions": "{{(() => { const tableData = tblIngList.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\n[\n\t{\n\t\tlabel: \"\",\n\t\tvalue: \"\"\n\t},\n\t...(qryIngGetSuppliers.data || []).map(x => ({\n\t\tlabel: x.name,\n\t\tvalue: String(x.id)\n\t}))\n]\n)) : \n[\n\t{\n\t\tlabel: \"\",\n\t\tvalue: \"\"\n\t},\n\t...(qryIngGetSuppliers.data || []).map(x => ({\n\t\tlabel: x.name,\n\t\tvalue: String(x.id)\n\t}))\n]\n })()}}",
       "sticky": "",

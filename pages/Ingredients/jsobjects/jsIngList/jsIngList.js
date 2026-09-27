@@ -108,7 +108,7 @@ export default {
 		}
 
 		try {
-			await qryIngUpdateIngredientInline.run({
+			await qryIngUpdateInline.run({
 				ingredient_id:
 				Number(row.id),
 
@@ -179,7 +179,7 @@ export default {
 		}
 
 		try {
-			await qryIngRenameIngredient.run({
+			await qryIngRename.run({
 				ingredient_id: ingredientId,
 				new_name: newName
 			});
@@ -250,7 +250,7 @@ export default {
 		}
 
 		try {
-			await qryIngUpdateIngredientInline.run({
+			await qryIngUpdateInline.run({
 				ingredient_id:
 				Number(ingredientId),
 
@@ -312,24 +312,10 @@ export default {
 	// CATEGORY
 	// ============================================================
 
-	async saveCategoryInline(
-		ingredientId,
-		newCategoryId
-	) {
-		if (!ingredientId) {
-			showAlert(
-				"Ingredient Category could not be identified.",
-				"error"
-			);
-
-			return false;
-		}
-
+	async saveCategoryInline(ingredientId, newCategoryId) {
 		try {
-			await qryIngUpdateIngredientInline.run({
-				ingredient_id:
-				Number(ingredientId),
-
+			await qryIngUpdateInline.run({
+				ingredient_id: Number(ingredientId),
 				changes: {
 					category_id:
 					newCategoryId
@@ -339,34 +325,10 @@ export default {
 			});
 
 			await qryIngGetIngredients.run();
-
-			resetWidget(
-				"tblIngList",
-				true
-			);
-
-			showAlert(
-				"Ingredient updated.",
-				"success"
-			);
-
-			return true;
+			resetWidget("tblIngList", true);
 
 		} catch (e) {
-			await qryIngGetIngredients.run();
-
-			resetWidget(
-				"tblIngList",
-				true
-			);
-
-			showAlert(
-				e?.message ||
-				"Ingredient Category could not be updated.",
-				"error"
-			);
-
-			return false;
+			showAlert(e?.message || String(e), "error");
 		}
 	},
 
@@ -389,7 +351,7 @@ export default {
 		}
 
 		try {
-			await qryIngUpdateIngredientInline.run({
+			await qryIngUpdateInline.run({
 				ingredient_id:
 				Number(ingredientId),
 
@@ -452,7 +414,7 @@ export default {
 		}
 
 		try {
-			await qryIngUpdateIngredientInline.run({
+			await qryIngUpdateInline.run({
 				ingredient_id:
 				Number(ingredientId),
 
@@ -520,7 +482,7 @@ export default {
 		}
 
 		try {
-			await qryIngUpdateIngredientInline.run({
+			await qryIngUpdateInline.run({
 				ingredient_id:
 				ingredientId,
 

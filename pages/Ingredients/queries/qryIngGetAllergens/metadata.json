@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select\n    hli.id,\n    hli.name,\n    hli.is_system\nfrom public.helper_list_items hli\njoin public.helper_lists hl\n    on hl.id = hli.list_id\nwhere hli.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and hl.list_code = 'diet_tag'\n  and hli.active = true\n  and coalesce(hli.deleted, false) = false\norder by\n    hli.is_system desc,\n    hli.sort_order nulls last,\n    hli.name;",
+      "body": "select\n    hli.id,\n    hli.name,\n    hli.is_system\nfrom public.helper_list_items hli\njoin public.helper_lists hl\n    on hl.id = hli.list_id\nwhere hl.list_code = 'allergen'\n  and hli.is_system = true\n  and hli.active = true\n  and coalesce(hli.deleted, false) = false\norder by\n    hli.sort_order nulls last,\n    hli.name;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
@@ -22,11 +22,7 @@
       "name": "FoodCostingDB",
       "pluginId": "postgres-plugin"
     },
-    "dynamicBindingPathList": [
-      {
-        "key": "body"
-      }
-    ],
+    "dynamicBindingPathList": [],
     "name": "qryIngGetAllergens",
     "pageId": "Ingredients",
     "runBehaviour": "MANUAL",

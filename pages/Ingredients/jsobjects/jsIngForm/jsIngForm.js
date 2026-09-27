@@ -326,7 +326,7 @@ export default {
 
 		try {
 			const result =
-						await qryIngSaveIngredient.run();
+						await qryIngSave.run();
 
 			const savedId =
 						Number(
@@ -558,13 +558,13 @@ export default {
 
 		try {
 			const result =
-						await qryIngDelIng.run({
+						await qryIngDelete.run({
 							ingredient_id: id
 						});
 
 			const deletedId =
 						Number(
-							result?.[0]?.id || 0
+							result?.[0]?.ingredient_id || 0
 						);
 
 			if (!deletedId) {

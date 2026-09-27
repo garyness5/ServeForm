@@ -47,6 +47,7 @@
   "mobileRightColumn": 24,
   "mobileTopRow": 7,
   "needsErrorInfo": false,
+  "onOptionChange": "{{}}",
   "optionLabel": "label",
   "optionValue": "value",
   "originalBottomRow": 27,
