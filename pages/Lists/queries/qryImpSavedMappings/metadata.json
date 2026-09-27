@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.get_ingredient_import_saved_mappings(\n\t{{ appsmith.store.current_client_id }}::uuid,\n\n\t{{\n\t!selImportListSupplier.selectedOptionValue\n\t? null\n\t: selImportListSupplier.selectedOptionValue === \"__NO_SUPPLIER__\"\n\t? null\n\t: Number(selImportListSupplier.selectedOptionValue)\n\t}},\n\n\t{{\n\tappsmith.store.impHeaderSignature || null\n\t}}\n);",
+      "body": "select *\nfrom public.get_ingredient_import_saved_mappings(\n\t'{{ appsmith.user.email }}'::text,\n\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\n\t{{\n\t!selImportListSupplier.selectedOptionValue\n\t? null\n\t: selImportListSupplier.selectedOptionValue === \"__NO_SUPPLIER__\"\n\t? null\n\t: Number(selImportListSupplier.selectedOptionValue)\n\t}},\n\n\t{{\n\tappsmith.store.impHeaderSignature || null\n\t}}\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

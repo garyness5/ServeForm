@@ -1,5 +1,7 @@
 SELECT public.commit_ingredient_import(
-	{{ appsmith.store.current_client_id }}::uuid,
+	'{{ appsmith.user.email }}'::text,
+
+	'{{ appsmith.store.current_client_id }}'::uuid,
 
 	{{
 	appsmith.store.impReviewSnapshot?.supplier_id === "__NO_SUPPLIER__"
@@ -11,25 +13,25 @@ SELECT public.commit_ingredient_import(
 	appsmith.store.impReviewSnapshot?.supplier_id === "__NO_SUPPLIER__"
 	}}::boolean,
 
-	{{
+	'{{
 	appsmith.store.impReviewSnapshot?.header_signature || ""
-	}}::text,
+	}}'::text,
 
-	{{
+	'{{
 	JSON.stringify(
 		appsmith.store.impReviewSnapshot?.header_mappings || []
-	)
-	}}::jsonb,
+	).replaceAll("'", "''")
+	}}'::jsonb,
 
-	{{
+	'{{
 	JSON.stringify(
 		appsmith.store.impReviewSnapshot?.value_mappings || []
-	)
-	}}::jsonb,
+	).replaceAll("'", "''")
+	}}'::jsonb,
 
-	{{
+	'{{
 	JSON.stringify(
 		appsmith.store.impReviewSnapshot?.rows || []
-	)
-	}}::jsonb
+	).replaceAll("'", "''")
+	}}'::jsonb
 ) AS result;

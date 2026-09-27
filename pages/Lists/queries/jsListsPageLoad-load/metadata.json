@@ -1,5 +1,5 @@
 {
-  "gitSyncId": "6a0a1bde3214f344228346e7_818f7c85-5ee3-48db-8211-dc412c95cf91",
+  "gitSyncId": "6a0a1bde3214f344228346e7_f77eec4a-1843-49f2-ac21-7d94f959c74e",
   "id": "Lists_jsListsPageLoad.load",
   "pluginId": "js-plugin",
   "pluginType": "JS",
@@ -25,7 +25,7 @@
     "fullyQualifiedName": "jsListsPageLoad.load",
     "name": "load",
     "pageId": "Lists",
-    "runBehaviour": "MANUAL",
-    "userSetOnLoad": false
+    "runBehaviour": "ON_PAGE_LOAD",
+    "userSetOnLoad": true
   }
 }

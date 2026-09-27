@@ -1,6 +1,8 @@
 select *
 from public.get_ingredient_import_saved_mappings(
-	{{ appsmith.store.current_client_id }}::uuid,
+	'{{ appsmith.user.email }}'::text,
+
+	'{{ appsmith.store.current_client_id }}'::uuid,
 
 	{{
 	!selImportListSupplier.selectedOptionValue
