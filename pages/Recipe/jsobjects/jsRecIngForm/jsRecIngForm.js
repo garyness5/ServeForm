@@ -5,6 +5,19 @@ export default {
 			true
 		);
 
+		await qryRecGetIngCategories.run();
+
+		showModal(
+			mdlRecIngAddIng.name
+		);
+
+		return true;
+	},async openAdd() {
+		await resetWidget(
+			mdlRecIngAddIng.name,
+			true
+		);
+
 		showModal(
 			mdlRecIngAddIng.name
 		);
