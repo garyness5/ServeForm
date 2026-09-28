@@ -32,7 +32,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{ qryDeleteDsh.isLoading }}",
+  "isDisabled": "{{ qryDshListDelete.isLoading }}",
   "isLoading": false,
   "isVisible": true,
   "key": "db5p08m351",

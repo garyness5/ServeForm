@@ -7,9 +7,9 @@ export default {
 		}
 
 		await Promise.all([
-			qryGetDshFormats.run(),
-			qryGetDshDietTags.run(),
-			qryGetDshComponentItems.run()
+			qryDshGetFormats.run(),
+			qryDshGetDietTags.run(),
+			qryDshGetComponentItems.run()
 		]);
 
 		const mode =
@@ -49,9 +49,9 @@ export default {
 		}
 
 		await Promise.all([
-			qryGetDshItemById.run(),
-			qryGetSelectedDshDietTags.run(),
-			qryGetDshComponents.run()
+			qryDshGetItemById.run(),
+			qryDshGetSelectedDietTags.run(),
+			qryDshGetComponents.run()
 		]);
 
 		await jsDshWorkspace.initializeFromSaved();

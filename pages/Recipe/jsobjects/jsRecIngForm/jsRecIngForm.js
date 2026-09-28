@@ -12,17 +12,6 @@ export default {
 		);
 
 		return true;
-	},async openAdd() {
-		await resetWidget(
-			mdlRecIngAddIng.name,
-			true
-		);
-
-		showModal(
-			mdlRecIngAddIng.name
-		);
-
-		return true;
 	},
 
 	validate() {

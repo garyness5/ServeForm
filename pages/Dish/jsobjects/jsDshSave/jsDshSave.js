@@ -98,7 +98,7 @@ export default {
 
 	impactCount() {
 		const impact =
-					qryGetDshImpactCount.data?.[0] || {};
+					qryDshGetImpactCount.data?.[0] || {};
 
 		return Number(
 			impact.menu_count || 0
@@ -122,7 +122,7 @@ export default {
 			);
 
 			const result =
-						await qrySaveDish.run();
+						await qryDshSaveDish.run();
 
 			const savedId =
 						Number(
@@ -144,9 +144,9 @@ export default {
 			);
 
 			await Promise.all([
-				qryGetDshItemById.run(),
-				qryGetSelectedDshDietTags.run(),
-				qryGetDshComponents.run()
+				qryDshGetItemById.run(),
+				qryDshGetSelectedDietTags.run(),
+				qryDshGetComponents.run()
 			]);
 
 			await jsDshCompTable.loadFromQuery();
@@ -430,7 +430,7 @@ export default {
 	async deleteDishStart() {
 		await jsDshWorkspace.capture();
 
-		await qryGetDshImpactCount.run();
+		await qryDshGetImpactCount.run();
 
 		showModal(
 			mdlDshDelete.name
@@ -442,7 +442,7 @@ export default {
 	async deleteDishConfirm() {
 		try {
 			const result =
-						await qryDeleteDish.run();
+						await qryDshDelete.run();
 
 			const deletedId =
 						Number(
@@ -501,7 +501,7 @@ export default {
 
 	impactMenuCount() {
 		return Number(
-			qryGetDshImpactCount.data?.[0]?.menu_count || 0
+			qryDshGetImpactCount.data?.[0]?.menu_count || 0
 		);
 	},
 

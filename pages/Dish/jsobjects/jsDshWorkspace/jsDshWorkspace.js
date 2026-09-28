@@ -348,11 +348,11 @@ export default {
 	savedHeaderFromQuery() {
 		const row =
 					Array.isArray(
-						qryGetDshItemById.data
+						qryDshGetItemById.data
 					)
-		? qryGetDshItemById
+		? qryDshGetItemById
 		.data[0]
-		: qryGetDshItemById
+		: qryDshGetItemById
 		.data;
 
 		if (!row) {
@@ -385,7 +385,7 @@ export default {
 
 	savedDietTagsFromQuery() {
 		return this.normalizeDietTags(
-			qryGetSelectedDshDietTags
+			qryDshGetSelectedDietTags
 			.data ||
 			[]
 		);
@@ -393,7 +393,7 @@ export default {
 
 	savedComponentsFromQuery() {
 		return this.normalizeComponents(
-			qryGetDshComponents
+			qryDshGetComponents
 			.data ||
 			[]
 		);

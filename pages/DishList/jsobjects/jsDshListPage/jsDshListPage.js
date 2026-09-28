@@ -7,8 +7,8 @@ export default {
 		}
 
 		await Promise.all([
-			qryGetDshCategories.run(),
-			qryGetDishList.run()
+			qryDshListGetDshCategories.run(),
+			qryDshListGetDishList.run()
 		]);
 
 		return true;

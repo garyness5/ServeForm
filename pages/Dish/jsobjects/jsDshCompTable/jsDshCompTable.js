@@ -217,7 +217,7 @@ export default {
 
 	async loadFromQuery() {
 		const queryRows =
-					qryGetDshComponents.data || [];
+					qryDshGetComponents.data || [];
 
 		return await this.setRows(
 			queryRows
@@ -443,7 +443,7 @@ export default {
 		}
 
 		const categories =
-					(qryGetDshComponentItems.data || [])
+					(qryDshGetComponentItems.data || [])
 		.filter(i =>
 						i.item_type === itemType
 					 )
@@ -474,7 +474,7 @@ export default {
 					this.usedItemKeys(row);
 
 		return (
-			qryGetDshComponentItems.data || []
+			qryDshGetComponentItems.data || []
 		)
 			.filter(i =>
 							i.item_type === itemType
@@ -516,7 +516,7 @@ export default {
 				 ) || row;
 
 		const item =
-					(qryGetDshComponentItems.data || [])
+					(qryDshGetComponentItems.data || [])
 		.find(i =>
 					i.item_type ===
 					freshRow.item_type &&
@@ -711,7 +711,7 @@ export default {
 			}
 
 			const item =
-						(qryGetDshComponentItems.data || [])
+						(qryDshGetComponentItems.data || [])
 			.find(i =>
 						i.item_type ===
 						r.item_type &&
@@ -720,7 +720,7 @@ export default {
 					 );
 
 			const unit =
-						(qryGetDshComponentUnits.data || [])
+						(qryDshGetComponentUnits.data || [])
 			.find(u =>
 						u.abbreviation ===
 						r.unit_abbreviation
@@ -794,7 +794,7 @@ export default {
 		}
 
 		return (
-			qryGetDshComponentUnits.data || []
+			qryDshGetComponentUnits.data || []
 		)
 			.filter(u =>
 							u.unit_type ===
@@ -834,7 +834,7 @@ export default {
 		}
 
 		const item =
-					(qryGetDshComponentItems.data || [])
+					(qryDshGetComponentItems.data || [])
 		.find(i =>
 					i.item_type ===
 					row.item_type &&
@@ -843,7 +843,7 @@ export default {
 				 );
 
 		const unit =
-					(qryGetDshComponentUnits.data || [])
+					(qryDshGetComponentUnits.data || [])
 		.find(u =>
 					Number(u.id) ===
 					Number(
@@ -905,7 +905,7 @@ export default {
 		}
 
 		const item =
-					(qryGetDshComponentItems.data || [])
+					(qryDshGetComponentItems.data || [])
 		.find(i =>
 					i.item_type ===
 					row.item_type &&
@@ -919,7 +919,7 @@ export default {
 				 );
 
 		const unit =
-					(qryGetDshComponentUnits.data || [])
+					(qryDshGetComponentUnits.data || [])
 		.find(u =>
 					u.abbreviation ===
 					row.unit_abbreviation

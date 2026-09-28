@@ -1,8 +1,7 @@
-update public.dsh_items
-set
-  active = {{ this.params.active === true }},
-  updated_at = now()
-where id = {{ Number(this.params.dish_id || 0) }}
-  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and coalesce(deleted, false) = false
-returning id, active;
+select *
+from public.set_dish_active(
+	'{{ appsmith.user.email }}'::text,
+	{{ Number(this.params.dish_id || 0) }}::bigint,
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	{{ this.params.active === true }}::boolean
+);

@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "update public.dsh_items\nset\n  active = {{ this.params.active === true }},\n  updated_at = now()\nwhere id = {{ Number(this.params.dish_id || 0) }}\n  and client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\nreturning id, active;",
+      "body": "select *\nfrom public.set_dish_active(\n\t'{{ appsmith.user.email }}'::text,\n\t{{ Number(this.params.dish_id || 0) }}::bigint,\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t{{ this.params.active === true }}::boolean\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

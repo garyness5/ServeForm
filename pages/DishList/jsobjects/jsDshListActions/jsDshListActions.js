@@ -107,7 +107,7 @@ export default {
 			return false;
 		}
 
-		await qryGetDshListImpactCount.run();
+		await qryDshListGetImpactCount.run();
 
 		showModal(
 			mdlDshListDelete.name
@@ -131,7 +131,7 @@ export default {
 
 		try {
 			const result =
-						await qryDeleteDsh.run({
+						await qryDshListDelete.run({
 							dish_id: dishId
 						});
 
@@ -158,7 +158,7 @@ export default {
 				mdlDshListDelete.name
 			);
 
-			await qryGetDishList.run();
+			await qryDshListGetDishList.run();
 
 			showAlert(
 				"Dish deleted.",
@@ -180,7 +180,7 @@ export default {
 
 	impactMenuCount() {
 		return Number(
-			qryGetDshListImpactCount.data?.[0]?.menu_count || 0
+			qryDshListGetImpactCount.data?.[0]?.menu_count || 0
 		);
 	},
 
@@ -210,7 +210,7 @@ export default {
 				category_id: categoryId
 			});
 
-			await qryGetDishList.run();
+			await qryDshListGetDishList.run();
 
 			return true;
 
@@ -221,7 +221,7 @@ export default {
 				"error"
 			);
 
-			await qryGetDishList.run();
+			await qryDshListGetDishList.run();
 
 			return false;
 		}
@@ -241,7 +241,7 @@ export default {
 				active: active === true
 			});
 
-			await qryGetDishList.run();
+			await qryDshListGetDishList.run();
 
 			return true;
 
@@ -252,7 +252,7 @@ export default {
 				"error"
 			);
 
-			await qryGetDishList.run();
+			await qryDshListGetDishList.run();
 
 			return false;
 		}
@@ -269,7 +269,7 @@ export default {
 	},
 
 	filteredRows() {
-		const rows = qryGetDishList.data || [];
+		const rows = qryDshListGetDishList.data || [];
 		const search = this.searchText();
 		const status = this.statusFilter();
 

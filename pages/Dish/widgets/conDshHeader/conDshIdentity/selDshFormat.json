@@ -57,7 +57,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 63,
   "serverSideFiltering": false,
-  "sourceData": "{{\n(qryGetDshFormats.data || []).map(x => ({\n\tlabel: x.name,\n\tvalue: String(x.id)\n}))\n}}",
+  "sourceData": "{{\n(qryDshGetFormats.data || []).map(x => ({\n\tlabel: x.name,\n\tvalue: String(x.id)\n}))\n}}",
   "topRow": 13,
   "type": "SELECT_WIDGET",
   "version": 1,

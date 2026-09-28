@@ -1,5 +1,0 @@
-select *
-from public.delete_dish(
-	{{ Number(this.params.dish_id || 0) }},
-	'{{ appsmith.store.current_client_id }}'::uuid
-);
