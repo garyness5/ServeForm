@@ -72,8 +72,6 @@ export default {
 				customerName
 			);
 
-			await qryCusDeleteContactLinks.run();
-
 			await qryCusGetCustomers.run();
 
 			closeModal(mdlCustomerDuplicateWarning.name);
@@ -407,6 +405,35 @@ export default {
 			showAlert(
 				error?.message ||
 				"Customer status could not be updated.",
+				"error"
+			);
+
+			await qryCusGetCustomers.run();
+		}
+	},
+
+	async toggleActive() {
+		const row = tblCustomers.triggeredRow;
+
+		const customerId = Number(row?.id || 0);
+
+		if (!customerId) {
+			showAlert("Customer ID is missing.", "error");
+			await qryCusGetCustomers.run();
+			return;
+		}
+
+		try {
+			await qryCusToggleActive.run({
+				customer_id: customerId,
+				active: Boolean(row.active)
+			});
+
+			await qryCusGetCustomers.run();
+
+		} catch (error) {
+			showAlert(
+				error?.message || "Customer status could not be updated.",
 				"error"
 			);
 

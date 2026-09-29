@@ -2,10 +2,9 @@ select *
 from public.save_new_event(
 	'{{ appsmith.user.email }}'::text,
 	'{{ appsmith.store.current_client_id }}'::uuid,
-
 	'{{
 	JSON.stringify(
-		jsEvtSave.headerSnapshotFromPage()
+		appsmith.store.event_new_save_request?.header || {}
 	).replaceAll("'", "''")
 	}}'::jsonb
 );

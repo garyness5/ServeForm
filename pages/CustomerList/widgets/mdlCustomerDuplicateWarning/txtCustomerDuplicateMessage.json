@@ -44,7 +44,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 61,
   "shouldTruncate": false,
-  "text": "{{\n  `\"${appsmith.store.customer_duplicate_name}\" is already registered as a ${appsmith.store.customer_duplicate_entity}.\n\nThis ${appsmith.store.customer_duplicate_entity} will be added as a new entry.\nThe existing ${appsmith.store.customer_duplicate_entity} will not be changed.\n\nDo you want to add this ${appsmith.store.customer_duplicate_entity} anyway?`\n}}",
+  "text": "{{\n`\"${appsmith.store.customer_duplicate_name}\" is already registered as a ${appsmith.store.customer_duplicate_entity}.\n\nThis ${appsmith.store.customer_duplicate_entity} will be added as a new entry.\nThe existing ${appsmith.store.customer_duplicate_entity} will not be changed.\n\nDo you want to add this ${appsmith.store.customer_duplicate_entity} anyway?`\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 7,

@@ -37,25 +37,25 @@
     "proposal_number",
     "proposal_status",
     "updated_at",
-    "accepted",
-    "ordered",
     "id",
     "event_id",
     "proposal_no",
     "proposal_title",
-    "event_name",
-    "event_ref",
-    "event_date",
-    "total_guests",
     "sent_at",
-    "created_at",
     "closed_at",
     "was_issued",
     "is_editable",
     "is_closed",
+    "accepted",
+    "ordered",
+    "event_name",
+    "event_ref",
+    "event_date",
+    "total_guests",
+    "created_at",
     "proposal_sequence_number"
   ],
-  "columnUpdatedAt": 1790463519121,
+  "columnUpdatedAt": 1790699997180,
   "columnWidthMap": {
     "active": 103,
     "customColumn1": 111,
@@ -106,12 +106,6 @@
       "key": "primaryColumns.updated_at.computedValue"
     },
     {
-      "key": "primaryColumns.accepted.computedValue"
-    },
-    {
-      "key": "primaryColumns.ordered.computedValue"
-    },
-    {
       "key": "primaryColumns.id.computedValue"
     },
     {
@@ -122,6 +116,27 @@
     },
     {
       "key": "primaryColumns.proposal_title.computedValue"
+    },
+    {
+      "key": "primaryColumns.sent_at.computedValue"
+    },
+    {
+      "key": "primaryColumns.closed_at.computedValue"
+    },
+    {
+      "key": "primaryColumns.was_issued.computedValue"
+    },
+    {
+      "key": "primaryColumns.is_editable.computedValue"
+    },
+    {
+      "key": "primaryColumns.is_closed.computedValue"
+    },
+    {
+      "key": "primaryColumns.accepted.computedValue"
+    },
+    {
+      "key": "primaryColumns.ordered.computedValue"
     },
     {
       "key": "primaryColumns.event_name.computedValue"
@@ -136,22 +151,7 @@
       "key": "primaryColumns.total_guests.computedValue"
     },
     {
-      "key": "primaryColumns.sent_at.computedValue"
-    },
-    {
       "key": "primaryColumns.created_at.computedValue"
-    },
-    {
-      "key": "primaryColumns.closed_at.computedValue"
-    },
-    {
-      "key": "primaryColumns.was_issued.computedValue"
-    },
-    {
-      "key": "primaryColumns.is_editable.computedValue"
-    },
-    {
-      "key": "primaryColumns.is_closed.computedValue"
     },
     {
       "key": "primaryColumns.proposal_sequence_number.computedValue"
@@ -719,7 +719,7 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "number",
+      "columnType": "text",
       "computedValue": "{{(() => { const tableData = tblPropForEvent.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"proposal_sequence_number\"])) : proposal_sequence_number })()}}",
       "currencyCode": "USD",
       "decimals": 0,

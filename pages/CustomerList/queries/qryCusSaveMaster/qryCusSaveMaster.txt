@@ -17,5 +17,22 @@ from public.save_customer_master(
 	{{ inpCustomerEmail.text ?? "" }}::text,
 	{{ inpCustomerWebsite.text ?? "" }}::text,
 	{{ inpCustomerNotes.text ?? "" }}::text,
-	{{ chkCustomerActive.isChecked }}::boolean
+
+	{{ chkCustomerActive.isChecked }}::boolean,
+
+	coalesce(
+		string_to_array(
+			nullif(
+				{{
+				(msCustomerContacts.selectedOptionValues || [])
+				.map(Number)
+				.filter(id => Number.isFinite(id) && id > 0)
+				.join(",")
+				}}::text,
+				''
+			),
+			','
+		)::bigint[],
+		'{}'::bigint[]
+	)
 );
