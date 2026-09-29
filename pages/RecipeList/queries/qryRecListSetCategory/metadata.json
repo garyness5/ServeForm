@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.set_recipe_category(\n\t'{{ appsmith.user.email }}',\n\t{{ Number(this.params.recipe_id || 0) }},\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t{{ Number(this.params.category_id || 0) || null }}\n);",
+      "body": "select *\nfrom public.set_recipe_category(\n\t'{{ appsmith.user.email }}'::text,\n\t{{ Number(tblRecipeList.updatedRow?.id || 0) }},\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\t{{ Number(tblRecipeList.updatedRow?.category_name || 0) || null }}\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

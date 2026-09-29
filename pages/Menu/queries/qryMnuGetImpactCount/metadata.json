@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "with src as (\n\tselect id\n\tfrom public.mnu_items\n\twhere id = {{ Number(appsmith.store.current_menu_id || 0) }}\n\tand client_id = '{{ appsmith.store.current_client_id }}'::uuid\n\tand coalesce(deleted, false) = false\n)\nselect\n    count(distinct ec.event_id) as event_count\nfrom src s\njoin public.evt_components ec\n  on ec.menu_id = s.id\njoin public.evt_items e\n  on e.id = ec.event_id\nwhere e.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(e.deleted, false) = false;",
+      "body": "select\n\tcount(distinct pi.event_id)::integer as event_count\nfrom public.prop_menus pm\njoin public.prop_items pi\n\ton pi.id = pm.proposal_id\njoin public.evt_items e\n\ton e.id = pi.event_id\n\tand e.client_id = '{{ appsmith.store.current_client_id }}'::uuid\nwhere pm.menu_id = {{ Number(appsmith.store.current_menu_id || 0) }}\n\tand pi.client_id = '{{ appsmith.store.current_client_id }}'::uuid\n\tand coalesce(pi.deleted, false) = false\n\tand coalesce(e.deleted, false) = false;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

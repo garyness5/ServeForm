@@ -103,13 +103,14 @@ export default {
 	},
 
 	async deleteSelectedMenuStart() {
-
 		if (!this.hasSelection()) {
-			showAlert("Select a menu first.", "warning");
+			showAlert(
+				"Select a menu first.",
+				"warning"
+			);
 			return false;
 		}
 
-		await qryMnuLstGetImpactCount.run();
 		showModal(mdlMnuDelete.name);
 
 		return true;

@@ -1,16 +1,12 @@
-with src as (
-	select id
-	from public.mnu_items
-	where id = {{ Number(tblMnuList.selectedRow?.id || 0) }}
-	and client_id = '{{ appsmith.store.current_client_id }}'::uuid
-	and coalesce(deleted, false) = false
-)
 select
-    count(distinct ec.event_id) as event_count
-from src s
-join public.evt_components ec
-  on ec.menu_id = s.id
+	count(distinct pi.event_id)::integer as event_count
+from public.prop_menus pm
+join public.prop_items pi
+	on pi.id = pm.proposal_id
 join public.evt_items e
-  on e.id = ec.event_id
-where e.client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and coalesce(e.deleted, false) = false;
+	on e.id = pi.event_id
+	and e.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+where pm.menu_id = {{ Number(tblMnuList.selectedRow?.id || 0) }}
+	and pi.client_id = '{{ appsmith.store.current_client_id }}'::uuid
+	and coalesce(pi.deleted, false) = false
+	and coalesce(e.deleted, false) = false;

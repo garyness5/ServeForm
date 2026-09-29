@@ -1,8 +1,6 @@
-update public.mnu_items
-set
-  active = {{ this.params.active === true }},
-  updated_at = now()
-where id = {{ Number(this.params.menu_id || 0) }}
-  and client_id = '{{ appsmith.store.current_client_id }}'::uuid
-  and coalesce(deleted, false) = false
-returning id, active;
+select public.set_menu_active(
+	'{{ appsmith.user.email }}'::text,
+	{{ Number(tblMnuList.updatedRow?.id || 0) }},
+	'{{ appsmith.store.current_client_id }}'::uuid,
+	{{ tblMnuList.updatedRow?.active === true }}
+);
