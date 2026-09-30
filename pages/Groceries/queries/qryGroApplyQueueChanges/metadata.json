@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.apply_gro_queue_changes(\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\n\t'{{ JSON.stringify(\n\t\tappsmith.store.gro_pending_to_order_changes || []\n\t).replaceAll(\"'\", \"''\") }}'::jsonb,\n\n\t'{{ JSON.stringify(\n\t\tappsmith.store.gro_pending_remove_proposal_ids || []\n\t).replaceAll(\"'\", \"''\") }}'::jsonb\n);",
+      "body": "select *\nfrom public.apply_gro_queue_changes(\n\t{{ appsmith.user.email }}::text,\n\t'{{ appsmith.store.current_client_id }}'::uuid,\n\n\t'{{ JSON.stringify(\n\t\tappsmith.store.gro_pending_to_order_changes || []\n\t).replaceAll(\"'\", \"''\") }}'::jsonb,\n\n\t'{{ JSON.stringify(\n\t\tappsmith.store.gro_pending_remove_proposal_ids || []\n\t).replaceAll(\"'\", \"''\") }}'::jsonb\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [
