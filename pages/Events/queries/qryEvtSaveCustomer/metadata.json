@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_customer_master(\n\tnull::bigint,\n\n\t{{ appsmith.store.current_client_id }}::uuid,\n\n\t{{ (inpEvtCustomerName.text ?? \"\").trim() }}::text,\n\n\t''::text,\n\n\t{{ inpEvtCustomerAddress.text ?? \"\" }}::text,\n\n\t{{ (inpEvtCustomerPhone.text ?? \"\").trim() }}::text,\n\n\t{{ (inpEvtCustomerMobile.text ?? \"\").trim() }}::text,\n\n\t{{ (inpEvtCustomerEmail.text ?? \"\").trim() }}::text,\n\n\t''::text,\n\n\t{{ inpEvtCustomerNotes.text ?? \"\" }}::text,\n\n\ttrue::boolean\n);",
+      "body": "select *\nfrom public.save_customer_master(\n\t{{ appsmith.user.email }}::text,\n\n\tnull::bigint,\n\n\t{{ appsmith.store.current_client_id }}::uuid,\n\n\t{{ (inpEvtCustomerName.text ?? \"\").trim() }}::text,\n\n\t''::text,\n\n\t{{ inpEvtCustomerAddress.text ?? \"\" }}::text,\n\n\t{{ (inpEvtCustomerPhone.text ?? \"\").trim() }}::text,\n\n\t{{ (inpEvtCustomerMobile.text ?? \"\").trim() }}::text,\n\n\t{{ (inpEvtCustomerEmail.text ?? \"\").trim() }}::text,\n\n\t''::text,\n\n\t{{ inpEvtCustomerNotes.text ?? \"\" }}::text,\n\n\ttrue::boolean,\n\n\t'{}'::bigint[]\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

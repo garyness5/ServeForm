@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.save_venue_master(\n    null::bigint,\n\n    {{ appsmith.store.current_client_id }}::uuid,\n\n    {{ (inpEvtVenueName.text ?? \"\").trim() }}::text,\n\n    {{ inpEvtVenueAddress.text ?? \"\" }}::text,\n\n    {{ (inpEvtVenuePhone.text ?? \"\").trim() }}::text,\n\n    {{ (inpEvtVenueMobile.text ?? \"\").trim() }}::text,\n\n    {{ (inpEvtVenueEmail.text ?? \"\").trim() }}::text,\n\n    {{ inpEvtVenueNotes.text ?? \"\" }}::text,\n\n    true::boolean,\n\n    '{}'::bigint[]\n);",
+      "body": "select *\nfrom public.save_venue_master(\n\t{{ appsmith.user.email }}::text,\n\n\tnull::bigint,\n\n\t{{ appsmith.store.current_client_id }}::uuid,\n\n\t{{ (inpEvtVenueName.text ?? \"\").trim() }}::text,\n\n\t{{ inpEvtVenueAddress.text ?? \"\" }}::text,\n\n\t{{ (inpEvtVenuePhone.text ?? \"\").trim() }}::text,\n\n\t{{ (inpEvtVenueMobile.text ?? \"\").trim() }}::text,\n\n\t{{ (inpEvtVenueEmail.text ?? \"\").trim() }}::text,\n\n\t{{ inpEvtVenueNotes.text ?? \"\" }}::text,\n\n\ttrue::boolean,\n\n\t'{}'::bigint[]\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

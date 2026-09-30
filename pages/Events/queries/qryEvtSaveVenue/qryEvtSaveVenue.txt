@@ -1,22 +1,24 @@
 select *
 from public.save_venue_master(
-    null::bigint,
+	{{ appsmith.user.email }}::text,
 
-    {{ appsmith.store.current_client_id }}::uuid,
+	null::bigint,
 
-    {{ (inpEvtVenueName.text ?? "").trim() }}::text,
+	{{ appsmith.store.current_client_id }}::uuid,
 
-    {{ inpEvtVenueAddress.text ?? "" }}::text,
+	{{ (inpEvtVenueName.text ?? "").trim() }}::text,
 
-    {{ (inpEvtVenuePhone.text ?? "").trim() }}::text,
+	{{ inpEvtVenueAddress.text ?? "" }}::text,
 
-    {{ (inpEvtVenueMobile.text ?? "").trim() }}::text,
+	{{ (inpEvtVenuePhone.text ?? "").trim() }}::text,
 
-    {{ (inpEvtVenueEmail.text ?? "").trim() }}::text,
+	{{ (inpEvtVenueMobile.text ?? "").trim() }}::text,
 
-    {{ inpEvtVenueNotes.text ?? "" }}::text,
+	{{ (inpEvtVenueEmail.text ?? "").trim() }}::text,
 
-    true::boolean,
+	{{ inpEvtVenueNotes.text ?? "" }}::text,
 
-    '{}'::bigint[]
+	true::boolean,
+
+	'{}'::bigint[]
 );
