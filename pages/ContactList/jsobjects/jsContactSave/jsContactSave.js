@@ -128,7 +128,7 @@ export default {
 			await storeValue("current_contact_record", newContact);
 
 			resetWidget("mdlContact", true);
-			showModal("mdlContact");
+			showModal(mdlContact.name);
 
 			showAlert(
 				`${newContact.contact_name} created.`,
@@ -165,15 +165,20 @@ export default {
 
 		if (!sourceRow?.id) {
 			showAlert("No Contact is selected.", "warning");
-			closeModal("mdlContactDelConfirm");
+			closeModal(mdlContactDelConfirm.name);
 			return;
 		}
+
+		const contactName = sourceRow.contact_name || "Contact";
 
 		try {
 			const result = await qryCtcDeleteMaster.run();
 			const deletedContact = result?.[0];
 
-			if (!deletedContact?.id) {
+			if (
+				Number(deletedContact?.contact_id || 0) !==
+				Number(sourceRow.id)
+			) {
 				throw new Error("The Contact was not deleted.");
 			}
 
@@ -188,7 +193,7 @@ export default {
 			resetWidget("tblContacts", true);
 
 			showAlert(
-				`${deletedContact.contact_name} deleted.`,
+				`${contactName} deleted.`,
 				"success"
 			);
 		} catch (error) {
@@ -232,5 +237,58 @@ export default {
 
 			await qryCtcGetContacts.run();
 		}
+	},
+
+	contactSnapshotFromPage() {
+		return {
+			name: (inpContactName.text || "").trim(),
+			title: (inpContactTitle.text || "").trim(),
+			phone: (inpContactPhone.text || "").trim(),
+			mobile: (inpContactMobile.text || "").trim(),
+			email: (inpContactEmail.text || "").trim(),
+			notes: (inpContactNotes.text || "").trim(),
+			active: chkContactActive.isChecked !== false,
+
+			customer_ids: (msContactCustomers.selectedOptionValues || [])
+			.map(Number)
+			.filter(Boolean)
+			.sort((a, b) => a - b),
+
+			venue_ids: (msContactVenues.selectedOptionValues || [])
+			.map(Number)
+			.filter(Boolean)
+			.sort((a, b) => a - b)
+		};
+	},
+
+	contactSnapshotFromSaved() {
+		const saved = appsmith.store.current_contact_record || {};
+
+		return {
+			name: (saved.contact_name || "").trim(),
+			title: (saved.title || "").trim(),
+			phone: (saved.phone || "").trim(),
+			mobile: (saved.mobile || "").trim(),
+			email: (saved.email || "").trim(),
+			notes: (saved.notes || "").trim(),
+			active: saved.active !== false,
+
+			customer_ids: (saved.customer_ids || [])
+			.map(Number)
+			.filter(Boolean)
+			.sort((a, b) => a - b),
+
+			venue_ids: (saved.venue_ids || [])
+			.map(Number)
+			.filter(Boolean)
+			.sort((a, b) => a - b)
+		};
+	},
+
+	isDirty() {
+		const page = this.contactSnapshotFromPage();
+		const saved = this.contactSnapshotFromSaved();
+
+		return JSON.stringify(page) !== JSON.stringify(saved);
 	},
 };

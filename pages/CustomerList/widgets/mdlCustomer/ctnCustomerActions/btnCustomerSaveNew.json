@@ -13,6 +13,9 @@
     },
     {
       "key": "borderRadius"
+    },
+    {
+      "key": "isDisabled"
     }
   ],
   "dynamicPropertyPathList": [
@@ -29,7 +32,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "",
+  "isDisabled": "{{\n!inpCustomerName.text?.trim() ||\nqryCusSaveMaster.isLoading ||\n!jsCustomer.isDirty()\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",

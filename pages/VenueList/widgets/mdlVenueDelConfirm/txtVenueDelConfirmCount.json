@@ -13,10 +13,10 @@
       "key": "borderRadius"
     },
     {
-      "key": "text"
+      "key": "isVisible"
     },
     {
-      "key": "isVisible"
+      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -51,7 +51,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 31,
   "shouldTruncate": false,
-  "text": "{{ \n\"This will impact <br><br>Customers:  <br>Venues: \"\n}}",
+  "text": "This will impact \n\n{{\n\"   Events: \" +\nNumber(qryVnuGetDeleteImpact.data?.[0]?.event_count || 0) +\n\"\\n   Quotes: 0\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 23,

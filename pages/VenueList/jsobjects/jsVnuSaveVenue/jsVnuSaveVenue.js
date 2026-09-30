@@ -323,9 +323,17 @@ export default {
 			return;
 		}
 
-		await storeValue("current_venue_id", venueId);
+		try {
+			await qryVnuGetDeleteImpact.run();
 
-		showModal(mdlVenueDelConfirm.name);
+			showModal(mdlVenueDelConfirm.name);
+		} catch (error) {
+			showAlert(
+				error?.message ||
+				"Venue impact could not be checked.",
+				"error"
+			);
+		}
 	},
 
 	async deleteVenue() {
@@ -364,39 +372,88 @@ export default {
 		}
 	},
 
-	async cancelDelete() {
-		closeModal(mdlVenueDelConfirm.name);
-		await removeValue("current_venue_id");
-	},
+		async cancelDelete() {
+			closeModal(mdlVenueDelConfirm.name);
+			await removeValue("current_venue_id");
+		},
 
-	async setActive(venueId, active) {
-		const id = Number(venueId || 0);
+			async setActive(venueId, active) {
+				const id = Number(venueId || 0);
 
-		if (!id) {
-			showAlert(
-				"Venue ID is missing.",
-				"error"
-			);
+				if (!id) {
+					showAlert(
+						"Venue ID is missing.",
+						"error"
+					);
 
-			await qryVnuGetVenues.run();
-			return;
-		}
+					await qryVnuGetVenues.run();
+					return;
+				}
 
-		try {
-			await qryVnuToggleActive.run({
-				venue_id: id,
-				active: active === true
-			});
+				try {
+					await qryVnuToggleActive.run({
+						venue_id: id,
+						active: active === true
+					});
 
-			await qryVnuGetVenues.run();
-		} catch (error) {
-			showAlert(
-				error?.message ||
-				"Venue status could not be updated.",
-				"error"
-			);
+					await qryVnuGetVenues.run();
+				} catch (error) {
+					showAlert(
+						error?.message ||
+						"Venue status could not be updated.",
+						"error"
+					);
 
-			await qryVnuGetVenues.run();
-		}
-	},
+					await qryVnuGetVenues.run();
+				}
+			},
+
+				venueSnapshotFromPage() {
+					return {
+						name: (inpVenueName.text || "").trim(),
+						address: (inpVenueAddress.text || "").trim(),
+						phone: (inpVenuePhone.text || "").trim(),
+						mobile: (inpVenueMobile.text || "").trim(),
+						email: (inpVenueEmail.text || "").trim(),
+						notes: (inpVenueNotes.text || "").trim(),
+						active: chkVenueActive.isChecked !== false,
+
+						contact_ids: (msVenueContacts.selectedOptionValues || [])
+						.map(Number)
+						.filter(Boolean)
+						.sort((a, b) => a - b)
+					};
+				},
+
+					venueSnapshotFromSaved() {
+						const venueId =
+									Number(appsmith.store.current_venue_id || 0);
+
+						const saved =
+									(qryVnuGetVenues.data || []).find(
+										row => Number(row.id) === venueId
+									) || {};
+
+						return {
+							name: (saved.venue_name || "").trim(),
+							address: (saved.address || "").trim(),
+							phone: (saved.phone || "").trim(),
+							mobile: (saved.mobile || "").trim(),
+							email: (saved.email || "").trim(),
+							notes: (saved.generic_notes || "").trim(),
+							active: saved.active !== false,
+
+							contact_ids: (appsmith.store.venue_contact_ids || [])
+							.map(Number)
+							.filter(Boolean)
+							.sort((a, b) => a - b)
+						};
+					},
+
+						isDirty() {
+							const page = this.venueSnapshotFromPage();
+							const saved = this.venueSnapshotFromSaved();
+
+							return JSON.stringify(page) !== JSON.stringify(saved);
+						},
 };

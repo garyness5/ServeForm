@@ -1,28 +1,30 @@
 select *
 from public.save_contact_master(
-  null::bigint,
+	{{ appsmith.user.email }}::text,
 
-  {{ appsmith.store.current_client_id }}::uuid,
+	null::bigint,
 
-  {{ (inpVenueContactName.text ?? "").trim() }}::text,
-  {{ (inpVenueContactTitle.text ?? "").trim() }}::text,
-  {{ (inpVenueContactPhone.text ?? "").trim() }}::text,
-  {{ (inpVenueContactMobile.text ?? "").trim() }}::text,
-  {{ (inpVenueContactEmail.text ?? "").trim() }}::text,
-  {{ (inpVenueContactNotes.text ?? "").trim() }}::text,
+	{{ appsmith.store.current_client_id }}::uuid,
 
-  true::boolean,
+	{{ (inpVenueContactName.text ?? "").trim() }}::text,
+	{{ (inpVenueContactTitle.text ?? "").trim() }}::text,
+	{{ (inpVenueContactPhone.text ?? "").trim() }}::text,
+	{{ (inpVenueContactMobile.text ?? "").trim() }}::text,
+	{{ (inpVenueContactEmail.text ?? "").trim() }}::text,
+	{{ (inpVenueContactNotes.text ?? "").trim() }}::text,
 
-  '{}'::bigint[],
+	true::boolean,
 
-  case
-    when coalesce(
-      {{ Number(appsmith.store.current_venue_id || 0) }},
-      0
-    ) > 0
-    then array[
-      {{ Number(appsmith.store.current_venue_id || 0) }}
-    ]::bigint[]
-    else '{}'::bigint[]
-  end
+	'{}'::bigint[],
+
+	case
+	when coalesce(
+		{{ Number(appsmith.store.current_venue_id || 0) }},
+		0
+	) > 0
+	then array[
+		{{ Number(appsmith.store.current_venue_id || 0) }}
+	]::bigint[]
+	else '{}'::bigint[]
+	end
 );

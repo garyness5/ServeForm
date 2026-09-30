@@ -293,28 +293,24 @@ export default {
 	},
 
 	async openDelete() {
-		const selectedCustomer = tblCustomers.selectedRow;
-		const customerId = Number(selectedCustomer?.id || 0);
+		const customerId = Number(tblCustomers.selectedRow?.id || 0);
 
 		if (!customerId) {
-			showAlert(
-				"Select a Customer to delete.",
-				"warning"
-			);
+			showAlert("Select a Customer to delete.", "warning");
 			return;
 		}
 
-		await storeValue(
-			"current_customer_id",
-			customerId
-		);
+		try {
+			await qryCusGetDeleteImpact.run();
 
-		await storeValue(
-			"current_customer_record",
-			selectedCustomer
-		);
-
-		showModal(mdlCustomerDeleteConfirm.name);
+			showModal(mdlCusDeleteConfirm.name);
+		} catch (error) {
+			showAlert(
+				error?.message ||
+				"Customer impact could not be checked.",
+				"error"
+			);
+		}
 	},
 
 	async deleteCustomer() {
@@ -328,7 +324,7 @@ export default {
 				"warning"
 			);
 
-			closeModal(mdlCustomerDeleteConfirm.name);
+			closeModal(mdlCusDeleteConfirm.name);
 			return;
 		}
 
@@ -360,7 +356,7 @@ export default {
 				);
 			}
 
-			closeModal(mdlCustomerDeleteConfirm.name);
+			closeModal(mdlCusDeleteConfirm.name);
 			closeModal(mdlCustomer.name);
 
 			await qryCusGetCustomers.run();
@@ -442,10 +438,58 @@ export default {
 	},
 
 	async cancelDelete() {
-		closeModal(mdlCustomerDeleteConfirm.name);
+		closeModal(mdlCusDeleteConfirm.name);
 
 		await removeValue("current_customer_id");
 		await removeValue("current_customer_record");
-	}
+	},
+
+	customerSnapshotFromPage() {
+		return {
+			name: (inpCustomerName.text || "").trim(),
+			company: (inpCustomerCompany.text || "").trim(),
+			address: (inpCustomerAddress.text || "").trim(),
+			phone: (inpCustomerPhone.text || "").trim(),
+			mobile: (inpCustomerMobile.text || "").trim(),
+			email: (inpCustomerEmail.text || "").trim(),
+			website: (inpCustomerWebsite.text || "").trim(),
+			notes: (inpCustomerNotes.text || "").trim(),
+			active: chkCustomerActive.isChecked !== false,
+
+			contact_ids: (msCustomerContacts.selectedOptionValues || [])
+			.map(Number)
+			.filter(Boolean)
+			.sort((a, b) => a - b)
+		};
+	},
+
+	customerSnapshotFromSaved() {
+		const saved =
+					appsmith.store.current_customer_record || {};
+
+		return {
+			name: (saved.customer_name || "").trim(),
+			company: (saved.company || "").trim(),
+			address: (saved.address || "").trim(),
+			phone: (saved.phone || "").trim(),
+			mobile: (saved.mobile || "").trim(),
+			email: (saved.email || "").trim(),
+			website: (saved.website || "").trim(),
+			notes: (saved.notes || "").trim(),
+			active: saved.active !== false,
+
+			contact_ids: (appsmith.store.customer_contact_ids || [])
+			.map(Number)
+			.filter(Boolean)
+			.sort((a, b) => a - b)
+		};
+	},
+
+	isDirty() {
+		const page = this.customerSnapshotFromPage();
+		const saved = this.customerSnapshotFromSaved();
+
+		return JSON.stringify(page) !== JSON.stringify(saved);
+	},
 
 };

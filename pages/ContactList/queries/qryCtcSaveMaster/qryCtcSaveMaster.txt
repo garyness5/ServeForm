@@ -20,16 +20,20 @@ from public.save_contact_master(
 	{{ chkContactActive.isChecked !== false }}::boolean,
 
 	{{
-	`{${(msContactCustomers.selectedOptionValues || [])
+	`{${
+	(msContactCustomers.selectedOptionValues || [])
 	.map(Number)
 	.filter(Boolean)
-	.join(",")}}`
+	.join(",")
+	}}`
 	}}::bigint[],
 
 	{{
-	`{${(msContactVenues.selectedOptionValues || [])
+	`{${
+	(msContactVenues.selectedOptionValues || [])
 	.map(Number)
 	.filter(Boolean)
-	.join(",")}}`
+	.join(",")
+	}}`
 	}}::bigint[]
 );
