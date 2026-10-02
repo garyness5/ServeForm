@@ -26,6 +26,14 @@
       "isDefault": false
     },
     {
+      "id": "QuoteList",
+      "isDefault": false
+    },
+    {
+      "id": "Quote",
+      "isDefault": false
+    },
+    {
       "id": "Groceries",
       "isDefault": false
     },
@@ -63,14 +71,6 @@
     },
     {
       "id": "Dish",
-      "isDefault": false
-    },
-    {
-      "id": "QuoteList",
-      "isDefault": false
-    },
-    {
-      "id": "Quote",
       "isDefault": false
     },
     {

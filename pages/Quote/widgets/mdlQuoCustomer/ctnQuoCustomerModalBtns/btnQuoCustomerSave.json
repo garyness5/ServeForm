@@ -40,7 +40,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ quoPage.saveCustomer(false) }}",
+  "onClick": "{{ jsQuoPageLoad.saveCustomer(false) }}",
   "originalBottomRow": 71,
   "originalTopRow": 67,
   "parentId": "tlvc47x8au",

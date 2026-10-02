@@ -4,7 +4,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 70,
+  "bottomRow": 54,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "cachedTableData": {},
   "canFreezeColumn": true,
@@ -62,6 +62,7 @@
     "phone": 129,
     "venue_list": 135
   },
+  "compactMode": "SHORT",
   "customIsLoading": false,
   "customIsLoadingValue": "",
   "defaultPageSize": 0,

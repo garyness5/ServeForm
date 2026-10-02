@@ -32,7 +32,7 @@
     }
   ],
   "isDefaultClickDisabled": true,
-  "isDisabled": "{{\n  !inpQuoContactName.text?.trim() ||\n  !quoPage.contactIsDirty() ||\n  saveQuoContact.isLoading\n}}",
+  "isDisabled": "{{\n  !inpQuoContactName.text?.trim() ||\n  !jsQuoPageLoad.contactIsDirty() ||\n  qryQuoSaveContact.isLoading\n}}",
   "isLoading": false,
   "isVisible": true,
   "key": "oy0hw5tj7l",
@@ -43,7 +43,7 @@
   "mobileRightColumn": 63,
   "mobileTopRow": 18,
   "needsErrorInfo": false,
-  "onClick": "{{ quoPage.saveContact(false) }}",
+  "onClick": "{{ jsQuoPageLoad.saveContact(false) }}",
   "originalBottomRow": 65,
   "originalTopRow": 61,
   "parentId": "nkuuy50h2d",

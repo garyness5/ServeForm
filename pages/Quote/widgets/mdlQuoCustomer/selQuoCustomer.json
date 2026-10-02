@@ -65,7 +65,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 57,
   "serverSideFiltering": false,
-  "sourceData": "{{\n  (getQuoCustomers.data || []).map(row => ({\n    label: row.customer_name,\n    value: row.id\n  }))\n}}",
+  "sourceData": "{{\n  (qryQuoGetCustomers.data || []).map(row => ({\n    label: row.customer_name,\n    value: row.id\n  }))\n}}",
   "topRow": 6,
   "type": "SELECT_WIDGET",
   "version": 1,

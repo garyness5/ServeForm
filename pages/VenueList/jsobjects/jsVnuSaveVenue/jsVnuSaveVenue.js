@@ -13,7 +13,7 @@ export default {
 
 		try {
 			const duplicate =
-						await qryCheckVenueDuplicate.run();
+						await qryVnuCheckVenueDuplicate.run();
 
 			if (duplicate?.length) {
 				await storeValue(

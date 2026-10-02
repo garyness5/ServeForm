@@ -4,7 +4,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 12,
   "boxShadow": "none",
-  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  getSelectedQuote.data?.[0]?.contact_id || \"\"\n))(selQuoContact.options, selQuoContact.serverSideFiltering) }}",
+  "defaultOptionValue": "{{ ((options, serverSideFiltering) => ( \n  qryQuoGetSelectedQuote.data?.[0]?.contact_id || \"\"\n))(selQuoContact.options, selQuoContact.serverSideFiltering) }}",
   "dynamicBindingPathList": [
     {
       "key": "accentColor"
@@ -54,21 +54,21 @@
   "mobileRightColumn": 12,
   "mobileTopRow": 8,
   "needsErrorInfo": false,
-  "onOptionChange": "{{\n  assignQuoContact.run()\n    .then(() => getSelectedQuote.run())\n    .then(() => getQuoContacts.run())\n}}",
+  "onOptionChange": "{{\n  qryQuoAssignContact.run()\n    .then(() => qryQuoGetSelectedQuote.run())\n    .then(() => qryQuoGetContacts.run())\n}}",
   "optionLabel": "label",
   "optionValue": "value",
   "parentColumnSpace": 6.021484375,
-  "parentId": "xe44359w11",
+  "parentId": "pfw5ch02xm",
   "parentRowSpace": 10,
   "placeholderText": "Select Contact",
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
   "rightColumn": 56,
   "serverSideFiltering": false,
-  "sourceData": "{{\n  (getQuoContacts.data || [])\n    .filter(row => row.active !== false)\n    .map(row => ({\n      label: row.contact_name,\n      value: row.id\n    }))\n}}",
+  "sourceData": "{{\n  (qryQuoGetContacts.data || [])\n    .filter(row => row.active !== false)\n    .map(row => ({\n      label: row.contact_name,\n      value: row.id\n    }))\n}}",
   "topRow": 8,
   "type": "SELECT_WIDGET",
   "version": 1,
-  "widgetId": "6qz3wlm7qr",
+  "widgetId": "ap7snrhx3f",
   "widgetName": "selQuoContact"
 }

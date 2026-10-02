@@ -44,9 +44,9 @@
   "mobileRightColumn": 36,
   "mobileTopRow": 23,
   "needsErrorInfo": false,
-  "onClick": "{{\n  (() => {\n    const contactId =\n      Number(selQuoContact.selectedOptionValue || 0) ||\n      Number(getSelectedQuote.data?.[0]?.contact_id || 0);\n\n    return storeValue(\n      \"quo_contact_mode\",\n      contactId ? \"edit\" : \"add\"\n    )\n      .then(() =>\n        storeValue(\n          \"quo_contact_id\",\n          contactId || null\n        )\n      )\n      .then(() =>\n        storeValue(\n          \"quo_contact_customer_id\",\n          getSelectedQuote.data?.[0]?.customer_id || null\n        )\n      )\n      .then(() => getQuoCustomers.run())\n      .then(() => getQuoContacts.run())\n      .then(() => resetWidget(\"mdlQuoContact\", true))\n      .then(() => showModal(\"mdlQuoContact\"));\n  })()\n}}",
+  "onClick": "{{\n  (() => {\n    const contactId =\n      Number(selQuoContact.selectedOptionValue || 0) ||\n      Number(qryQuoGetSelectedQuote.data?.[0]?.contact_id || 0);\n\n    return storeValue(\n      \"quo_contact_mode\",\n      contactId ? \"edit\" : \"add\"\n    )\n      .then(() =>\n        storeValue(\n          \"quo_contact_id\",\n          contactId || null\n        )\n      )\n      .then(() =>\n        storeValue(\n          \"quo_contact_customer_id\",\n          qryQuoGetSelectedQuote.data?.[0]?.customer_id || null\n        )\n      )\n      .then(() => qryQuoGetCustomers.run())\n      .then(() => qryQuoGetContacts.run())\n      .then(() => resetWidget(\"mdlQuoContact\", true))\n      .then(() => showModal(\"mdlQuoContact\"));\n  })()\n}}",
   "parentColumnSpace": 6.021484375,
-  "parentId": "xe44359w11",
+  "parentId": "pfw5ch02xm",
   "parentRowSpace": 10,
   "placement": "CENTER",
   "recaptchaType": "V3",
@@ -59,6 +59,6 @@
   "topRow": 8,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "1avha30esf",
+  "widgetId": "wfdt89gzrv",
   "widgetName": "btnQuoCustAddContact"
 }
