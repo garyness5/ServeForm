@@ -38,8 +38,8 @@
   "label": "Final Due Date      ",
   "labelAlignment": "left",
   "labelPosition": "Left",
-  "labelStyle": "BOLD",
-  "labelTextSize": "1rem",
+  "labelStyle": "",
+  "labelTextSize": "0.875rem",
   "labelWidth": "31",
   "leftColumn": 0,
   "maxDate": "2121-12-31T18:29:00.000Z",
@@ -55,7 +55,7 @@
   "originalBottomRow": 43,
   "originalTopRow": 39,
   "parentColumnSpace": 5.74609375,
-  "parentId": "xgfvxmtq7k",
+  "parentId": "3xurkxp5za",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
@@ -65,6 +65,6 @@
   "topRow": 20,
   "type": "DATE_PICKER_WIDGET2",
   "version": 2,
-  "widgetId": "4q2faanpha",
+  "widgetId": "zxmm9e3y3s",
   "widgetName": "datQuoFinalDueDate"
 }

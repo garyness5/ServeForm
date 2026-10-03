@@ -1,15 +1,15 @@
 update public.quo_events
 set
   contact_id = nullif(
-    {{ Number(selQuoContact.selectedOptionValue || 0) }},
+    {{ Number(selQuoCusContact.selectedOptionValue || 0) }},
     0
   )::bigint,
 
   customer_id = case
-    when {{ Number(selQuoContact.selectedOptionValue || 0) }} > 0 then (
+    when {{ Number(selQuoCusContact.selectedOptionValue || 0) }} > 0 then (
       select customer_id
       from public.customer_contacts
-      where id = {{ Number(selQuoContact.selectedOptionValue || 0) }}::bigint
+      where id = {{ Number(selQuoCusContact.selectedOptionValue || 0) }}::bigint
     )
     else customer_id
   end,

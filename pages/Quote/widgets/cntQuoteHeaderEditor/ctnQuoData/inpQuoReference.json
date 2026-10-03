@@ -29,8 +29,8 @@
   "label": "Reference",
   "labelAlignment": "left",
   "labelPosition": "Left",
-  "labelStyle": "BOLD",
-  "labelTextSize": "1rem",
+  "labelStyle": "",
+  "labelTextSize": "0.875rem",
   "labelWidth": "26",
   "leftColumn": 0,
   "maxDynamicHeight": 9000,
@@ -42,7 +42,7 @@
   "mobileTopRow": 0,
   "needsErrorInfo": false,
   "parentColumnSpace": 6.296875,
-  "parentId": "xgfvxmtq7k",
+  "parentId": "3xurkxp5za",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "resetOnSubmit": true,
@@ -52,6 +52,6 @@
   "topRow": 0,
   "type": "INPUT_WIDGET_V2",
   "version": 2,
-  "widgetId": "2b8baq89jw",
+  "widgetId": "9vkywox93e",
   "widgetName": "inpQuoReference"
 }

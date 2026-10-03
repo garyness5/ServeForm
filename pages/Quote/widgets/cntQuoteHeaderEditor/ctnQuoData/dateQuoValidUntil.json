@@ -38,8 +38,8 @@
   "label": "Valid Until",
   "labelAlignment": "left",
   "labelPosition": "Left",
-  "labelStyle": "BOLD",
-  "labelTextSize": "1rem",
+  "labelStyle": "",
+  "labelTextSize": "0.875rem",
   "labelWidth": "26",
   "leftColumn": 0,
   "maxDate": "2121-12-31T18:29:00.000Z",
@@ -53,7 +53,7 @@
   "mobileTopRow": 5,
   "needsErrorInfo": false,
   "parentColumnSpace": 5.74609375,
-  "parentId": "xgfvxmtq7k",
+  "parentId": "3xurkxp5za",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
@@ -63,6 +63,6 @@
   "topRow": 4,
   "type": "DATE_PICKER_WIDGET2",
   "version": 2,
-  "widgetId": "o5w3byg2h7",
+  "widgetId": "cgjfp2z0wz",
   "widgetName": "dateQuoValidUntil"
 }

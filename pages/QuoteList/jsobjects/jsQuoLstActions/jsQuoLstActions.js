@@ -14,7 +14,7 @@ export default {
 		await removeValue("quotationProposalId");
 		await removeValue("quotationQuoteId");
 
-		navigateTo("Quotation");
+		navigateTo("Quote");
 	},
 
 	async setActive(row, isActive) {

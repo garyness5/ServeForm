@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "update public.quo_events\nset\n  contact_id = nullif(\n    {{ Number(selQuoContact.selectedOptionValue || 0) }},\n    0\n  )::bigint,\n\n  customer_id = case\n    when {{ Number(selQuoContact.selectedOptionValue || 0) }} > 0 then (\n      select customer_id\n      from public.customer_contacts\n      where id = {{ Number(selQuoContact.selectedOptionValue || 0) }}::bigint\n    )\n    else customer_id\n  end,\n\n  updated_at = now()\nwhere id = {{ Number(appsmith.store.selectedQuoteEventId || 0) }}::bigint\n  and client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\nreturning id, customer_id, contact_id;",
+      "body": "update public.quo_events\nset\n  contact_id = nullif(\n    {{ Number(selQuoCusContact.selectedOptionValue || 0) }},\n    0\n  )::bigint,\n\n  customer_id = case\n    when {{ Number(selQuoCusContact.selectedOptionValue || 0) }} > 0 then (\n      select customer_id\n      from public.customer_contacts\n      where id = {{ Number(selQuoCusContact.selectedOptionValue || 0) }}::bigint\n    )\n    else customer_id\n  end,\n\n  updated_at = now()\nwhere id = {{ Number(appsmith.store.selectedQuoteEventId || 0) }}::bigint\n  and client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and coalesce(deleted, false) = false\nreturning id, customer_id, contact_id;",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

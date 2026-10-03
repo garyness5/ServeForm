@@ -4,7 +4,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 28,
+  "bottomRow": 55,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "cachedTableData": {},
   "canFreezeColumn": true,
@@ -48,6 +48,7 @@
   ],
   "columnUpdatedAt": 1790974127326,
   "columnWidthMap": {},
+  "compactMode": "SHORT",
   "customIsLoading": false,
   "customIsLoadingValue": "",
   "defaultPageSize": 0,
@@ -117,11 +118,7 @@
       "key": "onRowSelected"
     }
   ],
-  "dynamicTriggerPathList": [
-    {
-      "key": "onRowSelected"
-    }
-  ],
+  "dynamicTriggerPathList": [],
   "enableClientSideSearch": true,
   "endOfData": false,
   "flexVerticalAlignment": "start",
@@ -132,8 +129,8 @@
   "isVisible": true,
   "isVisibleDownload": true,
   "isVisibleFilters": false,
-  "isVisiblePagination": true,
-  "isVisibleSearch": true,
+  "isVisiblePagination": false,
+  "isVisibleSearch": false,
   "key": "s1z5k0k04a",
   "label": "Data",
   "leftColumn": 0,
@@ -143,7 +140,7 @@
   "mobileRightColumn": 34,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
-  "onRowSelected": "{{ jsQuoLstActions.openEvent(tblQuoLst.triggeredRow) }}",
+  "onRowSelected": "",
   "parentColumnSpace": 17.734375,
   "parentId": "7ry9057ll2",
   "parentRowSpace": 10,
@@ -595,6 +592,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 64,
   "searchKey": "",
+  "serverSidePaginationEnabled": true,
   "tableData": "{{ jsQuoLstActions.searchRows() }}",
   "textSize": "0.875rem",
   "topRow": 0,

@@ -54,7 +54,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 7,
   "text": "Open",
-  "tooltip": "Open Even proposals and Quotes",
+  "tooltip": "Open/Edit Event Quotes",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
