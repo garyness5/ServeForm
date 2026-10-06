@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 39,
+  "bottomRow": 37,
   "disableLink": false,
   "dynamicBindingPathList": [
     {
@@ -34,8 +34,8 @@
   "mobileRightColumn": 40,
   "mobileTopRow": 8,
   "needsErrorInfo": false,
-  "originalBottomRow": 34,
-  "originalTopRow": 29,
+  "originalBottomRow": 37,
+  "originalTopRow": 33,
   "overflow": "NONE",
   "parentColumnSpace": 17.625,
   "parentId": "pfw5ch02xm",
@@ -47,7 +47,7 @@
   "text": "{{  \"Event Date:  \" + qryQuoGetEventInboxRow.data?.[0]?.event_date || \"\" }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 35,
+  "topRow": 33,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
