@@ -9,9 +9,6 @@
   "dynamicBindingPathList": [
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "text"
     }
   ],
   "dynamicPropertyPathList": [
@@ -31,7 +28,7 @@
   "key": "iu27lzhy00",
   "labelStyle": "BOLD",
   "labelTextSize": "1rem",
-  "leftColumn": 0,
+  "leftColumn": 33,
   "minWidth": 120,
   "mobileBottomRow": 19,
   "mobileLeftColumn": 0,
@@ -42,18 +39,18 @@
   "originalBottomRow": 57,
   "originalTopRow": 53,
   "parentColumnSpace": 17.9375,
-  "parentId": "t9qzlufju7",
+  "parentId": "ojxrx4vpy5",
   "parentRowSpace": 10,
   "placement": "START",
   "recaptchaType": "V3",
   "renderMode": "CANVAS",
   "resetFormOnClick": false,
   "responsiveBehavior": "hug",
-  "rightColumn": 22,
-  "text": "{{\n((appsmith.store.accQuoteSelector ?? true) ? \"▲  \" : \"▼  \") + \"Quotes - All controls below affect Quotes\"\n}}",
+  "rightColumn": 55,
+  "text": "Quotes - All controls below affect Quotes",
   "topRow": 0,
   "type": "BUTTON_WIDGET",
   "version": 1,
-  "widgetId": "94cy7mozaq",
+  "widgetId": "356sjcvuzr",
   "widgetName": "accQuotesSelector"
 }

@@ -4,7 +4,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 28,
+  "bottomRow": 34,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "cachedTableData": {},
   "canFreezeColumn": true,
@@ -45,8 +45,12 @@
     "closed",
     "closed_at"
   ],
-  "columnUpdatedAt": 1791346604723,
-  "columnWidthMap": {},
+  "columnUpdatedAt": 1791390528257,
+  "columnWidthMap": {
+    "quote_id": 91,
+    "quote_status": 88
+  },
+  "compactMode": "SHORT",
   "customIsLoading": false,
   "customIsLoadingValue": "",
   "defaultPageSize": 0,
@@ -111,9 +115,16 @@
     },
     {
       "key": "primaryColumns.updated_at.outputFormat"
+    },
+    {
+      "key": "onRowSelected"
     }
   ],
-  "dynamicTriggerPathList": [],
+  "dynamicTriggerPathList": [
+    {
+      "key": "onRowSelected"
+    }
+  ],
   "enableClientSideSearch": true,
   "endOfData": false,
   "flexVerticalAlignment": "start",
@@ -128,15 +139,16 @@
   "isVisibleSearch": true,
   "key": "jzadqtd0fd",
   "label": "Data",
-  "leftColumn": 0,
+  "leftColumn": 33,
   "minWidth": 450,
   "mobileBottomRow": 28,
   "mobileLeftColumn": 0,
   "mobileRightColumn": 34,
   "mobileTopRow": 0,
   "needsErrorInfo": false,
+  "onRowSelected": "{{ jsQuoQuotes.select(tblQuoSelectorTable.selectedRow) }}",
   "parentColumnSpace": 19.046875,
-  "parentId": "vy52xut525",
+  "parentId": "ojxrx4vpy5",
   "parentRowSpace": 10,
   "primaryColumns": {
     "closed": {
@@ -330,12 +342,12 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "columnType": "number",
-      "computedValue": "{{(() => { const tableData = tblQuoSelectorTable.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"quote_id\"])) : quote_id })()}}",
+      "computedValue": "{{(() => { const tableData = tblQuoSelectorTable.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.quote_id )) :  currentRow.quote_id  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "RIGHT",
       "id": "quote_id",
       "index": 0,
       "isCellEditable": false,
@@ -392,12 +404,12 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblQuoSelectorTable.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"quote_status\"])) : quote_status })()}}",
+      "computedValue": "{{(() => { const tableData = tblQuoSelectorTable.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.quote_status || \"\" )) :  currentRow.quote_status || \"\"  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
       "enableSort": true,
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "RIGHT",
       "id": "quote_status",
       "index": 5,
       "isCellEditable": false,
@@ -453,8 +465,8 @@
       "alias": "updated_at",
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
-      "columnType": "text",
-      "computedValue": "{{(() => { const tableData = tblQuoSelectorTable.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (\ncurrentRow.updated_at\n? moment(currentRow.updated_at).format(\"YYYY-MMM-DD | HH:mm\")\n: \"\"\n)) : \ncurrentRow.updated_at\n? moment(currentRow.updated_at).format(\"YYYY-MMM-DD | HH:mm\")\n: \"\"\n })()}}",
+      "columnType": "date",
+      "computedValue": "{{(() => { const tableData = tblQuoSelectorTable.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => ( currentRow.updated_at )) :  currentRow.updated_at  })()}}",
       "currencyCode": "USD",
       "decimals": 0,
       "enableFilter": true,
@@ -515,15 +527,15 @@
   },
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 34,
+  "rightColumn": 64,
   "searchKey": "",
-  "tableData": "{{ qryQuoGetQuotes.data || [] }}",
+  "tableData": "{{\nNumber(appsmith.store.quotationProposalId || 0) > 0 &&\nNumber(appsmith.store.quotationInboxId || 0) > 0\n? (qryQuoGetQuotes.data || [])\n: []\n}}",
   "textSize": "0.875rem",
-  "topRow": 0,
+  "topRow": 4,
   "totalRecordsCount": 0,
   "type": "TABLE_WIDGET_V2",
   "version": 2,
   "verticalAlignment": "CENTER",
-  "widgetId": "0qw5zibome",
+  "widgetId": "6zj621uvda",
   "widgetName": "tblQuoSelectorTable"
 }

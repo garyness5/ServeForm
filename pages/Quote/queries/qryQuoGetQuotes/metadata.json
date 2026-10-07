@@ -29,7 +29,7 @@
     ],
     "name": "qryQuoGetQuotes",
     "pageId": "Quote",
-    "runBehaviour": "AUTOMATIC",
-    "userSetOnLoad": false
+    "runBehaviour": "MANUAL",
+    "userSetOnLoad": true
   }
 }

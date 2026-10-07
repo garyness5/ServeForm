@@ -4,7 +4,7 @@
   "borderColor": "#E0DEDE",
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "borderWidth": "1",
-  "bottomRow": 30,
+  "bottomRow": 34,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
   "cachedTableData": {},
   "canFreezeColumn": true,
@@ -44,11 +44,12 @@
     "reviewed_at",
     "menu_count"
   ],
-  "columnUpdatedAt": 1791346117518,
+  "columnUpdatedAt": 1791390528294,
   "columnWidthMap": {
-    "last_sent_at": 241,
+    "last_sent_at": 163,
     "menu_count": 87,
-    "send_count": 120
+    "proposal_number": 135,
+    "send_count": 122
   },
   "compactMode": "SHORT",
   "customIsLoading": false,
@@ -528,11 +529,11 @@
   },
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 36,
+  "rightColumn": 31,
   "searchKey": "",
   "tableData": "{{ qryQuoGetEventProposals.data || [] }}",
   "textSize": "0.875rem",
-  "topRow": 0,
+  "topRow": 4,
   "totalRecordsCount": 0,
   "type": "TABLE_WIDGET_V2",
   "version": 2,

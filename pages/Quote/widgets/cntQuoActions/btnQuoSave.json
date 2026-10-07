@@ -43,7 +43,7 @@
   "mobileRightColumn": 22,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "onClick": "{{ jsQuoPageLoad.saveAll() }}",
+  "onClick": "{{ jsQuoQuotes.save() }}",
   "parentColumnSpace": 10.609375,
   "parentId": "8aexkoc7em",
   "parentRowSpace": 10,

@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 77,
+  "bottomRow": 15,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -24,7 +24,7 @@
   "isLoading": false,
   "isVisible": true,
   "key": "ym9bsplnc2",
-  "leftColumn": 36,
+  "leftColumn": 26,
   "maxDynamicHeight": 9000,
   "minDynamicHeight": 4,
   "minWidth": 450,
@@ -33,23 +33,23 @@
   "mobileRightColumn": 55,
   "mobileTopRow": 4,
   "needsErrorInfo": false,
-  "originalBottomRow": 10,
-  "originalTopRow": 1,
+  "originalBottomRow": 15,
+  "originalTopRow": 11,
   "overflow": "NONE",
   "parentColumnSpace": 19.359375,
-  "parentId": "vy52xut525",
+  "parentId": "dm3138dr90",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 50,
+  "rightColumn": 40,
   "shouldTruncate": false,
-  "text": "{{\n  JSON.stringify({\n    eventId: appsmith.store.quotationEventId,\n    proposalId: appsmith.store.quotationProposalId,\n    inboxId: appsmith.store.quotationInboxId,\n    quoteId: appsmith.store.quotationQuoteId,\n    quoteRows: qryQuoGetQuotes.data\n  }, null, 2)\n}}",
+  "text": "{{ appsmith.store.quotationQuoteId }}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 1,
+  "topRow": 11,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "zyoju0lw6f",
+  "widgetId": "jq8qcf80rh",
   "widgetName": "Text1"
 }
