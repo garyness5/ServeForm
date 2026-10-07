@@ -6,12 +6,10 @@ export default {
 			return false;
 		}
 
-		/*
-		 * Fresh Quote-page session.
-		 * Opening an Event must not automatically
-		 * select a Proposal or Quote.
-		 */
+		// Fresh Quote Event workspace.
+		// Opening an Event must not auto-select a Proposal or Quote.
 		await removeValue("quotationProposalId");
+		await removeValue("quotationInboxId");
 		await removeValue("quotationQuoteId");
 
 		const eventId = Number(
@@ -22,10 +20,11 @@ export default {
 			return true;
 		}
 
-		/*
-		 * Load Event header only.
-		 */
-		await qryQuoGetEventHeader.run();
+		// Load Event-owned header and received Proposal inbox.
+		await Promise.all([
+			qryQuoGetEventHeader.run(),
+			qryQuoGetReceivedMenusReceived.run()
+		]);
 
 		return true;
 	}

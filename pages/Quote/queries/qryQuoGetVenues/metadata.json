@@ -29,7 +29,7 @@
     ],
     "name": "qryQuoGetVenues",
     "pageId": "Quote",
-    "runBehaviour": "AUTOMATIC",
+    "runBehaviour": "MANUAL",
     "userSetOnLoad": false
   }
 }

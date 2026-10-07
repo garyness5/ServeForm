@@ -1,7 +1,7 @@
 {
   "animateLoading": true,
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
-  "bottomRow": 25,
+  "bottomRow": 28,
   "dynamicBindingPathList": [
     {
       "key": "truncateButtonColor"
@@ -33,23 +33,23 @@
   "mobileRightColumn": 16,
   "mobileTopRow": 5,
   "needsErrorInfo": false,
-  "originalBottomRow": 8,
-  "originalTopRow": 4,
+  "originalBottomRow": 28,
+  "originalTopRow": 24,
   "overflow": "NONE",
   "parentColumnSpace": 6.021484375,
   "parentId": "pfw5ch02xm",
   "parentRowSpace": 10,
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 64,
+  "rightColumn": 55,
   "shouldTruncate": false,
-  "text": "{{\n  \"Contact: \" +\n  (qryQuoGetSelectedQuote.data?.[0]?.venue_contact || \"\")\n}}",
+  "text": "{{\n\"Venue: \" +\nqryQuoGetEventHeader.data?.[0]?.venue_name || \"\"\n}}",
   "textAlign": "LEFT",
   "textColor": "#231F20",
-  "topRow": 21,
+  "topRow": 24,
   "truncateButtonColor": "{{appsmith.theme.colors.primaryColor}}",
   "type": "TEXT_WIDGET",
   "version": 1,
-  "widgetId": "bjvtog3lc0",
-  "widgetName": "txtQuoVnuContactCopy"
+  "widgetId": "5unw3lwfbj",
+  "widgetName": "txtQuoVenue"
 }

@@ -5,7 +5,7 @@
   "pluginType": "DB",
   "unpublishedAction": {
     "actionConfiguration": {
-      "body": "select *\nfrom public.prop_items\nwhere client_id = '{{ appsmith.store.current_client_id }}'::uuid\n  and event_id = {{ appsmith.store.quotationEventId }}\norder by sent_at desc nulls last, id desc;",
+      "body": "SELECT *\nFROM public.get_quote_received_proposals(\n\t'{{ appsmith.user.email }}'::text,\n\t{{ Number(appsmith.store.quotationEventId || 0) }}::bigint,\n\t'{{ appsmith.store.current_client_id }}'::uuid\n);",
       "encodeParamsToggle": true,
       "paginationType": "NONE",
       "pluginSpecifiedTemplates": [

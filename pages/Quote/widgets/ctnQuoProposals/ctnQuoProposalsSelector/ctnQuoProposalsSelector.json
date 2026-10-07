@@ -57,13 +57,22 @@
     },
     {
       "key": "boxShadow"
+    },
+    {
+      "key": "isVisible"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
+  "dynamicPropertyPathList": [
+    {
+      "key": "isVisible"
+    }
+  ],
+  "dynamicTriggerPathList": [],
   "flexVerticalAlignment": "stretch",
   "isCanvas": true,
   "isLoading": false,
-  "isVisible": true,
+  "isVisible": "{{ appsmith.store.accPropSelector ?? true }}",
   "key": "2xl7w3mzy8",
   "leftColumn": 0,
   "maxDynamicHeight": 9000,
@@ -87,5 +96,5 @@
   "type": "CONTAINER_WIDGET",
   "version": 1,
   "widgetId": "ejfr4rpdmm",
-  "widgetName": "Container3"
+  "widgetName": "ctnQuoProposalsSelector"
 }

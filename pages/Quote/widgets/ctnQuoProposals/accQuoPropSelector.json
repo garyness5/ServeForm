@@ -38,7 +38,7 @@
   "mobileRightColumn": 16,
   "mobileTopRow": 15,
   "needsErrorInfo": false,
-  "onClick": "{{\nstoreValue(\n\t\"accPropSelector\",\n\t!appsmith.store.accPropSelector\n);\n}}",
+  "onClick": "{{\nstoreValue(\n\t\"accPropSelector\",\n\t!(appsmith.store.accPropSelector ?? true)\n)\n}}",
   "originalBottomRow": 57,
   "originalTopRow": 53,
   "parentColumnSpace": 17.9375,

@@ -35,18 +35,20 @@
     "proposal_number",
     "last_sent_at",
     "send_count",
-    "menu_count",
-    "inbox_id",
-    "proposal_id",
     "proposal_title",
+    "proposal_id",
+    "inbox_id",
     "proposal_customer_notes",
     "general_notes",
     "first_sent_at",
-    "reviewed_at"
+    "reviewed_at",
+    "menu_count"
   ],
-  "columnUpdatedAt": 1791314513682,
+  "columnUpdatedAt": 1791346117518,
   "columnWidthMap": {
-    "last_sent_at": 231
+    "last_sent_at": 241,
+    "menu_count": 87,
+    "send_count": 120
   },
   "compactMode": "SHORT",
   "customIsLoading": false,
@@ -68,10 +70,10 @@
       "key": "boxShadow"
     },
     {
-      "key": "tableData"
+      "key": "primaryColumns.inbox_id.computedValue"
     },
     {
-      "key": "primaryColumns.inbox_id.computedValue"
+      "key": "tableData"
     },
     {
       "key": "primaryColumns.proposal_id.computedValue"
@@ -110,6 +112,9 @@
     },
     {
       "key": "onRowSelected"
+    },
+    {
+      "key": "primaryColumns.last_sent_at.outputFormat"
     }
   ],
   "dynamicTriggerPathList": [
@@ -138,7 +143,7 @@
   "mobileRightColumn": 49,
   "mobileTopRow": 31,
   "needsErrorInfo": false,
-  "onRowSelected": "{{\nstoreValue(\n\t\"current_quote_inbox_id\",\n\tNumber(tblQuoProposals.selectedRow.inbox_id)\n).then(() => qryGetQuoteReceivedMenus.run())\n}}",
+  "onRowSelected": "{{ jsQuoProposals.select(tblQuoProposals.selectedRow) }}",
   "originalBottomRow": 55,
   "originalTopRow": 24,
   "parentColumnSpace": 19.359375,
@@ -252,7 +257,7 @@
       "allowCellWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
-      "columnType": "text",
+      "columnType": "date",
       "computedValue": "{{(() => { const tableData = tblQuoProposals.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"last_sent_at\"])) : last_sent_at })()}}",
       "currencyCode": "USD",
       "decimals": 0,
@@ -270,9 +275,10 @@
       "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Sent at",
+      "label": "Last sent at",
       "notation": "standard",
       "originalId": "last_sent_at",
+      "outputFormat": "YYYY-MMM-DD | HH:MM",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",
@@ -303,8 +309,8 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": true,
-      "label": "Menus",
+      "isVisible": false,
+      "label": "menu_count",
       "notation": "standard",
       "originalId": "menu_count",
       "sticky": "",
@@ -508,7 +514,7 @@
       "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Sends",
+      "label": "Send count",
       "notation": "standard",
       "originalId": "send_count",
       "sticky": "",
@@ -522,9 +528,9 @@
   },
   "renderMode": "CANVAS",
   "responsiveBehavior": "fill",
-  "rightColumn": 37,
+  "rightColumn": 36,
   "searchKey": "",
-  "tableData": "{{ qryGetQuoteReceivedProposals.data || [] }}",
+  "tableData": "{{ qryQuoGetEventProposals.data || [] }}",
   "textSize": "0.875rem",
   "topRow": 0,
   "totalRecordsCount": 0,
