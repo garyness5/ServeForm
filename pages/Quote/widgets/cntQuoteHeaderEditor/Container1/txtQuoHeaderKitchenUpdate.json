@@ -11,9 +11,6 @@
     },
     {
       "key": "borderRadius"
-    },
-    {
-      "key": "text"
     }
   ],
   "dynamicHeight": "AUTO_HEIGHT",
@@ -43,7 +40,7 @@
   "responsiveBehavior": "fill",
   "rightColumn": 23,
   "shouldTruncate": false,
-  "text": "{{ qryQuoGetEventInboxRow.data?.[0]?.kitchen_update_available ? \"Kitchen Update\" : \"Current\" }}",
+  "text": "",
   "textAlign": "LEFT",
   "textColor": "#231F20",
   "topRow": 0,

@@ -33,10 +33,13 @@ export default {
 	},
 
 	async loadQuote() {
-		const proposalRows = (qryQuoGetReceivedMenus.data || []).map(r => ({
-			quote_menu_id: null,
-			quote_id: null,
-			received_menu_id: Number(r.received_menu_id || r.id),
+		const rows = (qryQuoGetQuoteMenus.data || []).map(r => ({
+			quote_menu_id: Number(r.quote_menu_id),
+			quote_id: Number(r.quote_id),
+			received_menu_id:
+			r.received_menu_id == null
+			? null
+			: Number(r.received_menu_id),
 			line_no: Number(r.line_no),
 
 			menu_name: r.menu_name || "",
@@ -55,52 +58,26 @@ export default {
 			Number(r.customer_guests)
 			: null,
 
-			price_per_guest_markup_percent: null,
-			selling_price_per_guest: null,
-			total_markup_percent: null,
-			selling_total: null
+			price_per_guest_markup_percent:
+			r.price_per_guest_markup_percent == null
+			? null
+			: Number(r.price_per_guest_markup_percent),
+
+			selling_price_per_guest:
+			r.selling_price_per_guest == null
+			? null
+			: Number(r.selling_price_per_guest),
+
+			total_markup_percent:
+			r.total_markup_percent == null
+			? null
+			: Number(r.total_markup_percent),
+
+			selling_total:
+			r.selling_total == null
+			? null
+			: Number(r.selling_total)
 		}));
-
-		const quoteRows = qryQuoGetQuoteMenus.data || [];
-
-		const rows = proposalRows.map(proposalRow => {
-			const quoteRow = quoteRows.find(
-				q =>
-				Number(q.received_menu_id) ===
-				Number(proposalRow.received_menu_id)
-			);
-
-			if (!quoteRow) {
-				return proposalRow;
-			}
-
-			return {
-				...proposalRow,
-
-				quote_menu_id: Number(quoteRow.quote_menu_id),
-				quote_id: Number(quoteRow.quote_id),
-
-				price_per_guest_markup_percent:
-				quoteRow.price_per_guest_markup_percent == null
-				? null
-				: Number(quoteRow.price_per_guest_markup_percent),
-
-				selling_price_per_guest:
-				quoteRow.selling_price_per_guest == null
-				? null
-				: Number(quoteRow.selling_price_per_guest),
-
-				total_markup_percent:
-				quoteRow.total_markup_percent == null
-				? null
-				: Number(quoteRow.total_markup_percent),
-
-				selling_total:
-				quoteRow.selling_total == null
-				? null
-				: Number(quoteRow.selling_total)
-			};
-		});
 
 		await storeValue("quotationMenuRows", rows);
 		return rows;
