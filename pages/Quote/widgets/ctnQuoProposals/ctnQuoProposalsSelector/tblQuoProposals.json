@@ -33,23 +33,25 @@
   },
   "columnOrder": [
     "proposal_number",
-    "last_sent_at",
+    "updated_at",
     "send_count",
-    "proposal_title",
     "proposal_id",
+    "last_sent_at",
     "inbox_id",
-    "proposal_customer_notes",
-    "general_notes",
     "first_sent_at",
     "reviewed_at",
-    "menu_count"
+    "menu_count",
+    "proposal_title",
+    "proposal_customer_notes",
+    "general_notes"
   ],
-  "columnUpdatedAt": 1791390528294,
+  "columnUpdatedAt": 1791484333099,
   "columnWidthMap": {
     "last_sent_at": 163,
     "menu_count": 87,
     "proposal_number": 135,
-    "send_count": 122
+    "send_count": 74,
+    "updated_at": 158
   },
   "compactMode": "SHORT",
   "customIsLoading": false,
@@ -83,15 +85,6 @@
       "key": "primaryColumns.proposal_number.computedValue"
     },
     {
-      "key": "primaryColumns.proposal_title.computedValue"
-    },
-    {
-      "key": "primaryColumns.proposal_customer_notes.computedValue"
-    },
-    {
-      "key": "primaryColumns.general_notes.computedValue"
-    },
-    {
       "key": "primaryColumns.first_sent_at.computedValue"
     },
     {
@@ -105,6 +98,18 @@
     },
     {
       "key": "primaryColumns.menu_count.computedValue"
+    },
+    {
+      "key": "primaryColumns.updated_at.computedValue"
+    },
+    {
+      "key": "primaryColumns.proposal_title.computedValue"
+    },
+    {
+      "key": "primaryColumns.proposal_customer_notes.computedValue"
+    },
+    {
+      "key": "primaryColumns.general_notes.computedValue"
     }
   ],
   "dynamicPropertyPathList": [
@@ -116,6 +121,9 @@
     },
     {
       "key": "primaryColumns.last_sent_at.outputFormat"
+    },
+    {
+      "key": "primaryColumns.updated_at.outputFormat"
     }
   ],
   "dynamicTriggerPathList": [
@@ -126,7 +134,7 @@
   "enableClientSideSearch": true,
   "endOfData": false,
   "flexVerticalAlignment": "start",
-  "horizontalAlignment": "LEFT",
+  "horizontalAlignment": "RIGHT",
   "inlineEditingSaveOption": "ROW_LEVEL",
   "isLoading": false,
   "isSortable": true,
@@ -163,7 +171,7 @@
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "RIGHT",
       "id": "first_sent_at",
       "index": 6,
       "isCellEditable": false,
@@ -197,9 +205,9 @@
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "RIGHT",
       "id": "general_notes",
-      "index": 5,
+      "index": 11,
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
@@ -207,7 +215,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "general_notes",
       "notation": "standard",
       "originalId": "general_notes",
@@ -231,7 +239,7 @@
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "RIGHT",
       "id": "inbox_id",
       "index": 0,
       "isCellEditable": false,
@@ -265,7 +273,7 @@
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "RIGHT",
       "id": "last_sent_at",
       "index": 7,
       "isCellEditable": false,
@@ -275,7 +283,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": true,
+      "isVisible": false,
       "label": "Last sent at",
       "notation": "standard",
       "originalId": "last_sent_at",
@@ -300,7 +308,7 @@
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "RIGHT",
       "id": "menu_count",
       "index": 10,
       "isCellEditable": false,
@@ -334,9 +342,9 @@
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "RIGHT",
       "id": "proposal_customer_notes",
-      "index": 4,
+      "index": 10,
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
@@ -344,7 +352,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "proposal_customer_notes",
       "notation": "standard",
       "originalId": "proposal_customer_notes",
@@ -368,7 +376,7 @@
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "RIGHT",
       "id": "proposal_id",
       "index": 1,
       "isCellEditable": false,
@@ -436,9 +444,9 @@
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "RIGHT",
       "id": "proposal_title",
-      "index": 3,
+      "index": 9,
       "isCellEditable": false,
       "isCellVisible": true,
       "isDerived": false,
@@ -446,7 +454,7 @@
       "isDiscardVisible": true,
       "isEditable": false,
       "isSaveVisible": true,
-      "isVisible": false,
+      "isVisible": true,
       "label": "proposal_title",
       "notation": "standard",
       "originalId": "proposal_title",
@@ -470,7 +478,7 @@
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "RIGHT",
       "id": "reviewed_at",
       "index": 9,
       "isCellEditable": false,
@@ -504,7 +512,7 @@
       "enableFilter": true,
       "enableSort": true,
       "fontStyle": "",
-      "horizontalAlignment": "LEFT",
+      "horizontalAlignment": "RIGHT",
       "id": "send_count",
       "index": 8,
       "isCellEditable": false,
@@ -515,9 +523,44 @@
       "isEditable": false,
       "isSaveVisible": true,
       "isVisible": true,
-      "label": "Send count",
+      "label": "Sent",
       "notation": "standard",
       "originalId": "send_count",
+      "sticky": "",
+      "textColor": "",
+      "textSize": "0.875rem",
+      "thousandSeparator": true,
+      "validation": {},
+      "verticalAlignment": "CENTER",
+      "width": 150
+    },
+    "updated_at": {
+      "alias": "updated_at",
+      "allowCellWrapping": false,
+      "allowSameOptionsInNewRow": true,
+      "cellBackground": "",
+      "columnType": "date",
+      "computedValue": "{{(() => { const tableData = tblQuoProposals.processedTableData || []; return tableData.length > 0 ? tableData.map((currentRow, currentIndex) => (currentRow[\"updated_at\"])) : updated_at })()}}",
+      "currencyCode": "USD",
+      "decimals": 0,
+      "enableFilter": true,
+      "enableSort": true,
+      "fontStyle": "",
+      "horizontalAlignment": "RIGHT",
+      "id": "updated_at",
+      "index": 11,
+      "isCellEditable": false,
+      "isCellVisible": true,
+      "isDerived": false,
+      "isDisabled": false,
+      "isDiscardVisible": true,
+      "isEditable": false,
+      "isSaveVisible": true,
+      "isVisible": true,
+      "label": "Updated at",
+      "notation": "standard",
+      "originalId": "updated_at",
+      "outputFormat": "YYYY-MMM-DD | H:mm",
       "sticky": "",
       "textColor": "",
       "textSize": "0.875rem",

@@ -3,6 +3,7 @@ export default {
 		const ready = await jsAppInit.init();
 		if (!ready) return false;
 
+		await jsQuoWorkspace.reset();
 		await removeValue("quotationProposalId");
 		await removeValue("quotationInboxId");
 		await removeValue("quotationQuoteId");

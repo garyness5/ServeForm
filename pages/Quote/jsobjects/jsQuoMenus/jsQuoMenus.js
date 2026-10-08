@@ -91,7 +91,7 @@ export default {
 		const pct = this.toNullableNumber(value);
 
 		const rows = (appsmith.store.quotationMenuRows || []).map(r => {
-			if (r.quote_menu_id !== Number(quoteMenuId)) return r;
+			if (Number(r.received_menu_id) !== Number(quoteMenuId)) return r;
 
 			const price =
 						pct == null || r.cost_per_guest == null
@@ -110,6 +110,7 @@ export default {
 			};
 		});
 
+		await jsQuoWorkspace.updateMenus(rows);
 		await storeValue("quotationMenuRows", rows);
 	},
 
@@ -117,7 +118,7 @@ export default {
 		const price = this.toNullableNumber(value);
 
 		const rows = (appsmith.store.quotationMenuRows || []).map(r => {
-			if (r.quote_menu_id !== Number(quoteMenuId)) return r;
+			if (Number(r.received_menu_id) !== Number(quoteMenuId)) return r;
 
 			return {
 				...r,
@@ -131,6 +132,7 @@ export default {
 			};
 		});
 
+		await jsQuoWorkspace.updateMenus(rows);
 		await storeValue("quotationMenuRows", rows);
 	},
 
@@ -138,7 +140,7 @@ export default {
 		const pct = this.toNullableNumber(value);
 
 		const rows = (appsmith.store.quotationMenuRows || []).map(r => {
-			if (r.quote_menu_id !== Number(quoteMenuId)) return r;
+			if (Number(r.received_menu_id) !== Number(quoteMenuId)) return r;
 
 			return {
 				...r,
@@ -152,6 +154,7 @@ export default {
 			};
 		});
 
+		await jsQuoWorkspace.updateMenus(rows);
 		await storeValue("quotationMenuRows", rows);
 	},
 
@@ -159,7 +162,7 @@ export default {
 		const total = this.toNullableNumber(value);
 
 		const rows = (appsmith.store.quotationMenuRows || []).map(r => {
-			if (r.quote_menu_id !== Number(quoteMenuId)) return r;
+			if (Number(r.received_menu_id) !== Number(quoteMenuId)) return r;
 
 			return {
 				...r,
@@ -170,11 +173,51 @@ export default {
 			};
 		});
 
+		await jsQuoWorkspace.updateMenus(rows);
 		await storeValue("quotationMenuRows", rows);
 	},
 
+	isDirty() {
+		if (!Number(appsmith.store.quotationQuoteId || 0)) {
+			return false;
+		}
+
+		const current = appsmith.store.quotationMenuRows || [];
+		const saved = qryQuoGetQuoteMenus.data || [];
+
+		const fields = [
+			"price_per_guest_markup_percent",
+			"selling_price_per_guest",
+			"total_markup_percent",
+			"selling_total"
+		];
+
+		const normalize = value =>
+		value == null || value === ""
+		? null
+		: Number(Number(value).toFixed(2));
+
+		return current.some(row => {
+			const original = saved.find(
+				r => Number(r.quote_menu_id) === Number(row.quote_menu_id)
+			);
+
+			if (!original) return true;
+
+			return fields.some(
+				field =>
+				normalize(row[field]) !==
+				normalize(original[field])
+			);
+		});
+	},
+
 	toNullableNumber(value) {
-		if (value === null || value === undefined || value === "") {
+		if (
+			value === null ||
+			value === undefined ||
+			value === ""
+		) {
 			return null;
 		}
 

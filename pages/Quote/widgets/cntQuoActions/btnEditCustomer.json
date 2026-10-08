@@ -44,7 +44,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 24,
   "text": "Issue",
-  "tooltip": "Edit selected dish",
+  "tooltip": "Send quote",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,

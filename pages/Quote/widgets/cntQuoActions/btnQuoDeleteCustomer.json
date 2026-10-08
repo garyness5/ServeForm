@@ -48,7 +48,7 @@
   "responsiveBehavior": "hug",
   "rightColumn": 29,
   "text": "Accept",
-  "tooltip": "Edit selected dish",
+  "tooltip": "Accept quote",
   "topRow": 2,
   "type": "BUTTON_WIDGET",
   "version": 1,
