@@ -73,7 +73,6 @@ export default {
 			return false;
 		}
 
-		const workspaceKey = workspace.key;
 		const data = jsQuoWorkspace.clone(workspace.current);
 		const inboxId = Number(data.header?.inbox_id || 0);
 
@@ -101,16 +100,16 @@ export default {
 					throw new Error("Quote creation returned no Quote ID.");
 				}
 
-				// Persist the new database ID immediately.
-				// Do not create a second Quote if a later step fails.
-				const all = jsQuoWorkspace.clone(
-					jsQuoWorkspace.getAll()
-				);
+				// Immediately promote the workspace to its permanent identity.
+				// Preserve unsaved pricing until the complete Save succeeds.
+				stage = "promote workspace";
 
-				all[workspaceKey].quoteId = quoteId;
-				all[workspaceKey].current.header.quote_id = quoteId;
+				const promoted =
+							await jsQuoWorkspace.promoteToSavedIdentity(quoteId);
 
-				await storeValue("quotationWorkspaces", all);
+				if (!promoted) {
+					throw new Error("Could not promote Quote workspace.");
+				}
 			}
 
 			stage = "load database Menus";
@@ -163,10 +162,6 @@ export default {
 							rows: pricingRows
 						});
 
-			if (qryQuoSaveWorkspacePricing.isLoading) {
-				throw new Error("Pricing query did not finish.");
-			}
-
 			if (!pricingResult) {
 				throw new Error("Pricing query returned no result.");
 			}
@@ -191,10 +186,14 @@ export default {
 
 			stage = "finalize workspace";
 
-			await jsQuoWorkspace.markSaved(quoteId, {
+			const finalized = await jsQuoWorkspace.markSaved(quoteId, {
 				header: jsQuoWorkspace.clone(header),
 				menus
 			});
+
+			if (!finalized) {
+				throw new Error("Could not finalize Quote workspace.");
+			}
 
 			showAlert("Quote saved.", "success");
 			return true;
@@ -203,7 +202,7 @@ export default {
 			console.error("Quote Save failed:", {
 				stage,
 				quoteId,
-				workspaceKey,
+				workspaceKey: jsQuoWorkspace.getActiveKey(),
 				message: error?.message
 			});
 
@@ -228,7 +227,15 @@ export default {
 		}
 
 		try {
+			await qryQuoGetEventProposals.run();
 			await qryQuoGetReceivedMenus.run();
+
+			const proposal = (qryQuoGetEventProposals.data || [])
+			.find(r => Number(r.inbox_id) === inboxId);
+
+			if (!proposal) {
+				throw new Error("Selected received Proposal was not found.");
+			}
 
 			const menus = await jsQuoMenus.loadProposal();
 
@@ -242,7 +249,7 @@ export default {
 					quote_status: "Draft",
 					quote_date: null,
 					valid_until: null,
-					quote_notes: null,
+					quote_notes: proposal.proposal_customer_notes ?? null,
 					internal_notes: null,
 					terms: null,
 					closed: false
@@ -251,7 +258,6 @@ export default {
 			});
 
 			await removeValue("quotationQuoteId");
-
 			await storeValue(
 				"quotationMenuRows",
 				jsQuoWorkspace.clone(menus)
@@ -263,6 +269,65 @@ export default {
 		} catch (error) {
 			showAlert(
 				error?.message || "Could not prepare new Quote.",
+				"error"
+			);
+			return false;
+		}
+	},
+
+	async duplicate() {
+		try {
+			const key = await jsQuoWorkspace.duplicateActive();
+
+			if (!key) {
+				showAlert("Select a Quote to duplicate.", "warning");
+				return false;
+			}
+
+			const ws = jsQuoWorkspace.getActive();
+
+			await removeValue("quotationQuoteId");
+
+			await storeValue(
+				"quotationMenuRows",
+				jsQuoWorkspace.clone(ws.current.menus || [])
+			);
+
+			showAlert("Quote duplicated. Save to create it.", "success");
+			return true;
+
+		} catch (error) {
+			showAlert(
+				error?.message || "Could not duplicate Quote.",
+				"error"
+			);
+			return false;
+		}
+	},
+
+	async discard() {
+		try {
+			const ws = jsQuoWorkspace.getActive();
+
+			if (!ws) return false;
+
+			const wasTemporary = ws.isTemporary;
+			const result = await jsQuoWorkspace.discardActive();
+
+			if (!result) return false;
+
+			showAlert(
+				wasTemporary
+				? "Unsaved Quote discarded."
+				: "Quote changes discarded.",
+				"success"
+			);
+
+			return true;
+
+		} catch (error) {
+			showAlert(
+				error?.message || "Could not discard changes.",
 				"error"
 			);
 			return false;

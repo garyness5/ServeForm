@@ -89,14 +89,67 @@ export default {
 		const source = this.getActive();
 		if (!source) return null;
 
+		// Copy the current working state, including unsaved edits.
 		const data = this.clone(source.current);
 
-		data.quoteId = null;
-		data.quoteStatus = "Draft";
-		data.issuedAt = null;
-		data.acceptedAt = null;
+		if (!data.header) {
+			throw new Error("Quote header is missing.");
+		}
+
+		// New Quote identity and lifecycle.
+		data.header.quote_id = null;
+		data.header.quote_number = null;
+		data.header.quote_status = "Draft";
+		data.header.quote_date = null;
+		data.header.closed = false;
+
+		// Clear lifecycle fields without changing quote content.
+		data.header.issued_at = null;
+		data.header.accepted_at = null;
+
+		// Menu rows retain pricing but receive new database identities.
+		data.menus = (data.menus || []).map(row => ({
+			...row,
+			quote_id: null,
+			quote_menu_id: null
+		}));
 
 		return await this.addTemporary(data);
+	},
+
+	async discardActive() {
+		const key = this.getActiveKey();
+		const all = this.clone(this.getAll());
+		const ws = all[key];
+
+		if (!ws) return false;
+
+		if (ws.isTemporary) {
+			// Delete the unsaved workspace only.
+			delete all[key];
+
+			await storeValue("quotationWorkspaces", all);
+			await removeValue("quotationActiveWorkspaceKey");
+			await removeValue("quotationQuoteId");
+			await storeValue("quotationMenuRows", []);
+
+			return true;
+		}
+
+		// Restore the saved Quote.
+		if (!ws.saved) {
+			throw new Error("Saved Quote state is unavailable.");
+		}
+
+		ws.current = this.clone(ws.saved);
+
+		await storeValue("quotationWorkspaces", all);
+		await storeValue(
+			"quotationMenuRows",
+			this.clone(ws.current.menus || [])
+		);
+
+		return true;
 	},
 
 	async updateMenus(rows) {
@@ -119,6 +172,60 @@ export default {
 
 		all[key].current = this.clone(data);
 		await storeValue("quotationWorkspaces", all);
+
+		return true;
+	},
+
+	async promoteToSavedIdentity(quoteId) {
+		const id = Number(quoteId);
+		const oldKey = this.getActiveKey();
+		const newKey = `quote:${id}`;
+		const all = this.clone(this.getAll());
+
+		if (!id || !oldKey || !all[oldKey]) {
+			return false;
+		}
+
+		const source = all[oldKey];
+
+		if (
+			source.quoteId &&
+			Number(source.quoteId) !== id
+		) {
+			throw new Error("Workspace Quote ID mismatch.");
+		}
+
+		if (oldKey !== newKey && all[newKey]) {
+			throw new Error(
+				`Quote ${id} already has a workspace.`
+			);
+		}
+
+		const promoted = {
+			...source,
+			key: newKey,
+			quoteId: id,
+			isTemporary: false,
+			current: this.clone(source.current)
+		};
+
+		promoted.current.header = {
+			...(promoted.current.header || {}),
+			quote_id: id
+		};
+
+		// No pricing has been saved yet.
+		// Preserve the dirty state until Save completes.
+		if (source.isTemporary) {
+			promoted.saved = null;
+		}
+
+		delete all[oldKey];
+		all[newKey] = promoted;
+
+		await storeValue("quotationWorkspaces", all);
+		await storeValue("quotationActiveWorkspaceKey", newKey);
+		await storeValue("quotationQuoteId", id);
 
 		return true;
 	},
@@ -171,6 +278,37 @@ export default {
 		}));
 
 		return [...temporary, ...saved];
+	},
+
+	async updateHeaderField(field, value) {
+		const allowed = [
+			"quote_title",
+			"valid_until",
+			"quote_notes",
+			"internal_notes",
+			"terms"
+		];
+
+		if (!allowed.includes(field)) {
+			throw new Error(`Invalid Quote field: ${field}`);
+		}
+
+		const key = this.getActiveKey();
+		const all = this.clone(this.getAll());
+
+		if (!key || !all[key]) return false;
+		if (all[key].current?.header?.closed) {
+			showAlert("Closed Quotes cannot be edited.", "warning");
+			return false;
+		}
+
+		all[key].current.header = {
+			...all[key].current.header,
+			[field]: value
+		};
+
+		await storeValue("quotationWorkspaces", all);
+		return true;
 	},
 
 	async reset() {
