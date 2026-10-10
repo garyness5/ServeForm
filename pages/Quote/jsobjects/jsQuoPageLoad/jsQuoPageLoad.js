@@ -4,6 +4,8 @@ export default {
 		if (!ready) return false;
 
 		await jsQuoWorkspace.reset();
+		await removeValue("quotationPageSaved");
+		await removeValue("quotationPageCurrent");
 		await removeValue("quotationProposalId");
 		await removeValue("quotationInboxId");
 		await removeValue("quotationQuoteId");
@@ -17,13 +19,22 @@ export default {
 
 		await Promise.all([
 			qryQuoGetEventHeader.run(),
-			qryQuoGetEventProposals.run()
+			qryQuoGetEventProposals.run(),
+			qryQuoGetEventDetails.run()
 		]);
+
+		await jsQuoPageWorkspace.load();
 
 		const proposals = qryQuoGetEventProposals.data || [];
 
 		if (proposals.length > 0) {
-			await jsQuoProposals.select(proposals[0]);
+			const latest = [...proposals].sort(
+				(a, b) =>
+				new Date(b.last_sent_at).getTime() -
+				new Date(a.last_sent_at).getTime()
+			)[0];
+
+			await jsQuoProposals.select(latest);
 		}
 
 		return true;

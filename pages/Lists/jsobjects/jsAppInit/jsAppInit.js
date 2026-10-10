@@ -1,12 +1,8 @@
 export default {
 	async init() {
-		if (appsmith.store.current_client_id) {
-			return true;
-		}
-
 		const rows = await qryResolveUser.run();
 
-		if (!rows || !rows.length) {
+		if (!rows?.length || !rows[0]?.client_id) {
 			await removeValue("current_client_id");
 			await removeValue("current_user_id");
 			await removeValue("current_client_name");

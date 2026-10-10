@@ -3,7 +3,7 @@
   "borderRadius": "{{appsmith.theme.borderRadius.appBorderRadius}}",
   "bottomRow": 43,
   "boxShadow": "{{appsmith.theme.boxShadow.appBoxShadow}}",
-  "defaultText": "{{ jsQuoWorkspace.getActive()?.current?.header?.internal_notes ?? \"\" }}",
+  "defaultText": "{{ jsQuoPageWorkspace.getCurrent().internal_notes ?? \"\" }}",
   "dynamicBindingPathList": [
     {
       "key": "borderRadius"

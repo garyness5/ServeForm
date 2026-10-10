@@ -1,6 +1,8 @@
 export default {
 
 	async select(row) {
+		await jsQuoWorkspace.captureCurrentFields();
+
 		const workspaceKey = row?.workspace_key || null;
 
 		if (row?.is_temporary && workspaceKey) {
@@ -65,21 +67,30 @@ export default {
 	},
 
 
+
 	async save() {
-		const workspace = jsQuoWorkspace.getActive();
-
-		if (!workspace) {
-			showAlert("Select a Quote before saving.", "warning");
-			return false;
-		}
-
-		const data = jsQuoWorkspace.clone(workspace.current);
-		const inboxId = Number(data.header?.inbox_id || 0);
-
-		let quoteId = Number(workspace.quoteId || 0);
-		let stage = "initialization";
+		let quoteId = 0;
+		let stage = "capture Quote fields";
 
 		try {
+			await jsQuoWorkspace.captureCurrentFields();
+
+			const workspace = jsQuoWorkspace.getActive();
+
+			if (!workspace) {
+				showAlert("Select a Quote before saving.", "warning");
+				return false;
+			}
+
+			if (workspace.current?.header?.closed) {
+				showAlert("Closed Quotes cannot be edited.", "warning");
+				return false;
+			}
+
+			const data = jsQuoWorkspace.clone(workspace.current);
+			const inboxId = Number(data.header?.inbox_id || 0);
+			quoteId = Number(workspace.quoteId || 0);
+
 			if (!quoteId) {
 				if (!inboxId) {
 					throw new Error("The Quote has no source Proposal.");
@@ -100,8 +111,6 @@ export default {
 					throw new Error("Quote creation returned no Quote ID.");
 				}
 
-				// Immediately promote the workspace to its permanent identity.
-				// Preserve unsaved pricing until the complete Save succeeds.
 				stage = "promote workspace";
 
 				const promoted =
@@ -110,6 +119,24 @@ export default {
 				if (!promoted) {
 					throw new Error("Could not promote Quote workspace.");
 				}
+			}
+
+			stage = "save Quote header";
+
+			const headerResult = await qryQuoSaveHeader.run({
+				quoteId,
+				header: {
+					quote_title: data.header?.quote_title ?? null,
+					quote_date: data.header?.quote_date ?? null,
+					valid_until: data.header?.valid_until ?? null,
+					quote_notes: data.header?.quote_notes ?? null,
+					internal_notes: data.header?.internal_notes ?? null,
+					terms: data.header?.terms ?? null
+				}
+			});
+
+			if (!headerResult) {
+				throw new Error("Header query returned no result.");
 			}
 
 			stage = "load database Menus";
@@ -217,6 +244,7 @@ export default {
 		}
 	},
 
+
 	async newQuote() {
 		const inboxId = Number(appsmith.store.quotationInboxId || 0);
 		const eventId = Number(appsmith.store.quotationEventId || 0);
@@ -276,6 +304,8 @@ export default {
 	},
 
 	async duplicate() {
+		await jsQuoWorkspace.captureCurrentFields();
+
 		try {
 			const key = await jsQuoWorkspace.duplicateActive();
 

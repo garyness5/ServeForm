@@ -280,6 +280,45 @@ export default {
 		return [...temporary, ...saved];
 	},
 
+
+	async captureCurrentFields() {
+		const key = this.getActiveKey();
+		const all = this.clone(this.getAll());
+
+		if (!key || !all[key]) return false;
+
+		const ws = all[key];
+
+		if (ws.current?.header?.closed) return false;
+
+		const header = ws.current.header || {};
+
+		const fields = {
+			quote_title: inpQuoQuoteTitle.text || null,
+			valid_until: datQuoValidUntil.selectedDate || null,
+			quote_notes: rteQuoQuoteNotes.text || null,
+			terms: rteQuoTerms.text || null
+		};
+
+		const updatedHeader = {
+			...header,
+			...fields
+		};
+
+		if (
+			JSON.stringify(updatedHeader) ===
+			JSON.stringify(header)
+		) {
+			return true;
+		}
+
+		ws.current.header = updatedHeader;
+
+		await storeValue("quotationWorkspaces", all);
+		return true;
+	},
+
+
 	async updateHeaderField(field, value) {
 		const allowed = [
 			"quote_title",
