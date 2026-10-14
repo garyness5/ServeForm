@@ -10,6 +10,10 @@
   "icon": "bicycle",
   "pages": [
     {
+      "id": "SecurityTest",
+      "isDefault": false
+    },
+    {
       "id": "MenuList",
       "isDefault": false
     },
