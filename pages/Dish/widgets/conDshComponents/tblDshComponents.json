@@ -65,7 +65,7 @@
     "delete_action",
     "line_no"
   ],
-  "columnUpdatedAt": 1790643150497,
+  "columnUpdatedAt": 1792350705322,
   "columnWidthMap": {
     "active": 103,
     "allergen_names": 124,
@@ -1023,6 +1023,7 @@
     "line_no": {
       "alias": "line_no",
       "allowCellWrapping": false,
+      "allowHeaderWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "number",

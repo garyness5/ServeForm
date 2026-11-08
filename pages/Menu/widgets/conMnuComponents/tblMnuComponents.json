@@ -65,7 +65,7 @@
     "saved_unit_id",
     "saved_unit_abbreviation"
   ],
-  "columnUpdatedAt": 1790642826805,
+  "columnUpdatedAt": 1792537524497,
   "columnWidthMap": {
     "active": 104,
     "allergen_names": 124,
@@ -402,6 +402,7 @@
     "child_active": {
       "alias": "child_active",
       "allowCellWrapping": false,
+      "allowHeaderWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "checkbox",
@@ -436,6 +437,7 @@
     "child_deleted": {
       "alias": "child_deleted",
       "allowCellWrapping": false,
+      "allowHeaderWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "checkbox",
@@ -599,6 +601,7 @@
     "component_status": {
       "alias": "component_status",
       "allowCellWrapping": false,
+      "allowHeaderWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
@@ -664,6 +667,7 @@
     "created_at": {
       "alias": "created_at",
       "allowCellWrapping": false,
+      "allowHeaderWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
@@ -1087,6 +1091,7 @@
     "saved_qty": {
       "alias": "saved_qty",
       "allowCellWrapping": false,
+      "allowHeaderWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "number",
@@ -1121,6 +1126,7 @@
     "saved_unit_abbreviation": {
       "alias": "saved_unit_abbreviation",
       "allowCellWrapping": false,
+      "allowHeaderWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
@@ -1155,6 +1161,7 @@
     "saved_unit_id": {
       "alias": "saved_unit_id",
       "allowCellWrapping": false,
+      "allowHeaderWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "number",
@@ -1283,6 +1290,7 @@
     "updated_at": {
       "alias": "updated_at",
       "allowCellWrapping": false,
+      "allowHeaderWrapping": false,
       "allowSameOptionsInNewRow": true,
       "cellBackground": "",
       "columnType": "text",
